@@ -237,3 +237,4 @@ done <CurrentAccountModelConfig
 echo "Writing final output from $catFile..."
 cat $catFile>>$output
 echo "Created Models YAML With ISOMapping and In/Out Models for Action terms in file $output :)"
+rm -rf bq bqel el isobq q rest
