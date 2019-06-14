@@ -14,8 +14,6 @@ context=""
 crr=""
 lastverb=
 catFile=
-inputModelFile="/dev/null"
-outputModelFile="/dev/null"
 while read line
 do
     if  [[ $line == BQ* ]] || [[ $line == CR* ]] ;
@@ -31,10 +29,10 @@ do
         then
                 echo " "$verb"InputModel:" >$verb"InputModel"
                 echo "  type: object" >>$verb"InputModel"
-#                echo "  properties:" >>$verb"InputModel"
+                echo "  properties:" >>$verb"InputModel"
                 echo " "$verb"OutputModel:" >$verb"OutputModel"
                 echo "  type: object" >>$verb"OutputModel"
-#                echo "  properties:" >>$verb"OutputModel"
+                echo "  properties:" >>$verb"OutputModel"
                 catFile=$catFile" "$verb"InputModel "$verb"OutputModel "
         fi
         continue;
@@ -43,7 +41,7 @@ do
     then
         context=`echo $line|cut -f1 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
         context=`echo $context | tr '[:upper:]' '[:lower:]'`
-        echo "  $context:" |tee -a $output $verb"InputModel" $verb"OutputModel">>/dev/null
+        echo "  $context:" >>$output
         continue;
     fi
     a=`echo $line|cut -f3 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
@@ -58,10 +56,10 @@ do
         lastRead=$a;
         space=""
     fi
-    inputModelFile="/dev/null"
-    outputModelFile="/dev/null"
-    if [[ ! -z "$verb" ]] && [[ ! -z "$io" ]]
+    if [[ ! -z "$verb" ]]
     then
+        inputModelFile=$verb"InputModel"
+        outputModelFile=$verb"OutputModel"
         if [[ "$io" == "I" ]]
         then
             inputModelFile=$verb"InputModel"
@@ -81,7 +79,6 @@ do
     ## check for child object
     if  [[ ! -z "$a" ]] && [[ "$a2" == "#" ]] ;
     then
-        lastRead="$(tr '[:upper:]' '[:lower:]' <<< ${lastRead:0:1})${lastRead:1}"
         echo "   $lastRead:"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
         space=" $space"
         continue
@@ -93,8 +90,7 @@ do
     fi
     if  [[ -z "$a" ]] && [[ ! -z "$a2" ]] && [[ "$a3" == "#" ]];
     then
-        a2="$(tr '[:upper:]' '[:lower:]' <<< ${a2:0:1})${a2:1}"
-        echo "    $a2:"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
+        echo "    $a2:">>$output
         space=" $space"
         continue
     fi
@@ -237,3 +233,4 @@ done <CurrentAccountModelConfig
 echo "Writing final output from $catFile..."
 cat $catFile>>$output
 echo "Created Models YAML With ISOMapping and In/Out Models for Action terms in file $output :)"
+rm -rf p bq el bqel rest q isobq
