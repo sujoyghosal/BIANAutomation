@@ -56,8 +56,10 @@ do
         lastRead=$a;
         space=""
     fi
-    if [[ ! -z "$verb" ]] && [[ ! -z "$io" ]]
+    if [[ ! -z "$verb" ]]
     then
+        inputModelFile=$verb"InputModel"
+        outputModelFile=$verb"OutputModel"
         if [[ "$io" == "I" ]]
         then
             inputModelFile=$verb"InputModel"
