@@ -123,13 +123,13 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        201:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
                     foo=`echo ${cr:0:1} | tr  '[a-z]' '[A-Z]'`${cr:1}
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                 else #CR Level
                     echo "  /$sdpath/$crpath/$action:">>$output
                     echo "    post:">>$output
@@ -146,12 +146,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        201:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
             record)
@@ -181,13 +181,13 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        201:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
                     foo=`echo ${cr:0:1} | tr  '[a-z]' '[A-Z]'`${cr:1}
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                 else #CR Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/recording:">>$output
                     echo "    post:">>$output
@@ -209,12 +209,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        201:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
             update)
@@ -244,12 +244,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        200:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                 else #CR Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/updation:">>$output
                     echo "    put:">>$output
@@ -271,12 +271,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        200:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
             execute|request)
@@ -317,12 +317,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr request payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        200:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                     # Execute - BQ Post
                     echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/$action:">>$output
                     echo "    post:">>$output
@@ -345,12 +345,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        201:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                 else #CR Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/$action:">>$output
                     echo "    put:">>$output
@@ -373,12 +373,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        200:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                     # POST
                     echo "  /$sdpath/$crpath/$action:">>$output
                     echo "    post:">>$output
@@ -396,12 +396,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$1$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        201:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$1$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
             *)
