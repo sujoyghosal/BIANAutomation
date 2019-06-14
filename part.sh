@@ -15,8 +15,7 @@ while read line
 do
     if  [[ $line == BQ* ]] || [[ $line == CR* ]] ;
     then
-        read line
-        crr=`echo $line|cut -f2 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
+        crr=`echo $line|cut -f1 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
         echo " $crr:" >>$output
         echo "  type: object" >>$output
         continue;
@@ -38,7 +37,7 @@ do
         lastRead=$a;
         space=""
     fi
-    ## check for L2
+    ## check for child object
     if  [[ ! -z "$a" ]] && [[ "$a2" == "#" ]] ;
     then
         echo "   $lastRead:">>$output
@@ -46,34 +45,26 @@ do
         continue
     fi
 
-    if  [[ -z "$a" ]] && [[ ! -z "$a2" ]] && [[ "$l3" != "true" ]];
+    if  [[ -z "$a" ]] && [[ ! -z "$a2" ]] && [[ "$a3" != "#" ]];
     then
         a=$a2
     fi
-    ## end L2 check
-    ## check for L3
-    if  [[ ! -z "$a" ]] && [[ "$a3" == "#" ]] ;
+    if  [[ -z "$a" ]] && [[ ! -z "$a2" ]] && [[ "$a3" == "#" ]];
     then
-        echo "   $a:">>$output
-        l3="true"
+        echo "    $a2:">>$output
+        space=" $space"
         continue
     fi
-    if  [[ -z "$a" ]] && [[ ! -z "$a2" ]] && [[ "$l3" == "true" ]];
-    then
-            echo "     $a2:">>$output
-            space="  $space"
-            continue;
-    fi
-    if  [[ -z "$a" ]] && [[ -z "$a2" ]] && [[ ! -z "$a3" ]];
+
+    if  [[ -z "$a" ]] && [[ -z "$a2" ]] && [[ ! -z "$a3" ]] && [[ "$a3" != "#" ]];
     then
         a=$a3
     fi
-    ## end L3 check
     
 
     a="$(tr '[:upper:]' '[:lower:]' <<< ${a:0:1})${a:1}"
     echo "$a"
-    info=`echo $line|cut -f7 -d"|"|sed 's/[)]//g'`
+    info=`echo $line|cut -f7 -d"|"`
     z=`echo $a | tr '[:upper:]' '[:lower:]'`
     echo "$space   $a:">>$output
     case $z in
