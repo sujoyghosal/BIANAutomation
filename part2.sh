@@ -22,7 +22,7 @@ inputModelFile="/dev/null"
 outputModelFile="/dev/null"
 prepend=""
 col=0
-
+cat $input|sed -e $'s/\t/|/g' -e $'s/"//g'>infile
 while read line
 do
     if  [[ $line == BQ* ]] || [[ $line == CR* ]] ;
@@ -271,7 +271,7 @@ do
         fi
     echo "$space     general-info: $info"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
 
-done <CurrentAccountModelConfig
+done <infile
 rm -rf bq bqel el isobq q rest p
 done
 #cat $catFile >>m

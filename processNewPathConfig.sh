@@ -3,7 +3,7 @@ readConfig="false"
 input=$1"PathConfig"
 output=$1"Paths.yaml"
 mcr=
-cat $input|sed -e $'s/\t/|/g'>p
+cat $input|sed -e $'s/\t/|/g' -e $'s/"//g'>p
 while read line
 do    
     if  [[ $line == sd=* ]] ;
@@ -55,7 +55,7 @@ do
         cr=`echo $line|cut -f1 -d"|" |tr '[:upper:]' '[:lower:]'`
         bcr=`echo ${cr:0:1} | tr  '[a-z]' '[A-Z]'`${cr:1} #first character capital letter
         actionRaw=`echo $line|cut -f2 -d"|"`
-        desc=`echo $line|cut -f3 -d"|"|sed 's/[:]/ /g'`
+        desc=`echo $line|cut -f3 -d"|"|sed 's/[:""]/ /g'`
         extOp=`echo $line|cut -f4 -d"|"`
         extApi=`echo $line|cut -f5 -d"|"`
         summary=`echo $line|cut -f7 -d"|"|sed 's/[:]/ /g'`
@@ -64,7 +64,7 @@ do
             echo "Processing $cr $z - skipping"
             continue
         fi
-        echo "Processing $cr $z ..."
+        echo "Creating Path Definitions for $cr $z ..."
         case $z in
             initiate|create|activate|register|evaluate|provide|authorize)
                 if [ $z == "initiate" ]
@@ -123,13 +123,13 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/BQ$bcr$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        201:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
                     foo=`echo ${cr:0:1} | tr  '[a-z]' '[A-Z]'`${cr:1}
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/$bcr$actionRaw"OutputModel\'>>$output
                 else #CR Level
                     echo "  /$sdpath/$crpath/$action:">>$output
                     echo "    post:">>$output
@@ -146,12 +146,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/CR$bcr$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        201:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/CR$bcr$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
             record)
@@ -244,12 +244,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/BQ$bcr$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        200:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/BQ$bcr$actionRaw"OutputModel\'>>$output
                 else #CR Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/updation:">>$output
                     echo "    put:">>$output
@@ -271,15 +271,15 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/CR$bcr$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        200:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/CR$bcr$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
-            execute|request)
+            execute|request|control|exchange)
                 if [ "$z" == "execute" ]
                 then
                     action="execution"
@@ -289,6 +289,16 @@ do
                 then
                     action="requisition"
                     tag="request"
+                fi
+                if [ "$z" == "control" ]
+                then
+                    action="control"
+                    tag="control"
+                fi
+                if [ "$z" == "exchange" ]
+                then
+                    action="exchange"
+                    tag="exchange"
                 fi
                 if [ ! -z "$extOp" -a "$extOp" != " " ]; then #BQ Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/{bq-reference-id}/$action:">>$output
@@ -317,40 +327,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr request payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/BQ$bcr$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        200:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
-                    # Execute - BQ Post
-                    echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/$action:">>$output
-                    echo "    post:">>$output
-                    echo "      tags:">>$output
-                    echo "      - $tag">>$output
-                    verb="Create"
-                    echo "      operationId: $extOp$verb">>$output
-                    echo "      summary: $summary">>$output
-                    echo "      description: $desc">>$output
-                    echo "      produces:">>$output
-                    echo "      - application/json">>$output
-                    echo "      parameters:">>$output
-                    echo "      - name: cr-reference-id">>$output
-                    echo "        in: path">>$output
-                    echo "        description: $crr">>$output
-                    echo "        required: true">>$output
-                    echo "        type: string">>$output
-                    echo "      - in: body">>$output
-                    echo "        name: body">>$output
-                    echo "        required: true">>$output
-                    echo "        description: $bcr Request Payload">>$output
-                    echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
-                    echo "      responses:">>$output
-                    echo "        201:">>$output
-                    echo "          description: Successful $summary">>$output
-                    echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/BQ$bcr$actionRaw"OutputModel\'>>$output
                 else #CR Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/$action:">>$output
                     echo "    put:">>$output
@@ -373,35 +355,12 @@ do
                     echo "        required: true">>$output
                     echo "        description: $bcr Request Payload">>$output
                     echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
+                    echo "          \$ref: '#/definitions/CR$bcr$actionRaw"InputModel\'>>$output
                     echo "      responses:">>$output
                     echo "        200:">>$output
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
-                    # POST
-                    echo "  /$sdpath/$crpath/$action:">>$output
-                    echo "    post:">>$output
-                    echo "      tags:">>$output
-                    echo "      - $tag">>$output
-                    verb="Create"
-                    echo "      operationId: $extApi$verb">>$output
-                    echo "      summary: $summary">>$output
-                    echo "      description: $desc">>$output
-                    echo "      produces:">>$output
-                    echo "      - application/json">>$output
-                    echo "      parameters:">>$output
-                    echo "      - in: body">>$output
-                    echo "        name: body">>$output
-                    echo "        required: true">>$output
-                    echo "        description: $bcr Request Payload">>$output
-                    echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
-                    echo "      responses:">>$output
-                    echo "        201:">>$output
-                    echo "          description: Successful $summary">>$output
-                    echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/CR$bcr$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
             *)
@@ -502,12 +461,18 @@ echo "        in: path">>$output
 echo "        description: $crr">>$output
 echo "        required: true">>$output
 echo "        type: string">>$output
+echo "      - in: body">>$output
+echo "        name: body">>$output
+echo "        required: true">>$output
+echo "        description: $cr Request Payload">>$output
+echo "        schema:">>$output
+echo "          \$ref: '#/definitions/CR$cr"RetrieveInputModel\'>>$output
 echo "      responses:">>$output
 echo "        200:">>$output
 echo "          description: Successfully Retrieved $sdb Report">>$output
 echo "          schema:">>$output
 #echo "            \$ref: '#/definitions/$1$sd"WithIdAndRoot\'>>$output
-echo "            \$ref: '#/definitions/$1$mcr"OutputModel\'>>$output
+echo "            \$ref: '#/definitions/CR$cr"OutputModel\'>>$output
 # Loop thru BQ Array and generate Retrieves at BQ Level
 for i in "${bqs[@]}"
 do
@@ -532,11 +497,17 @@ do
     echo "        description: "$i BQ Reference Id"">>$output
     echo "        required: true">>$output
     echo "        type: string">>$output
+    echo "      - in: body">>$output
+    echo "        name: body">>$output
+    echo "        required: true">>$output
+    echo "        description: $bcr Request Payload">>$output
+    echo "        schema:">>$output
+    echo "          \$ref: '#/definitions/BQ$bcr"RetrieveInputModel\'>>$output
     echo "      responses:">>$output
     echo "        200:">>$output
     echo "          description: Successfully Retrieved $sdb $i Report">>$output
     echo "          schema:">>$output
-    echo "            \$ref: '#/definitions/$1$i"OutputModel\'>>$output
+    echo "            \$ref: '#/definitions/BQ$bcr"RetrieveOutputModel\'>>$output
 done
 rm -rf p
 echo "Generated Path Definitions YAML File $output :)"
