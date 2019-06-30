@@ -1,0 +1,179 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Credit Management'
+ description: 'Description'
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-credit-management/1.0.0
+schemes:
+ - https
+paths:
+  /credit-management/credit-pricing-assessment/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCreditPricingAssessment
+      summary: EvCR Evaluate a proposed transaction pricing against group credit policy
+      description: A check to confirm that a proposed (v. large) transaction is withingroup credit policy and to recommend pricing adjustments as necessary
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: CreditManagement Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditManagementInitiateInputModel'
+      responses:
+        201:
+          description: Successful EvCR Evaluate a proposed transaction pricing against group credit policy
+          schema:
+            $ref: '#/definitions/CRCreditManagementInitiateOutputModel'
+  /credit-management/credit-pricing-assessment/{cr-reference-id}/updation:
+    put:
+      tags:
+      - update
+      operationId: updateCreditPricingAssessmentDetails
+      summary: UpCR Update details of an active credit pricing assessment
+      description: A check to confirm that a proposed (v. large) transaction is withingroup credit policy and to recommend pricing adjustments as necessary
+      produces:
+      - application/json
+      parameters:
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Record
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CreditManagement Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditManagementUpdateInputModel'
+      responses:
+        200:
+          description: Successful UpCR Update details of an active credit pricing assessment
+          schema:
+            $ref: '#/definitions/CRCreditManagementUpdateOutputModel'
+  /credit-management/credit-pricing-assessment/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCreditPricingAssessmentUpdate
+      summary: EcCR Accept/reject a pricing assessment
+      description: A check to confirm that a proposed (v. large) transaction is withingroup credit policy and to recommend pricing adjustments as necessary
+      produces:
+      - application/json
+      parameters:
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Record
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CreditManagement Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditManagementExchangeInputModel'
+      responses:
+        200:
+          description: Successful EcCR Accept/reject a pricing assessment
+          schema:
+            $ref: '#/definitions/CRCreditManagementExchangeOutputModel'
+  /credit-management/credit-pricing-assessment:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCreditManagementReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- 
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /credit-management/credit-pricing-assessment/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCreditManagementBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /credit-management/credit-pricing-assessment/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCreditManagementBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Record
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 'BQ1'
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['BQID1', 'BQID2']
+  /credit-management/credit-pricing-assessment/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCreditManagement
+      summary: Retrieve a Credit Management Record
+      description: Retrieve a Credit Management Record
+      produces:
+      - application/json
+      parameters:
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Record
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Credit Management Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditManagementRetrieveInputModel'
+      responses:
+        200:
+          description: Successfully Retrieved Credit Management Report
+          schema:
+            $ref: '#/definitions/CRCreditManagementRetrieveOutputModel'
