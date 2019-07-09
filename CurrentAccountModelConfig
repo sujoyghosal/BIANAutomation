@@ -1,128 +1,374 @@
-CR Current Account Fulfillment Arrangement Instance Record	Current Account					The control record maintains for a current account product instance	CR Current Account Initiate	CR Current Account Update	CR Current Account Retrieve	BQ Interest Initiate	BQ Interest Execute	BQ Interest Retrieve	BQ Service Fees Initiate	BQ Account Lien Initiate	BQ Account Lien Update	BQ Account Lien Retrieve	BQ Account Sweep Initiate	BQ Account Sweep Update	BQ Account Sweep  Execute	BQ Account Sweep   Retrieve	BQ Deposits Withdrawls Initiate	BQ Deposits Withdrawls Update	BQ Deposits Withdrawls Execute	BQ Deposits Withdrawls Retrieve	BQ Payments Initiate	BQ Payments Update	BQ Payments Execute	BQ Payments Retrieve	BQ Issued Inventory Initiate	BQ Issued Inventory Update	BQ Issued Inventory Request	BQ Issued Inventory Retrieve
-Properties		Current Account Number				The associated account number in any suitable format (e.g. IBAN)	O	I	O	I			I	I			I				I				I				I			
-		Customer Reference				Reference to the account primary party/owner	I	IO	O					I			I				I				I				I			
-		Bank Branch/Location Reference				Bank branch associated with the account for booking purposes	I	IO	O					I			I				I				I				I			
-		Issued Device				Reference to an issued device associated with the facility (such as a card or key fob)	O	IO	O																I							
-		Account Type				The type of current account (e.g. checking, student, small business)	I	IO	O	I			I	I			I				I				I				I			
-		Account Currency				The primary account currency	IO	IO	O	I			I				I				I				I				I			
-		Tax Reference 				Reference identifier linking the account to appropriate tax handling	I	IO	O	I			I				I								O							
-Options		Entitlement Option Definition				The definition of an applicable entitlement option	O	O	O					O																		
-		Entitlement Option Setting				The setting for the entitlement option	IO	IO	O					I			I				I				I				I			
-		Restriction Option Definition				The definition of an applicable restriction option	O	O	O					O																		
-		Restriction Option Setting				The setting for the restriction option	IO	IO	O	I			I	I			I				I				I				I			
-Variables		Associations	#			Definition of the associations to the account	I	IO	O																				O			
-			Association Type			The type of association (e.g. guarantor, co-signer)	I	IO	O																O				O			
-			Association Obligation/Entitlement			Description of the role, obligations or entitlements of the associated party	I	IO	O																O				O			
-			Association Reference			Reference to the associated party	I	IO	O																O				O			
-		Linked Accounts	#			Definition of the associations to the account	I	IO	O	I			I	IO			I															
-			Link Type			The type and purpose for the link	I	IO	O	I			I	I			I															
-			Account Details			Details of the linked account	I	IO	O	I			I	I			I															
-		Position Limits	#				IO	IO	O	I											IO											
-			Position Limit Type			The type of position maintained for the account (e.g. transaction credit/debit, netting, position)	O	IO	O	I			I	I							I											
-			Position Limit Settings			The position definition, associated limit settings and rules	IO	IO	O	I			I	IO											O				O			
-			Position Limit Value			The current calculated position	O	O	O	I			I	O							O				I				I			
-		Date Type	#			Key dates associated with the account (e.g. opening date, closing date)	IO	IO	O	IO			IO	IO			IO				IO				IO				IO			
-			Date			Value of the date type	IO	IO	O	IO			IO	IO			IO				IO				IO				IO			
-		Account Status (e.g. pre-opened, active, dormant, pending for closing, blocked)					IO	IO	O	IO			IO	IO			IO				O				IO				IO			
-BQ Interest Instance Record 	Interest					Applies interst to the account				IO	I	O																				
-Properties		Rate Type				The type of rate calculation that can be applied				I	I	O																				
-Options		Rate Application Schedule				The processing schedule for applying interest rates to the account				I		O																				
-Variables		Rate Configuration	#			The collection of applicable rates				I	I	O																				
-			Rate Type			Applicable rate type				I		O																				
-			Rate			The rate value to be applied				I	I	O																				
-		Interest Application Record	#			The record of applied interest				I	IO	O																				
-			Interest Transaction	#		A record of applied interest					O	O																				
-				Transaction Description		General description of the interest transaction					I	O																				
-				Transaction Rate Type		Applicable rate type					I	O																				
-				Transaction Interest Charge		The derived interest amount to be applied					O	O																				
-			Interest Accrual Amount	#		Record of accrued interest				I	O	O																				
-				Interest Accrual Type		The interest type being tracked				I	O	O																				
-				Interest Accrual Charge		The accrued amount of applied interest				I	O	O																				
-BQ Service Fees Instance Record	Service Fees					Applies service fees and penalties to the account							IO																			
-Properties		Fee Type				The fee or penalty type							I																			
-		Fee Definition 				Definition of the fee or penalty including when and how to apply							I																			
-Options		Fee Configuration Profile	#			The profile of applicable fees and penalties fees							I																			
-			Fee Type			The fee or penalty type applied							I																			
-Variables		Fee Application Record	#			The record of applied fees and penalties including transactions and accrued amounts																										
-			Fee Transaction	#		A record of an applied fee or penalty																										
-				Transaction Description		General description of the fee or penalty transaction																										
-				Transaction Fee Type		The fee or penalty type applied																										
-				Transaction Fee Charge		The derived fee or penalty amount applied																										
-			Fee Projections and Commitments	#		A record of projected fees and penalties																										
-				Projected Transaction Description		General description of the projected fee or penalty																										
-				Projected Transaction Fee Type		The fee or penalty type																										
-				Projected Transaction Fee Charge		The anticipated fee or penalty amount																										
-			Fee Accrual Amount			Tracking of accumulated fees and penalties																										
-				Accrual Fee Type		The fee or penalty type being tracked																										
-				Accrual Fee Charge		The accrued amount of fees and penalties																										
-BQ Acount Lien Instance Record 	Acount Lien					Handles liens placed against the account								IO	I	O																
-Properties		Lien Type				The type of lien (e.g. final, pending)								I	IO	O																
-		Lien Definition				Definition of the type of lien including processing guidelines								IO		O																
-Options		Lien Processing Option 				The processing option applied to the lien								I	O	O																
-Variables		Lien Record	#			The collection of applicable rates								IO	IO	O																
-			Lien Originator			The party requesting the lien								I	IO	O																
-			Lien Purpose			The purpose or associated facility linked to the lien								I	IO	O																
-			Lien Amount			The amount being blocked								I	IO	O																
-			Lien Start Date			The date the lien is enforced								I	IO	O																
-			Lien Expiry Date			The date the lien is removed								I	IO	O																
-			Lien Status			The status on the lien								I	IO	O																
-BQ Acount Sweep Instance Record 	Account Sweep					Handles sweeping arrangments linke to the account											IO	I	I	O												
-Properties		Account Sweep Type				The type of sweep (e.g. periodic, threshhold)											I			O												
-		Account Sweep Definition				Definition of the type of sweep											O			O												
-Options		Account Sweep Application Schedule 				Sweep processing guidelines and scheduling rules											IO			O												
-Variables		Account Sweep Configuration	#			The set-up of the sweep facility											I			O												
-			Target Account			The facility that the sweep is made to/from											I			O												
-			Sweep Mandate			Confirmation that the sweep processing is sanctioned as necessary											I			O												
-			Sweep Processing Schedule			Timing and or triggers for initiating sweep transaction											I			O												
-		Sweep Application Record	#			The transaction record for an applied sweep												IO	I	O												
-			Account Sweep Target Account			The facility that the sweep is made to/from												IO	I	O												
-			Account Sweep Amount			The amount transferred to or from the account												IO	I	O												
-			Account Sweep Execution Date			The date and time the sweep is initiated												IO	I	O												
-BQ Deposits Withdrawals Instance Record 	Deposits Withdrawl					Processes deposits and withdrawals against the account															IO	I	I	O								
-Properties		Deposit Type				The type of deposit transaction that can be applied to the account (e.g. customer deposit, internal credit)															I	IO		O								
-		Withdrawal Type				The type of withdrawal transaction that can be applied to the account (e.g. customer withdrawal, internal service charge, disbursement)															I	IO		O								
-Options		Account Limit Breach Response				The handling options if a withdrawal results in a breach of an account limit															I	IO		O								
-Variables		Deposit Transaction	#			The collection of applicable rates															I	IO	IO	O								
-			Deposit Transaction Source Reference			Identifies the source of the deposit															I	IO	I	O								
-			Deposit Transaction Deposit Type			The type of deposit made with the transaction															I	IO	I	O								
-			Deposit Transaction Description 			Any necessary details describing the purpose or reference properties of the deposit															I	IO	I	O								
-			Deposit Transaction Amount			The deposited amount															I	IO	I	O								
-			Deposit Transaction Date			The date and time the deposit was initiated															IO	IO	IO	O								
-		Withdrawal Transaction	#			The record of appliedinterest															I	IO	I	O								
-			Withdrawal Transaction Source Reference			Identifies the target for the withdrawal															I	IO	I	O								
-			Withdrawal Transaction Withdrawal Type			The type of withdrawal made with the transaction															I	IO	I	O								
-			Withdrawal Transaction Description 			Any necessary details describing the purpose or reference properties of the withdrawal															I	IO	I	O								
-			Wihdrawal Transaction Amount			The withdrawn amount															I	IO	I	O								
-			Withdrawal Transaction Date			The date and time the withdrawal was initiated															IO	IO	IO	O								
-BQ Payments Instance Record 	Payments					Handles different payment handling requirements																			IO	I	I	O				
-Properties		Payment Type				The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)																			I	I		O				
-		Payment Definition				Definition of the type of payment including processing rules and guidelines																			IO			O				
-Options		Payment Processinng Option Definition				Definition of the processing option and impact (e.g. frequency and cumulative amount constraints)																			O	IO		O				
-		Payment Processing Option Setting				The option setting																			I	IO		O				
-Variables		Payment Configuration	#			Configuration setting for various payment transaction types																			I	IO		O				
-			Payment Schedule 			Processing schedule for repeating payments for standing orders (e.g. start date, end, period, number/cycles). Note this triggers an internal execution call as necessary																			I	IO		O				
-			Direct Debit Mandate Reference	#		Reference to the applicable mandate for direct debits																			I	IO		O				
-				Direct Debit Mandate Settings		Processing settings governing direct debits																			I	IO		O				
-			Bill Pay Mandate Reference	#		Reference to the applicable mandate for bill pay transactions																			I	IO		O				
-				Bil Pay Mandate Settings		Processing settings governing bil pay transactions																			I	IO		O				
-		Payment Transaction	#			The general payment transaction with all major attributes - some optional depending on type																			I	IO	IO	O				
-			Payment Transaction Type			The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)																			I	IO	I	O				
-			Payment Transaction Payee Reference			Reference to the party to whom the payment is made																			I	IO	I	O				
-			Payment Transaction Payee Account Reference			Reference to the account to which the payment is made																			I	IO	I	O				
-			Payment Transaction Payee Bank Reference			Reference to the bankwhere the payee account is held																			I	IO	I	O				
-			Payment Transaction Amount			The amount (and currency if applicable) of the payment																			I	IO	I	O				
-			Payment Transaction Fee Type			The fee type applied to the payment transaction																			I	IO	I	O				
-			Payment Transaction Fee Charge 			The fee charge applied to the transaction																			I	IO	I	O				
-			Payment Transaction Date			The various key dates and times associated with the payment transaction																			IO	IO	IO	O				
-			Payment Transaction Payment Mechanism			Requested payment mechanism (e,g Wire, ACH)																			I	IO	I	O				
-			Payment Transaction Payment Purpose			Description of the purpose including any external reference to the transaction																			I	IO	I	O				
-			Payment Transaction Bank Branch/Location Reference			Reference to the location the payment transaction is initiated from 																			I	IO	I	O				
-			Payment Transaction Status			The processing status of the transaction (e.g. captured, approved, initiated, confirmed, settled)																			IO	O	IO	O				
-BQ Issued Inventory Instance Record	Issued Inventory					Handles the administration of issued inventory (e.g. checkbooks)																							IO	I	I	O
-Properties		Issued Inventory Description				Definition of the inventory item, including processing and handling guidelines and rules																							IO	O	O	O
-Options		Issued Inventory Option Definition				Definition of the processing option and impact (e.g. lost check handling)																							IO	O	O	O
-		Issued Inventory Option Setting				The processing option setting 																							IO	IO	IO	O
-Variables		Issued Inventory Type	#			The type of issued inventory (e.g. checkbook, pay-in slip)																							IO	IO	IO	O
-			Issued Inventory Property Type	#		Tracked property of the issued inventory (e.g.issued check numbers)																							IO	IO	IO	O
-				Issued Inventory Property Value		The tracked values associated with an issued inventory item																							IO	IO	IO	O
-			Issued Inventory Status			The tracked status of the inventory item (e.g. active, suspended, cancelled)																							IO	IO	IO	O
+CR Current Account Management Plan Instance Record	Current Account						CR Current Account Initiate	CR Current Account Update	CR Current Account Control	CR Current Account Retrieve	BQ Interest Initiate	BQ Interest Execute	BQ Interest Retrieve	BQ Service Fees Initiate	BQ Service Fees Execute	BQ Service Fees Retrieve	BQ Account Lien Initiate	BQ Account Lien Update	BQ Account Lien Exchange	BQ Account Lien Retrieve	BQ Account Sweep Initiate	BQ Account Sweep Update	BQ Account Sweep  Execute	BQ Account Sweep   Retrieve	BQ Deposits Withdrawls Initiate	BQ Deposits Withdrawls Update	BQ Deposits Withdrawls Execute	BQ Deposits Withdrawls Retrieve	BQ Payments Initiate	BQ Payments Update	BQ Payments Exchange	BQ Payments Execute	BQ Payments Retrieve	BQ Issued Device Initiate	BQ Issued Device Update	BQ Issued Device Request	BQ Issued Device Retrieve
+Properties		Current Account Initiate Action Reference				Reference to an Initiate service call	O																														
+		Current Account Initiate Action Record				The Initiate service call input and output record	I/O																														
+		Current Account Servicing Session Reference				Reference to the active servicing session	I	I	I																												
+		Current Account Instance Reference				Reference to the Current Account instance	O	I	I																												
+		Current Account Instance Status																																			
+		Current Account Instance Record	##			Consolidated record of the #CR instance including any input and output record values	IO	IO		O	IO			IO			IO				IO				IO				IO					IO			
+			Product Instance Reference 			Reference to the current account product instance	O	IO		O	I			I			I				I				I				I					I			
+			Current Account Number			The associated account number in any suitable format (e.g. IBAN)	O	IO		O	I			I			I				I				I				I					I			
+			Customer Reference			Reference to the account primary party/owner	I	IO		O							I				I				I				I					I			
+			Bank Branch/Location Reference			Bank branch associated with the account for booking purposes	I	IO		O							I				I				I				I					I			
+			Account Type			The type of current account (e.g. checking, student, small business)	I	IO		O	I			I			I				I				I				I					I			
+			Account Currency			The primary account currency	IO	IO		O	I			I							I				I				I					I			
+			Tax Reference 			Reference identifier linking the account to appropriate tax handling	I	IO		O	I			I							I								O								
+			Entitlement Option Definition			The definition of an applicable entitlement option	O	IO		O							O																				
+			Entitlement Option Setting			The setting for the entitlement option	IO	IO		O							I				I				I				I					I			
+			Restriction Option Definition			The definition of an applicable restriction option	O	IO		O							O																				
+			Restriction Option Setting			The setting for the restriction option	IO	IO		O	I			I			I				I				I				I					I			
+			Associations	##		Definition of the associations to the account	I	IO		O																			O					O			
+				Association Type		The type of association (e.g. guarantor, co-signer)	I	IO		O																			O					O			
+				Association Obligation/Entitlement		Description of the role, obligations or entitlements of the associated party	I	IO		O																			O					O			
+				Association Reference		Reference to the associated party	I	IO		O																			O					O			
+			Linked Accounts	##		Definition of the associations to the account	I	IO		O	I			I			I				I																
+				Link Type		The type and purpose for the link	I	IO		O	I			I			I				I																
+				Account Details		Details of the linked account	I	IO		O	I			I			I				I																
+			Position Limits	##		Position limits that are maintained by the account	IO	IO		O	I			I			IO								IO				IO					IO			
+				Position Limit Type		The type of position maintained for the account (e.g. transaction credit/debit, netting, position)	O	IO		O	I			I			I								I												
+				Position Limit Settings		The position definition, associated limit settings and rules	IO	IO		O	I			I			IO												O					O			
+				Position Limit Value		The current calculated position	O	IO		O	I			I			O								O				I					I			
+`			Date Type	##		Key dates associated with the account (e.g. opening date, closing date)	IO	IO		O	IO			IO			IO				IO				IO				IO					IO			
+				Date		Value of the date type	IO	IO		O	IO			IO			IO				IO				IO				IO					IO			
+		Current Account Instance Status				The status of the Current Account instance (e.g. initialised, pending, active)	O																														
+		Current Account Update Action Task Reference				Reference to an update service call		O																													
+		Current Account Update Action Task Record				The update service call consolidated processing record		I/O																													
+		Update Action Request				Details of the update action service request		I																													
+		Update Response Record				Details of the Update action service response		O																													
+		Current Account Control Action Task Reference				Reference to a Current Account instance control processing service call			O																												
+		Current Account Control Action Task Record				The processing control service call consolidated processing record			I/O																												
+		Current Account Control Action Request	##			Details of the control action service request			I																												
+			Control Action Type			The type of processing action requested (e.g. suspend, skip, terminate)			I																												
+		Current Account Control Action Response				Details of the control action service response			O																												
+		Current Account Retrieve Action Task Reference				Reference to a Current Account instance retrieve service call				O																											
+		Current Account Retrieve Action Task Record				The retrieve service call consolidated processing record				IO																											
+		Current Account Retrieve Action Request				Details of the retrieve action service request (lists requested reports)				I																											
+		Current Account Retrieve Action Response				Details of the retrieve action service response (lists returned reports)				O																											
+		Current Account Instance Report Record	##			A specific Current Account instance formatted report				IO																											
+			Current Account Instance Report Reference			Reference to the control record instance report				I																											
+			Current Account Instance Report Data			The input information used to assemble the report that can be on-going, periodic and actual and projected				O																											
+			Current Account Instance Report Type			The type of external report available				IO																											
+			Current Account Instance Report Parameters			The selection parameters for the report (e.g. period, content type)				I																											
+			Current Account Instance Report			The external report in any suitable form including selection filters where appropriate				O																											
+		Current Account Instance Analysis	##			A specific Current Account instance analytical report				IO																											
+			Current Account Instance Analysis Reference			Reference to the control record instance analysis view				I																											
+			Current Account Instance Analysis Data			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected				O																											
+			Current Account Instance Analysis Report Type			The type of external performance analysis report available				IO																											
+			Current Account Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)				I																											
+			Current Account Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate				O																											
+BQ Interest Instance Record	Interest					Information used to track and manage the bank's cashflow and liquidity requirements																															
+		Interest Initiate Action Reference				Reference to an Initiate service call					O																										
+		Interest Initiate Action Record				The Initiate service call input and output record					I/O																										
+		Current Account Instance Reference				Reference to the parent Current Accountinstance					I	I																									
+		Interest Instance Reference				Reference to the Interest instance					O	I																									
+		Interest Instance Status				The status of the Interest instance (e.g. initialised, pending, active)					O																										
+		Interest Rate Type				The type of rate calculation that can be applied					I	I	O																								
+		Interest Rate Application Schedule				The processing schedule for applying interest rates to the account					I	I	O																								
+		Interest Rate Configuration	##			The collection of applicable rates					I	I	O																								
+			Interest Rate Type			Applicable rate type					I	I	O																								
+			Interest Rate			The rate value to be applied					I	I	O																								
+		Interest Application Record	##			The record of applied interest					I	IO	O																								
+			Interest Transaction	##		A record of applied interest						IO	O																								
+				Transaction Description		General description of the interest transaction						I	O																								
+				Transaction Rate Type		Applicable rate type						I	O																								
+				Transaction Interest Charge		The derived interest amount to be applied						O	O																								
+			Interest Accrual Amount	##		Record of accrued interest					I	IO	O																								
+				Interest Accrual Type		The interest type being tracked					I	I	O																								
+				Interest Accrual Charge		The accrued amount of applied interest					I	O	O																								
+		Interest Execute Action Task Reference				Reference to a #BQ instance execute service call						O																									
+		Interest Execute Action Task Record				The execute service call consolidated processing record						I/O																									
+		Interest Execute Record Reference				Reference to the #BQ execute transaction/record						O																									
+		Interest Execute Record Type	##			Copy in associated API description (less 5 header characters)						I																									
+			Execute Input Record			Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)						I																									
+		Execute Response Record				Details of the execute action service response						O																									
+		Interest Retrieve Action Task Reference				Reference to a Interest instance retrieve service call							O																								
+		Interest Retrieve Action Task Record				The retrieve service call consolidated processing record							I/O																								
+		Interest Retrieve Action Request				Details of the retrieve action service request (lists requested reports)							I																								
+		Interest Retrieve Action Response				Details of the retrieve action service response (lists returned reports)							O																								
+		Interest Instance Report	##			A specific Interest instance formatted report							IO																								
+			Interest Instance Report Reference			Reference to the control record instance report							I																								
+			Interest Instance Report Record			The input information used to assemble the report that can be on-going, periodic and actual and projected							O																								
+			Interest Instance Report Type			The type of external report available							O																								
+			Interest Instance Report Parameters			The selection parameters for the report (e.g. period, content type)							O																								
+			Interest Instance Report			The external report in any suitable form including selection filters where appropriate							O																								
+		Interest Instance Analysis	##			A specific Interest instance analytical report							IO																								
+			Interest Instance Analysis Reference			Reference to the control record instance analysis view							I																								
+			Interest Instance Analysis Record			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected							O																								
+			Interest Instance Analysis Report Type			The type of external performance analysis report available							O																								
+			Interest Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)							O																								
+			Interest Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate							O																								
+BQ Service Fees Instance Record	Service Fees					Applies service fees and penalties to the account																															
+		Service Fees Initiate Action Reference				Reference to an Initiate service call								O																							
+		Service Fees Initiate Action Record				The Initiate service call input and output record								IO																							
+		Current Account Instance Reference				Reference to the parent Current Accountinstance								I	I																						
+		Service Fees Instance Reference				Reference to the Interest instance								O	I																						
+		Service Fees Instance Status				The status of the Interest instance (e.g. initialised, pending, active)								O																							
+		Fee Configuration Profile	##			The profile of applicable fees and penalties fees								IO	IO	O																					
+			Fee Definition 			Definition of the fee or penalty including when and how to apply								O	O	O																					
+			Fee Type			The fee or penalty type applied								I	I	O																					
+		Fee Application Record	##			The record of applied fees and penalties including transactions and accrued amounts									IO	O																					
+			Fee Transaction	##		A record of an applied fee or penalty									IO	O																					
+				Transaction Description		General description of the fee or penalty transaction									I	O																					
+				Transaction Fee Type		The fee or penalty type applied									IO	O																					
+				Transaction Fee Charge		The derived fee or penalty amount applied									O	O																					
+			Fee Projections and Commitments	##		A record of projected fees and penalties									IO	O																					
+				Projected Transaction Description		General description of the projected fee or penalty									I	O																					
+				Projected Transaction Fee Type		The fee or penalty type									IO	O																					
+				Projected Transaction Fee Charge		The anticipated fee or penalty amount									O	O																					
+			Fee Accrual Amount	##		Tracking of accumulated fees and penalties									IO	O																					
+				Accrual Fee Type		The fee or penalty type being tracked									IO	O																					
+				Accrual Fee Charge		The accrued amount of fees and penalties									O	O																					
+		Service Fees Execute Action Task Reference				Reference to a #BQ instance execute service call									O																						
+		Service Fees Execute Action Task Record				The execute service call consolidated processing record									I/O																						
+		Service Fees Execute Record Reference				Reference to the #BQ execute transaction/record									O																						
+		Execute Record Type	##			Copy in associated API description (less 5 header characters)									I																						
+			Execute Input Record			Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)									I																						
+		Execute Response Record				Details of the execute action service response									O																						
+		Service Fees Retrieve Action Task Reference				Reference to a Service Fees instance retrieve service call										O																					
+		Service Fees Retrieve Action Task Record				The retrieve service call consolidated processing record										I/O																					
+		Service Fees Retrieve Action Request				Details of the retrieve action service request (lists requested reports)										I																					
+		Service Fees Retrieve Action Response				Details of the retrieve action service response (lists returned reports)										O																					
+		Service Fees Instance Report	##			A specific Service Fees instance formatted report										IO																					
+			Service Fees Instance Report Reference			Reference to the control record instance report										I																					
+			Service Fees Instance Report Record			The input information used to assemble the report that can be on-going, periodic and actual and projected										O																					
+			Service Fees Instance Report Type			The type of external report available										O																					
+			Service Fees Instance Report Parameters			The selection parameters for the report (e.g. period, content type)										O																					
+			Service Fees Instance Report			The external report in any suitable form including selection filters where appropriate										O																					
+		Service Fees Instance Analysis	##			A specific Service Fees instance analytical report										IO																					
+			Service Fees Instance Analysis Reference			Reference to the control record instance analysis view										I																					
+			Service Fees Instance Analysis Record			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected										O																					
+			Service Fees Instance Analysis Report Type			The type of external performance analysis report available										O																					
+			Service Fees Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)										O																					
+			Service Fees Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate										O																					
+BQ Acount Lien Instance Record 	Acount Lien					Handles liens placed against the account											IO	I		O																	
+		Account Lien Initiate Action Reference				Reference to an Initiate service call											O																				
+		Account Lien Initiate Action Record				The Initiate service call input and output record											I/O																				
+		Current Account Instance Reference				Reference to the parent Current Account instance											I	I	I																		
+		Account Lien Instance Reference				Reference to the Account Lien instance											O	I	I																		
+		Account Lien Instance Status				The status of the Account Lien instance (e.g. initialised, pending, active)											O																				
+		Lien Type				The type of lien (e.g. final, pending)											I	IO		O																	
+		Lien Definition				Definition of the type of lien including processing guidelines											IO			O																	
+		Lien Processing Option 				The processing option applied to the lien											I	IO		O																	
+		Lien Record	##			The collection of applicable rates											I	IO		O																	
+			Lien Originator			The party requesting the lien											I	IO		O																	
+			Lien Purpose			The purpose or associated facility linked to the lien											I	IO		O																	
+			Lien Amount			The amount being blocked											I	IO		O																	
+			Lien Start Date			The date the lien is enforced											I	IO		O																	
+			Lien Expiry Date			The date the lien is removed											I	IO		O																	
+			Lien Status			The status on the lien											I	IO		O																	
+		Account Lien Update Action Task Reference				Reference to an update service call												O																			
+		Account Lien Update Action Task Record				The update service call consolidated processing record												IO																			
+		Account Lien Update Action Request				Details of the update action service request												I																			
+		Update Response Record				Details of the Update action service response												O																			
+		Account Lien Exchange Action Task Reference				Reference to a Account Lien instance exchange service call													O																		
+		Account Lien Exchange Action Task Record				The exchange service call consolidated processing record													IO																		
+		Account Lien Exchange Action Request	##			Details of the exchange action service request													I																		
+			Exchange Action Type			The type of exchange (e.g. accept, reject, verify)													I																		
+		Account Lien Exchange Action Response				Details of the exchange action service response													O																		
+		Account Lien Instance Status				The status of the Account Lien instance (e.g. accepted, rejected, verified)													O																		
+		Account Lien Retrieve Action Task Reference				Reference to a Account Lien instance retrieve service call														O																	
+		Account Lien Retrieve Action Task Record				The retrieve service call consolidated processing record														I/O																	
+		Account Lien Retrieve Action Request				Details of the retrieve action service request (lists requested reports)														I																	
+		Account Lien Retrieve Action Response				Details of the retrieve action service response (lists returned reports)														O																	
+		Account Lien Instance Report	##			A specific Account Lien instance formatted report														IO																	
+			Account Lien Instance Report Reference			Reference to the control record instance report														I																	
+			Account Lien Instance Report Record			The input information used to assemble the report that can be on-going, periodic and actual and projected														O																	
+			Account Lien Instance Report Type			The type of external report available														O																	
+			Account Lien Instance Report Parameters			The selection parameters for the report (e.g. period, content type)														O																	
+			Account Lien Instance Report			The external report in any suitable form including selection filters where appropriate														O																	
+		Account Lien Instance Analysis	##			A specific Account Lien instance analytical report														IO																	
+			Account Lien Instance Analysis Reference			Reference to the control record instance analysis view														I																	
+			Account Lien Instance Analysis Record			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected														O																	
+			Account Lien Instance Analysis Report Type			The type of external performance analysis report available														O																	
+			Account Lien Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)														O																	
+			Account Lien Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate														O																	
+BQ Acount Sweep Instance Record 	Account Sweep																																				
+		Account Sweep Initiate Action Reference				Reference to an Initiate service call															O																
+		Account Sweep Initiate Action Record				The Initiate service call input and output record															I/O																
+		Current Account Instance Reference				Reference to the parent Current Account instance															I	I	I														
+		Account Sweep Instance Reference				Reference to the Account Sweep instance															O	I	I														
+		Account Sweep Instance Status				The status of the Account Sweep instance (e.g. initialised, pending, active)															O																
+		Account Sweep Type				The type of sweep (e.g. periodic, threshhold)															I	IO		O													
+		Account Sweep Definition				Definition of the type of sweep															O	IO		O													
+		Account Sweep Application Schedule 				Sweep processing guidelines and scheduling rules															IO	IO		O													
+		Account Sweep Configuration	##			The set-up of the sweep facility															I	IO		O													
+			Target Account			The facility that the sweep is made to/from															I	IO		O													
+			Sweep Mandate			Confirmation that the sweep processing is sanctioned as necessary															I	IO		O													
+			Sweep Processing Schedule			Timing and or triggers for initiating sweep transaction															I	IO		O													
+		Sweep Application Record	##			The transaction record for an applied sweep																IO	I	O													
+			Account Sweep Target Account			The facility that the sweep is made to/from																IO	I	O													
+			Account Sweep Amount			The amount transferred to or from the account																IO	I	O													
+			Account Sweep Execution Date			The date and time the sweep is initiated																IO	I	O													
+		Account Sweep Update Action Task Reference				Reference to an update service call																O															
+		Account Sweep Update Action Task Record				The update service call consolidated processing record																I/O															
+		Account Sweep Update Action Request				Details of the update action service request																I															
+		Update Response Record				Details of the Update action service response																O															
+		Account Sweep Execute Action Task Reference				Reference to a Account Sweep instance execute service call																	O														
+		Account Sweep Execute Action Task Record				The execute service call consolidated processing record																	I/O														
+		Account Sweep Execute Record Reference				Reference to the Account Sweep execute transaction/record																	O														
+		Execute Record Type	##			Copy in associated API description (less 5 header characters)																	I														
+			Execute Input Record			Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)																	I														
+		Execute Response Record				Details of the execute action service response																	O														
+		Account Sweep Retrieve Action Task Reference				Reference to a Account Sweep instance retrieve service call																		O													
+		Account Sweep Retrieve Action Task Record				The retrieve service call consolidated processing record																		I/O													
+		Account Sweep Retrieve Action Request				Details of the retrieve action service request (lists requested reports)																		I													
+		Account Sweep Retrieve Action Response				Details of the retrieve action service response (lists returned reports)																		O													
+		Account Sweep Instance Report	##			A specific Account Sweep instance formatted report																		IO													
+			Account Sweep Instance Report Reference			Reference to the control record instance report																		I													
+			Account Sweep Instance Report Record			The input information used to assemble the report that can be on-going, periodic and actual and projected																		O													
+			Account Sweep Instance Report Type			The type of external report available																		O													
+			Account Sweep Instance Report Parameters			The selection parameters for the report (e.g. period, content type)																		O													
+			Account Sweep Instance Report			The external report in any suitable form including selection filters where appropriate																		O													
+		Account Sweep Instance Analysis	##			A specific Account Sweep instance analytical report																		IO													
+			Account Sweep Instance Analysis Reference			Reference to the control record instance analysis view																		I													
+			Account Sweep Instance Analysis Record			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected																		O													
+			Account Sweep Instance Analysis Report Type			The type of external performance analysis report available																		O													
+			Account Sweep Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)																		O													
+			Account Sweep Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate																		O													
+BQ Deposits Withdrawals Instance Record 	Deposits Withdrawl					Processes deposits and withdrawals against the account																			IO	IO	IO	O									
+		Deposits Withdrawls Initiate Action Reference				Reference to an Initiate service call																			O												
+		Deposits Withdrawls Initiate Action Record				The Initiate service call input and output record																			I/O												
+		Current Account Instance Reference				Reference to the parent Current Account instance																			I	I	I										
+		Deposits Withdrawls Instance Reference				Reference to the Deposits Withdrawls instance																			O	I	I										
+		Deposits Withdrawls Instance Status				The status of the Deposits Withdrawls instance (e.g. initialised, pending, active)																			O												
+		Deposit Type				The type of deposit transaction that can be applied to the account (e.g. customer deposit, internal credit)																			I	IO		O									
+		Withdrawal Type				The type of withdrawal transaction that can be applied to the account (e.g. customer withdrawal, internal service charge, disbursement)																			I	IO		O									
+		Account Limit Breach Response				The handling options if a withdrawal results in a breach of an account limit																			I	IO		O									
+		Deposit Transaction	##			The collection of applicable rates																			IO	IO	IO	O									
+			Deposit Transaction Source Reference			Identifies the source of the deposit																			I	IO	I	O									
+			Deposit Transaction Deposit Type			The type of deposit made with the transaction																			I	IO	I	O									
+			Deposit Transaction Description 			Any necessary details describing the purpose or reference properties of the deposit																			I	IO	I	O									
+			Deposit Transaction Amount			The deposited amount																			I	IO	I	O									
+			Deposit Transaction Date			The date and time the deposit was initiated																			IO	IO	IO	O									
+		Withdrawal Transaction	##			The record of appliedinterest																			IO	IO	IO	O									
+			Withdrawal Transaction Source Reference			Identifies the target for the withdrawal																			I	IO	I	O									
+			Withdrawal Transaction Withdrawal Type			The type of withdrawal made with the transaction																			I	IO	I	O									
+			Withdrawal Transaction Description 			Any necessary details describing the purpose or reference properties of the withdrawal																			I	IO	I	O									
+			Wihdrawal Transaction Amount			The withdrawn amount																			I	IO	I	O									
+			Withdrawal Transaction Date			The date and time the withdrawal was initiated																			IO	IO	IO	O									
+		Deposits Withdrawls Update Action Task Reference				Reference to an update service call																				O											
+		Deposits Withdrawls Update Action Task Record				The update service call consolidated processing record																				I/O											
+		Deposits Withdrawls Update Action Request				Details of the update action service request																				I											
+		Update Response Record				Details of the Update action service response																				O											
+		Deposits Withdrawls Execute Action Task Reference				Reference to a Deposits Withdrawls instance execute service call																					O										
+		Deposits Withdrawls Execute Action Task Record				The execute service call consolidated processing record																					I/O										
+		Deposits Withdrawls Execute Record Reference				Reference to the Deposits Withdrawls execute transaction/record																					O										
+		Execute Record Type	##			Copy in associated API description (less 5 header characters)																					I										
+			Execute Input Record			Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)																					I										
+		Execute Response Record				Details of the execute action service response																					O										
+		Deposits Withdrawls Retrieve Action Task Reference				Reference to a Deposits Withdrawls instance retrieve service call																						O									
+		Deposits Withdrawls Retrieve Action Task Record				The retrieve service call consolidated processing record																						I/O									
+		Deposits Withdrawls Retrieve Action Request				Details of the retrieve action service request (lists requested reports)																						I									
+		Deposits Withdrawls Retrieve Action Response				Details of the retrieve action service response (lists returned reports)																						O									
+		Deposits Withdrawls Instance Report	##			A specific Deposits Withdrawls instance formatted report																						IO									
+			Deposits Withdrawls Instance Report Reference			Reference to the control record instance report																						I									
+			Deposits Withdrawls Instance Report Record			The input information used to assemble the report that can be on-going, periodic and actual and projected																						O									
+			Deposits Withdrawls Instance Report Type			The type of external report available																						O									
+			Deposits Withdrawls Instance Report Parameters			The selection parameters for the report (e.g. period, content type)																						O									
+			Deposits Withdrawls Instance Report			The external report in any suitable form including selection filters where appropriate																						O									
+		Deposits Withdrawls Instance Analysis	##			A specific Deposits Withdrawls instance analytical report																						IO									
+			Deposits Withdrawls Instance Analysis Reference			Reference to the control record instance analysis view																						I									
+			Deposits Withdrawls Instance Analysis Record			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected																						O									
+			Deposits Withdrawls Instance Analysis Report Type			The type of external performance analysis report available																						O									
+			Deposits Withdrawls Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)																						O									
+			Deposits Withdrawls Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate																						O									
+BQ Payments Instance Record 	Payments																																				
+		Payments Initiate Action Reference				Reference to an Initiate service call																							O								
+		Payments Initiate Action Record				The Initiate service call input and output record																							I/O								
+		Current Account Instance Reference				Reference to the parent Current Account instance																							I	I	I	I					
+		Payments Instance Reference				Reference to the Payments instance																							O	I	I	I					
+		Payments Instance Status				The status of the Payments instance (e.g. initialised, pending, active)																							O								
+		Payment Type				The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)																							I	IO			O				
+		Payment Definition				Definition of the type of payment including processing rules and guidelines																							IO				O				
+		Payment Processinng Option Definition				Definition of the processing option and impact (e.g. frequency and cumulative amount constraints)																							O	IO			O				
+		Payment Processing Option Setting				The option setting																							I	IO			O				
+		Payment Configuration	##			Configuration setting for various payment transaction types																							I	IO			O				
+			Payment Schedule 			Processing schedule for repeating payments for standing orders (e.g. start date, end, period, number/cycles). Note this triggers an internal execution call as necessary																							I	IO			O				
+			Direct Debit Mandate Reference	##		Reference to the applicable mandate for direct debits																							I	IO			O				
+				Direct Debit Mandate Settings		Processing settings governing direct debits																							I	IO			O				
+			Bill Pay Mandate Reference	##		Reference to the applicable mandate for bill pay transactions																							I	IO			O				
+				Bil Pay Mandate Settings		Processing settings governing bil pay transactions																							I	IO			O				
+		Payment Transaction	##			The general payment transaction with all major attributes - some optional depending on type																								IO		IO	O				
+			Payment Transaction Type			The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)																								IO		I	O				
+			Payment Transaction Payee Reference			Reference to the party to whom the payment is made																								IO		I	O				
+			Payment Transaction Payee Account Reference			Reference to the account to which the payment is made																								IO		I	O				
+			Payment Transaction Payee Bank Reference			Reference to the bankwhere the payee account is held																								IO		I	O				
+			Payment Transaction Amount			The amount (and currency if applicable) of the payment																								IO		I	O				
+			Payment Transaction Fee Type			The fee type applied to the payment transaction																								IO		I	O				
+			Payment Transaction Fee Charge 			The fee charge applied to the transaction																								IO		I	O				
+			Payment Transaction Date			The various key dates and times associated with the payment transaction																								IO		IO	O				
+			Payment Transaction Payment Mechanism			Requested payment mechanism (e,g Wire, ACH)																								IO		I	O				
+			Payment Transaction Payment Purpose			Description of the purpose including any external reference to the transaction																								IO		I	O				
+			Payment Transaction Bank Branch/Location Reference			Reference to the location the payment transaction is initiated from 																								IO		I	O				
+			Payment Transaction Status			The processing status of the transaction (e.g. captured, approved, initiated, confirmed, settled)																								O		IO	O				
+		Payments Update Action Task Reference				Reference to an update service call																								O							
+		Payments Update Action Task Record				The update service call consolidated processing record																								I/O							
+		Payments Update Action Request				Details of the update action service request																								I							
+		Update Response Record				Details of the Update action service response																								O							
+		Payments Exchange Action Task Reference				Reference to a Payments instance exchange service call																									O						
+		Payments Exchange Action Task Record				The exchange service call consolidated processing record																									I/O						
+		Payments Exchange Action Request	##			Details of the exchange action service request																									I						
+			Exchange Action Type			The type of exchange (e.g. accept, reject, verify)																									I						
+		Payments Exchange Action Response				Details of the exchange action service response																									O						
+		Payments Instance Status				The status of the Payments instance (e.g. accepted, rejected, verified)																									O						
+		Payments Execute Action Task Reference				Reference to a Payments instance execute service call																										O					
+		Payments Execute Action Task Record				The execute service call consolidated processing record																										I/O					
+		Payments Execute Record Reference				Reference to the Payments execute transaction/record																										O					
+		Execute Record Type	##			Copy in associated API description (less 5 header characters)																										I					
+			Execute Input Record			Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)																										I					
+		Execute Response Record				Details of the execute action service response																										O					
+		Payments Retrieve Action Task Reference				Reference to a Payments instance retrieve service call																											O				
+		Payments Retrieve Action Task Record				The retrieve service call consolidated processing record																											I/O				
+		Payments Retrieve Action Request				Details of the retrieve action service request (lists requested reports)																											I				
+		Payments Retrieve Action Response				Details of the retrieve action service response (lists returned reports)																											O				
+		Payments Instance Report	##			A specific Payments instance formatted report																											IO				
+			Payments Instance Report Reference			Reference to the control record instance report																											I				
+			Payments Instance Report Record			The input information used to assemble the report that can be on-going, periodic and actual and projected																											O				
+			Payments Instance Report Type			The type of external report available																											O				
+			Payments Instance Report Parameters			The selection parameters for the report (e.g. period, content type)																											O				
+			Payments Instance Report			The external report in any suitable form including selection filters where appropriate																											O				
+		Payments Instance Analysis	##			A specific Payments instance analytical report																											IO				
+			Payments Instance Analysis Reference			Reference to the control record instance analysis view																											I				
+			Payments Instance Analysis Record			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected																											O				
+			Payments Instance Analysis Report Type			The type of external performance analysis report available																											O				
+			Payments Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)																											O				
+			Payments Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate																											O				
+BQ Issued Device Instance Record	Issued Device																																				
+		Issued Device Initiate Action Reference				Reference to an Initiate service call																												O			
+		Issued Device Initiate Action Record				The Initiate service call input and output record																												I/O			
+		Current Account Instance Reference				Reference to the parent Current Account instance																												I	I	I	
+		Issued Device Instance Reference				Reference to the Issued Device instance																												O	I	I	
+		Issued Device Instance Status				The status of the Issued Device instance (e.g. initialised, pending, active)																												O			
+		Issued Device Type				The type of issued device/inventory (e.g. checkbook, pay-in slip)																												I	IO	I	O
+		Issued Device Description				Definition of the inventory item, including processing and handling guidelines and rules																												IO	IO	O	O
+		Issued Device Option Definition				Definition of the processing option and impact (e.g. lost check handling)																												IO	IO	O	O
+		Issued Device Option Setting				The processing option setting 																												IO	IO	IO	O
+		Issued Device Property	##			A property of the issued device/inventory (e.g. card, checkbook, pay-in slip)																												IO	IO	IO	O
+			Issued Device Property Type	##		Tracked property of the issued device/inventory (e.g. issued check numbers)																												IO	IO	IO	O
+				Issued Device Property Value		The tracked values associated with an issued device/inventory item																												IO	IO	IO	O
+			Issued Device Status			The tracked status of the device/inventory item (e.g. active, suspended, cancelled)																												IO	IO	IO	O
+		Issued Device Update Action Task Reference				Reference to an update service call																													O		
+		Issued Device Update Action Task Record				The update service call consolidated processing record																													I/O		
+		Issued Device Update Action Request				Details of the update action service request																													I		
+		Update Response Record				Details of the Update action service response																													O		
+		Issued Device Request Action Task Reference				Reference to a Issued Device instance request service call																														O	
+		Issued Device Request Action Task Record				The request service call consolidated processing record																														I/O	
+		Issued Device Request Record Reference				Reference to the Issued Device service request record																														O	
+		Request Record Type	##			Request service record type (e.g. reworking, refresh, workstep)																														I	
+			Request Input Record			Request service record (e.g. rework function, refresh record, process workstep)																														I	
+		Request Response Record				Details of the request action service response																														O	
+		Issued Device Retrieve Action Task Reference				Reference to a Issued Device instance retrieve service call																															O
+		Issued Device Retrieve Action Task Record				The retrieve service call consolidated processing record																															I/O
+		Issued Device Retrieve Action Request				Details of the retrieve action service request (lists requested reports)																															I
+		Issued Device Retrieve Action Response				Details of the retrieve action service response (lists returned reports)																															O
+		Issued Device Instance Report	##			A specific Issued Device instance formatted report																															IO
+			Issued Device Instance Report Reference			Reference to the control record instance report																															I
+			Issued Device Instance Report Record			The input information used to assemble the report that can be on-going, periodic and actual and projected																															O
+			Issued Device Instance Report Type			The type of external report available																															O
+			Issued Device Instance Report Parameters			The selection parameters for the report (e.g. period, content type)																															O
+			Issued Device Instance Report			The external report in any suitable form including selection filters where appropriate																															O
+		Issued Device Instance Analysis	##			A specific Issued Device instance analytical report																															IO
+			Issued Device Instance Analysis Reference			Reference to the control record instance analysis view																															I
+			Issued Device Instance Analysis Record			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected																															O
+			Issued Device Instance Analysis Report Type			The type of external performance analysis report available																															O
+			Issued Device Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)																															O
+			Issued Device Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate																															O

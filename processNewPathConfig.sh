@@ -67,7 +67,7 @@ do
         fi
         echo "Creating Path Definitions for $cr $z ..."
         case $z in
-            initiate|create|activate|register|evaluate|provide|authorize)
+            initiate|create|activate|register|evaluate|provide)
                 if [ $z == "initiate" ]
                 then
                     action="initiation"
@@ -130,7 +130,7 @@ do
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
                     foo=`echo ${cr:0:1} | tr  '[a-z]' '[A-Z]'`${cr:1}
-                    echo "            \$ref: '#/definitions/$bcr$actionRaw"OutputModel\'>>$output
+                    echo "            \$ref: '#/definitions/BQ$bcr$actionRaw"OutputModel\'>>$output
                 else #CR Level
                     echo "  /$sdpath/$crpath/$action:">>$output
                     echo "    post:">>$output
@@ -220,7 +220,7 @@ do
                 ;;
             update)
                 if [ ! -z "$extOp" -a "$extOp" != " " ]; then #BQ Level
-                    echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/{bq-reference-id}/updation:">>$output
+                    echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/{bq-reference-id}/update:">>$output
                     echo "    put:">>$output
                     echo "      tags:">>$output
                     echo "      - update">>$output
@@ -252,7 +252,7 @@ do
                     echo "          schema:">>$output
                     echo "            \$ref: '#/definitions/BQ$bcr$actionRaw"OutputModel\'>>$output
                 else #CR Level
-                    echo "  /$sdpath/$crpath/{cr-reference-id}/updation:">>$output
+                    echo "  /$sdpath/$crpath/{cr-reference-id}/update:">>$output
                     echo "    put:">>$output
                     echo "      tags:">>$output
                     echo "      - update">>$output
@@ -280,7 +280,7 @@ do
                     echo "            \$ref: '#/definitions/CR$bcr$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
-            execute|request|control|exchange)
+            execute|request|control|exchange|capture|grant)
                 if [ "$z" == "execute" ]
                 then
                     action="execution"
@@ -300,6 +300,16 @@ do
                 then
                     action="exchange"
                     tag="exchange"
+                fi
+                if [ "$z" == "capture" ]
+                then
+                    action="capture"
+                    tag="capture"
+                fi
+                if [ "$z" == "grant" ]
+                then
+                    action="grant"
+                    tag="grant"
                 fi
                 if [ ! -z "$extOp" -a "$extOp" != " " ]; then #BQ Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/{bq-reference-id}/$action:">>$output

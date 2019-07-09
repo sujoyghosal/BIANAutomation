@@ -13,29 +13,29 @@ paths:
       tags:
       - initiate
       operationId: initiateCreditPricingAssessment
-      summary: EvCR Evaluate a proposed transaction pricing against group credit policy
-      description: A check to confirm that a proposed (v. large) transaction is withingroup credit policy and to recommend pricing adjustments as necessary
+      summary: Details of a new #CR instance
+      description: Evaluate a proposed transaction pricing against group credit policy
       produces:
       - application/json
       parameters:
       - in: body
         name: body
         required: true
-        description: CreditManagement Request Payload
+        description: CreditPricingAssessment Request Payload
         schema:
-          $ref: '#/definitions/CRCreditManagementInitiateInputModel'
+          $ref: '#/definitions/CRCreditPricingAssessmentInitiateInputModel'
       responses:
         201:
-          description: Successful EvCR Evaluate a proposed transaction pricing against group credit policy
+          description: Successful Details of a new #CR instance
           schema:
-            $ref: '#/definitions/CRCreditManagementInitiateOutputModel'
-  /credit-management/credit-pricing-assessment/{cr-reference-id}/updation:
+            $ref: '#/definitions/CRCreditPricingAssessmentInitiateOutputModel'
+  /credit-management/credit-pricing-assessment/{cr-reference-id}/update:
     put:
       tags:
       - update
-      operationId: updateCreditPricingAssessmentDetails
-      summary: UpCR Update details of an active credit pricing assessment
-      description: A check to confirm that a proposed (v. large) transaction is withingroup credit policy and to recommend pricing adjustments as necessary
+      operationId: updateCreditPricingAssessment
+      summary: Update to any amendable fields of the #CR instance
+      description: Update details of an active credit pricing assessment
       produces:
       - application/json
       parameters:
@@ -47,21 +47,21 @@ paths:
       - in: body
         name: body
         required: true
-        description: CreditManagement Request Payload
+        description: CreditPricingAssessment Request Payload
         schema:
-          $ref: '#/definitions/CRCreditManagementUpdateInputModel'
+          $ref: '#/definitions/CRCreditPricingAssessmentUpdateInputModel'
       responses:
         200:
-          description: Successful UpCR Update details of an active credit pricing assessment
+          description: Successful Update to any amendable fields of the #CR instance
           schema:
-            $ref: '#/definitions/CRCreditManagementUpdateOutputModel'
+            $ref: '#/definitions/CRCreditPricingAssessmentUpdateOutputModel'
   /credit-management/credit-pricing-assessment/{cr-reference-id}/exchange:
     put:
       tags:
       - exchange
-      operationId: exchangeCreditPricingAssessmentUpdate
-      summary: EcCR Accept/reject a pricing assessment
-      description: A check to confirm that a proposed (v. large) transaction is withingroup credit policy and to recommend pricing adjustments as necessary
+      operationId: processCreditPricingAssessmentAcceptanceUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept/reject a pricing assessment
       produces:
       - application/json
       parameters:
@@ -73,14 +73,40 @@ paths:
       - in: body
         name: body
         required: true
-        description: CreditManagement Request Payload
+        description: CreditPricingAssessment Request Payload
         schema:
-          $ref: '#/definitions/CRCreditManagementExchangeInputModel'
+          $ref: '#/definitions/CRCreditPricingAssessmentExchangeInputModel'
       responses:
         200:
-          description: Successful EcCR Accept/reject a pricing assessment
+          description: Successful Handle an external exchange (e.g. accept, reject, verify)
           schema:
-            $ref: '#/definitions/CRCreditManagementExchangeOutputModel'
+            $ref: '#/definitions/CRCreditPricingAssessmentExchangeOutputModel'
+  /credit-management/credit-pricing-assessment/{cr-reference-id}/grant:
+    put:
+      tags:
+      - grant
+      operationId: grantCreditPricingAssessmentAcceptanceUpdate
+      summary: Invoke a grant request action from the #BQ instance to obtain access permission
+      description: Obtain a credit pricing policy acceptance grant to proceed with a transaction
+      produces:
+      - application/json
+      parameters:
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Record
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CreditPricingAssessment Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditPricingAssessmentGrantInputModel'
+      responses:
+        200:
+          description: Successful Invoke a grant request action from the #BQ instance to obtain access permission
+          schema:
+            $ref: '#/definitions/CRCreditPricingAssessmentGrantOutputModel'
   /credit-management/credit-pricing-assessment:
     get:
       tags:
@@ -178,293 +204,703 @@ paths:
           schema:
             $ref: '#/definitions/CRCreditManagementRetrieveOutputModel'
 definitions:
- CRCreditPricingAssessmentInstanceRecord:
+ CRCreditPricingAssessmentInitiateInputModel:
   type: object
-  businessUnitReference:
-   type: string
-   example: "750003"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Business unit submitting the proposed transaction for review
-  customerReference:
-   type: string
-   example: "717528"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Reference to the customer related to the proposed transaction
-  sectorReference:
-   type: string
-   example: "755135"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: The sector where the proposed transaction would be booked
-  productType:
-   type: string
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-     general-info: The product type/category of the proposed transaction for the credit pricing assessment
-  proposedTransactionReference:
-   type: string
-   example: "745066"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Reference to proposed transaction submitted for assessment
-  proposedTransactionRecord:
-   proposedTransactionType:
+  properties: 
+   creditPricingAssessmentInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   creditPricingAssessmentServicingSessionReference:
+    type: string
+    example: "CPASSR721825"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   creditPricingAssessmentInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The type of credit instrument being considered
-   proposedTransactionAmount:
+      general-info: The status of the #CR instance (e.g. initialized, pending, active)
+   creditPricingAssessmentInstanceRecord:
+    type: object
+    properties:
+     businessUnitReference:
+      type: string
+      example: "703216"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Business unit submitting the proposed transaction for review
+     customerReference:
+      type: string
+      example: "792575"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer related to the proposed transaction
+     sectorReference:
+      type: string
+      example: "751587"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The sector where the proposed transaction would be booked
+     productType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type/category of the proposed transaction for the credit pricing assessment
+     proposedTransactionReference:
+      type: string
+      example: "789406"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to proposed transaction submitted for assessment
+     proposedTransactionRecord:
+      type: object
+      properties:
+       proposedTransactionType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of credit instrument being considered
+       proposedTransactionAmount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The financial structure of the proposed transaction
+       proposedTransactionRecordDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: One or more key dates associated with the transaction
+       proposedTransactionBookingEntity:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The booking entity within the bank that the proposed transaction would impact
+ CRCreditPricingAssessmentInitiateOutputModel:
+  type: object
+  properties: 
+   creditPricingAssessmentInitiateActionReference:
     type: string
-    example: USD 250
+    example: "CPAIAR753921"
     description: |
      `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-      general-info: The financial structure of the proposed transaction
-   proposedTransactionRecordDate:
-    type: string
-    example: "09-22-2018"
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   creditPricingAssessmentInitiateActionRecord:
+    type: object
     description: |
      `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-      general-info: One or more key dates associated with the transaction
-   proposedTransactionBookingEntity:
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   creditPricingAssessmentInstanceReference:
+    type: string
+    example: "CPAIR703249"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Credit Pricing Assessment instance
+   creditPricingAssessmentInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The bookingentity within the bank that the proposed transaction would impact
-  proposedTransactionCreditPricingAssessment:
-   type: string
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-     general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
- CRCreditManagementInitiateInputModel:
+      general-info: The status of the #CR instance (e.g. initialized, pending, active)
+   creditPricingAssessmentInstanceRecord:
+    type: object
+    properties:
+     proposedTransactionCreditPricingAssessment:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
+ CRCreditPricingAssessmentUpdateInputModel:
   type: object
-  businessUnitReference:
-   type: string
-   example: "712783"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Business unit submitting the proposed transaction for review
-  customerReference:
-   type: string
-   example: "712032"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Reference to the customer related to the proposed transaction
-  sectorReference:
-   type: string
-   example: "715047"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: The sector where the proposed transaction would be booked
-  productType:
-   type: string
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-     general-info: The product type/category of the proposed transaction for the credit pricing assessment
-  proposedTransactionReference:
-   type: string
-   example: "766941"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Reference to proposed transaction submitted for assessment
-  proposedTransactionRecord:
-   proposedTransactionType:
+  properties: 
+   creditPricingAssessmentServicingSessionReference:
+    type: string
+    example: "CPASSR772218"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   creditPricingAssessmentInstanceReference:
+    type: string
+    example: "CPAIR799269"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Credit Pricing Assessment instance
+   creditPricingAssessmentInstanceRecord:
+    type: object
+    properties:
+     businessUnitReference:
+      type: string
+      example: "702760"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Business unit submitting the proposed transaction for review
+     customerReference:
+      type: string
+      example: "795429"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer related to the proposed transaction
+     sectorReference:
+      type: string
+      example: "740548"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The sector where the proposed transaction would be booked
+     productType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type/category of the proposed transaction for the credit pricing assessment
+     proposedTransactionReference:
+      type: string
+      example: "707162"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to proposed transaction submitted for assessment
+     proposedTransactionRecord:
+      type: object
+      properties:
+       proposedTransactionType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of credit instrument being considered
+       proposedTransactionAmount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The financial structure of the proposed transaction
+       proposedTransactionRecordDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: One or more key dates associated with the transaction
+       proposedTransactionBookingEntity:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The booking entity within the bank that the proposed transaction would impact
+   creditPricingAssessmentUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The type of credit instrument being considered
-   proposedTransactionAmount:
+      general-info: Details of the update action service request
+ CRCreditPricingAssessmentUpdateOutputModel:
+  type: object
+  properties: 
+   creditPricingAssessmentInstanceRecord:
+    type: object
+    properties:
+     businessUnitReference:
+      type: string
+      example: "702760"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Business unit submitting the proposed transaction for review
+     customerReference:
+      type: string
+      example: "795429"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer related to the proposed transaction
+     sectorReference:
+      type: string
+      example: "740548"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The sector where the proposed transaction would be booked
+     productType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type/category of the proposed transaction for the credit pricing assessment
+     proposedTransactionReference:
+      type: string
+      example: "707162"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to proposed transaction submitted for assessment
+     proposedTransactionRecord:
+      type: object
+      properties:
+       proposedTransactionType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of credit instrument being considered
+       proposedTransactionAmount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The financial structure of the proposed transaction
+       proposedTransactionRecordDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: One or more key dates associated with the transaction
+       proposedTransactionBookingEntity:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The booking entity within the bank that the proposed transaction would impact
+   creditPricingAssessmentUpdateActionTaskReference:
     type: string
-    example: USD 250
+    example: "CPAUATR756694"
     description: |
      `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-      general-info: The financial structure of the proposed transaction
-   proposedTransactionRecordDate:
-    type: string
-    example: "09-22-2018"
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   creditPricingAssessmentUpdateActionTaskRecord:
+    type: object
     description: |
      `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-      general-info: One or more key dates associated with the transaction
-   proposedTransactionBookingEntity:
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ CRCreditPricingAssessmentExchangeInputModel:
+  type: object
+  properties: 
+   creditPricingAssessmentServicingSessionReference:
+    type: string
+    example: "CPASSR759919"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   creditPricingAssessmentInstanceReference:
+    type: string
+    example: "CPAIR739733"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Credit Pricing Assessment instance
+   creditPricingAssessmentExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   creditPricingAssessmentExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ CRCreditPricingAssessmentExchangeOutputModel:
+  type: object
+  properties: 
+   creditPricingAssessmentExchangeActionTaskReference:
+    type: string
+    example: "CPAEATR765742"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Credit Pricing Assessment instance exchange service call
+   creditPricingAssessmentExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   creditPricingAssessmentExchangeActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The bookingentity within the bank that the proposed transaction would impact
- CRCreditManagementInitiateOutputModel:
+      general-info: Details of the exchange action service response
+ CRCreditPricingAssessmentGrantInputModel:
   type: object
-  proposedTransactionCreditPricingAssessment:
-   type: string
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-     general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
- CRCreditManagementUpdateInputModel:
-  type: object
-  businessUnitReference:
-   type: string
-   example: "708729"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Business unit submitting the proposed transaction for review
-  customerReference:
-   type: string
-   example: "720158"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Reference to the customer related to the proposed transaction
-  sectorReference:
-   type: string
-   example: "734475"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: The sector where the proposed transaction would be booked
-  productType:
-   type: string
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-     general-info: The product type/category of the proposed transaction for the credit pricing assessment
-  proposedTransactionReference:
-   type: string
-   example: "759503"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Reference to proposed transaction submitted for assessment
-  proposedTransactionRecord:
-   proposedTransactionType:
+  properties: 
+   creditPricingAssessmentServicingSessionReference:
+    type: string
+    example: "CPASSR764259"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   creditPricingAssessmentInstanceReference:
+    type: string
+    example: "CPAIR796677"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Credit Pricing Assessment instance
+   creditPricingAssessmentGrantActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The grant service call consolidated processing record
+   grantRequestRecordType:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The type of credit instrument being considered
-   proposedTransactionAmount:
+      general-info: Grant request type (e.g. access permission)
+   grantRequestInputRecord:
+    type: object
+    properties:
+     grantRequestDetails:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the permissions requested
+ CRCreditPricingAssessmentGrantOutputModel:
+  type: object
+  properties: 
+   creditPricingAssessmentInstanceRecord:
+    type: object
+    properties:
+     businessUnitReference:
+      type: string
+      example: "789950"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Business unit submitting the proposed transaction for review
+     customerReference:
+      type: string
+      example: "797534"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer related to the proposed transaction
+     sectorReference:
+      type: string
+      example: "704196"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The sector where the proposed transaction would be booked
+     productType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type/category of the proposed transaction for the credit pricing assessment
+     proposedTransactionReference:
+      type: string
+      example: "780737"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to proposed transaction submitted for assessment
+     proposedTransactionRecord:
+      type: object
+      properties:
+       proposedTransactionType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of credit instrument being considered
+       proposedTransactionAmount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The financial structure of the proposed transaction
+       proposedTransactionRecordDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: One or more key dates associated with the transaction
+       proposedTransactionBookingEntity:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The booking entity within the bank that the proposed transaction would impact
+     proposedTransactionCreditPricingAssessment:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
+   creditPricingAssessmentGrantActionTaskReference:
     type: string
-    example: USD 250
+    example: "CPAGATR702365"
     description: |
      `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-      general-info: The financial structure of the proposed transaction
-   proposedTransactionRecordDate:
-    type: string
-    example: "09-22-2018"
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Credit Pricing Assessment instance grant service call
+   creditPricingAssessmentGrantActionTaskRecord:
+    type: object
     description: |
      `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-      general-info: One or more key dates associated with the transaction
-   proposedTransactionBookingEntity:
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The grant service call consolidated processing record
+   grantRequestRecordReference:
+    type: string
+    example: "GRRR793583"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the grant request record
+   grantRequestResponseRecord:
+    type: object
+    properties:
+     grantPermissionDetails:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the permissions granted
+ CRCreditPricingAssessmentRetrieveInputModel:
+  type: object
+  properties: 
+   creditPricingAssessmentRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   creditPricingAssessmentRetrieveActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The bookingentity within the bank that the proposed transaction would impact
- CRCreditManagementUpdateOutputModel:
+      general-info: Details of the retrieve action service request (lists requested reports)
+   creditPricingAssessmentInstanceReportRecord:
+    type: object
+    properties:
+     creditPricingAssessmentInstanceReportReference:
+      type: string
+      example: "785204"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+     creditPricingAssessmentInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     creditPricingAssessmentInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+   creditPricingAssessmentInstanceAnalysis:
+    type: object
+    properties:
+     creditPricingAssessmentInstanceAnalysisReference:
+      type: string
+      example: "791510"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+     creditPricingAssessmentInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     creditPricingAssessmentInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+ CRCreditPricingAssessmentRetrieveOutputModel:
   type: object
- CRCreditManagementExchangeInputModel:
-  type: object
- CRCreditManagementExchangeOutputModel:
-  type: object
- CRCreditManagementGrantInputModel:
-  type: object
- CRCreditManagementGrantOutputModel:
-  type: object
-  proposedTransactionCreditPricingAssessment:
-   type: string
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-     general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
- CRCreditManagementRetrieveInputModel:
-  type: object
- CRCreditManagementRetrieveOutputModel:
-  type: object
-  businessUnitReference:
-   type: string
-   example: "750003"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Business unit submitting the proposed transaction for review
-  customerReference:
-   type: string
-   example: "717528"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Reference to the customer related to the proposed transaction
-  sectorReference:
-   type: string
-   example: "755135"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: The sector where the proposed transaction would be booked
-  productType:
-   type: string
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-     general-info: The product type/category of the proposed transaction for the credit pricing assessment
-  proposedTransactionReference:
-   type: string
-   example: "745066"
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-     general-info: Reference to proposed transaction submitted for assessment
-  proposedTransactionRecord:
-   proposedTransactionType:
+  properties: 
+   creditPricingAssessmentInstanceRecord:
+    type: object
+    properties:
+     businessUnitReference:
+      type: string
+      example: "719856"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Business unit submitting the proposed transaction for review
+     customerReference:
+      type: string
+      example: "779890"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer related to the proposed transaction
+     sectorReference:
+      type: string
+      example: "779625"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The sector where the proposed transaction would be booked
+     productType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type/category of the proposed transaction for the credit pricing assessment
+     proposedTransactionReference:
+      type: string
+      example: "788028"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to proposed transaction submitted for assessment
+     proposedTransactionRecord:
+      type: object
+      properties:
+       proposedTransactionType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of credit instrument being considered
+       proposedTransactionAmount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The financial structure of the proposed transaction
+       proposedTransactionRecordDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: One or more key dates associated with the transaction
+       proposedTransactionBookingEntity:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The booking entity within the bank that the proposed transaction would impact
+     proposedTransactionCreditPricingAssessment:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
+   creditPricingAssessmentRetrieveActionTaskReference:
+    type: string
+    example: "CPARATR703351"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Credit Pricing Assessment instance retrieve service call
+   creditPricingAssessmentRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   creditPricingAssessmentRetrieveActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The type of credit instrument being considered
-   proposedTransactionAmount:
-    type: string
-    example: USD 250
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-      general-info: The financial structure of the proposed transaction
-   proposedTransactionRecordDate:
-    type: string
-    example: "09-22-2018"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-      general-info: One or more key dates associated with the transaction
-   proposedTransactionBookingEntity:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The bookingentity within the bank that the proposed transaction would impact
-  proposedTransactionCreditPricingAssessment:
-   type: string
-   description: |
-    `status: Not Mapped`
-     core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-     general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
+      general-info: Details of the retrieve action service response (lists returned reports)
+   creditPricingAssessmentInstanceReportRecord:
+    type: object
+    properties:
+     creditPricingAssessmentInstanceReportData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     creditPricingAssessmentInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     creditPricingAssessmentInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   creditPricingAssessmentInstanceAnalysis:
+    type: object
+    properties:
+     creditPricingAssessmentInstanceAnalysisData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     creditPricingAssessmentInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     creditPricingAssessmentInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
