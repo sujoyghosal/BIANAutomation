@@ -14,7 +14,7 @@ do
         echo "info:">>$output
         echo " version: '1.0.0'">>$output
         echo " title: 'Service Domain - $sdb'">>$output
-        echo " description: 'Description'">>$output
+        echo " description: >">>$output
         echo "host: virtserver.swaggerhub.com">>$output
         basepath=`echo $sdb|sed 's/ /-/g'|tr '[:upper:]' '[:lower:]'`>>$output
         echo "basePath: /BIAN/sd-$basepath/1.0.0">>$output
@@ -25,6 +25,7 @@ do
     if  [[ $line == sdpath=* ]] ;
     then
         sdpath=`echo $line|cut -f2 -d"="`
+        sed -e "s/ServiceDomainPath/$sdpath/g" -e "s/ServiceDomain/SD$1/g" SDGenericPaths.yaml>>$output
     fi
     if  [[ $line == crpath=* ]] ;
     then
@@ -43,6 +44,7 @@ do
         bq=`echo $line|cut -f2 -d"="`
         declare -a bqs=($bq)
     fi
+
     if  [[ $line == CONFIG* ]] ;
     then
         echo "Starting to read configs"
@@ -103,6 +105,7 @@ do
                     action="authorization"
                     tag="authorize"
                 fi
+                
                 if [ ! -z "$extOp" -a "$extOp" != " " ]; then #BQ Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/$action:">>$output
                     echo "    post:">>$output
@@ -132,6 +135,7 @@ do
                     foo=`echo ${cr:0:1} | tr  '[a-z]' '[A-Z]'`${cr:1}
                     echo "            \$ref: '#/definitions/BQ$bcr$actionRaw"OutputModel\'>>$output
                 else #CR Level
+                    echo "Adding $tag"
                     echo "  /$sdpath/$crpath/$action:">>$output
                     echo "    post:">>$output
                     echo "      tags:">>$output
@@ -155,69 +159,7 @@ do
                     echo "            \$ref: '#/definitions/CR$bcr$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
-            record)
-                if [ ! -z "$extOp" -a "$extOp" != " " ]; then #BQ Level
-                    echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/{bq-reference-id}/recording:">>$output
-                    echo "    post:">>$output
-                    echo "      tags:">>$output
-                    echo "      - record">>$output
-                    echo "      operationId: $extOp">>$output
-                    echo "      summary: $summary">>$output
-                    echo "      description: $desc">>$output
-                    echo "      produces:">>$output
-                    echo "      - application/json">>$output
-                    echo "      parameters:">>$output
-                    echo "      - name: cr-reference-id">>$output
-                    echo "        in: path">>$output
-                    echo "        description: $crr">>$output
-                    echo "        required: true">>$output
-                    echo "        type: string">>$output
-                    echo "      - name: bq-reference-id">>$output
-                    echo "        in: path">>$output
-                    echo "        description: "$bcr BQ Reference Id"">>$output
-                    echo "        required: true">>$output
-                    echo "        type: string">>$output
-                    echo "      - in: body">>$output
-                    echo "        name: body">>$output
-                    echo "        required: true">>$output
-                    echo "        description: $bcr Request Payload">>$output
-                    echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
-                    echo "      responses:">>$output
-                    echo "        201:">>$output
-                    echo "          description: Successful $summary">>$output
-                    echo "          schema:">>$output
-                    foo=`echo ${cr:0:1} | tr  '[a-z]' '[A-Z]'`${cr:1}
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
-                else #CR Level
-                    echo "  /$sdpath/$crpath/{cr-reference-id}/recording:">>$output
-                    echo "    post:">>$output
-                    echo "      tags:">>$output
-                    echo "      - record">>$output
-                    echo "      operationId: $extApi">>$output
-                    echo "      summary: $summary">>$output
-                    echo "      description: $desc">>$output
-                    echo "      produces:">>$output
-                    echo "      - application/json">>$output
-                    echo "      parameters:">>$output
-                    echo "      - name: cr-reference-id">>$output
-                    echo "        in: path">>$output
-                    echo "        description: $crr">>$output
-                    echo "        required: true">>$output
-                    echo "        type: string">>$output
-                    echo "      - in: body">>$output
-                    echo "        name: body">>$output
-                    echo "        required: true">>$output
-                    echo "        description: $bcr Request Payload">>$output
-                    echo "        schema:">>$output
-                    echo "          \$ref: '#/definitions/$actionRaw"InputModel\'>>$output
-                    echo "      responses:">>$output
-                    echo "        201:">>$output
-                    echo "          description: Successful $summary">>$output
-                    echo "          schema:">>$output
-                    echo "            \$ref: '#/definitions/$actionRaw"OutputModel\'>>$output
-                fi
-                ;;
+            
             update)
                 if [ ! -z "$extOp" -a "$extOp" != " " ]; then #BQ Level
                     echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/{bq-reference-id}/update:">>$output
@@ -278,6 +220,63 @@ do
                     echo "          description: Successful $summary">>$output
                     echo "          schema:">>$output
                     echo "            \$ref: '#/definitions/CR$bcr$actionRaw"OutputModel\'>>$output
+                fi
+                ;;
+                retrieve) ## SD Level
+                if [ ! -z "$extOp" -a "$extOp" != " " ]; then #BQ Level
+                    echo "  /$sdpath/$crpath/{cr-reference-id}/$cr/{bq-reference-id}/update:">>$output
+                    echo "    put:">>$output
+                    echo "      tags:">>$output
+                    echo "      - update">>$output
+                    echo "      operationId: $extOp">>$output
+                    echo "      summary: $summary">>$output
+                    echo "      description: $desc">>$output
+                    echo "      produces:">>$output
+                    echo "      - application/json">>$output
+                    echo "      parameters:">>$output
+                    echo "      - name: cr-reference-id">>$output
+                    echo "        in: path">>$output
+                    echo "        description: $crr">>$output
+                    echo "        required: true">>$output
+                    echo "        type: string">>$output
+                    echo "      - name: bq-reference-id">>$output
+                    echo "        in: path">>$output
+                    echo "        description: "$bcr BQ Reference Id"">>$output
+                    echo "        required: true">>$output
+                    echo "        type: string">>$output
+                    echo "      - in: body">>$output
+                    echo "        name: body">>$output
+                    echo "        required: true">>$output
+                    echo "        description: $bcr Request Payload">>$output
+                    echo "        schema:">>$output
+                    echo "          \$ref: '#/definitions/BQ$bcr$actionRaw"InputModel\'>>$output
+                    echo "      responses:">>$output
+                    echo "        200:">>$output
+                    echo "          description: Successful $summary">>$output
+                    echo "          schema:">>$output
+                    echo "            \$ref: '#/definitions/BQ$bcr$actionRaw"OutputModel\'>>$output
+                else #CR Level
+                    echo "  /$sdpath/retrieve:">>$output
+                    echo "    get:">>$output
+                    echo "      tags:">>$output
+                    echo "      - retrieve">>$output
+                    echo "      operationId: $extApi">>$output
+                    echo "      summary: $summary">>$output
+                    echo "      description: $desc">>$output
+                    echo "      produces:">>$output
+                    echo "      - application/json">>$output
+                    echo "      parameters:">>$output
+                    echo "      - in: body">>$output
+                    echo "        name: body">>$output
+                    echo "        required: true">>$output
+                    echo "        description: $bcr Request Payload">>$output
+                    echo "        schema:">>$output
+                    echo "          \$ref: '#/definitions/SD$bcr$actionRaw"InputModel\'>>$output
+                    echo "      responses:">>$output
+                    echo "        200:">>$output
+                    echo "          description: Successful $summary">>$output
+                    echo "          schema:">>$output
+                    echo "            \$ref: '#/definitions/SD$bcr$actionRaw"OutputModel\'>>$output
                 fi
                 ;;
             execute|request|control|exchange|capture|grant)
@@ -391,7 +390,7 @@ echo "      - application/json">>$output
 echo "      parameters:">>$output
 echo "      - name : collection-filter">>$output
 echo "        in: query">>$output
-echo "        description: Filter to refine the result set. ex- ">>$output
+echo "        description: Filter to refine the result set. ex- $1 Instance Status='active'">>$output
 echo "        required: false">>$output
 echo "        type: string">>$output
 echo "      responses:">>$output
@@ -421,6 +420,7 @@ echo "              type: string">>$output
 for i in "${bqs[@]}"
 do
     e=$e" '$i', "
+    lastBQ=$i;
 done
 echo "            example: [$e]">>$output
 ## Add Standard Retrieve Operations
@@ -440,12 +440,12 @@ echo "        required: true">>$output
 echo "        type: string">>$output
 echo "      - name : behavior-qualifier">>$output
 echo "        in: path">>$output
-echo "        description: Behavior Qualifier Name. ex- 'BQ1'">>$output
+echo "        description: Behavior Qualifier Name. ex- $lastBQ">>$output
 echo "        required: true">>$output
 echo "        type: string">>$output
 echo "      - name : collection-filter">>$output
 echo "        in: query">>$output
-echo "        description: Filter to refine the result set. ex-">>$output
+echo "        description: Filter to refine the result set. ex- $lastBQ Instance Status = 'pending'">>$output
 echo "        required: false">>$output
 echo "        type: string">>$output
 echo "      responses:">>$output
@@ -455,7 +455,7 @@ echo "          schema:">>$output
 echo "            type: array">>$output
 echo "            items:">>$output
 echo "              type: string">>$output
-echo "            example: ['BQID1', 'BQID2']">>$output
+echo "            example: [$lastBQ"ID1", $lastBQ"ID2"]">>$output
 # CR Level Rertieve
 echo "  /$sdpath/$crpath/{cr-reference-id}:">>$output
 echo "    get:">>$output

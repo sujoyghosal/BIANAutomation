@@ -282,7 +282,7 @@ done <infile
 rm -rf bq bqel el isobq q rest p
 done
 echo "definitions:">$output
-echo $catFile
+sed "s/ServiceDomain/SD$1/g" SDGenericModel.yaml>>$output
 cat $catFile >>$output
 
 #cat $catFile >>$output

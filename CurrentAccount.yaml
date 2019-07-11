@@ -8,6 +8,90 @@ basePath: /BIAN/sd-current-account/1.0.0
 schemes:
  - https
 paths:
+  /current-account/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCurrentAccount
+      summary: Reference to a service activation service call
+      description: Reference to a service activation service call
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCurrentAccount Request Payload
+        schema:
+          $ref: '#/definitions/SDCurrentAccountActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCurrentAccountActivateOutputModel'
+  /current-account/configure:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCurrentAccount
+      summary: Reference to a service configuration service call
+      description: Reference to a service configuration service call
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCurrentAccount Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCurrentAccountConfigureInputModel'
+      responses:
+        201:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCurrentAccountConfigureOutputModel'
+  /current-account/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCurrentAccount
+      summary: Reference to a feedback service call
+      description: Reference to a feedback service call
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCurrentAccount Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCurrentAccountFeedbackInputModel'
+      responses:
+        201:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCurrentAccountFeedbackOutputModel'
+  /current-account/retrieve:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCurrentAccount
+      summary: Reference to a retrieve service call
+      description: Reference to a retrieve service call
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCurrentAccount Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCurrentAccountRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCurrentAccountRetrieveOutputModel'
   /current-account/current-account-fulfullment-arrangement/initiation:
     post:
       tags:
@@ -677,7 +761,7 @@ paths:
       parameters:
       - name : collection-filter
         in: query
-        description: Filter to refine the result set. ex- 
+        description: Filter to refine the result set. ex- CurrentAccount Instance Status='active'
         required: false
         type: string
       responses:
@@ -720,12 +804,12 @@ paths:
         type: string
       - name : behavior-qualifier
         in: path
-        description: Behavior Qualifier Name. ex- 'BQ1'
+        description: Behavior Qualifier Name. ex- IssuedDevice
         required: true
         type: string
       - name : collection-filter
         in: query
-        description: Filter to refine the result set. ex-
+        description: Filter to refine the result set. ex- IssuedDevice Instance Status = 'pending'
         required: false
         type: string
       responses:
@@ -735,7 +819,7 @@ paths:
             type: array
             items:
               type: string
-            example: ['BQID1', 'BQID2']
+            example: [IssuedDeviceID1, IssuedDeviceID2]
   /current-account/current-account-fulfullment-arrangement/{cr-reference-id}:
     get:
       tags:
@@ -980,6 +1064,649 @@ paths:
           schema:
             $ref: '#/definitions/BQIssuedDeviceRetrieveOutputModel'
 definitions:
+ SDCurrentAccountActivateInputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainCenterReference:
+    type: string
+    example: "SCR793499"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service center/operational unit
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR703914"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+ SDCurrentAccountActivateOutputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskReference:
+    type: string
+    example: "SAATR758836"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service activation service call
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR783215"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServicingSessionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Consolidated information record for the servicing session
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "769192"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "791202"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "767210"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDCurrentAccountConfigureInputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR764367"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR744740"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "710630"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+ SDCurrentAccountConfigureOutputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskReference:
+    type: string
+    example: "SCATR765419"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service configuration service call
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDCurrentAccountFeedbackInputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     serviceDomainServicingSessionReference:
+      type: string
+      example: "796678"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the active servicing session
+     controlRecordInstanceReference:
+      type: string
+      example: "724385"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance if appropriate
+     behaviorQualifierInstanceReference:
+      type: string
+      example: "789747"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the behavior qualifier instance if appropriate
+     feedbackRecordType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The layout/type of the feedback provided
+     feedbackRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The content of the feedback in any suitable format and media
+ SDCurrentAccountFeedbackOutputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskReference:
+    type: string
+    example: "SFATR765157"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a feedback service call
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     feedbackRecordDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date/time the feedback submitted for consideration
+     feedbackRecordStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of processing the feedback e.g. received, considered, responded to
+     employeeBusinessUnitReference:
+      type: string
+      example: "769031"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to business unit/employee responsible for handling feedback
+ SDCurrentAccountRetrieveInputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+ SDCurrentAccountRetrieveOutputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskReference:
+    type: string
+    example: "SRATR795161"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a retrieve service call
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+       activityAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the activity analysis that can be on-going, periodic and actual and projected
+       activityAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of activity analysis report available
+       activityAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The activity analysis report in any suitable form including selection filters where appropriate
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+       performanceAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the performance analysis that can be on-going or periodic
+       performanceAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of performance analysis report available
+       performanceAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The performance analysis report in any suitable form including selection filters where appropriate
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+       controlRecordPortfolioAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the portfolio analysis that can be on-going, periodic and actual and projected (can be unstructured data)
+       controlRecordPortfolioAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of external portfolio analysis report available
+       controlRecordAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The external analysis report in any suitable form including selection filters where appropriate
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Refers to the different types of services offered
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+       serviceDomainServiceDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the offered service 
+       serviceDomainServicePoliciesandGuidelines:
+        type: object
+        properties:
+         serviceDomainServiceEligibility:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Policies and rules governing access to the offered service, includes eligibility and qualifications
+         serviceDomainServiceIntendedUses:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Guidelines covering allowed, intended use of the service
+         serviceDomainServicePricingandTerms:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Terms, prices, penalties associated with use of the service
+       serviceDomainServiceSchedule:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Schedule defining when the accessed service is available
  CRCurrentAccountInitiateInputModel:
   type: object
   properties: 
@@ -991,17 +1718,23 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountServicingSessionReference:
     type: string
-    example: "CASSR715301"
+    example: "CASSR701147"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
+   currentAccountInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Current Account instance (e.g. initialised, pending, active)
    currentAccountInstanceRecord:
     type: object
     properties:
      customerReference:
       type: string
-      example: "742427"
+      example: "745073"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -1009,7 +1742,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "746293"
+      example: "709067"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -1035,7 +1768,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "712276"
+      example: "765522"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E4gZEcTGEeChad0JzLk7QA_2010102987/elements/__-5BiGIiEeGD28DQaMef-g
@@ -1070,7 +1803,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "741770"
+        example: "749397"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1114,7 +1847,7 @@ definitions:
   properties: 
    currentAccountInitiateActionReference:
     type: string
-    example: "CAIAR745017"
+    example: "CAIAR706569"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1127,17 +1860,23 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountInstanceReference:
     type: string
-    example: "CAIR728179"
+    example: "CAIR750320"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Current Account instance
+   currentAccountInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Current Account instance (e.g. initialised, pending, active)
    currentAccountInstanceRecord:
     type: object
     properties:
      productInstanceReference:
       type: string
-      example: "783097"
+      example: "769124"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -1215,25 +1954,19 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
           general-info: Value of the date type
-   currentAccountInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Current Account instance (e.g. initialised, pending, active)
  CRCurrentAccountUpdateInputModel:
   type: object
   properties: 
    currentAccountServicingSessionReference:
     type: string
-    example: "CASSR752626"
+    example: "CASSR796426"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    currentAccountInstanceReference:
     type: string
-    example: "CAIR748364"
+    example: "CAIR702073"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1243,7 +1976,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "743296"
+      example: "771347"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -1257,7 +1990,7 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "704680"
+      example: "762218"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -1265,7 +1998,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "738711"
+      example: "727009"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -1291,7 +2024,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "755858"
+      example: "783944"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E4gZEcTGEeChad0JzLk7QA_2010102987/elements/__-5BiGIiEeGD28DQaMef-g
@@ -1338,7 +2071,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "775691"
+        example: "796328"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1409,7 +2142,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "743296"
+      example: "771347"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -1423,7 +2156,7 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "704680"
+      example: "762218"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -1431,7 +2164,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "738711"
+      example: "727009"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -1457,7 +2190,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "755858"
+      example: "783944"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E4gZEcTGEeChad0JzLk7QA_2010102987/elements/__-5BiGIiEeGD28DQaMef-g
@@ -1504,7 +2237,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "775691"
+        example: "796328"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1557,7 +2290,7 @@ definitions:
           general-info: Value of the date type
    currentAccountUpdateActionTaskReference:
     type: string
-    example: "CAUATR712555"
+    example: "CAUATR792051"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1579,14 +2312,14 @@ definitions:
   properties: 
    currentAccountServicingSessionReference:
     type: string
-    example: "CASSR738402"
+    example: "CASSR728508"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    currentAccountInstanceReference:
     type: string
-    example: "CAIR737868"
+    example: "CAIR764384"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1611,7 +2344,7 @@ definitions:
   properties: 
    currentAccountControlActionTaskReference:
     type: string
-    example: "CACATR715631"
+    example: "CACATR765977"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1648,7 +2381,7 @@ definitions:
     properties:
      currentAccountInstanceReportReference:
       type: string
-      example: "749857"
+      example: "797932"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1670,7 +2403,7 @@ definitions:
     properties:
      currentAccountInstanceAnalysisReference:
       type: string
-      example: "776068"
+      example: "723041"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1695,7 +2428,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "719316"
+      example: "701877"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -1709,7 +2442,7 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "765258"
+      example: "776279"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -1717,7 +2450,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "706452"
+      example: "791622"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -1743,7 +2476,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "722020"
+      example: "702167"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E4gZEcTGEeChad0JzLk7QA_2010102987/elements/__-5BiGIiEeGD28DQaMef-g
@@ -1790,7 +2523,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "784977"
+        example: "797961"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1843,7 +2576,7 @@ definitions:
           general-info: Value of the date type
    currentAccountRetrieveActionTaskReference:
     type: string
-    example: "CARATR706240"
+    example: "CARATR761180"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1910,7 +2643,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "722362"
+      example: "709356"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -1942,7 +2675,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "794373"
+      example: "707633"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E4gZEcTGEeChad0JzLk7QA_2010102987/elements/__-5BiGIiEeGD28DQaMef-g
@@ -2008,7 +2741,7 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountInstanceReference:
     type: string
-    example: "CAIR796642"
+    example: "CAIR710292"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2077,7 +2810,7 @@ definitions:
           general-info: Value of the date type
    interestInitiateActionReference:
     type: string
-    example: "IIAR726271"
+    example: "IIAR746207"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2090,7 +2823,7 @@ definitions:
       general-info: The Initiate service call input and output record
    interestInstanceReference:
     type: string
-    example: "IIR749100"
+    example: "IIR715409"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2106,14 +2839,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR720561"
+    example: "CAIR707945"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Accountinstance
    interestInstanceReference:
     type: string
-    example: "IIR742463"
+    example: "IIR724805"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2215,7 +2948,7 @@ definitions:
           general-info: The accrued amount of applied interest
    interestExecuteActionTaskReference:
     type: string
-    example: "IEATR708646"
+    example: "IEATR795932"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2228,7 +2961,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    interestExecuteRecordReference:
     type: string
-    example: "IERR724475"
+    example: "IERR711409"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2259,7 +2992,7 @@ definitions:
     properties:
      interestInstanceReportReference:
       type: string
-      example: "724095"
+      example: "729583"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2269,7 +3002,7 @@ definitions:
     properties:
      interestInstanceAnalysisReference:
       type: string
-      example: "789774"
+      example: "712999"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2347,7 +3080,7 @@ definitions:
           general-info: The accrued amount of applied interest
    interestRetrieveActionTaskReference:
     type: string
-    example: "IRATR722167"
+    example: "IRATR736977"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2426,7 +3159,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "717593"
+      example: "736045"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -2458,7 +3191,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "728797"
+      example: "751243"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E4gZEcTGEeChad0JzLk7QA_2010102987/elements/__-5BiGIiEeGD28DQaMef-g
@@ -2524,7 +3257,7 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountInstanceReference:
     type: string
-    example: "CAIR732606"
+    example: "CAIR726486"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2556,7 +3289,7 @@ definitions:
           general-info: Value of the date type
    serviceFeesInitiateActionReference:
     type: string
-    example: "SFIAR793377"
+    example: "SFIAR705048"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2569,7 +3302,7 @@ definitions:
       general-info: The Initiate service call input and output record
    serviceFeesInstanceReference:
     type: string
-    example: "SFIR708031"
+    example: "SFIR767643"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2594,14 +3327,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR775283"
+    example: "CAIR780630"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Accountinstance
    serviceFeesInstanceReference:
     type: string
-    example: "SFIR720086"
+    example: "SFIR768413"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2737,7 +3470,7 @@ definitions:
           general-info: The accrued amount of fees and penalties
    serviceFeesExecuteActionTaskReference:
     type: string
-    example: "SFEATR732905"
+    example: "SFEATR740292"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2750,7 +3483,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    serviceFeesExecuteRecordReference:
     type: string
-    example: "SFERR778856"
+    example: "SFERR745176"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2781,7 +3514,7 @@ definitions:
     properties:
      serviceFeesInstanceReportReference:
       type: string
-      example: "785257"
+      example: "729175"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2791,7 +3524,7 @@ definitions:
     properties:
      serviceFeesInstanceAnalysisReference:
       type: string
-      example: "768902"
+      example: "712337"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2879,7 +3612,7 @@ definitions:
           general-info: The accrued amount of fees and penalties
    serviceFeesRetrieveActionTaskReference:
     type: string
-    example: "SFRATR723436"
+    example: "SFRATR738558"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2958,7 +3691,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "766587"
+      example: "715932"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -2972,7 +3705,7 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "704492"
+      example: "715555"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -2980,7 +3713,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "743420"
+      example: "746041"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -3053,7 +3786,7 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountInstanceReference:
     type: string
-    example: "CAIR756709"
+    example: "CAIR787849"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3163,7 +3896,7 @@ definitions:
           general-info: Value of the date type
    accountLienInitiateActionReference:
     type: string
-    example: "ALIAR714864"
+    example: "ALIAR794713"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3176,7 +3909,7 @@ definitions:
       general-info: The Initiate service call input and output record
    accountLienInstanceReference:
     type: string
-    example: "ALIR783928"
+    example: "ALIR728350"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3198,14 +3931,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR758737"
+    example: "CAIR753184"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    accountLienInstanceReference:
     type: string
-    example: "ALIR728034"
+    example: "ALIR708570"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3335,7 +4068,7 @@ definitions:
         general-info: The status on the lien
    accountLienUpdateActionTaskReference:
     type: string
-    example: "ALUATR764298"
+    example: "ALUATR783687"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3357,14 +4090,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR726429"
+    example: "CAIR703797"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    accountLienInstanceReference:
     type: string
-    example: "ALIR725128"
+    example: "ALIR749584"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3389,7 +4122,7 @@ definitions:
   properties: 
    accountLienExchangeActionTaskReference:
     type: string
-    example: "ALEATR720431"
+    example: "ALEATR749216"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3432,7 +4165,7 @@ definitions:
     properties:
      accountLienInstanceReportReference:
       type: string
-      example: "713825"
+      example: "733811"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3442,7 +4175,7 @@ definitions:
     properties:
      accountLienInstanceAnalysisReference:
       type: string
-      example: "734735"
+      example: "723373"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3512,7 +4245,7 @@ definitions:
         general-info: The status on the lien
    accountLienRetrieveActionTaskReference:
     type: string
-    example: "ALRATR763053"
+    example: "ALRATR760701"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3591,7 +4324,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "771793"
+      example: "737044"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -3605,7 +4338,7 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "797859"
+      example: "755285"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -3613,7 +4346,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "715379"
+      example: "780745"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -3639,7 +4372,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "784554"
+      example: "795754"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E4gZEcTGEeChad0JzLk7QA_2010102987/elements/__-5BiGIiEeGD28DQaMef-g
@@ -3690,7 +4423,7 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountInstanceReference:
     type: string
-    example: "CAIR774416"
+    example: "CAIR778239"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3747,7 +4480,7 @@ definitions:
           general-info: Value of the date type
    accountSweepInitiateActionReference:
     type: string
-    example: "ASIAR715398"
+    example: "ASIAR717325"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3760,7 +4493,7 @@ definitions:
       general-info: The Initiate service call input and output record
    accountSweepInstanceReference:
     type: string
-    example: "ASIR790753"
+    example: "ASIR785823"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3788,14 +4521,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR794415"
+    example: "CAIR790888"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    accountSweepInstanceReference:
     type: string
-    example: "ASIR788885"
+    example: "ASIR740407"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3943,7 +4676,7 @@ definitions:
         general-info: The date and time the sweep is initiated
    accountSweepUpdateActionTaskReference:
     type: string
-    example: "ASUATR713895"
+    example: "ASUATR752967"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3965,14 +4698,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR760740"
+    example: "CAIR733613"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    accountSweepInstanceReference:
     type: string
-    example: "ASIR704402"
+    example: "ASIR720779"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4020,7 +4753,7 @@ definitions:
   properties: 
    accountSweepExecuteActionTaskReference:
     type: string
-    example: "ASEATR711291"
+    example: "ASEATR775365"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4033,7 +4766,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    accountSweepExecuteRecordReference:
     type: string
-    example: "ASERR753787"
+    example: "ASERR756317"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4064,7 +4797,7 @@ definitions:
     properties:
      accountSweepInstanceReportReference:
       type: string
-      example: "786244"
+      example: "763557"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4074,7 +4807,7 @@ definitions:
     properties:
      accountSweepInstanceAnalysisReference:
       type: string
-      example: "714511"
+      example: "718835"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4147,7 +4880,7 @@ definitions:
         general-info: The date and time the sweep is initiated
    accountSweepRetrieveActionTaskReference:
     type: string
-    example: "ASRATR770047"
+    example: "ASRATR776468"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4226,7 +4959,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "776687"
+      example: "788987"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -4240,7 +4973,7 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "752816"
+      example: "791247"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -4248,7 +4981,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "737475"
+      example: "751420"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -4311,7 +5044,7 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountInstanceReference:
     type: string
-    example: "CAIR746342"
+    example: "CAIR739992"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4339,7 +5072,7 @@ definitions:
     properties:
      depositTransactionSourceReference:
       type: string
-      example: "706991"
+      example: "782458"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4375,7 +5108,7 @@ definitions:
     properties:
      withdrawalTransactionSourceReference:
       type: string
-      example: "712326"
+      example: "743683"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4433,7 +5166,7 @@ definitions:
           general-info: Value of the date type
    depositsWithdrawlsInitiateActionReference:
     type: string
-    example: "DWIAR792004"
+    example: "DWIAR714758"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4446,7 +5179,7 @@ definitions:
       general-info: The Initiate service call input and output record
    depositsWithdrawlsInstanceReference:
     type: string
-    example: "DWIR702129"
+    example: "DWIR774675"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4482,14 +5215,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR739457"
+    example: "CAIR728732"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    depositsWithdrawlsInstanceReference:
     type: string
-    example: "DWIR739517"
+    example: "DWIR783458"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4517,7 +5250,7 @@ definitions:
     properties:
      depositTransactionSourceReference:
       type: string
-      example: "743212"
+      example: "746629"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4553,7 +5286,7 @@ definitions:
     properties:
      withdrawalTransactionSourceReference:
       type: string
-      example: "752497"
+      example: "725114"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4622,7 +5355,7 @@ definitions:
     properties:
      depositTransactionSourceReference:
       type: string
-      example: "743212"
+      example: "746629"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4658,7 +5391,7 @@ definitions:
     properties:
      withdrawalTransactionSourceReference:
       type: string
-      example: "752497"
+      example: "725114"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4691,7 +5424,7 @@ definitions:
         general-info: The date and time the withdrawal was initiated
    depositsWithdrawlsUpdateActionTaskReference:
     type: string
-    example: "DWUATR788082"
+    example: "DWUATR788875"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4713,14 +5446,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR797618"
+    example: "CAIR752770"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    depositsWithdrawlsInstanceReference:
     type: string
-    example: "DWIR726939"
+    example: "DWIR770363"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4730,7 +5463,7 @@ definitions:
     properties:
      depositTransactionSourceReference:
       type: string
-      example: "758511"
+      example: "779056"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4766,7 +5499,7 @@ definitions:
     properties:
      withdrawalTransactionSourceReference:
       type: string
-      example: "772071"
+      example: "771396"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4837,7 +5570,7 @@ definitions:
         general-info: The date and time the withdrawal was initiated
    depositsWithdrawlsExecuteActionTaskReference:
     type: string
-    example: "DWEATR748358"
+    example: "DWEATR788018"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4850,7 +5583,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    depositsWithdrawlsExecuteRecordReference:
     type: string
-    example: "DWERR714605"
+    example: "DWERR767462"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4881,7 +5614,7 @@ definitions:
     properties:
      depositsWithdrawlsInstanceReportReference:
       type: string
-      example: "768399"
+      example: "750183"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4891,7 +5624,7 @@ definitions:
     properties:
      depositsWithdrawlsInstanceAnalysisReference:
       type: string
-      example: "736303"
+      example: "730572"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4922,7 +5655,7 @@ definitions:
     properties:
      depositTransactionSourceReference:
       type: string
-      example: "755659"
+      example: "783609"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4958,7 +5691,7 @@ definitions:
     properties:
      withdrawalTransactionSourceReference:
       type: string
-      example: "782922"
+      example: "793921"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4991,7 +5724,7 @@ definitions:
         general-info: The date and time the withdrawal was initiated
    depositsWithdrawlsRetrieveActionTaskReference:
     type: string
-    example: "DWRATR706133"
+    example: "DWRATR715675"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5070,7 +5803,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "753273"
+      example: "762425"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -5084,7 +5817,7 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "768186"
+      example: "708468"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -5092,7 +5825,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "716403"
+      example: "743799"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -5155,7 +5888,7 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountInstanceReference:
     type: string
-    example: "CAIR749481"
+    example: "CAIR710670"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5213,7 +5946,7 @@ definitions:
     properties:
      taxReference:
       type: string
-      example: "780104"
+      example: "707110"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E4gZEcTGEeChad0JzLk7QA_2010102987/elements/__-5BiGIiEeGD28DQaMef-g
@@ -5236,7 +5969,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "783291"
+        example: "732822"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5262,7 +5995,7 @@ definitions:
           general-info: Value of the date type
    paymentsInitiateActionReference:
     type: string
-    example: "PIAR719127"
+    example: "PIAR718252"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5275,7 +6008,7 @@ definitions:
       general-info: The Initiate service call input and output record
    paymentsInstanceReference:
     type: string
-    example: "PIR707319"
+    example: "PIR715719"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5303,14 +6036,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR754471"
+    example: "CAIR738767"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    paymentsInstanceReference:
     type: string
-    example: "PIR774668"
+    example: "PIR750764"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5371,21 +6104,21 @@ definitions:
         general-info: The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)
      paymentTransactionPayeeReference:
       type: string
-      example: "777370"
+      example: "770134"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the party to whom the payment is made
      paymentTransactionPayeeAccountReference:
       type: string
-      example: "773213"
+      example: "763583"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to which the payment is made
      paymentTransactionPayeeBankReference:
       type: string
-      example: "705981"
+      example: "751317"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5432,7 +6165,7 @@ definitions:
         general-info: Description of the purpose including any external reference to the transaction
      paymentTransactionBankBranchLocationReference:
       type: string
-      example: "739731"
+      example: "775642"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5508,21 +6241,21 @@ definitions:
         general-info: The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)
      paymentTransactionPayeeReference:
       type: string
-      example: "777370"
+      example: "770134"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the party to whom the payment is made
      paymentTransactionPayeeAccountReference:
       type: string
-      example: "773213"
+      example: "763583"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to which the payment is made
      paymentTransactionPayeeBankReference:
       type: string
-      example: "705981"
+      example: "751317"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5569,7 +6302,7 @@ definitions:
         general-info: Description of the purpose including any external reference to the transaction
      paymentTransactionBankBranchLocationReference:
       type: string
-      example: "739731"
+      example: "775642"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5582,7 +6315,7 @@ definitions:
         general-info: The processing status of the transaction (e.g. captured, approved, initiated, confirmed, settled)
    paymentsUpdateActionTaskReference:
     type: string
-    example: "PUATR721957"
+    example: "PUATR751411"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5604,14 +6337,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR720700"
+    example: "CAIR793012"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    paymentsInstanceReference:
     type: string
-    example: "PIR726972"
+    example: "PIR712345"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5636,7 +6369,7 @@ definitions:
   properties: 
    paymentsExchangeActionTaskReference:
     type: string
-    example: "PEATR738396"
+    example: "PEATR779267"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5664,14 +6397,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR706911"
+    example: "CAIR773682"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    paymentsInstanceReference:
     type: string
-    example: "PIR782276"
+    example: "PIR719380"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5687,21 +6420,21 @@ definitions:
         general-info: The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)
      paymentTransactionPayeeReference:
       type: string
-      example: "746840"
+      example: "727689"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the party to whom the payment is made
      paymentTransactionPayeeAccountReference:
       type: string
-      example: "705400"
+      example: "772367"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to which the payment is made
      paymentTransactionPayeeBankReference:
       type: string
-      example: "787369"
+      example: "721030"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5748,7 +6481,7 @@ definitions:
         general-info: Description of the purpose including any external reference to the transaction
      paymentTransactionBankBranchLocationReference:
       type: string
-      example: "769203"
+      example: "745366"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5795,7 +6528,7 @@ definitions:
         general-info: The processing status of the transaction (e.g. captured, approved, initiated, confirmed, settled)
    paymentsExecuteActionTaskReference:
     type: string
-    example: "PEATR740781"
+    example: "PEATR772183"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5808,7 +6541,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    paymentsExecuteRecordReference:
     type: string
-    example: "PERR767550"
+    example: "PERR756985"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5839,7 +6572,7 @@ definitions:
     properties:
      paymentsInstanceReportReference:
       type: string
-      example: "734882"
+      example: "722913"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5849,7 +6582,7 @@ definitions:
     properties:
      paymentsInstanceAnalysisReference:
       type: string
-      example: "772765"
+      example: "739794"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5919,21 +6652,21 @@ definitions:
         general-info: The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)
      paymentTransactionPayeeReference:
       type: string
-      example: "797690"
+      example: "751115"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the party to whom the payment is made
      paymentTransactionPayeeAccountReference:
       type: string
-      example: "758458"
+      example: "703857"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to which the payment is made
      paymentTransactionPayeeBankReference:
       type: string
-      example: "754219"
+      example: "785479"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5980,7 +6713,7 @@ definitions:
         general-info: Description of the purpose including any external reference to the transaction
      paymentTransactionBankBranchLocationReference:
       type: string
-      example: "770326"
+      example: "768742"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5993,7 +6726,7 @@ definitions:
         general-info: The processing status of the transaction (e.g. captured, approved, initiated, confirmed, settled)
    paymentsRetrieveActionTaskReference:
     type: string
-    example: "PRATR721112"
+    example: "PRATR766270"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6072,7 +6805,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "761221"
+      example: "716012"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E1rHgsTGEeChad0JzLk7QA_-1068889728/elements/_E1rHhcTGEeChad0JzLk7QA_-755813725
@@ -6086,7 +6819,7 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "754738"
+      example: "725725"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EysE9cTGEeChad0JzLk7QA_-200588046
@@ -6094,7 +6827,7 @@ definitions:
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "782090"
+      example: "774226"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633/elements/_z2I6YGx5EeKmZJ0Ago--9g_239738909
@@ -6157,7 +6890,7 @@ definitions:
       general-info: The Initiate service call input and output record
    currentAccountInstanceReference:
     type: string
-    example: "CAIR746045"
+    example: "CAIR724041"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6227,7 +6960,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "749957"
+        example: "745164"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6253,7 +6986,7 @@ definitions:
           general-info: Value of the date type
    issuedDeviceInitiateActionReference:
     type: string
-    example: "IDIAR732772"
+    example: "IDIAR755375"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6266,7 +6999,7 @@ definitions:
       general-info: The Initiate service call input and output record
    issuedDeviceInstanceReference:
     type: string
-    example: "IDIR767930"
+    example: "IDIR721925"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6318,14 +7051,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR766079"
+    example: "CAIR703147"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    issuedDeviceInstanceReference:
     type: string
-    example: "IDIR706889"
+    example: "IDIR776327"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6431,7 +7164,7 @@ definitions:
         general-info: The tracked status of the device/inventory item (e.g. active, suspended, cancelled)
    issuedDeviceUpdateActionTaskReference:
     type: string
-    example: "IDUATR705601"
+    example: "IDUATR701433"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6453,14 +7186,14 @@ definitions:
   properties: 
    currentAccountInstanceReference:
     type: string
-    example: "CAIR705954"
+    example: "CAIR749498"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Current Account instance
    issuedDeviceInstanceReference:
     type: string
-    example: "IDIR764353"
+    example: "IDIR751784"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6551,7 +7284,7 @@ definitions:
         general-info: The tracked status of the device/inventory item (e.g. active, suspended, cancelled)
    issuedDeviceRequestActionTaskReference:
     type: string
-    example: "IDRATR792242"
+    example: "IDRATR710636"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6564,7 +7297,7 @@ definitions:
       general-info: The request service call consolidated processing record
    issuedDeviceRequestRecordReference:
     type: string
-    example: "IDRRR789913"
+    example: "IDRRR705196"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6595,7 +7328,7 @@ definitions:
     properties:
      issuedDeviceInstanceReportReference:
       type: string
-      example: "707270"
+      example: "728034"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6605,7 +7338,7 @@ definitions:
     properties:
      issuedDeviceInstanceAnalysisReference:
       type: string
-      example: "722231"
+      example: "788324"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6657,7 +7390,7 @@ definitions:
         general-info: The tracked status of the device/inventory item (e.g. active, suspended, cancelled)
    issuedDeviceRetrieveActionTaskReference:
     type: string
-    example: "IDRATR730565"
+    example: "IDRATR743952"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
