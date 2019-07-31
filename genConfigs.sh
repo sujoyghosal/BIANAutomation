@@ -185,6 +185,7 @@ do
 					then
 						e=`echo $sdline|cut -f1 -d"|"|sed 's/[ (/-]//g'|tr '[:upper:]' '[:lower:]'`
 						f="bq`echo $bq|sed 's/[ (/-]//g'|tr '[:upper:]' '[:lower:]'`""instancerecord"
+						#echo "e,f = $e, $f"
 						if [[ "$e" == "$f" ]] ;
 						then
 							start="true"

@@ -58,6 +58,7 @@ do
 #        bcr=`echo ${cr:0:1} | tr  '[a-z]' '[A-Z]'`${cr:1} #first character capital letter
         bcr=`echo $line|cut -f1 -d"|"|sed 's/ //g'`
         actionRaw=`echo $line|cut -f2 -d"|"`
+        actionRaw="$(tr '[:lower:]' '[:upper:]' <<< ${actionRaw:0:1})${actionRaw:1}"
         desc=`echo $line|cut -f3 -d"|"|sed 's/[:""]/ /g'`
         extOp=`echo $line|cut -f4 -d"|"`
         extApi=`echo $line|cut -f5 -d"|"`
