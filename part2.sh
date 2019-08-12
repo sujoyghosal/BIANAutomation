@@ -29,8 +29,8 @@ do
     if  [[ $line == BQ* ]] || [[ $line == CR* ]] ;
     then
         crr=`echo $line|cut -f1 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
-#        echo " $crr:" >>$output
-#        echo "  type: object" >>$output
+        echo " $crr:" >>$output
+        echo "  type: object" >>$output
         crbq=`echo $line|cut -f2 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
         #echo "Processing $crbq..."
         if  [[ $line == BQ* ]]
@@ -64,7 +64,7 @@ do
     then
         context=`echo $line|cut -f1 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
         #context=`echo $context | tr '[:upper:]' '[:lower:]'`
-        #echo "  $prepend$context:" |tee -a $verb"InputModel" $verb"OutputModel">>/dev/null
+        #echo "  $prepend$context:" |tee -a $output $verb"InputModel" $verb"OutputModel">>/dev/null
         space=""
     fi
     a=`echo $line|cut -f3 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
@@ -73,7 +73,7 @@ do
     a4=`echo $line|cut -f6 -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
     io=`echo $line|cut -f$col -d"|"|cut -f1 -d"("|sed 's/[ (/-]//g'`
 
-    s=`echo $line|cut -f3 -d"|"|cut -f1 -d"("`
+    s=`echo $line|cut -f1 -d"|"|cut -f1 -d"("`
     if  [[ ! -z "$a" ]]
     then
         lastRead=$a;
@@ -108,43 +108,37 @@ do
     if  [[ ! -z "$a2" ]] && [[ "$a2" != "##" ]];
     then
         a=$a2
-        space="  "
+        space=" "
     fi
     if  [[ ! -z "$a3" ]] && [[ "$a3" != "##" ]];
     then
         a=$a3
-        space="    "
+        space="  "
     fi
     if  [[ ! -z "$a4" ]] && [[ "$a4" != "##" ]];
     then
         a=$a4
-        space="      "
+        space="   "
     fi
     
     if  [[ ! -z "$a" ]] && [[ "$a2" == "##" ]] ;
     then
         a="$(tr '[:upper:]' '[:lower:]' <<< ${a:0:1})${a:1}"
-        echo "   $a:"|tee -a $inputModelFile $outputModelFile>>/dev/null
-        echo "    type: object"|tee -a $inputModelFile $outputModelFile>>/dev/null
-        echo "    properties:"|tee -a $inputModelFile $outputModelFile>>/dev/null
+        echo "  $a:"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
         #space=" $space"
         continue
     fi
     if  [[ ! -z "$a2" ]] && [[ "$a3" == "##" ]] ;
     then
         a2="$(tr '[:upper:]' '[:lower:]' <<< ${a2:0:1})${a2:1}"
-        echo "     $a2:"|tee -a $inputModelFile $outputModelFile>>/dev/null
-        echo "      type: object"|tee -a $inputModelFile $outputModelFile>>/dev/null
-        echo "      properties:"|tee -a $inputModelFile $outputModelFile>>/dev/null
+        echo "   $a2:"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
         #space=" $space"
         continue
     fi
     if  [[ ! -z "$a3" ]] && [[ "$a4" == "##" ]] ;
     then
         a3="$(tr '[:upper:]' '[:lower:]' <<< ${a3:0:1})${a3:1}"
-        echo "       $a3:"|tee -a $inputModelFile $outputModelFile>>/dev/null
-        echo "        type: object"|tee -a $inputModelFile $outputModelFile>>/dev/null
-        echo "        properties:"|tee -a $inputModelFile $outputModelFile>>/dev/null
+        echo "    $a3:"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
         #space=" $space"
         continue
     fi
@@ -154,29 +148,29 @@ do
     #echo "$a"
     info=`echo $line|cut -f7 -d"|"`
     z=`echo $a | tr '[:upper:]' '[:lower:]'`
-    echo "$space   $a:"|tee -a $inputModelFile $outputModelFile>>/dev/null
+    echo "$space  $a:"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
     case $z in
         *record)
-            echo "$space    type: object"|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   type: object"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             ;;
         *report)
-            echo "$space    type: object"|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   type: object"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             ;;
         *)
-            echo "$space    type: string"|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   type: string"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             ;;
     esac
     case $z in
         *amount|*charge|*fee)
-            echo "$space    example: USD 250"|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   example: USD 250"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             defaultdatatype="core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount"
             ;;
         *currency)
-            echo "$space    example: USD"|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   example: USD"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             defaultdatatype="core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Currency"
             ;;
         *date|*datetime|*time)
-            echo "$space    example: \"09-22-2018\""|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   example: \"09-22-2018\""|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             defaultdatatype="core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime"
             ;;
         *reference)
@@ -207,15 +201,15 @@ do
                     e=$g$ra
                     idArray+=($e)
             fi
-            echo "$space    example: \"$e\""|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   example: \"$e\""|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             defaultdatatype="core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier"
             ;;
         *perioid)
-            echo "$space    example: \"09-22-2018\" - \"09-29-2018\""|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   example: \"09-22-2018\" - \"09-29-2018\""|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             defaultdatatype="core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Duration"
             ;;
         *interval)
-            echo "$space    example: monthly"|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space   example: monthly"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
             defaultdatatype="core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Duration"
             ;;
         *reporttype)
@@ -228,7 +222,7 @@ do
             defaultdatatype="core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text"
             ;;
     esac
-    echo "$space    description: |"|tee -a $inputModelFile $outputModelFile>>/dev/null
+    echo "$space   description: |"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
     #element=`echo $line|cut -f2 -d"-"|cut -f1 -d"("|sed 's/[ (/-]//g'`
         if [ -f "$isofile" ]
         then
@@ -238,7 +232,6 @@ do
             paste -d"|" bq el>bqel
             cat p|cut -f3,4 -d"|">rest
             paste -d"|" bqel rest>q
-            #echo "crbq|element: $crbq|$element"
             cat q|grep -i "$crbq|$element">isobq
             inisofile="false"
             coredatatype="false"
@@ -252,15 +245,15 @@ do
                     s3=`echo $status|grep -i "Core Data Type"`
                     if [ ! -z "$s1" -a "$s1" != " " ]; then
                         bref=`echo "$isorec" | cut -f3 -d"|"`
-                        echo "$space     \`status: Provisionally Registered\`"|tee -a $inputModelFile $outputModelFile>>/dev/null
-                        echo "$space      bian-reference: $bref"|tee -a $inputModelFile $outputModelFile>>/dev/null
+                        echo "$space    \`status: Provisionally Registered\`"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
+                        echo "$space     bian-reference: $bref"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
                     fi
                     if [ ! -z "$s2" -a "$s2" != " " ]; then
                         bref=`echo "$isorec" | cut -f3 -d"|"`
                         href=`echo "$isorec" | cut -f4 -d"|"`
-                        echo "$space     \`status: Registered\`"|tee -a $inputModelFile $outputModelFile>>/dev/null
-                        echo "$space      iso-link: $href"|tee -a $inputModelFile $outputModelFile>>/dev/null
-                        echo "$space      bian-reference: $bref"|tee -a $inputModelFile $outputModelFile>>/dev/null
+                        echo "$space    \`status: Registered\`"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
+                        echo "$space     iso-link: $href"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
+                        echo "$space     bian-reference: $bref"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
                     fi
                     if [ ! -z "$s3" -a "$s3" != " " ]; then
                         coredatatype="true"
@@ -274,18 +267,18 @@ do
         fi
         if [ $inisofile == "false" ] || [ $coredatatype == "true" ]
         then
-            echo "$space     \`status: Not Mapped\`"|tee -a $inputModelFile $outputModelFile>>/dev/null
-            echo "$space      $defaultdatatype"|tee -a $inputModelFile $outputModelFile>>/dev/null
+            echo "$space    \`status: Not Mapped\`"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
+            echo "$space     $defaultdatatype"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
         fi
-    echo "$space      general-info: $info"|tee -a $inputModelFile $outputModelFile>>/dev/null
+    echo "$space     general-info: $info"|tee -a $output $inputModelFile $outputModelFile>>/dev/null
 
 done <infile
 rm -rf bq bqel el isobq q rest p
 done
-echo "definitions:">$output
-sed "s/ServiceDomain/SD$1/g" SDGenericModel.yaml>>$output
-cat $catFile >>$output
-
+echo "components:">m
+#echo "definitions:">m
+cat $catFile >>m
+mv m $output
 #cat $catFile >>$output
 echo "Generated Output File $output :)"
 rm *InputModel *OutputModel

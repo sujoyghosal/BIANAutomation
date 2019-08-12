@@ -1,6 +1,7 @@
 #genSDRecords.sh $1
 cat CR|sed -e $'s/\t/|/g' -e $'s/"//g'>p
 cat $1SpecificModel|sed -e $'s/\t/|/g' -e $'s/"//g'>s
+cp BQ.txt BQ
 i=""
 echo "Enter SD"
 read sd
