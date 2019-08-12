@@ -1,0 +1,87 @@
+CR Financial Position Log Instance Record	Financial Position Log						CR Financial Position Log Initiate	CR Financial Position Log Update	CR Financial Position Log Control	CR Financial Position Log Retrieve	BQ Transaction Capture Update	BQ Transaction Capture Capture	BQ Transaction Capture Retrieve
+Mandatory		Position Keeping Servicing Session Reference				Reference to the active servicing session	I	I	I				
+Mandatory		Financial Position Log Instance Reference				Reference to the Financial Position Log instance	O	I	I				
+Initiate		Financial Position Log Initiate Action Reference				Reference to an Initiate service call	O						
+Initiate		Financial Position Log Initiate Action Record				The Initiate service call input and output record	IO						
+Initiate		Financial Position Log Instance Status				The status of the Financial Position Log instance (e.g. initialised, pending, active)	IO						
+		CR Financial Position Log Instance Record	##			Maintain a log of financial transactions for management information, tracking and reconciliation purposes	IO	IO		O			
+			Transaction Log Type			The type of financial transaction log (e.g. customer transactions)	I	IO		O			
+			Product Instance Reference 			The product/service for which this is a financial transaction log	I	IO		O			
+			Customer Reference 			Reference to the product or service account holder/customer for the log if appropriate	I	IO		O			
+			Counterparty Reference 			Reference to a counterparty for the log if appropriate (e.g. merchant reference, card network reference)	I	IO		O			
+			Base Currency			The currency for the logged transactions	I	IO		O			
+			Interest Application Record	##		The record of applied interest if interest calculations are supported	O	IO		O			
+				Interest Transaction	##	A record of applied interest	O	IO		O			
+					Transaction Description	General description of the interest transaction	O	IO		O			
+					Transaction Rate Type	Applicable rate type	O	IO		O			
+					Transaction Interest Charge	The derived interest amount to be applied	O	IO		O			
+			Managed Position Limits 	##		Basic position limits that are maintained as an aspect of the log	IO	IO		O			
+				Position Limit Type		The type of position maintained for the log (e.g. cumulative balance)	I	IO		O			
+				Position Limit Settings		The position definition, associated limit settings and rules	I	IO		O			
+				Position Limit Value		The current calculated position	O			O			
+			Amount Block	##		Support for recording blocks on the log position (handling is by the associated fulfillment service domain)	IO	IO		O			
+				Amount Block Type 		The type of block applied to the tracked position (e.g. pending, final)	I	IO		O			
+				Priority		Priority classification for the block	I	IO		O			
+				Amount		The amount of the block	I	IO		O			
+				Date Type	##	The type of key dates associated with the block (e.g. start, expiry)	IO	IO		O			
+					Date	Value of the specific date type	IO	IO		O			
+			Initiation Date			The date and time the log was initiated. Note the log will have a complex internal calendar structure for extract and reporting	I	IO		O			
+			Status			The status of the log entry (e.g. active, in-suspense etc.)	O	IO		O			
+Update		Financial Position Log Update Action Task Reference				Reference to an update service call		O					
+Update		Financial Position Log Update Action Task Record				The update service call consolidated processing record		I/O					
+Update		Update Action Request				Details of the update action service request		I					
+Update		Update Response Record				Details of the Update action service response		O					
+CONTROL		Financial Position Log Control Action Task Reference				Reference to a Financial Position Log instance control processing service call			O				
+CONTROL		Financial Position Log Control Action Task Record				The processing control service call consolidated processing record			I/O				
+CONTROL		Financial Position Log Control Action Request	##			Details of the control action service request			I				
+CONTROL			Control Action Type			The type of processing action requested (e.g. suspend, skip, terminate)			I				
+CONTROL		Financial Position Log Control Action Response				Details of the control action service response			O				
+RETRIEVE		Financial Position Log Retrieve Action Task Reference				Reference to a Financial Position Log instance retrieve service call				O			
+RETRIEVE		Financial Position Log Retrieve Action Task Record				The retrieve service call consolidated processing record				IO			
+RETRIEVE		Financial Position Log Retrieve Action Request				Details of the retrieve action service request (lists requested reports)				I			
+RETRIEVE		Financial Position Log Retrieve Action Response				Details of the retrieve action service response (lists returned reports)				O			
+RETRIEVE		Financial Position Log Instance Report Record	##			A specific Financial Position Log instance formatted report				IO			
+RETRIEVE			Financial Position Log Instance Report Reference			Reference to the control record instance report				I			
+RETRIEVE			Financial Position Log Instance Report Data			The input information used to assemble the report that can be on-going, periodic and actual and projected				O			
+RETRIEVE			Financial Position Log Instance Report Type			The type of external report available				IO			
+RETRIEVE			Financial Position Log Instance Report Parameters			The selection parameters for the report (e.g. period, content type)				I			
+RETRIEVE			Financial Position Log Instance Report			The external report in any suitable form including selection filters where appropriate				O			
+RETRIEVE		Financial Position Log Instance Analysis	##			A specific Financial Position Log instance analytical report				IO			
+RETRIEVE			Financial Position Log Instance Analysis Reference			Reference to the control record instance analysis view				I			
+RETRIEVE			Financial Position Log Instance Analysis Data			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected				O			
+RETRIEVE			Financial Position Log Instance Analysis Report Type			The type of external performance analysis report available				IO			
+RETRIEVE			Financial Position Log Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)				I			
+RETRIEVE			Financial Position Log Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate				O			
+BQ Transaction Capture Instance Record	Transaction Capture												
+Mandatory		Financial Position Log Instance Reference				Reference to the parent Financial Position Log instance					I	I	
+Mandatory		Transaction Capture Instance Reference				Reference to the Transaction Capture instance					O	I	
+		Transaction Capture Instance Record	##			The details of a financial transaction recorded in the log					IO	IO	O
+			Posting Description			The description of purpose of the financial transaction					IO	IO	O
+			Posting Transaction 			The logged financial transaction. Note the log can be structured with double entry representations (i.e. capture credit/debit pair)					IO	IO	O
+			Posting Value Date			The date of the transaction 					IO	IO	O
+Update		Transaction Capture Update Action Task Reference				Reference to an update service call					O		
+Update		Transaction Capture Update Action Task Record				The update service call consolidated processing record					I/O		
+Update		Transaction Capture Update Action Request				Details of the update action service request					I		
+Update		Update Response Record				Details of the Update action service response					O		
+Capture		Transaction Capture Capture Action Task Reference				Reference to a Transaction Capture instance capture service call						O	
+Capture		Transaction Capture Capture Action Task Record				The capture service call consolidated processing record						I/O	
+Capture		Transaction Capture Capture Record Reference				Reference to the Transaction Capture structured input transaction/record						O	
+Capture		Capture Record Type	##			Copy in associated API description (less 5 header characters)						I	
+Capture			Capture Input Record			Structured input transaction/record (e.g. timesheet, event record, account posting)						I	
+Capture		Capture Response Record				Details of the capture action service response						O	
+Retrieve		Transaction Capture Retrieve Action Task Reference				Reference to a Transaction Capture instance retrieve service call							O
+Retrieve		Transaction Capture Retrieve Action Task Record				The retrieve service call consolidated processing record							I/O
+Retrieve		Transaction Capture Retrieve Action Request				Details of the retrieve action service request (lists requested reports)							I
+Retrieve		Transaction Capture Retrieve Action Response				Details of the retrieve action service response (lists returned reports)							O
+Retrieve		Transaction Capture Instance Report	##			A specific Transaction Capture instance formatted report							IO
+Retrieve			Transaction Capture Instance Report Reference			Reference to the control record instance report							I
+Retrieve			Transaction Capture Instance Report Record			The input information used to assemble the report that can be on-going, periodic and actual and projected							O
+Retrieve			Transaction Capture Instance Report Type			The type of external report available							O
+Retrieve			Transaction Capture Instance Report Parameters			The selection parameters for the report (e.g. period, content type)							O
+Retrieve			Transaction Capture Instance Report			The external report in any suitable form including selection filters where appropriate							O
+Retrieve		Transaction Capture Instance Analysis	##			A specific Transaction Capture instance analytical report							IO
+Retrieve			Transaction Capture Instance Analysis Reference			Reference to the control record instance analysis view							I
+Retrieve			Transaction Capture Instance Analysis Record			The inputs and results of the instance analysis that can be on-going, periodic and actual and projected							O
+Retrieve			Transaction Capture Instance Analysis Report Type			The type of external performance analysis report available							O
+Retrieve			Transaction Capture Instance Analysis Parameters			The selection parameters for the analysis (e.g. period, algorithm type)							O
+Retrieve			Transaction Capture Instance Analysis Report			The external analysis report in any suitable form including selection filters where appropriate							O

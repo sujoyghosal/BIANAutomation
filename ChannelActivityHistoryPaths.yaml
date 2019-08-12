@@ -1,0 +1,424 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Channel Activity History'
+ description: >
+
+    ## Executive Summary:
+    This service domains consolidates and captures customer channel usage activity to support channel activity analysis and also can be referenced for customer access authorization and routing decisions
+
+    ## Example of Use:
+    Channel Activity Analysis draws on channel activity history data to support channel usage analysis to detect out of pattern behavior for customers
+
+    ## Description:
+    This service domain captures transaction activity across multiple channels/devices to provide recent activity details (such as an attempt at a self-service product application) to influence/inform service routing. The history is also used for access control and as a source of activity data for more detailed channel usage analysis
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-channel-activity-history/1.0.0
+schemes:
+ - https
+paths:
+  /channel-activity-history/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDChannelActivityHistory
+      summary: Activate  a SDChannelActivityHistory servicing session
+      description: Activate  a  SDChannelActivityHistory servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDChannelActivityHistory Request Payload
+        schema:
+          $ref: '#/definitions/SDChannelActivityHistoryActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDChannelActivityHistoryActivateOutputModel'
+  /channel-activity-history/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDChannelActivityHistory
+      summary: Update an active SDChannelActivityHistory session configuration
+      description: Update an active SDChannelActivityHistory session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDChannelActivityHistory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDChannelActivityHistory Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDChannelActivityHistoryConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDChannelActivityHistoryConfigureOutputModel'
+  /channel-activity-history/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDChannelActivityHistory
+      summary: "Capturing feedback against the SDChannelActivityHistory service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDChannelActivityHistory service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDChannelActivityHistory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDChannelActivityHistory Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDChannelActivityHistoryFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDChannelActivityHistoryFeedbackOutputModel'
+  /channel-activity-history/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDChannelActivityHistory
+      summary: Analytical views maintained by the SDChannelActivityHistory service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDChannelActivityHistory service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDChannelActivityHistory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDChannelActivityHistory Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDChannelActivityHistoryRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDChannelActivityHistoryRetrieveOutputModel'
+  /channel-activity-history/{sd-reference-id}/channel-activity-log/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateChannelActivityLog
+      summary: Details of a new ChannelActivityLog instance
+      description: Initiate channel activity logging for a customer
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ChannelActivityLog Request Payload
+        schema:
+          $ref: '#/definitions/CRChannelActivityLogInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new ChannelActivityLog instance
+          schema:
+            $ref: '#/definitions/CRChannelActivityLogInitiateOutputModel'
+  /channel-activity-history/{sd-reference-id}/channel-activity-log/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateChannelActivityLog
+      summary: Update to any amendable fields of the ChannelActivityLog instance
+      description: Update channel activity logging details for a customer
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Channel Activity Log Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Channel Activity Log Request Payload
+        schema:
+          $ref: '#/definitions/CRChannelActivityLogUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Channel Activity Log Instance
+          schema:
+            $ref: '#/definitions/CRChannelActivityLogUpdateOutputModel'
+  /channel-activity-history/{sd-reference-id}/channel-activity-log/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlChannelActivityLogUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the channel activity logging (e.g. suspend) 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Channel Activity Log Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Channel Activity Log Request Payload
+        schema:
+          $ref: '#/definitions/CRChannelActivityLogControlInputModel'
+      responses:
+        200:
+          description: Successful control of Channel Activity Log Instance
+          schema:
+            $ref: '#/definitions/CRChannelActivityLogControlOutputModel'
+  /channel-activity-history/{sd-reference-id}/channel-activity-log/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveChannelActivityHistory
+      summary: Invoke a reporting action to obtain a Channel Activity Log instance related report
+      description: Retrieve details about customer channel activity logging
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Channel Activity Log Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRChannelActivityLogRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Channel Activity Log Instance
+          schema:
+            $ref: '#/definitions/CRChannelActivityLogRetrieveOutputModel'
+  /channel-activity-history/{sd-reference-id}/channel-activity-log/{cr-reference-id}/event/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateChannelActivityLogEvent
+      summary: Update to any amendable fields of the Event instance
+      description: Update a logged event for a customer
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Channel Activity Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Event Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Event Request Payload
+        schema:
+          $ref: '#/definitions/BQEventUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Event Instance
+          schema:
+            $ref: '#/definitions/BQEventUpdateOutputModel'
+  /channel-activity-history/{sd-reference-id}/channel-activity-log/{cr-reference-id}/event/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureChannelActivityLogEventUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture a channel access event in the log
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Channel Activity Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Event Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Event request payload
+        schema:
+          $ref: '#/definitions/BQEventCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Event Instance Record
+          schema:
+            $ref: '#/definitions/BQEventCaptureOutputModel'
+  /channel-activity-history/{sd-reference-id}/channel-activity-log/{cr-reference-id}/event/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveChannelActivityLogEvent
+      summary: Invoke a reporting action to obtain a Event instance related report.
+      description: Retrieve details about a logged channel activity event .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Channel Activity Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Event Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQEventRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Event Instance Record
+          schema:
+            $ref: '#/definitions/BQEventRetrieveOutputModel'
+  /channel-activity-history/{sd-reference-id}/channel-activity-log:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveChannelActivityHistoryReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ChannelActivityHistory Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /channel-activity-history/channel-activity-log/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveChannelActivityHistoryBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Event', ]
+  /channel-activity-history/{sd-reference-id}/channel-activity-log/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveChannelActivityHistoryBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Channel Activity History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Channel Activity Log Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Event
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Event Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [EventID1, EventID2]

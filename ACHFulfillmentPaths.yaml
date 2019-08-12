@@ -1,0 +1,827 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - ACH Fulfillment'
+ description: >
+
+    ## Executive Summary:
+    This service domain operates the Automated Clearing House (ACH) access gateway between the bank and the ACH service provider
+
+    ## Example of Use:
+    A payment is made between two customers of different banks. The payment is processed via an automated clearing house.
+
+    ## Description:
+    This service domain handles the operational interface with an external automated clearing house (ACH) service. It handles the sending and receipt of batched transactions, servicing reporting and executes the schedule of service operations
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-ach-fulfillment/1.0.0
+schemes:
+ - https
+paths:
+  /ach-fulfillment/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDACHFulfillment
+      summary: Activate  a SDACHFulfillment servicing session
+      description: Activate  a  SDACHFulfillment servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDACHFulfillment Request Payload
+        schema:
+          $ref: '#/definitions/SDACHFulfillmentActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDACHFulfillmentActivateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDACHFulfillment
+      summary: Update an active SDACHFulfillment session configuration
+      description: Update an active SDACHFulfillment session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDACHFulfillment Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDACHFulfillment Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDACHFulfillmentConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDACHFulfillmentConfigureOutputModel'
+  /ach-fulfillment/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDACHFulfillment
+      summary: "Capturing feedback against the SDACHFulfillment service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDACHFulfillment service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDACHFulfillment Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDACHFulfillment Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDACHFulfillmentFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDACHFulfillmentFeedbackOutputModel'
+  /ach-fulfillment/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDACHFulfillment
+      summary: Analytical views maintained by the SDACHFulfillment service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDACHFulfillment service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDACHFulfillment Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDACHFulfillment Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDACHFulfillmentRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDACHFulfillmentRetrieveOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateACHFulfillmentOperatingSession
+      summary: Details of a new ACHFulfillmentOperatingSession instance
+      description: Initiate the operating schedule
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ACHFulfillmentOperatingSession Request Payload
+        schema:
+          $ref: '#/definitions/CRACHFulfillmentOperatingSessionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new ACHFulfillmentOperatingSession instance
+          schema:
+            $ref: '#/definitions/CRACHFulfillmentOperatingSessionInitiateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateACHFulfillmentOperatingSession
+      summary: Update to any amendable fields of the ACHFulfillmentOperatingSession instance
+      description: Update the operating schedule parameters
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ACH Fulfillment Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRACHFulfillmentOperatingSessionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated ACH Fulfillment Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRACHFulfillmentOperatingSessionUpdateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlACHFulfillmentOperatingSessionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the execution of the ACH access service session (e.g. terminate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ACH Fulfillment Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRACHFulfillmentOperatingSessionControlInputModel'
+      responses:
+        200:
+          description: Successful control of ACH Fulfillment Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRACHFulfillmentOperatingSessionControlOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveACHFulfillment
+      summary: Invoke a reporting action to obtain a ACH Fulfillment Operating Session instance related report
+      description: Retrieve details about the ACH access service session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRACHFulfillmentOperatingSessionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved ACH Fulfillment Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRACHFulfillmentOperatingSessionRetrieveOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/inboundach/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateACHFulfillmentOperatingSessionInboundACH
+      summary: Details of a new InboundACH instance
+      description: Initiate an inbound ACH transaction batch handling
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ACH Fulfillment Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQInboundACHInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of ACH Fulfillment Operating Session instance
+          schema:
+            $ref: '#/definitions/BQInboundACHInitiateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/inboundach/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateACHFulfillmentOperatingSessionInboundACH
+      summary: Update to any amendable fields of the InboundACH instance
+      description: Update an inbound ACH transaction batch
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InboundACH Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InboundACH Request Payload
+        schema:
+          $ref: '#/definitions/BQInboundACHUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated InboundACH Instance
+          schema:
+            $ref: '#/definitions/BQInboundACHUpdateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/inboundach/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveACHFulfillmentOperatingSessionInboundACH
+      summary: Invoke a reporting action to obtain a InboundACH instance related report.
+      description: Retrieve details about an inbound ACH transaction batch .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InboundACH Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInboundACHRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved InboundACH Instance Record
+          schema:
+            $ref: '#/definitions/BQInboundACHRetrieveOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/outboundach/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateACHFulfillmentOperatingSessionOutboundACH
+      summary: Details of a new OutboundACH instance
+      description: Initiate an outbound ACH transaction batch handling
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ACH Fulfillment Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQOutboundACHInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of ACH Fulfillment Operating Session instance
+          schema:
+            $ref: '#/definitions/BQOutboundACHInitiateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/outboundach/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateACHFulfillmentOperatingSessionOutboundACH
+      summary: Update to any amendable fields of the OutboundACH instance
+      description: Update an outbound ACH transaction batch
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OutboundACH Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: OutboundACH Request Payload
+        schema:
+          $ref: '#/definitions/BQOutboundACHUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated OutboundACH Instance
+          schema:
+            $ref: '#/definitions/BQOutboundACHUpdateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/outboundach/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveACHFulfillmentOperatingSessionOutboundACH
+      summary: Invoke a reporting action to obtain a OutboundACH instance related report.
+      description: Retrieve details about an outbound ACH transaction batch .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OutboundACH Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOutboundACHRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved OutboundACH Instance Record
+          schema:
+            $ref: '#/definitions/BQOutboundACHRetrieveOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/warehousing/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateACHFulfillmentOperatingSessionWarehousing
+      summary: Details of a new Warehousing instance
+      description: Initiate a warehoused outbound ACH transaction batch
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ACH Fulfillment Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQWarehousingInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of ACH Fulfillment Operating Session instance
+          schema:
+            $ref: '#/definitions/BQWarehousingInitiateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/warehousing/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateACHFulfillmentOperatingSessionWarehousing
+      summary: Update to any amendable fields of the Warehousing instance
+      description: Update a warehoused outbound ACH transaction batch
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Warehousing Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Warehousing Request Payload
+        schema:
+          $ref: '#/definitions/BQWarehousingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Warehousing Instance
+          schema:
+            $ref: '#/definitions/BQWarehousingUpdateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/warehousing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveACHFulfillmentOperatingSessionWarehousing
+      summary: Invoke a reporting action to obtain a Warehousing instance related report.
+      description: Retrieve details about a warehoused outbound ACH transaction batch .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Warehousing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQWarehousingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Warehousing Instance Record
+          schema:
+            $ref: '#/definitions/BQWarehousingRetrieveOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/clearingandsettlement/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateACHFulfillmentOperatingSessionClearingandSettlement
+      summary: Details of a new ClearingandSettlement instance
+      description: Initiate an ACH transaction batch clearing and settlement processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ACH Fulfillment Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQClearingandSettlementInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of ACH Fulfillment Operating Session instance
+          schema:
+            $ref: '#/definitions/BQClearingandSettlementInitiateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/clearingandsettlement/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateACHFulfillmentOperatingSessionClearingandSettlement
+      summary: Update to any amendable fields of the ClearingandSettlement instance
+      description: Update an ACH transaction batch in clearing and settlement
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ClearingandSettlement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ClearingandSettlement Request Payload
+        schema:
+          $ref: '#/definitions/BQClearingandSettlementUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated ClearingandSettlement Instance
+          schema:
+            $ref: '#/definitions/BQClearingandSettlementUpdateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/clearingandsettlement/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveACHFulfillmentOperatingSessionClearingandSettlement
+      summary: Invoke a reporting action to obtain a ClearingandSettlement instance related report.
+      description: Retrieve details about an ACH transaction batch in clearing and settlement .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ClearingandSettlement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQClearingandSettlementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ClearingandSettlement Instance Record
+          schema:
+            $ref: '#/definitions/BQClearingandSettlementRetrieveOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/reconciliation/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateACHFulfillmentOperatingSessionReconciliation
+      summary: Details of a new Reconciliation instance
+      description: Initiate the reconciliation of ACH transactions
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ACH Fulfillment Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQReconciliationInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of ACH Fulfillment Operating Session instance
+          schema:
+            $ref: '#/definitions/BQReconciliationInitiateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/reconciliation/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateACHFulfillmentOperatingSessionReconciliation
+      summary: Update to any amendable fields of the Reconciliation instance
+      description: Update an transaction in reconciliations
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Reconciliation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Reconciliation Request Payload
+        schema:
+          $ref: '#/definitions/BQReconciliationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Reconciliation Instance
+          schema:
+            $ref: '#/definitions/BQReconciliationUpdateOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/reconciliation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveACHFulfillmentOperatingSessionReconciliation
+      summary: Invoke a reporting action to obtain a Reconciliation instance related report.
+      description: Retrieve details about ACH transaction reconciliations .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Reconciliation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQReconciliationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Reconciliation Instance Record
+          schema:
+            $ref: '#/definitions/BQReconciliationRetrieveOutputModel'
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveACHFulfillmentReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ACHFulfillment Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /ach-fulfillment/ach-fulfillment-operating-session/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveACHFulfillmentBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'InboundACH',  'OutboundACH',  'Warehousing',  'ClearingAndSettlement',  'Reconciliation', ]
+  /ach-fulfillment/{sd-reference-id}/ach-fulfillment-operating-session/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveACHFulfillmentBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: ACH Fulfillment Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: ACH Fulfillment Operating Session Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Reconciliation
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Reconciliation Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ReconciliationID1, ReconciliationID2]

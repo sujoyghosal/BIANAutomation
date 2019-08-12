@@ -1,0 +1,480 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Advanced Voice Services Operations'
+ description: >
+
+    ## Executive Summary:
+    This service domain operates the telephone channel infrastructure, including the IVR and any other automated devices as appropriate. This includes handling default routing rules and intra-day/session adjustments to deal with peak load or other operational variations
+
+    ## Example of Use:
+    The numeric menu is adjusted to increase self-serve activity during a period of peak loading (this could be implemented in the IVR in a more sophisticated set-up)
+
+    ## Description:
+    This service domain handles the operation of the PBX/telephony infrastructure which can include embedded IVR capabilities. The PBX system will have close integration with the call center and E-Branch capabilities depending on the degree of computer telephony integration (CTI) and cross channel support
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-advanced-voice-services-operations/1.0.0
+schemes:
+ - https
+paths:
+  /advanced-voice-services-operations/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDAdvancedVoiceServicesOperations
+      summary: Activate  a SDAdvancedVoiceServicesOperations servicing session
+      description: Activate  a  SDAdvancedVoiceServicesOperations servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDAdvancedVoiceServicesOperations Request Payload
+        schema:
+          $ref: '#/definitions/SDAdvancedVoiceServicesOperationsActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDAdvancedVoiceServicesOperationsActivateOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDAdvancedVoiceServicesOperations
+      summary: Update an active SDAdvancedVoiceServicesOperations session configuration
+      description: Update an active SDAdvancedVoiceServicesOperations session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAdvancedVoiceServicesOperations Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDAdvancedVoiceServicesOperations Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDAdvancedVoiceServicesOperationsConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDAdvancedVoiceServicesOperationsConfigureOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDAdvancedVoiceServicesOperations
+      summary: "Capturing feedback against the SDAdvancedVoiceServicesOperations service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDAdvancedVoiceServicesOperations service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAdvancedVoiceServicesOperations Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDAdvancedVoiceServicesOperations Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDAdvancedVoiceServicesOperationsFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDAdvancedVoiceServicesOperationsFeedbackOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDAdvancedVoiceServicesOperations
+      summary: Analytical views maintained by the SDAdvancedVoiceServicesOperations service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDAdvancedVoiceServicesOperations service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAdvancedVoiceServicesOperations Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDAdvancedVoiceServicesOperations Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDAdvancedVoiceServicesOperationsRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDAdvancedVoiceServicesOperationsRetrieveOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateVoiceChannelOperatingSession
+      summary: Details of a new VoiceChannelOperatingSession instance
+      description: Initiate the voice channel service
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: VoiceChannelOperatingSession Request Payload
+        schema:
+          $ref: '#/definitions/CRVoiceChannelOperatingSessionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new VoiceChannelOperatingSession instance
+          schema:
+            $ref: '#/definitions/CRVoiceChannelOperatingSessionInitiateOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateVoiceChannelOperatingSession
+      summary: Update to any amendable fields of the VoiceChannelOperatingSession instance
+      description: Update the voice access service menu during the session (e.g. to notify customers of an issue)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Voice Channel Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRVoiceChannelOperatingSessionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Voice Channel Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRVoiceChannelOperatingSessionUpdateOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlVoiceChannelOperatingSessionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the service session (e.g. terminate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Voice Channel Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRVoiceChannelOperatingSessionControlInputModel'
+      responses:
+        200:
+          description: Successful control of Voice Channel Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRVoiceChannelOperatingSessionControlOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestVoiceChannelOperatingSessionUpdate
+      summary: Invoke a service request action against the VoiceChannelOperatingSession instance
+      description: Report an issue with the production service
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Voice Channel Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRVoiceChannelOperatingSessionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Voice Channel Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRVoiceChannelOperatingSessionRequestOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAdvancedVoiceServicesOperations
+      summary: Invoke a reporting action to obtain a Voice Channel Operating Session instance related report
+      description: Retrieve details and statistics relating to a session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRVoiceChannelOperatingSessionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Voice Channel Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRVoiceChannelOperatingSessionRetrieveOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}/inbound/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateVoiceChannelOperatingSessionInbound
+      summary: Details of a new Inbound instance
+      description: Execute an inbound voice connection 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Voice Channel Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQInboundInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Voice Channel Operating Session instance
+          schema:
+            $ref: '#/definitions/BQInboundInitiateOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}/inbound/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveVoiceChannelOperatingSessionInbound
+      summary: Invoke a reporting action to obtain a Inbound instance related report.
+      description: Retrieve details about an inbound voice connection .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Inbound Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInboundRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Inbound Instance Record
+          schema:
+            $ref: '#/definitions/BQInboundRetrieveOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}/outbound/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateVoiceChannelOperatingSessionOutbound
+      summary: Details of a new Outbound instance
+      description: Execute an outbound voice connection 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Voice Channel Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQOutboundInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Voice Channel Operating Session instance
+          schema:
+            $ref: '#/definitions/BQOutboundInitiateOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}/outbound/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveVoiceChannelOperatingSessionOutbound
+      summary: Invoke a reporting action to obtain a Outbound instance related report.
+      description: Retrieve details about an outbound voice connection .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Outbound Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOutboundRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Outbound Instance Record
+          schema:
+            $ref: '#/definitions/BQOutboundRetrieveOutputModel'
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveAdvancedVoiceServicesOperationsReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- AdvancedVoiceServicesOperations Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /advanced-voice-services-operations/voice-channel-operating-session/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveAdvancedVoiceServicesOperationsBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Inbound',  'Outbound', ]
+  /advanced-voice-services-operations/{sd-reference-id}/voice-channel-operating-session/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveAdvancedVoiceServicesOperationsBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Advanced Voice Services Operations Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Voice Channel Operating Session Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Outbound
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Outbound Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [OutboundID1, OutboundID2]

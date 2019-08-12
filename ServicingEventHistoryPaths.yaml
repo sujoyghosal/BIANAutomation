@@ -1,0 +1,745 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Servicing Event History'
+ description: >
+
+    ## Executive Summary:
+    This service domain captures, classifies and stores servicing activity and events to support root cause analysis
+
+    ## Example of Use:
+    A servicing contact is concluded and the contact details and result is captured. In cases the call is recorded
+
+    ## Description:
+    The Servicing Event History service domain captures the details of servicing activity to support root cause analysis. The information captured can include summary details of the servicing activity, product access details and click-stream/voice records as necessary. The captured detail can be analyzed for staff assessment and training and to support procedural refinements
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-servicing-event-history/1.0.0
+schemes:
+ - https
+paths:
+  /servicing-event-history/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDServicingEventHistory
+      summary: Activate  a SDServicingEventHistory servicing session
+      description: Activate  a  SDServicingEventHistory servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDServicingEventHistory Request Payload
+        schema:
+          $ref: '#/definitions/SDServicingEventHistoryActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDServicingEventHistoryActivateOutputModel'
+  /servicing-event-history/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDServicingEventHistory
+      summary: Update an active SDServicingEventHistory session configuration
+      description: Update an active SDServicingEventHistory session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDServicingEventHistory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDServicingEventHistory Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDServicingEventHistoryConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDServicingEventHistoryConfigureOutputModel'
+  /servicing-event-history/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDServicingEventHistory
+      summary: "Capturing feedback against the SDServicingEventHistory service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDServicingEventHistory service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDServicingEventHistory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDServicingEventHistory Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDServicingEventHistoryFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDServicingEventHistoryFeedbackOutputModel'
+  /servicing-event-history/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDServicingEventHistory
+      summary: Analytical views maintained by the SDServicingEventHistory service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDServicingEventHistory service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDServicingEventHistory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDServicingEventHistory Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDServicingEventHistoryRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDServicingEventHistoryRetrieveOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateServicingEventLog
+      summary: Details of a new ServicingEventLog instance
+      description: Initiate servicing event history tracking for a servicing resource
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ServicingEventLog Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingEventLogInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new ServicingEventLog instance
+          schema:
+            $ref: '#/definitions/CRServicingEventLogInitiateOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateServicingEventLog
+      summary: Update to any amendable fields of the ServicingEventLog instance
+      description: Update details about the log
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing Event Log Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingEventLogUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Servicing Event Log Instance
+          schema:
+            $ref: '#/definitions/CRServicingEventLogUpdateOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlServicingEventLogUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control event tracking for the servicing resource (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing Event Log Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingEventLogControlInputModel'
+      responses:
+        200:
+          description: Successful control of Servicing Event Log Instance
+          schema:
+            $ref: '#/definitions/CRServicingEventLogControlOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveServicingEventHistory
+      summary: Invoke a reporting action to obtain a Servicing Event Log instance related report
+      description: Retrieve details about the servicing event log
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRServicingEventLogRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Servicing Event Log Instance
+          schema:
+            $ref: '#/definitions/CRServicingEventLogRetrieveOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/assignment/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateServicingEventLogAssignment
+      summary: Update to any amendable fields of the Assignment instance
+      description: Update captured assignment event details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assignment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Assignment Request Payload
+        schema:
+          $ref: '#/definitions/BQAssignmentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Assignment Instance
+          schema:
+            $ref: '#/definitions/BQAssignmentUpdateOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/assignment/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureServicingEventLogAssignmentUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture servicing position assignment event details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assignment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Assignment request payload
+        schema:
+          $ref: '#/definitions/BQAssignmentCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Assignment Instance Record
+          schema:
+            $ref: '#/definitions/BQAssignmentCaptureOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/assignment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveServicingEventLogAssignment
+      summary: Invoke a reporting action to obtain a Assignment instance related report.
+      description: Retrieve servicing position assignment event details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assignment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAssignmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Assignment Instance Record
+          schema:
+            $ref: '#/definitions/BQAssignmentRetrieveOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/session/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateServicingEventLogSession
+      summary: Update to any amendable fields of the Session instance
+      description: Update captured customer servicing session event details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Session Request Payload
+        schema:
+          $ref: '#/definitions/BQSessionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Session Instance
+          schema:
+            $ref: '#/definitions/BQSessionUpdateOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/session/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureServicingEventLogSessionUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture customer servicing session event details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Session request payload
+        schema:
+          $ref: '#/definitions/BQSessionCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Session Instance Record
+          schema:
+            $ref: '#/definitions/BQSessionCaptureOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/session/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveServicingEventLogSession
+      summary: Invoke a reporting action to obtain a Session instance related report.
+      description: Retrieve customer servicing event details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Session Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQSessionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Session Instance Record
+          schema:
+            $ref: '#/definitions/BQSessionRetrieveOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/issue/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateServicingEventLogIssue
+      summary: Update to any amendable fields of the Issue instance
+      description: Update captured servicing issue event details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Issue Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Issue Request Payload
+        schema:
+          $ref: '#/definitions/BQIssueUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Issue Instance
+          schema:
+            $ref: '#/definitions/BQIssueUpdateOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/issue/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureServicingEventLogIssueUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture servicing issue event details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Issue Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Issue request payload
+        schema:
+          $ref: '#/definitions/BQIssueCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Issue Instance Record
+          schema:
+            $ref: '#/definitions/BQIssueCaptureOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/issue/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveServicingEventLogIssue
+      summary: Invoke a reporting action to obtain a Issue instance related report.
+      description: Retrieve servicing issue event details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Issue Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQIssueRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Issue Instance Record
+          schema:
+            $ref: '#/definitions/BQIssueRetrieveOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/facility/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateServicingEventLogFacility
+      summary: Update to any amendable fields of the Facility instance
+      description: Update captured facility utilization event details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Facility Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Facility Request Payload
+        schema:
+          $ref: '#/definitions/BQFacilityUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Facility Instance
+          schema:
+            $ref: '#/definitions/BQFacilityUpdateOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/facility/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureServicingEventLogFacilityUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture  facility utilization event details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Facility Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Facility request payload
+        schema:
+          $ref: '#/definitions/BQFacilityCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Facility Instance Record
+          schema:
+            $ref: '#/definitions/BQFacilityCaptureOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/facility/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveServicingEventLogFacility
+      summary: Invoke a reporting action to obtain a Facility instance related report.
+      description: Retrieve  facility utilization event details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Facility Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQFacilityRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Facility Instance Record
+          schema:
+            $ref: '#/definitions/BQFacilityRetrieveOutputModel'
+  /servicing-event-history/{sd-reference-id}/servicing-event-log:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveServicingEventHistoryReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ServicingEventHistory Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /servicing-event-history/servicing-event-log/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveServicingEventHistoryBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Assignment',  'Session',  'Issue',  'Facility', ]
+  /servicing-event-history/{sd-reference-id}/servicing-event-log/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveServicingEventHistoryBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Event History Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Event Log Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Facility
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Facility Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [FacilityID1, FacilityID2]

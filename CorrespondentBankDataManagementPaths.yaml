@@ -1,0 +1,317 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Correspondent Bank Data Management'
+ description: >
+
+    ## Executive Summary:
+    This service domain maintains correspondent bank reference details. This includes correspondent bank payment parameters in particular bank limits and capturing transaction activity to track reciprocity
+
+    ## Example of Use:
+    Correspondent bank (reciprocal) activity is consolidated to support periodic correspondent banking relationship reviews
+
+    ## Description:
+    This service domain maintains reference details specific to a correspondent banking partner covering payment terms and preferences and security keys. It also consolidates transactional activity as might be needed to track reciprocity with the correspondent bank. Any specific arrangements and terms (e.g. SSIs) that might override market directory details are maintained here as part of the data record.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-correspondent-bank-data-management/1.0.0
+schemes:
+ - https
+paths:
+  /correspondent-bank-data-management/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCorrespondentBankDataManagement
+      summary: Activate  a SDCorrespondentBankDataManagement servicing session
+      description: Activate  a  SDCorrespondentBankDataManagement servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCorrespondentBankDataManagement Request Payload
+        schema:
+          $ref: '#/definitions/SDCorrespondentBankDataManagementActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCorrespondentBankDataManagementActivateOutputModel'
+  /correspondent-bank-data-management/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCorrespondentBankDataManagement
+      summary: Update an active SDCorrespondentBankDataManagement session configuration
+      description: Update an active SDCorrespondentBankDataManagement session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorrespondentBankDataManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorrespondentBankDataManagement Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCorrespondentBankDataManagementConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCorrespondentBankDataManagementConfigureOutputModel'
+  /correspondent-bank-data-management/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCorrespondentBankDataManagement
+      summary: "Capturing feedback against the SDCorrespondentBankDataManagement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCorrespondentBankDataManagement service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorrespondentBankDataManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorrespondentBankDataManagement Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCorrespondentBankDataManagementFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCorrespondentBankDataManagementFeedbackOutputModel'
+  /correspondent-bank-data-management/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCorrespondentBankDataManagement
+      summary: Analytical views maintained by the SDCorrespondentBankDataManagement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCorrespondentBankDataManagement service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorrespondentBankDataManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorrespondentBankDataManagement Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCorrespondentBankDataManagementRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCorrespondentBankDataManagementRetrieveOutputModel'
+  /correspondent-bank-data-management/{sd-reference-id}/correspondent-bank-directory-entry/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorrespondentBankDirectoryEntry
+      summary: Details of a new CorrespondentBankDirectoryEntry instance
+      description: Register a new correspondent bank in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Data Management Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CorrespondentBankDirectoryEntry Request Payload
+        schema:
+          $ref: '#/definitions/CRCorrespondentBankDirectoryEntryInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CorrespondentBankDirectoryEntry instance
+          schema:
+            $ref: '#/definitions/CRCorrespondentBankDirectoryEntryInitiateOutputModel'
+  /correspondent-bank-data-management/{sd-reference-id}/correspondent-bank-directory-entry/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorrespondentBankDirectoryEntry
+      summary: Update to any amendable fields of the CorrespondentBankDirectoryEntry instance
+      description: Update details of a correspondent bank in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Correspondent Bank Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRCorrespondentBankDirectoryEntryUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Correspondent Bank Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRCorrespondentBankDirectoryEntryUpdateOutputModel'
+  /correspondent-bank-data-management/{sd-reference-id}/correspondent-bank-directory-entry/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCorrespondentBankDirectoryEntryUpdate
+      summary: Invoke a service request action against the CorrespondentBankDirectoryEntry instance
+      description: Request that an existing entry is updated or revised
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Correspondent Bank Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRCorrespondentBankDirectoryEntryRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Correspondent Bank Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRCorrespondentBankDirectoryEntryRequestOutputModel'
+  /correspondent-bank-data-management/{sd-reference-id}/correspondent-bank-directory-entry/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorrespondentBankDataManagement
+      summary: Invoke a reporting action to obtain a Correspondent Bank Directory Entry instance related report
+      description: Retrieve correspondent bank details from the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCorrespondentBankDirectoryEntryRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Correspondent Bank Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRCorrespondentBankDirectoryEntryRetrieveOutputModel'
+  /correspondent-bank-data-management/{sd-reference-id}/correspondent-bank-directory-entry:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorrespondentBankDataManagementReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CorrespondentBankDataManagement Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /correspondent-bank-data-management/correspondent-bank-directory-entry/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorrespondentBankDataManagementBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /correspondent-bank-data-management/{sd-reference-id}/correspondent-bank-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorrespondentBankDataManagementBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Directory Entry Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ID1, ID2]

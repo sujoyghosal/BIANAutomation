@@ -1,0 +1,989 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Consumer Loan'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles the fulfillment of a consumer loan product. This includes the initial set-up of the loan facility and the completion of scheduled and ad-hoc product processing tasks
+
+    ## Example of Use:
+    A consumer customer applies for and gets a loan to purchase new furniture.
+
+    ## Description:
+    The consumer loan product may include different properties/features depending on a bank's preferences and policies. The loan is targeted at consumer customer and may be associated with a type of product and may or may not be secured by collateral.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-consumer-loan/1.0.0
+schemes:
+ - https
+paths:
+  /consumer-loan/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDConsumerLoan
+      summary: Activate  a SDConsumerLoan servicing session
+      description: Activate  a  SDConsumerLoan servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDConsumerLoan Request Payload
+        schema:
+          $ref: '#/definitions/SDConsumerLoanActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDConsumerLoanActivateOutputModel'
+  /consumer-loan/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDConsumerLoan
+      summary: Update an active SDConsumerLoan session configuration
+      description: Update an active SDConsumerLoan session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDConsumerLoan Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDConsumerLoan Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDConsumerLoanConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDConsumerLoanConfigureOutputModel'
+  /consumer-loan/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDConsumerLoan
+      summary: "Capturing feedback against the SDConsumerLoan service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDConsumerLoan service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDConsumerLoan Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDConsumerLoan Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDConsumerLoanFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDConsumerLoanFeedbackOutputModel'
+  /consumer-loan/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDConsumerLoan
+      summary: Analytical views maintained by the SDConsumerLoan service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDConsumerLoan service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDConsumerLoan Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDConsumerLoan Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDConsumerLoanRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDConsumerLoanRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateConsumerLoanFulfillmentArrangement
+      summary: Details of a new ConsumerLoanFulfillmentArrangement instance
+      description: Initiate a consumer loan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ConsumerLoanFulfillmentArrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRConsumerLoanFulfillmentArrangementInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new ConsumerLoanFulfillmentArrangement instance
+          schema:
+            $ref: '#/definitions/CRConsumerLoanFulfillmentArrangementInitiateOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateConsumerLoanFulfillmentArrangement
+      summary: Update to any amendable fields of the ConsumerLoanFulfillmentArrangement instance
+      description: Update details for an existing consumer loan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Consumer Loan Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRConsumerLoanFulfillmentArrangementUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Consumer Loan Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRConsumerLoanFulfillmentArrangementUpdateOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlConsumerLoanFulfillmentArrangementUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control a consumer loan (e.g. suspend, terminate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Consumer Loan Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRConsumerLoanFulfillmentArrangementControlInputModel'
+      responses:
+        200:
+          description: Successful control of Consumer Loan Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRConsumerLoanFulfillmentArrangementControlOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerLoan
+      summary: Invoke a reporting action to obtain a Consumer Loan Fulfillment Arrangement instance related report
+      description: Retrieve details about a consumer loan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRConsumerLoanFulfillmentArrangementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Consumer Loan Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRConsumerLoanFulfillmentArrangementRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/interest/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerLoanFulfillmentArrangementInterest
+      summary: Invoke a reporting action to obtain a Interest instance related report.
+      description: Retrieve details about interest applied to a consumer loan .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Interest Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInterestRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Interest Instance Record
+          schema:
+            $ref: '#/definitions/BQInterestRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/servicefees/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeConsumerLoanFulfillmentArrangementServiceFeesUpdate
+      summary: Invoke an automated execute action against the ServiceFees instance
+      description: Execute a fee charge against a consumer loan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ServiceFees Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ServiceFees request payload
+        schema:
+          $ref: '#/definitions/BQServiceFeesExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of ServiceFees Instance Record
+          schema:
+            $ref: '#/definitions/BQServiceFeesExecuteOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/servicefees/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerLoanFulfillmentArrangementServiceFees
+      summary: Invoke a reporting action to obtain a ServiceFees instance related report.
+      description: Retrieve details about a consumer loan fees .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ServiceFees Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQServiceFeesRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ServiceFees Instance Record
+          schema:
+            $ref: '#/definitions/BQServiceFeesRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/disbursement/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerLoanFulfillmentArrangementDisbursement
+      summary: Invoke a reporting action to obtain a Disbursement instance related report.
+      description: Retrieve details about a disbursement paid against a consumer loan .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Disbursement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQDisbursementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Disbursement Instance Record
+          schema:
+            $ref: '#/definitions/BQDisbursementRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/maintenance/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestConsumerLoanFulfillmentArrangementMaintenanceUpdate
+      summary: Invoke a service request action against the Maintenance instance
+      description: Request a maintenance activity for a consumer load (e.g. obtain a fee statement)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Maintenance Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Maintenance request payload
+        schema:
+          $ref: '#/definitions/BQMaintenanceRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Maintenance Instance Record
+          schema:
+            $ref: '#/definitions/BQMaintenanceRequestOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/maintenance/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerLoanFulfillmentArrangementMaintenance
+      summary: Invoke a reporting action to obtain a Maintenance instance related report.
+      description: Retrieve details about maintenance processing for a consumer loan .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Maintenance Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQMaintenanceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Maintenance Instance Record
+          schema:
+            $ref: '#/definitions/BQMaintenanceRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/withdrawal/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateConsumerLoanFulfillmentArrangementWithdrawal
+      summary: Update to any amendable fields of the Withdrawal instance
+      description: Update details of a withdrawal from a consumer loan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Withdrawal Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Withdrawal Request Payload
+        schema:
+          $ref: '#/definitions/BQWithdrawalUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Withdrawal Instance
+          schema:
+            $ref: '#/definitions/BQWithdrawalUpdateOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/withdrawal/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeConsumerLoanFulfillmentArrangementWithdrawalUpdate
+      summary: Invoke an automated execute action against the Withdrawal instance
+      description: Execute an automated withdrawal against a consumer loan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Withdrawal Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Withdrawal request payload
+        schema:
+          $ref: '#/definitions/BQWithdrawalExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Withdrawal Instance Record
+          schema:
+            $ref: '#/definitions/BQWithdrawalExecuteOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/withdrawal/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestConsumerLoanFulfillmentArrangementWithdrawalUpdate
+      summary: Invoke a service request action against the Withdrawal instance
+      description: Request handling of a withdrawal (e.g. negotiate an exception)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Withdrawal Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Withdrawal request payload
+        schema:
+          $ref: '#/definitions/BQWithdrawalRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Withdrawal Instance Record
+          schema:
+            $ref: '#/definitions/BQWithdrawalRequestOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/withdrawal/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerLoanFulfillmentArrangementWithdrawal
+      summary: Invoke a reporting action to obtain a Withdrawal instance related report.
+      description: Retrieve details about a consumer loan withdrawal .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Withdrawal Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQWithdrawalRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Withdrawal Instance Record
+          schema:
+            $ref: '#/definitions/BQWithdrawalRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/repayment/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateConsumerLoanFulfillmentArrangementRepayment
+      summary: Update to any amendable fields of the Repayment instance
+      description: Update a repayment transaction made to the consumer loan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Repayment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Repayment Request Payload
+        schema:
+          $ref: '#/definitions/BQRepaymentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Repayment Instance
+          schema:
+            $ref: '#/definitions/BQRepaymentUpdateOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/repayment/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeConsumerLoanFulfillmentArrangementRepaymentUpdate
+      summary: Invoke an automated execute action against the Repayment instance
+      description: Execute an automated repayment transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Repayment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Repayment request payload
+        schema:
+          $ref: '#/definitions/BQRepaymentExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Repayment Instance Record
+          schema:
+            $ref: '#/definitions/BQRepaymentExecuteOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/repayment/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestConsumerLoanFulfillmentArrangementRepaymentUpdate
+      summary: Invoke a service request action against the Repayment instance
+      description: Request handling of an exceptional repayment (e.g. a balloon repayment)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Repayment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Repayment request payload
+        schema:
+          $ref: '#/definitions/BQRepaymentRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Repayment Instance Record
+          schema:
+            $ref: '#/definitions/BQRepaymentRequestOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/repayment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerLoanFulfillmentArrangementRepayment
+      summary: Invoke a reporting action to obtain a Repayment instance related report.
+      description: Retrieve details about a consumer loan repayment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Repayment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQRepaymentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Repayment Instance Record
+          schema:
+            $ref: '#/definitions/BQRepaymentRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/restructuring/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateConsumerLoanFulfillmentArrangementRestructuring
+      summary: Details of a new Restructuring instance
+      description: Initiate consumer loan account restructuring
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Consumer Loan Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/BQRestructuringInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Consumer Loan Fulfillment Arrangement instance
+          schema:
+            $ref: '#/definitions/BQRestructuringInitiateOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/restructuring/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateConsumerLoanFulfillmentArrangementRestructuring
+      summary: Update to any amendable fields of the Restructuring instance
+      description: Update details of a consumer loan or restructuring activities
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Restructuring Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Restructuring Request Payload
+        schema:
+          $ref: '#/definitions/BQRestructuringUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Restructuring Instance
+          schema:
+            $ref: '#/definitions/BQRestructuringUpdateOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/restructuring/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeConsumerLoanFulfillmentArrangementRestructuringUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject etc a consumer loan restructuring proposal
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Restructuring Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Restructuring request payload
+        schema:
+          $ref: '#/definitions/BQRestructuringExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Restructuring Instance Record
+          schema:
+            $ref: '#/definitions/BQRestructuringExchangeOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/restructuring/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestConsumerLoanFulfillmentArrangementRestructuringUpdate
+      summary: Invoke a service request action against the Restructuring instance
+      description: Request activity associated with a restructuring effort (e.g. negotiate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Restructuring Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Restructuring request payload
+        schema:
+          $ref: '#/definitions/BQRestructuringRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Restructuring Instance Record
+          schema:
+            $ref: '#/definitions/BQRestructuringRequestOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/restructuring/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerLoanFulfillmentArrangementRestructuring
+      summary: Invoke a reporting action to obtain a Restructuring instance related report.
+      description: Retrieve details about a consumer loan restructuring task .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Restructuring Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQRestructuringRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Restructuring Instance Record
+          schema:
+            $ref: '#/definitions/BQRestructuringRetrieveOutputModel'
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveConsumerLoanReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ConsumerLoan Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /consumer-loan/consumer-loan-fulfillment-arrangement/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveConsumerLoanBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Interest',  'ServiceFees',  'Disbursement',  'Maintenance',  'Withdrawal',  'Repayment',  'Restructuring', ]
+  /consumer-loan/{sd-reference-id}/consumer-loan-fulfillment-arrangement/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveConsumerLoanBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Loan Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Loan Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Restructuring
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Restructuring Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [RestructuringID1, RestructuringID2]

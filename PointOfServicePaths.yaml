@@ -1,0 +1,976 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Point of Service'
+ description: >
+
+    ## Executive Summary:
+    This service domain operates servicing positions within the bank. It administers all media connections, inventory holdings (e.g. cash), provides access to support utilities and tracks servicing activity -e.g. time spent, activity logs, capturing servicing events including commission and training related actions. In cases servicing positions can be automated
+
+    ## Example of Use:
+    Teller personnel are assigned to teller servicing positions at a branch where they are provided with a cash float and access to consumer product support systems.
+
+    ## Description:
+    The servicing position supports all point of sale, branch and channel based customer interactions including e-tellers and contact/service center positions. The facility provides access to product and service systems, supports activity tracking and access to other support and administrative systems as necessary. It can include CTI as appropriate. The service domain integrates with the Customer Dialogue service domain for customer session/narrative support when appropriate. The servicing position can be fully automated for some servicing activities
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-point-of-service/1.0.0
+schemes:
+ - https
+paths:
+  /point-of-service/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDPointOfService
+      summary: Activate  a SDPointOfService servicing session
+      description: Activate  a  SDPointOfService servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDPointOfService Request Payload
+        schema:
+          $ref: '#/definitions/SDPointOfServiceActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDPointOfServiceActivateOutputModel'
+  /point-of-service/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDPointOfService
+      summary: Update an active SDPointOfService session configuration
+      description: Update an active SDPointOfService session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPointOfService Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPointOfService Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDPointOfServiceConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDPointOfServiceConfigureOutputModel'
+  /point-of-service/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDPointOfService
+      summary: "Capturing feedback against the SDPointOfService service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDPointOfService service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPointOfService Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPointOfService Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDPointOfServiceFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDPointOfServiceFeedbackOutputModel'
+  /point-of-service/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDPointOfService
+      summary: Analytical views maintained by the SDPointOfService service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDPointOfService service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPointOfService Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPointOfService Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDPointOfServiceRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDPointOfServiceRetrieveOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePointofServiceOperatingSession
+      summary: Details of a new PointofServiceOperatingSession instance
+      description: Initiate a point of service session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PointofServiceOperatingSession Request Payload
+        schema:
+          $ref: '#/definitions/CRPointofServiceOperatingSessionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new PointofServiceOperatingSession instance
+          schema:
+            $ref: '#/definitions/CRPointofServiceOperatingSessionInitiateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePointofServiceOperatingSession
+      summary: Update to any amendable fields of the PointofServiceOperatingSession instance
+      description: Update details for a point of service session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Point of Service Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRPointofServiceOperatingSessionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Point of Service Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRPointofServiceOperatingSessionUpdateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlPointofServiceOperatingSessionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control a point of service session (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Point of Service Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRPointofServiceOperatingSessionControlInputModel'
+      responses:
+        200:
+          description: Successful control of Point of Service Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRPointofServiceOperatingSessionControlOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangePointofServiceOperatingSessionUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Execute an automated task (e.g. assign a contact)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Point of Service Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRPointofServiceOperatingSessionExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Point of Service Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRPointofServiceOperatingSessionExchangeOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestPointofServiceOperatingSessionUpdate
+      summary: Invoke a service request action against the PointofServiceOperatingSession instance
+      description: Request manual intervention (e.g. book future time)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Point of Service Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRPointofServiceOperatingSessionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Point of Service Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRPointofServiceOperatingSessionRequestOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePointofService
+      summary: Invoke a reporting action to obtain a Point of Service Operating Session instance related report
+      description: Retrieve details about a servicing position session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRPointofServiceOperatingSessionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Point of Service Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRPointofServiceOperatingSessionRetrieveOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/assisted/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePointofServiceOperatingSessionAssisted
+      summary: Details of a new Assisted instance
+      description: Initiate an assisted contact
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Point of Service Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQAssistedInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Point of Service Operating Session instance
+          schema:
+            $ref: '#/definitions/BQAssistedInitiateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/assisted/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePointofServiceOperatingSessionAssisted
+      summary: Update to any amendable fields of the Assisted instance
+      description: Update details about an assisted contact
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assisted Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Assisted Request Payload
+        schema:
+          $ref: '#/definitions/BQAssistedUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Assisted Instance
+          schema:
+            $ref: '#/definitions/BQAssistedUpdateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/assisted/{bq-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlPointofServiceOperatingSessionAssistedUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control an assisted contact (e.g. terminate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assisted Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Assisted request payload
+        schema:
+          $ref: '#/definitions/BQAssistedControlInputModel'
+      responses:
+        200:
+          description: Successful control of Assisted Instance Record
+          schema:
+            $ref: '#/definitions/BQAssistedControlOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/assisted/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePointofServiceOperatingSessionAssisted
+      summary: Invoke a reporting action to obtain a Assisted instance related report.
+      description: Retrieve details about an assisted contact .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assisted Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAssistedRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Assisted Instance Record
+          schema:
+            $ref: '#/definitions/BQAssistedRetrieveOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/automated/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePointofServiceOperatingSessionAutomated
+      summary: Details of a new Automated instance
+      description: Initiate an automated contact
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Point of Service Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQAutomatedInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Point of Service Operating Session instance
+          schema:
+            $ref: '#/definitions/BQAutomatedInitiateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/automated/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePointofServiceOperatingSessionAutomated
+      summary: Update to any amendable fields of the Automated instance
+      description: Update details about an automated contact
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Automated Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Automated Request Payload
+        schema:
+          $ref: '#/definitions/BQAutomatedUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Automated Instance
+          schema:
+            $ref: '#/definitions/BQAutomatedUpdateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/automated/{bq-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlPointofServiceOperatingSessionAutomatedUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control an automated contact (e.g. terminate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Automated Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Automated request payload
+        schema:
+          $ref: '#/definitions/BQAutomatedControlInputModel'
+      responses:
+        200:
+          description: Successful control of Automated Instance Record
+          schema:
+            $ref: '#/definitions/BQAutomatedControlOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/automated/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePointofServiceOperatingSessionAutomated
+      summary: Invoke a reporting action to obtain a Automated instance related report.
+      description: Retrieve details about an automated contact .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Automated Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAutomatedRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Automated Instance Record
+          schema:
+            $ref: '#/definitions/BQAutomatedRetrieveOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/interaction/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePointofServiceOperatingSessionInteraction
+      summary: Update to any amendable fields of the Interaction instance
+      description: Update details for a customer interaction session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Interaction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Interaction Request Payload
+        schema:
+          $ref: '#/definitions/BQInteractionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Interaction Instance
+          schema:
+            $ref: '#/definitions/BQInteractionUpdateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/interaction/{bq-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlPointofServiceOperatingSessionInteractionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control a customer interaction (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Interaction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Interaction request payload
+        schema:
+          $ref: '#/definitions/BQInteractionControlInputModel'
+      responses:
+        200:
+          description: Successful control of Interaction Instance Record
+          schema:
+            $ref: '#/definitions/BQInteractionControlOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/interaction/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePointofServiceOperatingSessionInteraction
+      summary: Invoke a reporting action to obtain a Interaction instance related report.
+      description: Retrieve details about a customer interaction session .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Interaction Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInteractionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Interaction Instance Record
+          schema:
+            $ref: '#/definitions/BQInteractionRetrieveOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/inventory/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePointofServiceOperatingSessionInventory
+      summary: Update to any amendable fields of the Inventory instance
+      description: Update inventory details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Inventory Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Inventory Request Payload
+        schema:
+          $ref: '#/definitions/BQInventoryUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Inventory Instance
+          schema:
+            $ref: '#/definitions/BQInventoryUpdateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/inventory/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executePointofServiceOperatingSessionInventoryUpdate
+      summary: Invoke an automated execute action against the Inventory instance
+      description: Execute transactions against the inventory position
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Inventory Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Inventory request payload
+        schema:
+          $ref: '#/definitions/BQInventoryExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Inventory Instance Record
+          schema:
+            $ref: '#/definitions/BQInventoryExecuteOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/inventory/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePointofServiceOperatingSessionInventory
+      summary: Invoke a reporting action to obtain a Inventory instance related report.
+      description: Retrieve details about inventory holdings and usage .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Inventory Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInventoryRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Inventory Instance Record
+          schema:
+            $ref: '#/definitions/BQInventoryRetrieveOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/cashposition/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePointofServiceOperatingSessionCashPosition
+      summary: Update to any amendable fields of the CashPosition instance
+      description: Update the cash position
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: CashPosition Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CashPosition Request Payload
+        schema:
+          $ref: '#/definitions/BQCashPositionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated CashPosition Instance
+          schema:
+            $ref: '#/definitions/BQCashPositionUpdateOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/cashposition/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executePointofServiceOperatingSessionCashPositionUpdate
+      summary: Invoke an automated execute action against the CashPosition instance
+      description: Execute transactions against the cash position
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: CashPosition Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CashPosition request payload
+        schema:
+          $ref: '#/definitions/BQCashPositionExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of CashPosition Instance Record
+          schema:
+            $ref: '#/definitions/BQCashPositionExecuteOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/cashposition/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePointofServiceOperatingSessionCashPosition
+      summary: Invoke a reporting action to obtain a CashPosition instance related report.
+      description: Retrieve details about the cash inventory .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: CashPosition Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQCashPositionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved CashPosition Instance Record
+          schema:
+            $ref: '#/definitions/BQCashPositionRetrieveOutputModel'
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePointofServiceReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- PointOfService Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /point-of-service/point-of-service-operating-session/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePointofServiceBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Assisted',  'Automated',  'Interaction',  'Inventory',  'CashPosition', ]
+  /point-of-service/{sd-reference-id}/point-of-service-operating-session/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePointofServiceBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Point of Service Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Point of Service Operating Session Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- CashPosition
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CashPosition Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [CashPositionID1, CashPositionID2]

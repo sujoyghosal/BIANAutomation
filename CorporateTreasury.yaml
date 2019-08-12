@@ -2,7 +2,17 @@ swagger: '2.0'
 info:
  version: '1.0.0'
  title: 'Service Domain - Corporate Treasury'
- description: 'Description'
+ description: >
+
+    ## Executive Summary:
+    This service domain orchestrates the consolidation and presentation of summary transaction details in order to assemble a timely and accurate view of the overall treasury position of the Bank at any one time. It is also responsible for determining the different interest and exchange rates applied to different products and services within the bank
+
+    ## Example of Use:
+    Example of use:The Bank Treasury consolidates trading and lending activity across its corporate clients to develop timely views of current positions and maturity projections
+
+    ## Description:
+    This service domain manages and administers the consolidation of transaction details and summaries in order to derive and report on the array of consolidated positions managed by Treasury. This includes the assembly of related maturity ladders (cash flow projections) and managing tactical and strategic funding activity for the bank. It is also responsible for tracking prevailing market conditions and determining the various bank rates that should be applied throughout the bank
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-corporate-treasury/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDCorporateTreasury
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDCorporateTreasury servicing session
+      description: Activate  a  SDCorporateTreasury servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDCorporateTreasuryActivateOutputModel'
-  /corporate-treasury/configure:
+  /corporate-treasury/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDCorporateTreasury
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDCorporateTreasury session configuration
+      description: Update an active SDCorporateTreasury session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateTreasury Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCorporateTreasuryConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDCorporateTreasuryConfigureOutputModel'
-  /corporate-treasury/feedback:
+  /corporate-treasury/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDCorporateTreasury
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDCorporateTreasury service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCorporateTreasury service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateTreasury Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCorporateTreasuryFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDCorporateTreasuryFeedbackOutputModel'
-  /corporate-treasury/retrieve:
+  /corporate-treasury/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDCorporateTreasury
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDCorporateTreasury service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCorporateTreasury service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateTreasury Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,123 +117,147 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDCorporateTreasuryRetrieveOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/initiation:
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/initiation:
     post:
       tags:
       - initiate
       operationId: initiateCorporateTreasuryManagementPlan
-      summary: InCR Initiate a corporate treasury plan
-      description: InCR Initiate a corporate treasury plan
+      summary: Details of a new CorporateTreasuryManagementPlan instance
+      description: Initiate the corporate treasury plan
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
-        description: CorporateTreasury Request Payload
+        description: CorporateTreasuryManagementPlan Request Payload
         schema:
-          $ref: '#/definitions/CRCorporateTreasuryInitiateInputModel'
+          $ref: '#/definitions/CRCorporateTreasuryManagementPlanInitiateInputModel'
       responses:
         201:
-          description: Successful InCR Initiate a corporate treasury plan
+          description: Successful initiation of new CorporateTreasuryManagementPlan instance
           schema:
-            $ref: '#/definitions/CRCorporateTreasuryInitiateOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/update:
+            $ref: '#/definitions/CRCorporateTreasuryManagementPlanInitiateOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCorporateTreasuryManagementPlan
-      summary: UpCR Update the corporate treasury plan
-      description: UpCR Update the corporate treasury plan
+      summary: Update to any amendable fields of the CorporateTreasuryManagementPlan instance
+      description: Update the corporate treasury plan
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Management Plan Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CorporateTreasury Request Payload
+        description: Corporate Treasury Management Plan Request Payload
         schema:
-          $ref: '#/definitions/CRCorporateTreasuryUpdateInputModel'
+          $ref: '#/definitions/CRCorporateTreasuryManagementPlanUpdateInputModel'
       responses:
         200:
-          description: Successful UpCR Update the corporate treasury plan
+          description: Successfully Updated Corporate Treasury Management Plan Instance
           schema:
-            $ref: '#/definitions/CRCorporateTreasuryUpdateOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/capture:
+            $ref: '#/definitions/CRCorporateTreasuryManagementPlanUpdateOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/capture:
     put:
       tags:
       - capture
       operationId: captureCorporateTreasuryManagementPlanUpdate
-      summary: CaCR Capture various financial reports and analysis used in planning
-      description: CaCR Capture various financial reports and analysis used in planning
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture various financial reports and analysis used in planning
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Management Plan Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CorporateTreasury Request Payload
+        description: Corporate Treasury Management Plan Request Payload
         schema:
-          $ref: '#/definitions/CRCorporateTreasuryCaptureInputModel'
+          $ref: '#/definitions/CRCorporateTreasuryManagementPlanCaptureInputModel'
       responses:
         200:
-          description: Successful CaCR Capture various financial reports and analysis used in planning
+          description: Successful capture of Corporate Treasury Management Plan Instance
           schema:
-            $ref: '#/definitions/CRCorporateTreasuryCaptureOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/liquidity/initiation:
-    post:
+            $ref: '#/definitions/CRCorporateTreasuryManagementPlanCaptureOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}:
+    get:
       tags:
-      - initiate
-      operationId: initiateCorporateTreasuryPlanLiquidity
-      summary: InBQ Initiate a Corporate Treasury Liquidity Analysis
-      description: Information used to track and manage the bank's cashflow and liquidity requirements
+      - retrieve
+      operationId: retrieveCorporateTreasury
+      summary: Invoke a reporting action to obtain a Corporate Treasury Management Plan instance related report
+      description: Retrieve details about the corporate treasury plan
       produces:
       - application/json
       parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Servicing Session Reference
         required: true
         type: string
-      - in: body
-        name: body
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
         required: true
-        description: Liquidity Request Payload
-        schema:
-          $ref: '#/definitions/BQLiquidityInitiateInputModel'
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCorporateTreasuryManagementPlanRetrieveInputModel'
+        type: string
       responses:
-        201:
-          description: Successful InBQ Initiate a Corporate Treasury Liquidity Analysis
+        200:
+          description: Successfully Retrieved Corporate Treasury Management Plan Instance
           schema:
-            $ref: '#/definitions/BQLiquidityInitiateOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/liquidity/{bq-reference-id}/capture:
+            $ref: '#/definitions/CRCorporateTreasuryManagementPlanRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/liquidity/{bq-reference-id}/capture:
     put:
       tags:
       - capture
-      operationId: captureCorporateTreasuryPlanLiquidityAnalysisUpdate
-      summary: CaBQ Capture transactions feeding into liquidity analysis
-      description: Information used to track and manage the bank's cashflow and liquidity requirements
+      operationId: captureCorporateTreasuryManagementPlanLiquidityUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture transactions feeding into liquidity analysis
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Management Plan Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Liquidity BQ Reference Id
+        description: Liquidity Instance Reference
         required: true
         type: string
       - in: body
@@ -219,79 +268,102 @@ paths:
           $ref: '#/definitions/BQLiquidityCaptureInputModel'
       responses:
         200:
-          description: Successful CaBQ Capture transactions feeding into liquidity analysis
+          description: Successful capture of Liquidity Instance Record
           schema:
             $ref: '#/definitions/BQLiquidityCaptureOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/tacticalfunding/initiation:
-    post:
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/liquidity/{bq-reference-id}/:
+    get:
       tags:
-      - initiate
-      operationId: initiateCorporateTreasuryTacticalFunding
-      summary: Initiate tactical funding details record
-      description: Information used to determine and resolve short term funding requirements
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanLiquidity
+      summary: Invoke a reporting action to obtain a Liquidity instance related report.
+      description: Retrieve liquidity analysis details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Servicing Session Reference
         required: true
         type: string
-      - in: body
-        name: body
-        required: true
-        description: TacticalFunding Request Payload
-        schema:
-          $ref: '#/definitions/BQTacticalFundingInitiateInputModel'
-      responses:
-        201:
-          description: Successful Initiate tactical funding details record
-          schema:
-            $ref: '#/definitions/BQTacticalFundingInitiateOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/strategicfunding/initiation:
-    post:
-      tags:
-      - initiate
-      operationId: initiateCorporateTreasuryStrategicFunding
-      summary: InBQ Initiate a large strategic transaction
-      description: Information used to determine and resolve long term funding requirements
-      produces:
-      - application/json
-      parameters:
       - name: cr-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: StrategicFunding Request Payload
-        schema:
-          $ref: '#/definitions/BQStrategicFundingInitiateInputModel'
-      responses:
-        201:
-          description: Successful InBQ Initiate a large strategic transaction
-          schema:
-            $ref: '#/definitions/BQStrategicFundingInitiateOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/strategicfunding/{bq-reference-id}/capture:
-    put:
-      tags:
-      - capture
-      operationId: captureCorporateTreasuryStrategicFundingUpdate
-      summary: CaBQ Capture details of large strategic transactions
-      description: Information used to determine and resolve long term funding requirements
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Management Plan Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: StrategicFunding BQ Reference Id
+        description: Liquidity Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQLiquidityRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Liquidity Instance Record
+          schema:
+            $ref: '#/definitions/BQLiquidityRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/tacticalfunding/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanTacticalFunding
+      summary: Invoke a reporting action to obtain a TacticalFunding instance related report.
+      description: Retrieve tactical funding details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: TacticalFunding Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQTacticalFundingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved TacticalFunding Instance Record
+          schema:
+            $ref: '#/definitions/BQTacticalFundingRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/strategicfunding/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCorporateTreasuryManagementPlanStrategicFundingUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture details of large strategic transactions
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: StrategicFunding Instance Reference
         required: true
         type: string
       - in: body
@@ -302,53 +374,67 @@ paths:
           $ref: '#/definitions/BQStrategicFundingCaptureInputModel'
       responses:
         200:
-          description: Successful CaBQ Capture details of large strategic transactions
+          description: Successful capture of StrategicFunding Instance Record
           schema:
             $ref: '#/definitions/BQStrategicFundingCaptureOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/securitization/initiation:
-    post:
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/strategicfunding/{bq-reference-id}/:
+    get:
       tags:
-      - initiate
-      operationId: initiateCorporateTreasurySecuritizationTask
-      summary: InBQ Initiate securitization tranche and task details record
-      description: Information used to determine and initiate securitization of bank assets
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanStrategicFunding
+      summary: Invoke a reporting action to obtain a StrategicFunding instance related report.
+      description: Retrieve strategic funding details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Servicing Session Reference
         required: true
         type: string
-      - in: body
-        name: body
-        required: true
-        description: Securitization Request Payload
-        schema:
-          $ref: '#/definitions/BQSecuritizationInitiateInputModel'
-      responses:
-        201:
-          description: Successful InBQ Initiate securitization tranche and task details record
-          schema:
-            $ref: '#/definitions/BQSecuritizationInitiateOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/securitization/{bq-reference-id}/update:
-    put:
-      tags:
-      - update
-      operationId: updateCorporateTreasurySecuritizationTask
-      summary: UpBQ Update securitization tranche and task details
-      description: Information used to determine and initiate securitization of bank assets
-      produces:
-      - application/json
-      parameters:
       - name: cr-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Management Plan Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Securitization BQ Reference Id
+        description: StrategicFunding Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQStrategicFundingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved StrategicFunding Instance Record
+          schema:
+            $ref: '#/definitions/BQStrategicFundingRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/securitization/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateTreasuryManagementPlanSecuritization
+      summary: Update to any amendable fields of the Securitization instance
+      description: Update securitization tranche and task details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Securitization Instance Reference
         required: true
         type: string
       - in: body
@@ -359,36 +445,80 @@ paths:
           $ref: '#/definitions/BQSecuritizationUpdateInputModel'
       responses:
         200:
-          description: Successful UpBQ Update securitization tranche and task details
+          description: Successfully Updated Securitization Instance
           schema:
             $ref: '#/definitions/BQSecuritizationUpdateOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/bankrates/initiation:
-    post:
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/securitization/{bq-reference-id}/:
+    get:
       tags:
-      - initiate
-      operationId: initiateCorporateTreasuryBankRatesProcessing
-      summary: InBQ Initiate bank rate table and details
-      description: Handling of the definition of internal bank rates used across production
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanSecuritization
+      summary: Invoke a reporting action to obtain a Securitization instance related report.
+      description: Retrieve securitization tranche and task related details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Servicing Session Reference
         required: true
         type: string
-      - in: body
-        name: body
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
         required: true
-        description: BankRates Request Payload
-        schema:
-          $ref: '#/definitions/BQBankRatesInitiateInputModel'
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Securitization Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQSecuritizationRetrieveInputModel'
+        type: string
       responses:
-        201:
-          description: Successful InBQ Initiate bank rate table and details
+        200:
+          description: Successfully  Retrieved Securitization Instance Record
           schema:
-            $ref: '#/definitions/BQBankRatesInitiateOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan:
+            $ref: '#/definitions/BQSecuritizationRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/bankrates/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanBankRates
+      summary: Invoke a reporting action to obtain a BankRates instance related report.
+      description: Retrieve bank rate table and details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: BankRates Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQBankRatesRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved BankRates Instance Record
+          schema:
+            $ref: '#/definitions/BQBankRatesRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan:
     get:
       tags:
       - retrieve
@@ -397,6 +527,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- CorporateTreasury Instance Status='active'
@@ -426,7 +561,7 @@ paths:
             items:
               type: string
             example: [ 'Liquidity',  'TacticalFunding',  'StrategicFunding',  'Securitization',  'BankRates', ]
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/{behavior-qualifier}/:
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -435,9 +570,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Corporate Treasury Management Plan Instance
+        description: Corporate Treasury Management Plan Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -458,187 +598,6 @@ paths:
             items:
               type: string
             example: [BankRatesID1, BankRatesID2]
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorporateTreasury
-      summary: Retrieve a Corporate Treasury Record
-      description: Retrieve a Corporate Treasury Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Corporate Treasury Management Plan Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Corporate Treasury Request Payload
-        schema:
-          $ref: '#/definitions/CRCorporateTreasuryRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Corporate Treasury Report
-          schema:
-            $ref: '#/definitions/CRCorporateTreasuryRetrieveOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/liquidity/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorporateTreasuryLiquidity
-      summary: Retrieve a Corporate Treasury Liquidity Record
-      description: Retrieve a Corporate Treasury Liquidity Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Corporate Treasury Management Plan Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Liquidity BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Corporate Treasury Liquidity Request Payload
-        schema:
-          $ref: '#/definitions/BQLiquidityRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Corporate Treasury Liquidity Report
-          schema:
-            $ref: '#/definitions/BQLiquidityRetrieveOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/tacticalfunding/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorporateTreasuryTacticalFunding
-      summary: Retrieve a Corporate Treasury TacticalFunding Record
-      description: Retrieve a Corporate Treasury TacticalFunding Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Corporate Treasury Management Plan Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: TacticalFunding BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Corporate Treasury TacticalFunding Request Payload
-        schema:
-          $ref: '#/definitions/BQTacticalFundingRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Corporate Treasury TacticalFunding Report
-          schema:
-            $ref: '#/definitions/BQTacticalFundingRetrieveOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/strategicfunding/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorporateTreasuryStrategicFunding
-      summary: Retrieve a Corporate Treasury StrategicFunding Record
-      description: Retrieve a Corporate Treasury StrategicFunding Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Corporate Treasury Management Plan Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: StrategicFunding BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Corporate Treasury StrategicFunding Request Payload
-        schema:
-          $ref: '#/definitions/BQStrategicFundingRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Corporate Treasury StrategicFunding Report
-          schema:
-            $ref: '#/definitions/BQStrategicFundingRetrieveOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/securitization/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorporateTreasurySecuritization
-      summary: Retrieve a Corporate Treasury Securitization Record
-      description: Retrieve a Corporate Treasury Securitization Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Corporate Treasury Management Plan Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Securitization BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Corporate Treasury Securitization Request Payload
-        schema:
-          $ref: '#/definitions/BQSecuritizationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Corporate Treasury Securitization Report
-          schema:
-            $ref: '#/definitions/BQSecuritizationRetrieveOutputModel'
-  /corporate-treasury/corporate-treasury-management-plan/{cr-reference-id}/bankrates/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorporateTreasuryBankRates
-      summary: Retrieve a Corporate Treasury BankRates Record
-      description: Retrieve a Corporate Treasury BankRates Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Corporate Treasury Management Plan Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: BankRates BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Corporate Treasury BankRates Request Payload
-        schema:
-          $ref: '#/definitions/BQBankRatesRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Corporate Treasury BankRates Report
-          schema:
-            $ref: '#/definitions/BQBankRatesRetrieveOutputModel'
 definitions:
  SDCorporateTreasuryActivateInputModel:
   type: object
@@ -1283,23 +1242,29 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRCorporateTreasuryInitiateInputModel:
+ CRCorporateTreasuryManagementPlanInitiateInputModel:
   type: object
   properties: 
-   corporateTreasuryInitiateActionRecord:
+   corporateTreasuryServicingSessionReference:
+    type: string
+    example: "CTSSR735518"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   corporateTreasuryManagementPlanInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The Initiate service call input and output record
-   corporateTreasuryServicingSessionReference:
+   corporateTreasuryManagementPlanInstanceStatus:
     type: string
-    example: "CTSSR725744"
     description: |
      `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
-   corporateTreasuryInstanceRecord:
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Corporate Treasury Management Plan instance (e.g. initialised, pending, active)
+   corporateTreasuryManagementPlanInstanceRecord:
     type: object
     properties:
      treasuryPlanningPolicies&Guidelines:
@@ -1337,7 +1302,7 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Account records that cover booking, pooling and netting activities across all relevent bank activity
+        general-info: Account records that cover booking, pooling and netting activities across all relevant bank activity
      capitalWholesaleMarketTransactions:
       type: string
       description: |
@@ -1350,60 +1315,36 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Analytical views detailing exposure and sensitivity to currency and interest rate fluctuations
- CRCorporateTreasuryInitiateOutputModel:
+ CRCorporateTreasuryManagementPlanInitiateOutputModel:
   type: object
   properties: 
-   corporateTreasuryInitiateActionReference:
+   corporateTreasuryManagementPlanInstanceReference:
     type: string
-    example: "CTIAR720934"
+    example: "CTMPIR787915"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Corporate Treasury Management Plan instance
+   corporateTreasuryManagementPlanInitiateActionReference:
+    type: string
+    example: "CTMPIAR751201"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to an Initiate service call
-   corporateTreasuryInitiateActionRecord:
+   corporateTreasuryManagementPlanInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The Initiate service call input and output record
-   corporateTreasuryInstanceReference:
-    type: string
-    example: "CTIR744497"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Corporate Treasury instance
-   corporateTreasuryInstanceRecord:
-    type: object
-    properties:
-     treasuryPlanningPolicies&Guidelines:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The bank's treasury policies and guidelines reflected in the plan
-     treasuryPlanOperatingParameters:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The array of group treasury positions and limits to be met through the plan
-     treasuryPlanGoals:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Target financial performance goals set out in the bank's corporate treasury plan
-   corporateTreasuryInstanceStatus:
+   corporateTreasuryManagementPlanInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Corporate Treasury instance (e.g. initialised, pending, active)
- CRCorporateTreasuryUpdateInputModel:
-  type: object
-  properties: 
-   corporateTreasuryInstanceRecord:
+      general-info: The status of the Corporate Treasury Management Plan instance (e.g. initialised, pending, active)
+   corporateTreasuryManagementPlanInstanceRecord:
     type: object
     properties:
      treasuryPlanningPolicies&Guidelines:
@@ -1424,7 +1365,45 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Target financial performance goals set out in the bank's corporate treasury plan
-   corporateTreasuryUpdateActionTaskRecord:
+ CRCorporateTreasuryManagementPlanUpdateInputModel:
+  type: object
+  properties: 
+   corporateTreasuryServicingSessionReference:
+    type: string
+    example: "CTSSR791515"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   corporateTreasuryManagementPlanInstanceReference:
+    type: string
+    example: "CTMPIR712186"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Corporate Treasury Management Plan instance
+   corporateTreasuryManagementPlanInstanceRecord:
+    type: object
+    properties:
+     treasuryPlanningPolicies&Guidelines:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The bank's treasury policies and guidelines reflected in the plan
+     treasuryPlanOperatingParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The array of group treasury positions and limits to be met through the plan
+     treasuryPlanGoals:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Target financial performance goals set out in the bank's corporate treasury plan
+   corporateTreasuryManagementPlanUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1436,10 +1415,10 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- CRCorporateTreasuryUpdateOutputModel:
+ CRCorporateTreasuryManagementPlanUpdateOutputModel:
   type: object
   properties: 
-   corporateTreasuryInstanceRecord:
+   corporateTreasuryManagementPlanInstanceRecord:
     type: object
     properties:
      treasuryPlanningPolicies&Guidelines:
@@ -1460,14 +1439,14 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Target financial performance goals set out in the bank's corporate treasury plan
-   corporateTreasuryUpdateActionTaskReference:
+   corporateTreasuryManagementPlanUpdateActionTaskReference:
     type: string
-    example: "CTUATR748455"
+    example: "CTMPUATR748151"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to an update service call
-   corporateTreasuryUpdateActionTaskRecord:
+   corporateTreasuryManagementPlanUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1479,10 +1458,24 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- CRCorporateTreasuryCaptureInputModel:
+ CRCorporateTreasuryManagementPlanCaptureInputModel:
   type: object
   properties: 
-   corporateTreasuryInstanceRecord:
+   corporateTreasuryServicingSessionReference:
+    type: string
+    example: "CTSSR771274"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   corporateTreasuryManagementPlanInstanceReference:
+    type: string
+    example: "CTMPIR718925"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Corporate Treasury Management Plan instance
+   corporateTreasuryManagementPlanInstanceRecord:
     type: object
     properties:
      enterpriseFinancialStatements:
@@ -1502,7 +1495,7 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Account records that cover booking, pooling and netting activities across all relevent bank activity
+        general-info: Account records that cover booking, pooling and netting activities across all relevant bank activity
      capitalWholesaleMarketTransactions:
       type: string
       description: |
@@ -1515,7 +1508,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Analytical views detailing exposure and sensitivity to currency and interest rate fluctuations
-   corporateTreasuryCaptureActionTaskRecord:
+   corporateTreasuryManagementPlanCaptureActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1530,17 +1523,17 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: Structured input transaction/record (e.g. timesheet, event record, account posting)
- CRCorporateTreasuryCaptureOutputModel:
+ CRCorporateTreasuryManagementPlanCaptureOutputModel:
   type: object
   properties: 
-   corporateTreasuryCaptureActionTaskReference:
+   corporateTreasuryManagementPlanCaptureActionTaskReference:
     type: string
-    example: "CTCATR758196"
+    example: "CTMPCATR780693"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Corporate Treasury instance capture service call
-   corporateTreasuryCaptureActionTaskRecord:
+      general-info: Reference to a Corporate Treasury Management Plan instance capture service call
+   corporateTreasuryManagementPlanCaptureActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1548,7 +1541,7 @@ definitions:
       general-info: The capture service call consolidated processing record
    captureRecordReference:
     type: string
-    example: "CRR731090"
+    example: "CRR754644"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1559,45 +1552,69 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the capture action service response
- CRCorporateTreasuryRetrieveInputModel:
+ CRCorporateTreasuryManagementPlanRetrieveInputModel:
   type: object
   properties: 
-   corporateTreasuryRetrieveActionTaskRecord:
+   corporateTreasuryManagementPlanRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   corporateTreasuryRetrieveActionRequest:
+   corporateTreasuryManagementPlanRetrieveActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service request (lists requested reports)
-   corporateTreasuryInstanceReport:
+   corporateTreasuryManagementPlanInstanceReportRecord:
     type: object
     properties:
-     corporateTreasuryInstanceReportReference:
+     corporateTreasuryManagementPlanInstanceReportReference:
       type: string
-      example: "733147"
+      example: "787295"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance report
-   corporateTreasuryInstanceAnalysis:
+     corporateTreasuryManagementPlanInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     corporateTreasuryManagementPlanInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+   corporateTreasuryManagementPlanInstanceAnalysis:
     type: object
     properties:
-     corporateTreasuryInstanceAnalysisReference:
+     corporateTreasuryManagementPlanInstanceAnalysisReference:
       type: string
-      example: "751800"
+      example: "746097"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance analysis view
- CRCorporateTreasuryRetrieveOutputModel:
+     corporateTreasuryManagementPlanInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     corporateTreasuryManagementPlanInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+ CRCorporateTreasuryManagementPlanRetrieveOutputModel:
   type: object
   properties: 
-   corporateTreasuryInstanceRecord:
+   corporateTreasuryManagementPlanInstanceRecord:
     type: object
     properties:
      treasuryPlanningPolicies&Guidelines:
@@ -1635,7 +1652,7 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Account records that cover booking, pooling and netting activities across all relevent bank activity
+        general-info: Account records that cover booking, pooling and netting activities across all relevant bank activity
      capitalWholesaleMarketTransactions:
       type: string
       description: |
@@ -1648,167 +1665,100 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Analytical views detailing exposure and sensitivity to currency and interest rate fluctuations
-   corporateTreasuryRetrieveActionTaskReference:
+   corporateTreasuryManagementPlanRetrieveActionTaskReference:
     type: string
-    example: "CTRATR796981"
+    example: "CTMPRATR741670"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Corporate Treasury instance retrieve service call
-   corporateTreasuryRetrieveActionTaskRecord:
+      general-info: Reference to a Corporate Treasury Management Plan instance retrieve service call
+   corporateTreasuryManagementPlanRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   corporateTreasuryRetrieveActionResponse:
+   corporateTreasuryManagementPlanRetrieveActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
-     corporateTreasuryInstanceReportRecord:
-      type: object
+   corporateTreasuryManagementPlanInstanceReportRecord:
+    type: object
+    properties:
+     corporateTreasuryManagementPlanInstanceReportData:
+      type: string
       description: |
        `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
-     corporateTreasuryInstanceReportType:
+     corporateTreasuryManagementPlanInstanceReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
-     corporateTreasuryInstanceReport:
+     corporateTreasuryManagementPlanInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
-     corporateTreasuryInstanceAnalysisRecord:
-      type: object
+   corporateTreasuryManagementPlanInstanceAnalysis:
+    type: object
+    properties:
+     corporateTreasuryManagementPlanInstanceAnalysisData:
+      type: string
       description: |
        `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
-     corporateTreasuryInstanceAnalysisReportType:
+     corporateTreasuryManagementPlanInstanceAnalysisReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
-     corporateTreasuryInstanceAnalysisReport:
+     corporateTreasuryManagementPlanInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQLiquidityInitiateInputModel:
+ BQLiquidityCaptureInputModel:
   type: object
   properties: 
-   corporateTreasuryInstanceRecord:
-    type: object
-    properties:
-     enterpriseBankAccounting&CashManagementRecords:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Account records that cover booking, pooling and netting activities across all relevent bank activity
-     currencyandRateRiskAnalysis:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Analytical views detailing exposure and sensitivity to currency and interest rate fluctuations
-   liquidityInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   corporateTreasuryInstanceReference:
+   corporateTreasuryManagementPlanInstanceReference:
     type: string
-    example: "CTIR769516"
+    example: "CTMPIR746377"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Corporate Treasury instance
-   enterpriseLiquidityCashManagementAnalysis:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Consolidated cashflow/liquidity reports
-   enterpriseLargePaymentTransactionRecords:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of large transactions that impact the treasury position that need to be considered individually 
-   businessUnitFinancialReports:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: These unit reports include cost/income actual and projected values as required
- BQLiquidityInitiateOutputModel:
-  type: object
-  properties: 
-   liquidityInitiateActionReference:
-    type: string
-    example: "LIAR782832"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   liquidityInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
+      general-info: Reference to the parent Corporate Treasury Management Plan instance
    liquidityInstanceReference:
     type: string
-    example: "LIR791233"
+    example: "LIR767565"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Liquidity instance
-   liquidityInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Liquidity instance (e.g. initialised, pending, active)
-   enterpriseLiquidityCashManagementAnalysis:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Consolidated cashflow/liquidity reports
-   liquidityResolutionTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
- BQLiquidityCaptureInputModel:
-  type: object
-  properties: 
-   enterpriseLargePaymentTransactionRecords:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of large transactions that impact the treasury position that need to be considered individually 
+   liquidityInstanceRecord:
+    type: object
+    properties:
+     enterpriseLargePaymentTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of large transactions that impact the treasury position that need to be considered individually 
    liquidityCaptureActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The capture service call consolidated processing record
-   liquidityCaptureRecordType:
+   captureRecordType:
     type: object
     properties:
      captureInputRecord:
@@ -1822,7 +1772,7 @@ definitions:
   properties: 
    liquidityCaptureActionTaskReference:
     type: string
-    example: "LCATR794682"
+    example: "LCATR796394"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1835,12 +1785,12 @@ definitions:
       general-info: The capture service call consolidated processing record
    liquidityCaptureRecordReference:
     type: string
-    example: "LCRR790704"
+    example: "LCRR730420"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Liquidity structured input transaction/record
-   liquidityCaptureResponseRecord:
+   captureResponseRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1863,26 +1813,20 @@ definitions:
       general-info: Details of the retrieve action service request (lists requested reports)
    liquidityInstanceReport:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: A specific Liquidity instance formatted report
+    properties:
      liquidityInstanceReportReference:
       type: string
-      example: "713855"
+      example: "723938"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance report
    liquidityInstanceAnalysis:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: A specific Liquidity instance analytical report
+    type: object
+    properties:
      liquidityInstanceAnalysisReference:
       type: string
-      example: "767558"
+      example: "732453"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1890,7 +1834,7 @@ definitions:
  BQLiquidityRetrieveOutputModel:
   type: object
   properties: 
-   corporateTreasuryInstanceRecord:
+   corporateTreasuryManagementPlanInstanceRecord:
     type: object
     properties:
      enterpriseBankAccounting&CashManagementRecords:
@@ -1898,40 +1842,43 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Account records that cover booking, pooling and netting activities across all relevent bank activity
+        general-info: Account records that cover booking, pooling and netting activities across all relevant bank activity
      currencyandRateRiskAnalysis:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Analytical views detailing exposure and sensitivity to currency and interest rate fluctuations
-   enterpriseLiquidityCashManagementAnalysis:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Consolidated cashflow/liquidity reports
-   enterpriseLargePaymentTransactionRecords:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of large transactions that impact the treasury position that need to be considered individually 
-   businessUnitFinancialReports:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: These unit reports include cost/income actual and projected values as required
-   liquidityResolutionTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
+   liquidityInstanceRecord:
+    type: object
+    properties:
+     enterpriseLiquidityCashManagementAnalysis:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Consolidated cashflow/liquidity reports
+     enterpriseLargePaymentTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of large transactions that impact the treasury position that need to be considered individually 
+     businessUnitFinancialReports:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: These unit reports include cost/income actual and projected values as required
+     liquidityResolutionTask:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of a response initiated by corporate treasury
    liquidityRetrieveActionTaskReference:
     type: string
-    example: "LRATR734595"
+    example: "LRATR775489"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1948,6 +1895,9 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
+   liquidityInstanceReport:
+    type: object
+    properties:
      liquidityInstanceReportRecord:
       type: object
       description: |
@@ -1960,12 +1910,21 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
+     liquidityInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
      liquidityInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
+   liquidityInstanceAnalysis:
+    type: object
+    properties:
      liquidityInstanceAnalysisRecord:
       type: object
       description: |
@@ -1978,93 +1937,18 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
+     liquidityInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
      liquidityInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQTacticalFundingInitiateInputModel:
-  type: object
-  properties: 
-   tacticalFundingInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   corporateTreasuryInstanceReference:
-    type: string
-    example: "CTIR718906"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Corporate Treasury instance
-   capitalAdequacyRequirements:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details the required capital holdings against which the current position is tracked and hedging, re-balancing activity initiated for compliance
-   bankPositionsandHedgingRequirements:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Breakdown of the treasury positions monitored and there current/projected ranges
-   enterpriseBalanceSheetPositions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Selected balance sheet views used to evaluate short term funding needs
- BQTacticalFundingInitiateOutputModel:
-  type: object
-  properties: 
-   tacticalFundingInitiateActionReference:
-    type: string
-    example: "TFIAR744115"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   tacticalFundingInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   tacticalFundingInstanceReference:
-    type: string
-    example: "TFIR726015"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Tactical Funding instance
-   tacticalFundingInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Tactical Funding instance (e.g. initialised, pending, active)
-   capitalAdequacyRequirements:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details the required capital holdings against which the current position is tracked and hedging, re-balancing activity initiated for compliance
-   bankPositionsandHedgingRequirements:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Breakdown of the treasury positions monitored and there current/projected ranges
-   tacticalFundingResolutionTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
  BQTacticalFundingRetrieveInputModel:
   type: object
   properties: 
@@ -2085,7 +1969,7 @@ definitions:
     properties:
      tacticalFundingInstanceReportReference:
       type: string
-      example: "769874"
+      example: "747571"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2095,7 +1979,7 @@ definitions:
     properties:
      tacticalFundingInstanceAnalysisReference:
       type: string
-      example: "780521"
+      example: "762545"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2103,33 +1987,36 @@ definitions:
  BQTacticalFundingRetrieveOutputModel:
   type: object
   properties: 
-   capitalAdequacyRequirements:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details the required capital holdings against which the current position is tracked and hedging, re-balancing activity initiated for compliance
-   bankPositionsandHedgingRequirements:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Breakdown of the treasury positions monitored and there current/projected ranges
-   enterpriseBalanceSheetPositions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Selected balance sheet views used to evaluate short term funding needs
-   tacticalFundingResolutionTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
+   tacticalFundingInstanceRecord:
+    type: object
+    properties:
+     capitalAdequacyRequirements:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the required capital holdings against which the current position is tracked and hedging, re-balancing activity initiated for compliance
+     bankPositionsandHedgingRequirements:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Breakdown of the treasury positions monitored and there current/projected ranges
+     enterpriseBalanceSheetPositions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Selected balance sheet views used to evaluate short term funding needs
+     tacticalFundingResolutionTask:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of a response initiated by corporate treasury
    tacticalFundingRetrieveActionTaskReference:
     type: string
-    example: "TFRATR701483"
+    example: "TFRATR743756"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2146,6 +2033,9 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
+   tacticalFundingInstanceReport:
+    type: object
+    properties:
      tacticalFundingInstanceReportRecord:
       type: object
       description: |
@@ -2158,12 +2048,21 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
+     tacticalFundingInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
      tacticalFundingInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
+   tacticalFundingInstanceAnalysis:
+    type: object
+    properties:
      tacticalFundingInstanceAnalysisRecord:
       type: object
       description: |
@@ -2176,135 +2075,50 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
+     tacticalFundingInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
      tacticalFundingInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQStrategicFundingInitiateInputModel:
+ BQStrategicFundingCaptureInputModel:
   type: object
   properties: 
-   corporateTreasuryInstanceRecord:
-    type: object
-    properties:
-     capitalWholesaleMarketTransactions:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Includes large transactions and net positions for smaller trade activity as appropriate
-     currencyandRateRiskAnalysis:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Analytical views detailing exposure and sensitivity to currency and interest rate fluctuations
-   strategicFundingInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   corporateTreasuryInstanceReference:
+   corporateTreasuryManagementPlanInstanceReference:
     type: string
-    example: "CTIR722785"
+    example: "CTMPIR762771"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Corporate Treasury instance
-   financialPerformanceandBalanceSheetProjections:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Financial reports from multiple business units
-   eCMDCMMarketTransactions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of equity and debt transactions
-   strategicInvestmentHoldingsTransactions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of major investment/divestment transactions
-   enterpriseBalanceSheetPositions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Summary details and analysis of the balance sheet relevent to longer term planning
- BQStrategicFundingInitiateOutputModel:
-  type: object
-  properties: 
-   strategicFundingInitiateActionReference:
-    type: string
-    example: "SFIAR725471"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   strategicFundingInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
+      general-info: Reference to the parent Corporate Treasury Management Plan instance
    strategicFundingInstanceReference:
     type: string
-    example: "SFIR762827"
+    example: "SFIR776584"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Strategic Funding instance
-   strategicFundingInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Strategic Funding instance (e.g. initialised, pending, active)
-   eCMDCMMarketTransactions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of equity and debt transactions
-   strategicInvestmentHoldingsTransactions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of major investment/divestment transactions
-   enterpriseBalanceSheetPositions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Summary details and analysis of the balance sheet relevent to longer term planning
-   strategicFundingResolutionTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
- BQStrategicFundingCaptureInputModel:
-  type: object
-  properties: 
-   eCMDCMMarketTransactions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of equity and debt transactions
-   strategicInvestmentHoldingsTransactions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of major investment/divestment transactions
+   strategicFundingInstanceRecord:
+    type: object
+    properties:
+     eCMDCMMarketTransactions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of equity and debt transactions
+     strategicInvestmentHoldingsTransactions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of major investment/divestment transactions
    strategicFundingCaptureActionTaskRecord:
     type: object
     description: |
@@ -2325,7 +2139,7 @@ definitions:
   properties: 
    strategicFundingCaptureActionTaskReference:
     type: string
-    example: "SFCATR759757"
+    example: "SFCATR775773"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2338,7 +2152,7 @@ definitions:
       general-info: The capture service call consolidated processing record
    strategicFundingCaptureRecordReference:
     type: string
-    example: "SFCRR723985"
+    example: "SFCRR726535"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2369,7 +2183,7 @@ definitions:
     properties:
      strategicFundingInstanceReportReference:
       type: string
-      example: "767417"
+      example: "707861"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2379,7 +2193,7 @@ definitions:
     properties:
      strategicFundingInstanceAnalysisReference:
       type: string
-      example: "730954"
+      example: "704128"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2387,39 +2201,42 @@ definitions:
  BQStrategicFundingRetrieveOutputModel:
   type: object
   properties: 
-   financialPerformanceandBalanceSheetProjections:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Financial reports from multiple business units
-   eCMDCMMarketTransactions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of equity and debt transactions
-   strategicInvestmentHoldingsTransactions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of major investment/divestment transactions
-   enterpriseBalanceSheetPositions:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Summary details and analysis of the balance sheet relevent to longer term planning
-   strategicFundingResolutionTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
+   strategicFundingInstanceRecord:
+    type: object
+    properties:
+     financialPerformanceandBalanceSheetProjections:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Financial reports from multiple business units
+     eCMDCMMarketTransactions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of equity and debt transactions
+     strategicInvestmentHoldingsTransactions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of major investment/divestment transactions
+     enterpriseBalanceSheetPositions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Summary details and analysis of the balance sheet relevant to longer term planning
+     strategicFundingResolutionTask:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of a response initiated by corporate treasury
    strategicFundingRetrieveActionTaskReference:
     type: string
-    example: "SFRATR706976"
+    example: "SFRATR754571"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2436,6 +2253,9 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
+   strategicFundingInstanceReport:
+    type: object
+    properties:
      strategicFundingInstanceReportRecord:
       type: object
       description: |
@@ -2448,12 +2268,21 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
+     strategicFundingInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
      strategicFundingInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
+   strategicFundingInstanceAnalysis:
+    type: object
+    properties:
      strategicFundingInstanceAnalysisRecord:
       type: object
       description: |
@@ -2466,125 +2295,50 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
+     strategicFundingInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
      strategicFundingInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQSecuritizationInitiateInputModel:
+ BQSecuritizationUpdateInputModel:
   type: object
   properties: 
-   corporateTreasuryInstanceRecord:
-    type: object
-    properties:
-     enterpriseFinancialStatements:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The bank financial statements include the balance sheet, statement of cash flows, statement of retained earnings and the income statement
-     enterpriseBalanceSheetDetailedContent:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The balance sheet breakdown include individual assets/liabilities as necessary
-   securitizationInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   corporateTreasuryInstanceReference:
+   corporateTreasuryManagementPlanInstanceReference:
     type: string
-    example: "CTIR738430"
+    example: "CTMPIR771513"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Corporate Treasury instance
-   bankSecuritizationPoliciesandguidelines:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Policies and guidelines that determine when and how asset securitizationwill be considered
-   securitizationTrancheReference:
-    type: string
-    example: "STR790470"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a selected group of bank balance sheet assets that are bundled into a tranche for securitization
- BQSecuritizationInitiateOutputModel:
-  type: object
-  properties: 
-   securitizationInitiateActionReference:
-    type: string
-    example: "SIAR769196"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   securitizationInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
+      general-info: Reference to the parent Corporate Treasury Management Plan instance
    securitizationInstanceReference:
     type: string
-    example: "SIR709496"
+    example: "SIR728815"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Securitization instance
-   securitizationInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Securitization instance (e.g. initialised, pending, active)
-   bankSecuritizationPoliciesandguidelines:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Policies and guidelines that determine when and how asset securitizationwill be considered
-   securitizationTrancheReference:
-    type: string
-    example: "STR790470"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a selected group of bank balance sheet assets that are bundled into a tranche for securitization
-   securitizationTrancheRecord:
+   securitizationInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The record of the bundled balance sheet items that are to be securitized
-   securitizationTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
- BQSecuritizationUpdateInputModel:
-  type: object
-  properties: 
-   securitizationTrancheRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The record of the bundled balance sheet items that are to be securitized
-   securitizationTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
+    properties:
+     securitizationTrancheRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The record of the bundled balance sheet items that are to be securitized
+     securitizationTask:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of a response initiated by corporate treasury
    securitizationUpdateActionTaskRecord:
     type: object
     description: |
@@ -2600,21 +2354,24 @@ definitions:
  BQSecuritizationUpdateOutputModel:
   type: object
   properties: 
-   securitizationTrancheRecord:
+   securitizationInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The record of the bundled balance sheet items that are to be securitized
-   securitizationTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
+    properties:
+     securitizationTrancheRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The record of the bundled balance sheet items that are to be securitized
+     securitizationTask:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of a response initiated by corporate treasury
    securitizationUpdateActionTaskReference:
     type: string
-    example: "SUATR702243"
+    example: "SUATR788084"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2651,7 +2408,7 @@ definitions:
     properties:
      securitizationInstanceReportReference:
       type: string
-      example: "787001"
+      example: "769502"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2661,7 +2418,7 @@ definitions:
     properties:
      securitizationInstanceAnalysisReference:
       type: string
-      example: "787093"
+      example: "702380"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2669,34 +2426,37 @@ definitions:
  BQSecuritizationRetrieveOutputModel:
   type: object
   properties: 
-   bankSecuritizationPoliciesandguidelines:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Policies and guidelines that determine when and how asset securitizationwill be considered
-   securitizationTrancheReference:
-    type: string
-    example: "STR731465"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a selected group of bank balance sheet assets that are bundled into a tranche for securitization
-   securitizationTrancheRecord:
+   securitizationInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The record of the bundled balance sheet items that are to be securitized
-   securitizationTask:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Description of a response initiated by corporate treasury
+    properties:
+     bankSecuritizationPoliciesandguidelines:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Policies and guidelines that determine when and how asset securitization will be considered
+     securitizationTrancheReference:
+      type: string
+      example: "709643"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a selected group of bank balance sheet assets that are bundled into a tranche for securitization
+     securitizationTrancheRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The record of the bundled balance sheet items that are to be securitized
+     securitizationTask:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of a response initiated by corporate treasury
    securitizationRetrieveActionTaskReference:
     type: string
-    example: "SRATR700844"
+    example: "SRATR710496"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2713,6 +2473,9 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
+   securitizationInstanceReport:
+    type: object
+    properties:
      securitizationInstanceReportRecord:
       type: object
       description: |
@@ -2725,12 +2488,21 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
+     securitizationInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
      securitizationInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
+   securitizationInstanceAnalysis:
+    type: object
+    properties:
      securitizationInstanceAnalysisRecord:
       type: object
       description: |
@@ -2743,108 +2515,18 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
+     securitizationInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
      securitizationInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQBankRatesInitiateInputModel:
-  type: object
-  properties: 
-   bankRatesInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   corporateTreasuryInstanceReference:
-    type: string
-    example: "CTIR712957"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Corporate Treasury instance
-   bankRateType:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The type of bank interest or currency rate that is to be applied inproduction (e.g. bank's consumer mortgage rate)
- BQBankRatesInitiateOutputModel:
-  type: object
-  properties: 
-   bankRatesInitiateActionReference:
-    type: string
-    example: "BRIAR780991"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   bankRatesInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   bankRatesInstanceReference:
-    type: string
-    example: "BRIR721487"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Bank Rates instance
-   bankRatesInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Bank Rates instance (e.g. initialised, pending, active)
-   bankRateType:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The type of bank interest or currency rate that is to be applied inproduction (e.g. bank's consumer mortgage rate)
-   bankRateValue:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The current value (value range if appropriate) to apply
-   bankRateValueDate:
-    type: string
-    example: "09-22-2018"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-      general-info: The key date and time values associated with the rate
-   bankRateValueHistory:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Historical values (maintained for backtesting, corrections etc.)
-   bankRateRecordReference:
-    type: string
-    example: "BRRR761823"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the distributed record containing the prevailing bank rates
-   bankRateRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The record of the prevailing bank rates
-   bankRateRecordDate:
-    type: string
-    example: "09-22-2018"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-      general-info: Date and time stamp for rate value record
  BQBankRatesRetrieveInputModel:
   type: object
   properties: 
@@ -2865,7 +2547,7 @@ definitions:
     properties:
      bankRatesInstanceReportReference:
       type: string
-      example: "739514"
+      example: "775931"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2875,7 +2557,7 @@ definitions:
     properties:
      bankRatesInstanceAnalysisReference:
       type: string
-      example: "732264"
+      example: "782977"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2883,54 +2565,57 @@ definitions:
  BQBankRatesRetrieveOutputModel:
   type: object
   properties: 
-   bankRateType:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The type of bank interest or currency rate that is to be applied inproduction (e.g. bank's consumer mortgage rate)
-   bankRateValue:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The current value (value range if appropriate) to apply
-   bankRateValueDate:
-    type: string
-    example: "09-22-2018"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-      general-info: The key date and time values associated with the rate
-   bankRateValueHistory:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Historical values (maintained for backtesting, corrections etc.)
-   bankRateRecordReference:
-    type: string
-    example: "BRRR771972"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the distributed record containing the prevailing bank rates
-   bankRateRecord:
+   bankRatesInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The record of the prevailing bank rates
-   bankRateRecordDate:
-    type: string
-    example: "09-22-2018"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-      general-info: Date and time stamp for rate value record
+    properties:
+     bankRateType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of bank interest or currency rate that is to be applied in production (e.g. bank's consumer mortgage rate)
+     bankRateValue:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The current value (value range if appropriate) to apply
+     bankRateValueDate:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The key date and time values associated with the rate
+     bankRateValueHistory:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Historical values (maintained for back testing, corrections etc.)
+     bankRateRecordReference:
+      type: string
+      example: "710598"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the distributed record containing the prevailing bank rates
+     bankRateRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The record of the prevailing bank rates
+     bankRateRecordDate:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: Date and time stamp for rate value record
    bankRatesRetrieveActionTaskReference:
     type: string
-    example: "BRRATR759512"
+    example: "BRRATR738597"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2947,6 +2632,9 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
+   bankRatesInstanceReport:
+    type: object
+    properties:
      bankRatesInstanceReportRecord:
       type: object
       description: |
@@ -2959,12 +2647,21 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
+     bankRatesInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
      bankRatesInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
+   bankRatesInstanceAnalysis:
+    type: object
+    properties:
      bankRatesInstanceAnalysisRecord:
       type: object
       description: |
@@ -2977,6 +2674,12 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
+     bankRatesInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
      bankRatesInstanceAnalysisReport:
       type: object
       description: |

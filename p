@@ -1,0 +1,62 @@
+Mandatory||#SD Servicing Session Reference||||Reference to the active servicing session|I|I|I|I|I|I|I|I|
+Mandatory||#CR Instance Reference||||Reference to the #CR instance|O|I|I|I|I|I|I|I|
+Initiate||#CR Initiate Action Reference||||Reference to an Initiate service call|O||||||||
+Initiate||#CR Initiate Action Record||||The Initiate service call input and output record|IO||||||||
+Initiate||#CR Instance Status||||The status of the #CR instance (e.g. initialised, pending, active)|IO|I/O|O|O|||||
+insert cr here
+Update||#CR Update Action Task Reference||||Reference to an update service call||O|||||||
+Update||#CR Update Action Task Record||||The update service call consolidated processing record||I/O|||||||
+Update||Update Action Request||||Details of the update action service request||I|||||||
+Update||Update Response Record||||Details of the Update action service response||O|||||||
+CONTROL||#CR Control Action Task Reference||||Reference to a #CR instance control processing service call|||O||||||
+CONTROL||#CR Control Action Task Record||||The processing control service call consolidated processing record|||I/O||||||
+CONTROL||#CR Control Action Request|##|||Details of the control action service request|||I||||||
+CONTROL|||Control Action Type|||The type of processing action requested (e.g. suspend, skip, terminate)|||I||||||
+CONTROL||#CR Control Action Response||||Details of the control action service response|||O||||||
+EXCHANGE||#CR Exchange Action Task Reference||||Reference to a #CR instance exchange service call||||O|||||
+EXCHANGE||#CR Exchange Action Task Record||||The exchange service call consolidated processing record||||I/O|||||
+EXCHANGE||#CR Exchange Action Request|##|||Details of the exchange action service request||||I|||||
+EXCHANGE|||Exchange Action Type|||The type of exchange (e.g. accept, reject, verify)||||I|||||
+EXCHANGE||#CR Exchange Action Response||||Details of the exchange action service response||||O|||||
+CAPTURE||#CR Capture Action Task Reference||||Reference to a #CR instance capture service call|||||O||||
+CAPTURE||#CR Capture Action Task Record||||The capture service call consolidated processing record|||||I/O||||
+CAPTURE||Capture Record Reference||||Reference to the structured input transaction/record|||||O||||
+CAPTURE||Capture Record Type|##|||Copy in associated API description (less 5 header characters)|||||I||||
+CAPTURE|||Capture Input Record|||Structured input transaction/record (e.g. timesheet, event record, account posting)|||||I||||
+CAPTURE||Capture Response Record||||Details of the capture action service response|||||O||||
+EXECUTE||#CR Execute Action Task Reference||||Reference to a #CR instance execute service call||||||O|||
+EXECUTE||#CR Execute Action Task Record||||The execute service call consolidated processing record||||||I/O|||
+EXECUTE||Execute Record Reference||||Reference to the execute transaction/record||||||O|||
+EXECUTE||Execute Record Type|##|||Copy in associated API description (less 5 header characters)||||||I|||
+EXECUTE|||Execute Input Record|||Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)||||||I|||
+EXECUTE||Execute Response Record||||Details of the execute action service response||||||O|||
+REQUEST||#CR Request Action Task Reference||||Reference to a #CR instance request service call|||||||O||
+REQUEST||#CR Request Action Task Record||||The request service call consolidated processing record|||||||I/O||
+REQUEST||Request Record Reference||||Reference to the service request record|||||||O||
+REQUEST||Request Record Type|##|||Request service record type (e.g. reworking, refresh, workstep)|||||||I||
+REQUEST|||Request Input Record|||Request service record (e.g. rework function, refresh record, process workstep)|||||||I||
+REQUEST||Request Response Record||||Details of the request action service response|||||||O||
+GRANT||#CR Grant Action Task Reference||||Reference to a #CR instance grant service call||||||||O|
+GRANT||#CR Grant Action Task Record||||The grant service call consolidated processing record||||||||I/O|
+GRANT||Grant Request Record Type||||Grant request type (e.g. access permission)||||||||I|
+GRANT||Grant Request Record Reference||||Reference to the grant request record||||||||O|
+GRANT||Grant Request Input Record|##|||Grant request record (e.g. access permission)||||||||I|
+GRANT|||Grant Request Details|||Details of the permissions requested||||||||I|
+GRANT||Grant Request Response Record |##|||Details of the grant request action service response||||||||O|
+GRANT|||Grant Permission Details|||Details of the permissions granted||||||||O|
+RETRIEVE||#CR Retrieve Action Task Reference||||Reference to a #CR instance retrieve service call|||||||||O
+RETRIEVE||#CR Retrieve Action Task Record||||The retrieve service call consolidated processing record|||||||||IO
+RETRIEVE||#CR Retrieve Action Request||||Details of the retrieve action service request (lists requested reports)|||||||||I
+RETRIEVE||#CR Retrieve Action Response||||Details of the retrieve action service response (lists returned reports)|||||||||O
+RETRIEVE||#CR Instance Report Record|##|||A specific #CR instance formatted report|||||||||IO
+RETRIEVE|||#CR Instance Report Reference|||Reference to the control record instance report|||||||||I
+RETRIEVE|||#CR Instance Report Data|||The input information used to assemble the report that can be on-going, periodic and actual and projected|||||||||O
+RETRIEVE|||#CR Instance Report Type|||The type of external report available|||||||||IO
+RETRIEVE|||#CR Instance Report Parameters|||The selection parameters for the report (e.g. period, content type)|||||||||I
+RETRIEVE|||#CR Instance Report|||The external report in any suitable form including selection filters where appropriate|||||||||O
+RETRIEVE||#CR Instance Analysis|##|||A specific #CR instance analytical report|||||||||IO
+RETRIEVE|||#CR Instance Analysis Reference|||Reference to the control record instance analysis view|||||||||I
+RETRIEVE|||#CR Instance Analysis Data|||The inputs and results of the instance analysis that can be on-going, periodic and actual and projected|||||||||O
+RETRIEVE|||#CR Instance Analysis Report Type|||The type of external performance analysis report available|||||||||IO
+RETRIEVE|||#CR Instance Analysis Parameters|||The selection parameters for the analysis (e.g. period, algorithm type)|||||||||I
+RETRIEVE|||#CR Instance Analysis Report|||The external analysis report in any suitable form including selection filters where appropriate|||||||||O

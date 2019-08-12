@@ -1,0 +1,410 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Disbursement'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles the disbursement of funds to newly established loans/facilities as necessary
+
+    ## Example of Use:
+    Example of use:A disbursement is processed at the closing of a new loan
+
+    ## Description:
+    This service domain handles the disbursement of funds typically for different loan facilities. Though typically a rather simple service it is modeled as a discrete service center as many banks handle disbursements from a specialist unit
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-disbursement/1.0.0
+schemes:
+ - https
+paths:
+  /disbursement/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDDisbursement
+      summary: Activate  a SDDisbursement servicing session
+      description: Activate  a  SDDisbursement servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDDisbursement Request Payload
+        schema:
+          $ref: '#/definitions/SDDisbursementActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDDisbursementActivateOutputModel'
+  /disbursement/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDDisbursement
+      summary: Update an active SDDisbursement session configuration
+      description: Update an active SDDisbursement session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDisbursement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDDisbursement Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDDisbursementConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDDisbursementConfigureOutputModel'
+  /disbursement/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDDisbursement
+      summary: "Capturing feedback against the SDDisbursement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDDisbursement service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDisbursement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDDisbursement Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDDisbursementFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDDisbursementFeedbackOutputModel'
+  /disbursement/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDDisbursement
+      summary: Analytical views maintained by the SDDisbursement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDDisbursement service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDisbursement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDDisbursement Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDDisbursementRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDDisbursementRetrieveOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateDisbursementTransaction
+      summary: Details of a new DisbursementTransaction instance
+      description: Initiate a disbursement
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: DisbursementTransaction Request Payload
+        schema:
+          $ref: '#/definitions/CRDisbursementTransactionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new DisbursementTransaction instance
+          schema:
+            $ref: '#/definitions/CRDisbursementTransactionInitiateOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateDisbursementTransaction
+      summary: Update to any amendable fields of the DisbursementTransaction instance
+      description: Update details of a disbursement
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Disbursement Transaction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Disbursement Transaction Request Payload
+        schema:
+          $ref: '#/definitions/CRDisbursementTransactionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Disbursement Transaction Instance
+          schema:
+            $ref: '#/definitions/CRDisbursementTransactionUpdateOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlDisbursementTransactionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the processing of a disbursement (e.g. delay)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Disbursement Transaction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Disbursement Transaction Request Payload
+        schema:
+          $ref: '#/definitions/CRDisbursementTransactionControlInputModel'
+      responses:
+        200:
+          description: Successful control of Disbursement Transaction Instance
+          schema:
+            $ref: '#/definitions/CRDisbursementTransactionControlOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeDisbursementTransactionUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Verify, confirm etc. a disbursement
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Disbursement Transaction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Disbursement Transaction Request Payload
+        schema:
+          $ref: '#/definitions/CRDisbursementTransactionExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Disbursement Transaction Instance
+          schema:
+            $ref: '#/definitions/CRDisbursementTransactionExchangeOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeDisbursementTransactionUpdate
+      summary: Invoke an automated execute action against the DisbursementTransaction instance
+      description: Execute an automated task against an active disbursement (e.g. generate confirmation note) 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Disbursement Transaction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Disbursement Transaction Request Payload
+        schema:
+          $ref: '#/definitions/CRDisbursementTransactionExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Disbursement Transaction Instance
+          schema:
+            $ref: '#/definitions/CRDisbursementTransactionExecuteOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestDisbursementTransactionUpdate
+      summary: Invoke a service request action against the DisbursementTransaction instance
+      description: Request manual intervention with a disbursement transaction (e.g. contact interested parties)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Disbursement Transaction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Disbursement Transaction Request Payload
+        schema:
+          $ref: '#/definitions/CRDisbursementTransactionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Disbursement Transaction Instance
+          schema:
+            $ref: '#/definitions/CRDisbursementTransactionRequestOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveDisbursement
+      summary: Invoke a reporting action to obtain a Disbursement Transaction instance related report
+      description: Retrieve details about a disbursement transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Disbursement Transaction Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRDisbursementTransactionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Disbursement Transaction Instance
+          schema:
+            $ref: '#/definitions/CRDisbursementTransactionRetrieveOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveDisbursementReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Disbursement Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /disbursement/disbursement-transaction/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveDisbursementBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveDisbursementBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Disbursement Transaction Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ID1, ID2]

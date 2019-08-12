@@ -1,0 +1,869 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Product Directory'
+ description: >
+
+    ## Executive Summary:
+    This service domain maintains a comprehensive directory of the bank's products and services. It can be referenced to obtain product details used to support activities including product selection, sales and marketing, on-boarding, servicing and product fulfillment.
+
+    ## Example of Use:
+    A customer accesses the product directory to obtain product feature descriptions, eligibility and pricing guidelines
+
+    ## Description:
+    The product directory service domain provides a central service to reference product specifications and related details. The broad range of specification information available includes: product feature descriptions; pricing and eligibility requirements used in sales and on-boarding; servicing support and guidelines; and operational and production requirements
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-product-directory/1.0.0
+schemes:
+ - https
+paths:
+  /product-directory/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDProductDirectory
+      summary: Activate  a SDProductDirectory servicing session
+      description: Activate  a  SDProductDirectory servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDProductDirectory Request Payload
+        schema:
+          $ref: '#/definitions/SDProductDirectoryActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDProductDirectoryActivateOutputModel'
+  /product-directory/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDProductDirectory
+      summary: Update an active SDProductDirectory session configuration
+      description: Update an active SDProductDirectory session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductDirectory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDProductDirectory Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDProductDirectoryConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDProductDirectoryConfigureOutputModel'
+  /product-directory/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDProductDirectory
+      summary: "Capturing feedback against the SDProductDirectory service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDProductDirectory service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductDirectory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDProductDirectory Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDProductDirectoryFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDProductDirectoryFeedbackOutputModel'
+  /product-directory/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDProductDirectory
+      summary: Analytical views maintained by the SDProductDirectory service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDProductDirectory service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductDirectory Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDProductDirectory Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDProductDirectoryRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDProductDirectoryRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateProductDirectoryEntry
+      summary: Details of a new ProductDirectoryEntry instance
+      description: Register a new product or service in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ProductDirectoryEntry Request Payload
+        schema:
+          $ref: '#/definitions/CRProductDirectoryEntryInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new ProductDirectoryEntry instance
+          schema:
+            $ref: '#/definitions/CRProductDirectoryEntryInitiateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateProductDirectoryEntry
+      summary: Update to any amendable fields of the ProductDirectoryEntry instance
+      description: Update details of a product or service in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Product Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRProductDirectoryEntryUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Product Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRProductDirectoryEntryUpdateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestProductDirectoryEntryUpdate
+      summary: Invoke a service request action against the ProductDirectoryEntry instance
+      description: Request that an existing entry is updated or revised
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Product Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRProductDirectoryEntryRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Product Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRProductDirectoryEntryRequestOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectory
+      summary: Invoke a reporting action to obtain a Product Directory Entry instance related report
+      description: Retrieve product or service details from the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRProductDirectoryEntryRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Product Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRProductDirectoryEntryRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/operations/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateProductDirectoryEntryOperations
+      summary: Details of a new Operations instance
+      description: Register a new product or service operations details in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Product Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/BQOperationsInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Product Directory Entry instance
+          schema:
+            $ref: '#/definitions/BQOperationsInitiateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateProductDirectoryEntryOperations
+      summary: Update to any amendable fields of the Operations instance
+      description: Update details of a product or service operations details in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Operations Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Operations Request Payload
+        schema:
+          $ref: '#/definitions/BQOperationsUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Operations Instance
+          schema:
+            $ref: '#/definitions/BQOperationsUpdateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestProductDirectoryEntryOperationsUpdate
+      summary: Invoke a service request action against the Operations instance
+      description: Request that an existing entry is updated or revised
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Operations Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Operations request payload
+        schema:
+          $ref: '#/definitions/BQOperationsRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Operations Instance Record
+          schema:
+            $ref: '#/definitions/BQOperationsRequestOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectoryEntryOperations
+      summary: Invoke a reporting action to obtain a Operations instance related report.
+      description: Retrieve product or service operations details from the catalog .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Operations Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOperationsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Operations Instance Record
+          schema:
+            $ref: '#/definitions/BQOperationsRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/salesandmarketing/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateProductDirectoryEntrySalesandMarketing
+      summary: Details of a new SalesandMarketing instance
+      description: Register a new product or service sales and marketing details in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Product Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/BQSalesandMarketingInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Product Directory Entry instance
+          schema:
+            $ref: '#/definitions/BQSalesandMarketingInitiateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateProductDirectoryEntrySalesandMarketing
+      summary: Update to any amendable fields of the SalesandMarketing instance
+      description: Update details of a product or service sales and marketing details in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: SalesandMarketing Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SalesandMarketing Request Payload
+        schema:
+          $ref: '#/definitions/BQSalesandMarketingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated SalesandMarketing Instance
+          schema:
+            $ref: '#/definitions/BQSalesandMarketingUpdateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestProductDirectoryEntrySalesandMarketingUpdate
+      summary: Invoke a service request action against the SalesandMarketing instance
+      description: Request that an existing entry is updated or revised
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: SalesandMarketing Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SalesandMarketing request payload
+        schema:
+          $ref: '#/definitions/BQSalesandMarketingRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of SalesandMarketing Instance Record
+          schema:
+            $ref: '#/definitions/BQSalesandMarketingRequestOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectoryEntrySalesandMarketing
+      summary: Invoke a reporting action to obtain a SalesandMarketing instance related report.
+      description: Retrieve product or service sales and marketing details from the catalog .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: SalesandMarketing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQSalesandMarketingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved SalesandMarketing Instance Record
+          schema:
+            $ref: '#/definitions/BQSalesandMarketingRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/servicing/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateProductDirectoryEntryServicing
+      summary: Details of a new Servicing instance
+      description: Register a new product or service servicing details in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Product Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/BQServicingInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Product Directory Entry instance
+          schema:
+            $ref: '#/definitions/BQServicingInitiateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateProductDirectoryEntryServicing
+      summary: Update to any amendable fields of the Servicing instance
+      description: Update details of a product or service servicing details in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Servicing Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing Request Payload
+        schema:
+          $ref: '#/definitions/BQServicingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Servicing Instance
+          schema:
+            $ref: '#/definitions/BQServicingUpdateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestProductDirectoryEntryServicingUpdate
+      summary: Invoke a service request action against the Servicing instance
+      description: Request that an existing entry is updated or revised
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Servicing Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing request payload
+        schema:
+          $ref: '#/definitions/BQServicingRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Servicing Instance Record
+          schema:
+            $ref: '#/definitions/BQServicingRequestOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectoryEntryServicing
+      summary: Invoke a reporting action to obtain a Servicing instance related report.
+      description: Retrieve product or service servicing details from the catalog .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Servicing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQServicingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Servicing Instance Record
+          schema:
+            $ref: '#/definitions/BQServicingRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/production/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateProductDirectoryEntryProduction
+      summary: Details of a new Production instance
+      description: Register a new product or service production details in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Product Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/BQProductionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Product Directory Entry instance
+          schema:
+            $ref: '#/definitions/BQProductionInitiateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateProductDirectoryEntryProduction
+      summary: Update to any amendable fields of the Production instance
+      description: Update details of a product or service production details in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Production Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Production Request Payload
+        schema:
+          $ref: '#/definitions/BQProductionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Production Instance
+          schema:
+            $ref: '#/definitions/BQProductionUpdateOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestProductDirectoryEntryProductionUpdate
+      summary: Invoke a service request action against the Production instance
+      description: Request that an existing entry is updated or revised
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Production Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Production request payload
+        schema:
+          $ref: '#/definitions/BQProductionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Production Instance Record
+          schema:
+            $ref: '#/definitions/BQProductionRequestOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectoryEntryProduction
+      summary: Invoke a reporting action to obtain a Production instance related report.
+      description: Retrieve product or service production details from the catalog .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Production Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQProductionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Production Instance Record
+          schema:
+            $ref: '#/definitions/BQProductionRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveProductDirectoryReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ProductDirectory Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /product-directory/product-directory-entry/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveProductDirectoryBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Operations',  'SalesAndMarketing',  'Servicing',  'Production', ]
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveProductDirectoryBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Production
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Production Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ProductionID1, ProductionID2]

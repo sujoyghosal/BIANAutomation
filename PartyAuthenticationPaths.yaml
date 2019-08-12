@@ -1,0 +1,806 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Party Authentication'
+ description: >
+
+    ## Executive Summary:
+    This service domain provides a customer identify authentication service covering all channels and devices to support access to the banks products and services
+
+    ## Example of Use:
+    A customer is authenticated when making phone contact with the bank's service center 
+
+    ## Description:
+    Customer/party authentication is a cross-channel/device capability that provides identity confirmation for customers accessing the bank through any interactive channel. The service may use a combination of one or more mechanisms to authenticate including issued tokens/devices, virtual mechanisms such as passwords and biometrics such as voice/face recognition. Different levels of authentication may be determined to support different types of access and there may be access permissions associated with the authentication mechanism used
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-party-authentication/1.0.0
+schemes:
+ - https
+paths:
+  /party-authentication/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDPartyAuthentication
+      summary: Activate  a SDPartyAuthentication servicing session
+      description: Activate  a  SDPartyAuthentication servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDPartyAuthentication Request Payload
+        schema:
+          $ref: '#/definitions/SDPartyAuthenticationActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDPartyAuthenticationActivateOutputModel'
+  /party-authentication/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDPartyAuthentication
+      summary: Update an active SDPartyAuthentication session configuration
+      description: Update an active SDPartyAuthentication session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPartyAuthentication Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPartyAuthentication Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDPartyAuthenticationConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDPartyAuthenticationConfigureOutputModel'
+  /party-authentication/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDPartyAuthentication
+      summary: "Capturing feedback against the SDPartyAuthentication service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDPartyAuthentication service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPartyAuthentication Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPartyAuthentication Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDPartyAuthenticationFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDPartyAuthenticationFeedbackOutputModel'
+  /party-authentication/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDPartyAuthentication
+      summary: Analytical views maintained by the SDPartyAuthentication service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDPartyAuthentication service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPartyAuthentication Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPartyAuthentication Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDPartyAuthenticationRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDPartyAuthenticationRetrieveOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePartyAuthenticationAssessment
+      summary: Details of a new PartyAuthenticationAssessment instance
+      description: Evaluate a customer's authenticity
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PartyAuthenticationAssessment Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyAuthenticationAssessmentInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new PartyAuthenticationAssessment instance
+          schema:
+            $ref: '#/definitions/CRPartyAuthenticationAssessmentInitiateOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePartyAuthenticationAssessment
+      summary: Update to any amendable fields of the PartyAuthenticationAssessment instance
+      description: Update details of a customer authentication assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyAuthenticationAssessmentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Party Authentication Assessment Instance
+          schema:
+            $ref: '#/definitions/CRPartyAuthenticationAssessmentUpdateOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangePartyAuthenticationAssessmentUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, etc. a customer authentication assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyAuthenticationAssessmentExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Party Authentication Assessment Instance
+          schema:
+            $ref: '#/definitions/CRPartyAuthenticationAssessmentExchangeOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executePartyAuthenticationAssessmentUpdate
+      summary: Invoke an automated execute action against the PartyAuthenticationAssessment instance
+      description: Execute an automated action for an assessment (e.g. submit data)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyAuthenticationAssessmentExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Party Authentication Assessment Instance
+          schema:
+            $ref: '#/definitions/CRPartyAuthenticationAssessmentExecuteOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestPartyAuthenticationAssessmentUpdate
+      summary: Invoke a service request action against the PartyAuthenticationAssessment instance
+      description: Request manual interventions in an assessment (e.g. engage specialist)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyAuthenticationAssessmentRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Party Authentication Assessment Instance
+          schema:
+            $ref: '#/definitions/CRPartyAuthenticationAssessmentRequestOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/grant:
+    put:
+      tags:
+      - grant
+      operationId: grantPartyAuthenticationAssessmentUpdate
+      summary: Invoke a grant request action from the PartyAuthenticationAssessment instance to obtain access permission
+      description: Obtain an authentication grant (a token)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyAuthenticationAssessmentGrantInputModel'
+      responses:
+        200:
+          description: Successful grant of Party Authentication Assessment Instance
+          schema:
+            $ref: '#/definitions/CRPartyAuthenticationAssessmentGrantOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyAuthentication
+      summary: Invoke a reporting action to obtain a Party Authentication Assessment instance related report
+      description: Retrieve details about an authentication assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRPartyAuthenticationAssessmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Party Authentication Assessment Instance
+          schema:
+            $ref: '#/definitions/CRPartyAuthenticationAssessmentRetrieveOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/password/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePartyAuthenticationAssessmentPassword
+      summary: Details of a new Password instance
+      description: Evaluate customer authenticity using passwords
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/BQPasswordInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Party Authentication Assessment instance
+          schema:
+            $ref: '#/definitions/BQPasswordInitiateOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/password/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyAuthenticationAssessmentPassword
+      summary: Invoke a reporting action to obtain a Password instance related report.
+      description: Retrieve details about a password evaluation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Password Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPasswordRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Password Instance Record
+          schema:
+            $ref: '#/definitions/BQPasswordRetrieveOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/question/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePartyAuthenticationAssessmentQuestion
+      summary: Details of a new Question instance
+      description: Evaluate customer authenticity using secret questions
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/BQQuestionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Party Authentication Assessment instance
+          schema:
+            $ref: '#/definitions/BQQuestionInitiateOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/question/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyAuthenticationAssessmentQuestion
+      summary: Invoke a reporting action to obtain a Question instance related report.
+      description: Retrieve details about a secret question evaluation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Question Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQQuestionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Question Instance Record
+          schema:
+            $ref: '#/definitions/BQQuestionRetrieveOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/document/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePartyAuthenticationAssessmentDocument
+      summary: Details of a new Document instance
+      description: Evaluate customer authenticity using documents
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/BQDocumentInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Party Authentication Assessment instance
+          schema:
+            $ref: '#/definitions/BQDocumentInitiateOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/document/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyAuthenticationAssessmentDocument
+      summary: Invoke a reporting action to obtain a Document instance related report.
+      description: Retrieve details about a document evaluation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Document Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQDocumentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Document Instance Record
+          schema:
+            $ref: '#/definitions/BQDocumentRetrieveOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/device/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePartyAuthenticationAssessmentDevice
+      summary: Details of a new Device instance
+      description: Evaluate customer authenticity using a device
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/BQDeviceInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Party Authentication Assessment instance
+          schema:
+            $ref: '#/definitions/BQDeviceInitiateOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/device/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyAuthenticationAssessmentDevice
+      summary: Invoke a reporting action to obtain a Device instance related report.
+      description: Retrieve details about a device evaluation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Device Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQDeviceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Device Instance Record
+          schema:
+            $ref: '#/definitions/BQDeviceRetrieveOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/biometric/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePartyAuthenticationAssessmentBiometric
+      summary: Details of a new Biometric instance
+      description: Evaluate customer authenticity using biometrics
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/BQBiometricInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Party Authentication Assessment instance
+          schema:
+            $ref: '#/definitions/BQBiometricInitiateOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/biometric/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyAuthenticationAssessmentBiometric
+      summary: Invoke a reporting action to obtain a Biometric instance related report.
+      description: Retrieve details about a biometric evaluation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Biometric Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQBiometricRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Biometric Instance Record
+          schema:
+            $ref: '#/definitions/BQBiometricRetrieveOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/behavioral/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePartyAuthenticationAssessmentBehavioral
+      summary: Details of a new Behavioral instance
+      description: Evaluate customer authenticity using behaviors
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Authentication Assessment Request Payload
+        schema:
+          $ref: '#/definitions/BQBehavioralInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Party Authentication Assessment instance
+          schema:
+            $ref: '#/definitions/BQBehavioralInitiateOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/behavioral/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyAuthenticationAssessmentBehavioral
+      summary: Invoke a reporting action to obtain a Behavioral instance related report.
+      description: Retrieve details about a behavior evaluation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Behavioral Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQBehavioralRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Behavioral Instance Record
+          schema:
+            $ref: '#/definitions/BQBehavioralRetrieveOutputModel'
+  /party-authentication/{sd-reference-id}/party-authentication-assessment:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePartyAuthenticationReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- PartyAuthentication Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /party-authentication/party-authentication-assessment/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePartyAuthenticationBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Password',  'Question',  'Document',  'Device',  'Biometric',  'Behavioral', ]
+  /party-authentication/{sd-reference-id}/party-authentication-assessment/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePartyAuthenticationBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Authentication Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Authentication Assessment Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Behavioral
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Behavioral Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [BehavioralID1, BehavioralID2]

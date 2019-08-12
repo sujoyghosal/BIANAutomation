@@ -1,0 +1,570 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Card Financial Settlement'
+ description: >
+
+    ## Executive Summary:
+    This service domain orchestrates the settlement of the transactions between the Issuers and the Acquirers through the Card Networks.
+
+    ## Example of Use:
+    Card Charge transactions that are acquired from the Merchants by the Acquiring Bank and forwarded to the Issuing Banks through Card Clearing are periodically settled (generally once a day). 
+
+    ## Description:
+    This service domain is used by the Card Network to initiate either gross or net settlement for the charges cleared during a specified period and to issue settlement instructions to the Issuing and Acquiring Banks. This requires the Card Network to issue settlement instructions to each Issuing Bank directing them to remit the total amounts corresponding to the cleared charges to designated bank accounts that are managed by the Card Network, which in turn makes the corresponding remittances to the designated bank accounts for the Card Issuers.The service domain is also used by the Issuing and Acquiring banks to perform reconciliation of the settlement instructions against the cleared charges and to initiate remittances through the Payment Order service domain.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-card-financial-settlement/1.0.0
+schemes:
+ - https
+paths:
+  /card-financial-settlement/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCardFinancialSettlement
+      summary: Activate  a SDCardFinancialSettlement servicing session
+      description: Activate  a  SDCardFinancialSettlement servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCardFinancialSettlement Request Payload
+        schema:
+          $ref: '#/definitions/SDCardFinancialSettlementActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCardFinancialSettlementActivateOutputModel'
+  /card-financial-settlement/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCardFinancialSettlement
+      summary: Update an active SDCardFinancialSettlement session configuration
+      description: Update an active SDCardFinancialSettlement session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardFinancialSettlement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardFinancialSettlement Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCardFinancialSettlementConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCardFinancialSettlementConfigureOutputModel'
+  /card-financial-settlement/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCardFinancialSettlement
+      summary: "Capturing feedback against the SDCardFinancialSettlement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCardFinancialSettlement service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardFinancialSettlement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardFinancialSettlement Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCardFinancialSettlementFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCardFinancialSettlementFeedbackOutputModel'
+  /card-financial-settlement/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCardFinancialSettlement
+      summary: Analytical views maintained by the SDCardFinancialSettlement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCardFinancialSettlement service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardFinancialSettlement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardFinancialSettlement Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCardFinancialSettlementRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCardFinancialSettlementRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCardFinancialSettlementProcedure
+      summary: Details of a new CardFinancialSettlementProcedure instance
+      description: Initiate card financial settlement processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardFinancialSettlementProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardFinancialSettlementProcedureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CardFinancialSettlementProcedure instance
+          schema:
+            $ref: '#/definitions/CRCardFinancialSettlementProcedureInitiateOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardFinancialSettlementProcedure
+      summary: Update to any amendable fields of the CardFinancialSettlementProcedure instance
+      description: Update the card financial settlement processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Financial Settlement Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardFinancialSettlementProcedureUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Card Financial Settlement Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardFinancialSettlementProcedureUpdateOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlement
+      summary: Invoke a reporting action to obtain a Card Financial Settlement Procedure instance related report
+      description: Retrieve details and reports about the card settlement processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCardFinancialSettlementProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Card Financial Settlement Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardFinancialSettlementProcedureRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/consolidation/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardFinancialSettlementProcedureConsolidation
+      summary: Update to any amendable fields of the Consolidation instance
+      description: Update consolidated transaction details for a settlement procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Consolidation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Consolidation Request Payload
+        schema:
+          $ref: '#/definitions/BQConsolidationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Consolidation Instance
+          schema:
+            $ref: '#/definitions/BQConsolidationUpdateOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/consolidation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlementProcedureConsolidation
+      summary: Invoke a reporting action to obtain a Consolidation instance related report.
+      description: Retrieve consolidated transaction details for a settlement procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Consolidation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQConsolidationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Consolidation Instance Record
+          schema:
+            $ref: '#/definitions/BQConsolidationRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/processing/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardFinancialSettlementProcedureProcessing
+      summary: Update to any amendable fields of the Processing instance
+      description: Update processing transaction details for a settlement procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Processing Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Processing Request Payload
+        schema:
+          $ref: '#/definitions/BQProcessingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Processing Instance
+          schema:
+            $ref: '#/definitions/BQProcessingUpdateOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/processing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlementProcedureProcessing
+      summary: Invoke a reporting action to obtain a Processing instance related report.
+      description: Retrieve processing transaction details for a settlement procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Processing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQProcessingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Processing Instance Record
+          schema:
+            $ref: '#/definitions/BQProcessingRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/instruction/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardFinancialSettlementProcedureInstruction
+      summary: Update to any amendable fields of the Instruction instance
+      description: Update payment instruction details for a settlement procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Instruction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Instruction Request Payload
+        schema:
+          $ref: '#/definitions/BQInstructionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Instruction Instance
+          schema:
+            $ref: '#/definitions/BQInstructionUpdateOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/instruction/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlementProcedureInstruction
+      summary: Invoke a reporting action to obtain a Instruction instance related report.
+      description: Retrieve payment instruction details for a settlement procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Instruction Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInstructionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Instruction Instance Record
+          schema:
+            $ref: '#/definitions/BQInstructionRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/payment/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardFinancialSettlementProcedurePayment
+      summary: Update to any amendable fields of the Payment instance
+      description: Update payment processing details for a settlement procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payment Request Payload
+        schema:
+          $ref: '#/definitions/BQPaymentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Payment Instance
+          schema:
+            $ref: '#/definitions/BQPaymentUpdateOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/payment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlementProcedurePayment
+      summary: Invoke a reporting action to obtain a Payment instance related report.
+      description: Retrieve payment processing details for a settlement procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Payment Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardFinancialSettlementReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CardFinancialSettlement Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /card-financial-settlement/card-financial-settlement-procedure/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardFinancialSettlementBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Consolidation',  'Processing',  'Instruction',  'Payment', ]
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardFinancialSettlementBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Payment
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Payment Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [PaymentID1, PaymentID2]

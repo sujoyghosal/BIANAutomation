@@ -1,0 +1,766 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Card Case'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles the processing of a customer card case, typically a disputed charge
+
+    ## Example of Use:
+    A card holder reports a payment dispute to the contact center and a case is initiated. The account is credited and documentation requested from the merchant. The case is finally judged when the documents are available for review and all interested parties are notified of the resolution
+
+    ## Description:
+    Capture, track, resolve and report on card related transactional disputes, handling all the dispute resolution messages between the Issuer, the Card Network and the Acquirer.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-card-case/1.0.0
+schemes:
+ - https
+paths:
+  /card-case/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCardCase
+      summary: Activate  a SDCardCase servicing session
+      description: Activate  a  SDCardCase servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCardCase Request Payload
+        schema:
+          $ref: '#/definitions/SDCardCaseActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCardCaseActivateOutputModel'
+  /card-case/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCardCase
+      summary: Update an active SDCardCase session configuration
+      description: Update an active SDCardCase session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardCase Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardCase Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCardCaseConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCardCaseConfigureOutputModel'
+  /card-case/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCardCase
+      summary: "Capturing feedback against the SDCardCase service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCardCase service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardCase Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardCase Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCardCaseFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCardCaseFeedbackOutputModel'
+  /card-case/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCardCase
+      summary: Analytical views maintained by the SDCardCase service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCardCase service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardCase Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardCase Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCardCaseRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCardCaseRetrieveOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCardCaseProcedure
+      summary: Details of a new CardCaseProcedure instance
+      description: Initiate a card case procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardCaseProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCaseProcedureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CardCaseProcedure instance
+          schema:
+            $ref: '#/definitions/CRCardCaseProcedureInitiateOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardCaseProcedure
+      summary: Update to any amendable fields of the CardCaseProcedure instance
+      description: Update details about a card case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Case Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCaseProcedureUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Card Case Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCaseProcedureUpdateOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCardCaseProcedureUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the processing of a card case (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Case Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCaseProcedureControlInputModel'
+      responses:
+        200:
+          description: Successful control of Card Case Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCaseProcedureControlOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCardCaseProcedureUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, reject etc. some aspect of a card case 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Case Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCaseProcedureExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Card Case Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCaseProcedureExchangeOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCardCaseProcedureUpdate
+      summary: Invoke an automated execute action against the CardCaseProcedure instance
+      description: Execute an automated task against a card case (e.g. upload data)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Case Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCaseProcedureExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Card Case Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCaseProcedureExecuteOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCardCaseProcedureUpdate
+      summary: Invoke a service request action against the CardCaseProcedure instance
+      description: Request manual intervention in a case (e.g. engage a specialist)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Case Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCaseProcedureRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Card Case Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCaseProcedureRequestOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCase
+      summary: Invoke a reporting action to obtain a Card Case Procedure instance related report
+      description: Retrieve details about a card case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCardCaseProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Card Case Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCaseProcedureRetrieveOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/consolidation/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardCaseProcedureConsolidation
+      summary: Update to any amendable fields of the Consolidation instance
+      description: Update details of the consolidation in a card case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Consolidation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Consolidation Request Payload
+        schema:
+          $ref: '#/definitions/BQConsolidationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Consolidation Instance
+          schema:
+            $ref: '#/definitions/BQConsolidationUpdateOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/consolidation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCaseProcedureConsolidation
+      summary: Invoke a reporting action to obtain a Consolidation instance related report.
+      description: Retrieve details about the consolidation analysis of a card case .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Consolidation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQConsolidationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Consolidation Instance Record
+          schema:
+            $ref: '#/definitions/BQConsolidationRetrieveOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/chargeback/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardCaseProcedureChargeback
+      summary: Update to any amendable fields of the Chargeback instance
+      description: Update details of the chargeback in a card case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Chargeback Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Chargeback Request Payload
+        schema:
+          $ref: '#/definitions/BQChargebackUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Chargeback Instance
+          schema:
+            $ref: '#/definitions/BQChargebackUpdateOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/chargeback/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCaseProcedureChargeback
+      summary: Invoke a reporting action to obtain a Chargeback instance related report.
+      description: Retrieve details about the chargeback for a card case .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Chargeback Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQChargebackRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Chargeback Instance Record
+          schema:
+            $ref: '#/definitions/BQChargebackRetrieveOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/arbitration/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardCaseProcedureArbitration
+      summary: Update to any amendable fields of the Arbitration instance
+      description: Update details of the arbitration request of a card case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Arbitration Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Arbitration Request Payload
+        schema:
+          $ref: '#/definitions/BQArbitrationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Arbitration Instance
+          schema:
+            $ref: '#/definitions/BQArbitrationUpdateOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/arbitration/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCardCaseProcedureArbitrationUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, reject etc. the arbitration result of a card case 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Arbitration Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Arbitration request payload
+        schema:
+          $ref: '#/definitions/BQArbitrationExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Arbitration Instance Record
+          schema:
+            $ref: '#/definitions/BQArbitrationExchangeOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/arbitration/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCaseProcedureArbitration
+      summary: Invoke a reporting action to obtain a Arbitration instance related report.
+      description: Retrieve details about the arbitration request for a card case .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Arbitration Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQArbitrationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Arbitration Instance Record
+          schema:
+            $ref: '#/definitions/BQArbitrationRetrieveOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/resolution/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardCaseProcedureResolution
+      summary: Update to any amendable fields of the Resolution instance
+      description: Update details of the resolution of a card case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Resolution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Resolution Request Payload
+        schema:
+          $ref: '#/definitions/BQResolutionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Resolution Instance
+          schema:
+            $ref: '#/definitions/BQResolutionUpdateOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/resolution/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCardCaseProcedureResolutionUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, reject etc. resolution actions for a card case 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Resolution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Resolution request payload
+        schema:
+          $ref: '#/definitions/BQResolutionExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Resolution Instance Record
+          schema:
+            $ref: '#/definitions/BQResolutionExchangeOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/resolution/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCaseProcedureResolution
+      summary: Invoke a reporting action to obtain a Resolution instance related report.
+      description: Retrieve details about the resolution actions for a card case .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Resolution Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQResolutionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Resolution Instance Record
+          schema:
+            $ref: '#/definitions/BQResolutionRetrieveOutputModel'
+  /card-case/{sd-reference-id}/card-case-procedure:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardCaseReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CardCase Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /card-case/card-case-procedure/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardCaseBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Consolidation',  'Chargeback',  'Arbitration',  'Resolution', ]
+  /card-case/{sd-reference-id}/card-case-procedure/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardCaseBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Case Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Case Procedure Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Resolution
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Resolution Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ResolutionID1, ResolutionID2]

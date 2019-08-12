@@ -3,6 +3,16 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Disbursement'
  description: >
+
+    ## Executive Summary:
+    This service domain handles the disbursement of funds to newly established loans/facilities as necessary
+
+    ## Example of Use:
+    Example of use:A disbursement is processed at the closing of a new loan
+
+    ## Description:
+    This service domain handles the disbursement of funds typically for different loan facilities. Though typically a rather simple service it is modeled as a discrete service center as many banks handle disbursements from a specialist unit
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-disbursement/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDDisbursement
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDDisbursement servicing session
+      description: Activate  a  SDDisbursement servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDDisbursementActivateOutputModel'
-  /disbursement/configuration:
+  /disbursement/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDDisbursement
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDDisbursement session configuration
+      description: Update an active SDDisbursement session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDisbursement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -50,16 +65,21 @@ paths:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDDisbursementConfigureOutputModel'
-  /disbursement/feedback:
+  /disbursement/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDDisbursement
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDDisbursement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDDisbursement service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDisbursement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -71,16 +91,21 @@ paths:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDDisbursementFeedbackOutputModel'
-  /disbursement/:
+  /disbursement/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDDisbursement
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDDisbursement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDDisbursement service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDisbursement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +117,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDDisbursementRetrieveOutputModel'
-  /disbursement/disbursement-transaction/initiation:
+  /disbursement/{sd-reference-id}/disbursement-transaction/initiation:
     post:
       tags:
       - initiate
       operationId: initiateDisbursementTransaction
-      summary: Details of a new Disbursement Transaction instance
+      summary: Details of a new DisbursementTransaction instance
       description: Initiate a disbursement
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,36 +140,41 @@ paths:
           $ref: '#/definitions/CRDisbursementTransactionInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Disbursement Transaction instance
+          description: Successful initiation of new DisbursementTransaction instance
           schema:
             $ref: '#/definitions/CRDisbursementTransactionInitiateOutputModel'
-  /disbursement/disbursement-transaction/{cr-reference-id}/update:
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateDisbursementTransaction
-      summary: Update to any amendable fields of the Disbursement Transaction instance
+      summary: Update to any amendable fields of the DisbursementTransaction instance
       description: Update details of a disbursement
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Instance Reference
+        description: Disbursement Transaction Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: DisbursementTransaction Request Payload
+        description: Disbursement Transaction Request Payload
         schema:
           $ref: '#/definitions/CRDisbursementTransactionUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Disbursement Transaction instance
+          description: Successfully Updated Disbursement Transaction Instance
           schema:
             $ref: '#/definitions/CRDisbursementTransactionUpdateOutputModel'
-  /disbursement/disbursement-transaction/{cr-reference-id}/control:
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/control:
     put:
       tags:
       - control
@@ -149,23 +184,28 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Instance Reference
+        description: Disbursement Transaction Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: DisbursementTransaction Request Payload
+        description: Disbursement Transaction Request Payload
         schema:
           $ref: '#/definitions/CRDisbursementTransactionControlInputModel'
       responses:
         200:
-          description: Successful Request specific processing (e.g. suspend, skip, terminate)
+          description: Successful control of Disbursement Transaction Instance
           schema:
             $ref: '#/definitions/CRDisbursementTransactionControlOutputModel'
-  /disbursement/disbursement-transaction/{cr-reference-id}/exchange:
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -175,75 +215,120 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Instance Reference
+        description: Disbursement Transaction Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: DisbursementTransaction Request Payload
+        description: Disbursement Transaction Request Payload
         schema:
           $ref: '#/definitions/CRDisbursementTransactionExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Disbursement Transaction Instance
           schema:
             $ref: '#/definitions/CRDisbursementTransactionExchangeOutputModel'
-  /disbursement/disbursement-transaction/{cr-reference-id}/execution:
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executeDisbursementTransactionUpdate
-      summary: Invoke an automated execute action against the Disbursement Transaction instance
+      summary: Invoke an automated execute action against the DisbursementTransaction instance
       description: Execute an automated task against an active disbursement (e.g. generate confirmation note) 
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Instance Reference
+        description: Disbursement Transaction Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: DisbursementTransaction Request Payload
+        description: Disbursement Transaction Request Payload
         schema:
           $ref: '#/definitions/CRDisbursementTransactionExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Disbursement Transaction instance
+          description: Successful execution of Disbursement Transaction Instance
           schema:
             $ref: '#/definitions/CRDisbursementTransactionExecuteOutputModel'
-  /disbursement/disbursement-transaction/{cr-reference-id}/requisition:
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestDisbursementTransactionUpdate
-      summary: Invoke a service request action against the Disbursement Transaction instance
+      summary: Invoke a service request action against the DisbursementTransaction instance
       description: Request manual intervention with a disbursement transaction (e.g. contact interested parties)
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Instance Reference
+        description: Disbursement Transaction Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: DisbursementTransaction Request Payload
+        description: Disbursement Transaction Request Payload
         schema:
           $ref: '#/definitions/CRDisbursementTransactionRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Disbursement Transaction instance
+          description: Successful requisition of Disbursement Transaction Instance
           schema:
             $ref: '#/definitions/CRDisbursementTransactionRequestOutputModel'
-  /disbursement/disbursement-transaction:
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveDisbursement
+      summary: Invoke a reporting action to obtain a Disbursement Transaction instance related report
+      description: Retrieve details about a disbursement transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Disbursement Transaction Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRDisbursementTransactionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Disbursement Transaction Instance
+          schema:
+            $ref: '#/definitions/CRDisbursementTransactionRetrieveOutputModel'
+  /disbursement/{sd-reference-id}/disbursement-transaction:
     get:
       tags:
       - retrieve
@@ -252,6 +337,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- Disbursement Instance Status='active'
@@ -281,7 +371,7 @@ paths:
             items:
               type: string
             example: []
-  /disbursement/disbursement-transaction/{cr-reference-id}/{behavior-qualifier}/:
+  /disbursement/{sd-reference-id}/disbursement-transaction/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -290,9 +380,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Disbursement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Instance Reference
+        description: Disbursement Transaction Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -313,32 +408,6 @@ paths:
             items:
               type: string
             example: [ID1, ID2]
-  /disbursement/disbursement-transaction/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveDisbursement
-      summary: Retrieve a Disbursement Record
-      description: Retrieve a Disbursement Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Product Instance Reference
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Disbursement Request Payload
-        schema:
-          $ref: '#/definitions/CRDisbursementTransactionRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Disbursement Report
-          schema:
-            $ref: '#/definitions/CRDisbursementTransactionRetrieveOutputModel'
 definitions:
  SDDisbursementActivateInputModel:
   type: object
@@ -1003,49 +1072,49 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "753689"
+      example: "740756"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the loan account for which the disbursement is made
      authorizingEmployeeReference:
       type: string
-      example: "776333"
+      example: "747704"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the authorizing employee
      customerReference:
       type: string
-      example: "769205"
+      example: "745148"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer owning the loan, used to obtain payment arrangements
      fundingAccountReference:
       type: string
-      example: "786129"
+      example: "742260"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the internal funding account for the disbursement
      payeeReference:
       type: string
-      example: "783852"
+      example: "726886"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the target for the disbursement
      payeeProductInstanceReference:
       type: string
-      example: "702022"
+      example: "799031"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to where the disbursement payment is made
      payeeBankReference:
       type: string
-      example: "757086"
+      example: "755389"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1076,7 +1145,7 @@ definitions:
   properties: 
    disbursementTransactionInitiateActionReference:
     type: string
-    example: "DTIAR798831"
+    example: "DTIAR733723"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1111,49 +1180,49 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "723089"
+      example: "795462"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the loan account for which the disbursement is made
      authorizingEmployeeReference:
       type: string
-      example: "709474"
+      example: "734395"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the authorizing employee
      customerReference:
       type: string
-      example: "793034"
+      example: "791490"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer owning the loan, used to obtain payment arrangements
      fundingAccountReference:
       type: string
-      example: "774749"
+      example: "776551"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the internal funding account for the disbursement
      payeeReference:
       type: string
-      example: "774088"
+      example: "742196"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the target for the disbursement
      payeeProductInstanceReference:
       type: string
-      example: "796467"
+      example: "710754"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to where the disbursement payment is made
      payeeBankReference:
       type: string
-      example: "741173"
+      example: "722017"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1199,49 +1268,49 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "723089"
+      example: "795462"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the loan account for which the disbursement is made
      authorizingEmployeeReference:
       type: string
-      example: "709474"
+      example: "734395"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the authorizing employee
      customerReference:
       type: string
-      example: "793034"
+      example: "791490"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer owning the loan, used to obtain payment arrangements
      fundingAccountReference:
       type: string
-      example: "774749"
+      example: "776551"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the internal funding account for the disbursement
      payeeReference:
       type: string
-      example: "774088"
+      example: "742196"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the target for the disbursement
      payeeProductInstanceReference:
       type: string
-      example: "796467"
+      example: "710754"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to where the disbursement payment is made
      payeeBankReference:
       type: string
-      example: "741173"
+      example: "722017"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1269,7 +1338,7 @@ definitions:
         general-info: The value date for the disbursement payment
    disbursementTransactionUpdateActionTaskReference:
     type: string
-    example: "DTUATR763947"
+    example: "DTUATR723558"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1309,7 +1378,7 @@ definitions:
   properties: 
    disbursementTransactionControlActionTaskReference:
     type: string
-    example: "DTCATR727231"
+    example: "DTCATR705169"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1349,7 +1418,7 @@ definitions:
   properties: 
    disbursementTransactionExchangeActionTaskReference:
     type: string
-    example: "DTEATR741423"
+    example: "DTEATR780100"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1374,49 +1443,49 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "762280"
+      example: "758406"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the loan account for which the disbursement is made
      authorizingEmployeeReference:
       type: string
-      example: "796077"
+      example: "771850"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the authorizing employee
      customerReference:
       type: string
-      example: "780781"
+      example: "736479"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer owning the loan, used to obtain payment arrangements
      fundingAccountReference:
       type: string
-      example: "702003"
+      example: "707307"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the internal funding account for the disbursement
      payeeReference:
       type: string
-      example: "755746"
+      example: "791378"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the target for the disbursement
      payeeProductInstanceReference:
       type: string
-      example: "705881"
+      example: "721662"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to where the disbursement payment is made
      payeeBankReference:
       type: string
-      example: "793910"
+      example: "762651"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1465,49 +1534,49 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "762280"
+      example: "758406"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the loan account for which the disbursement is made
      authorizingEmployeeReference:
       type: string
-      example: "796077"
+      example: "771850"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the authorizing employee
      customerReference:
       type: string
-      example: "780781"
+      example: "736479"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer owning the loan, used to obtain payment arrangements
      fundingAccountReference:
       type: string
-      example: "702003"
+      example: "707307"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the internal funding account for the disbursement
      payeeReference:
       type: string
-      example: "755746"
+      example: "791378"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the target for the disbursement
      payeeProductInstanceReference:
       type: string
-      example: "705881"
+      example: "721662"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to where the disbursement payment is made
      payeeBankReference:
       type: string
-      example: "793910"
+      example: "762651"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1535,7 +1604,7 @@ definitions:
         general-info: The value date for the disbursement payment
    disbursementTransactionExecuteActionTaskReference:
     type: string
-    example: "DTEATR706987"
+    example: "DTEATR709610"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1548,7 +1617,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    executeRecordReference:
     type: string
-    example: "ERR733045"
+    example: "ERR753224"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1567,49 +1636,49 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "753360"
+      example: "756951"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the loan account for which the disbursement is made
      authorizingEmployeeReference:
       type: string
-      example: "739592"
+      example: "705146"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the authorizing employee
      customerReference:
       type: string
-      example: "744330"
+      example: "761451"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer owning the loan, used to obtain payment arrangements
      fundingAccountReference:
       type: string
-      example: "742373"
+      example: "798258"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the internal funding account for the disbursement
      payeeReference:
       type: string
-      example: "766462"
+      example: "724019"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the target for the disbursement
      payeeProductInstanceReference:
       type: string
-      example: "789103"
+      example: "702409"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to where the disbursement payment is made
      payeeBankReference:
       type: string
-      example: "798651"
+      example: "754245"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1658,49 +1727,49 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "753360"
+      example: "756951"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the loan account for which the disbursement is made
      authorizingEmployeeReference:
       type: string
-      example: "739592"
+      example: "705146"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the authorizing employee
      customerReference:
       type: string
-      example: "744330"
+      example: "761451"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer owning the loan, used to obtain payment arrangements
      fundingAccountReference:
       type: string
-      example: "742373"
+      example: "798258"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the internal funding account for the disbursement
      payeeReference:
       type: string
-      example: "766462"
+      example: "724019"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the target for the disbursement
      payeeProductInstanceReference:
       type: string
-      example: "789103"
+      example: "702409"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to where the disbursement payment is made
      payeeBankReference:
       type: string
-      example: "798651"
+      example: "754245"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1728,7 +1797,7 @@ definitions:
         general-info: The value date for the disbursement payment
    disbursementTransactionRequestActionTaskReference:
     type: string
-    example: "DTRATR780851"
+    example: "DTRATR757277"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1741,7 +1810,7 @@ definitions:
       general-info: The request service call consolidated processing record
    requestRecordReference:
     type: string
-    example: "RRR720349"
+    example: "RRR737742"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1772,7 +1841,7 @@ definitions:
     properties:
      disbursementTransactionInstanceReportReference:
       type: string
-      example: "784588"
+      example: "763467"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1794,7 +1863,7 @@ definitions:
     properties:
      disbursementTransactionInstanceAnalysisReference:
       type: string
-      example: "792719"
+      example: "764714"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1819,49 +1888,49 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "760342"
+      example: "769828"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the loan account for which the disbursement is made
      authorizingEmployeeReference:
       type: string
-      example: "757468"
+      example: "794381"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the authorizing employee
      customerReference:
       type: string
-      example: "723373"
+      example: "787034"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer owning the loan, used to obtain payment arrangements
      fundingAccountReference:
       type: string
-      example: "795082"
+      example: "785373"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the internal funding account for the disbursement
      payeeReference:
       type: string
-      example: "719444"
+      example: "767656"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the target for the disbursement
      payeeProductInstanceReference:
       type: string
-      example: "776729"
+      example: "736174"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account to where the disbursement payment is made
      payeeBankReference:
       type: string
-      example: "707869"
+      example: "705719"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1889,7 +1958,7 @@ definitions:
         general-info: The value date for the disbursement payment
    disbursementTransactionRetrieveActionTaskReference:
     type: string
-    example: "DTRATR712201"
+    example: "DTRATR793858"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

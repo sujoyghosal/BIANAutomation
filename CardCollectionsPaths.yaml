@@ -1,0 +1,694 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Card Collections'
+ description: >
+
+    ## Executive Summary:
+    This service domain administers the recovery of outstanding amounts from cancelled card accounts through internal or external collection agencies. This may involve negotiating payment terms and/or interest write-downs.
+
+    ## Example of Use:
+    A card account is canceled when the age of outstanding balance exceeds policy limits (normally 90 days) or when delinquency management and dunning efforts are determined to be unsuccessful at eliciting payment. The account is then assigned to an internal Collections department or an external Collection Agency for making aggressive attempts at securing the payment of the outstandings.
+
+    ## Description:
+    The card collection process relates to the determination and execution of the optimal strategy to ensure the collection of unsecured distressed card debt, which may include aggressive collection efforts, renegotiation of payments terms in order to improve customer commitment to make the payment, or to take any applicable legal actions against the customer.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-card-collections/1.0.0
+schemes:
+ - https
+paths:
+  /card-collections/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCardCollections
+      summary: Activate  a SDCardCollections servicing session
+      description: Activate  a  SDCardCollections servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCardCollections Request Payload
+        schema:
+          $ref: '#/definitions/SDCardCollectionsActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCardCollectionsActivateOutputModel'
+  /card-collections/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCardCollections
+      summary: Update an active SDCardCollections session configuration
+      description: Update an active SDCardCollections session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardCollections Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardCollections Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCardCollectionsConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCardCollectionsConfigureOutputModel'
+  /card-collections/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCardCollections
+      summary: "Capturing feedback against the SDCardCollections service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCardCollections service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardCollections Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardCollections Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCardCollectionsFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCardCollectionsFeedbackOutputModel'
+  /card-collections/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCardCollections
+      summary: Analytical views maintained by the SDCardCollections service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCardCollections service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardCollections Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardCollections Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCardCollectionsRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCardCollectionsRetrieveOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCardCollectionsProcedure
+      summary: Details of a new CardCollectionsProcedure instance
+      description: Initiate card collections processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardCollectionsProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCollectionsProcedureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CardCollectionsProcedure instance
+          schema:
+            $ref: '#/definitions/CRCardCollectionsProcedureInitiateOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardCollectionsProcedure
+      summary: Update to any amendable fields of the CardCollectionsProcedure instance
+      description: Update details of card collections processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardCollectionsProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCollectionsProcedureUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated CardCollectionsProcedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCollectionsProcedureUpdateOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCardCollectionsProcedureUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control card collections process (e.g. escalate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardCollectionsProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCollectionsProcedureControlInputModel'
+      responses:
+        200:
+          description: Successful control of CardCollectionsProcedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCollectionsProcedureControlOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCardCollectionsProcedureUpdate
+      summary: Invoke an automated execute action against the CardCollectionsProcedure instance
+      description: Execute an automated task against an active card collections process (e.g. upload transactions)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardCollectionsProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCollectionsProcedureExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of CardCollectionsProcedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCollectionsProcedureExecuteOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCardCollectionsProcedureUpdate
+      summary: Invoke a service request action against the CardCollectionsProcedure instance
+      description: Execute manual intervention in an active card collections process (e.g. schedule review)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardCollectionsProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCardCollectionsProcedureRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of CardCollectionsProcedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCollectionsProcedureRequestOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCollections
+      summary: Invoke a reporting action to obtain a CardCollectionsProcedure instance related report
+      description: Retrieve details about a card collections procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCardCollectionsProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved CardCollectionsProcedure Instance
+          schema:
+            $ref: '#/definitions/CRCardCollectionsProcedureRetrieveOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/assignment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCollectionsProcedureAssignment
+      summary: Invoke a reporting action to obtain a Assignment instance related report.
+      description: Retrieve details about a card collections assignment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assignment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAssignmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Assignment Instance Record
+          schema:
+            $ref: '#/definitions/BQAssignmentRetrieveOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/paymentterms/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCardCollectionsProcedurePaymentTermsUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: accept, verify, etc. payment terms for card collections
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PaymentTerms Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PaymentTerms request payload
+        schema:
+          $ref: '#/definitions/BQPaymentTermsExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of PaymentTerms Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentTermsExchangeOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/paymentterms/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCollectionsProcedurePaymentTerms
+      summary: Invoke a reporting action to obtain a PaymentTerms instance related report.
+      description: Retrieve details about the payment terms for a card collections procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PaymentTerms Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentTermsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved PaymentTerms Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentTermsRetrieveOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/payment/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCardCollectionsProcedurePayment
+      summary: Details of a new Payment instance
+      description: Initiate payment processing against the card collections account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardCollectionsProcedure Request Payload
+        schema:
+          $ref: '#/definitions/BQPaymentInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of CardCollectionsProcedure instance
+          schema:
+            $ref: '#/definitions/BQPaymentInitiateOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/payment/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardCollectionsProcedurePayment
+      summary: Update to any amendable fields of the Payment instance
+      description: Update a payment transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payment Request Payload
+        schema:
+          $ref: '#/definitions/BQPaymentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Payment Instance
+          schema:
+            $ref: '#/definitions/BQPaymentUpdateOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/payment/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCardCollectionsProcedurePaymentUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: accept, verify, etc. a payment transaction made against the account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payment request payload
+        schema:
+          $ref: '#/definitions/BQPaymentExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Payment Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentExchangeOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/payment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCollectionsProcedurePayment
+      summary: Invoke a reporting action to obtain a Payment instance related report.
+      description: Retrieve details about a payment made against the delinquent account .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Payment Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentRetrieveOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/resolution/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardCollectionsProcedureResolution
+      summary: Update to any amendable fields of the Resolution instance
+      description: Update a resolution plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Resolution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Resolution Request Payload
+        schema:
+          $ref: '#/definitions/BQResolutionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Resolution Instance
+          schema:
+            $ref: '#/definitions/BQResolutionUpdateOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/resolution/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardCollectionsProcedureResolution
+      summary: Invoke a reporting action to obtain a Resolution instance related report.
+      description: Retrieve details about a card collections resolution plan .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Resolution Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQResolutionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Resolution Instance Record
+          schema:
+            $ref: '#/definitions/BQResolutionRetrieveOutputModel'
+  /card-collections/{sd-reference-id}/card-collections-procedure:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardCollectionsReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CardCollections Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /card-collections/card-collections-procedure/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardCollectionsBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Assignment',  'PaymentTerms',  'Payment',  'Resolution', ]
+  /card-collections/{sd-reference-id}/card-collections-procedure/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardCollectionsBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Collections Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: CardCollectionsProcedure Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Resolution
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Resolution Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ResolutionID1, ResolutionID2]

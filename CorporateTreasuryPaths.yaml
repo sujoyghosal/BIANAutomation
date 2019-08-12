@@ -1,0 +1,600 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Corporate Treasury'
+ description: >
+
+    ## Executive Summary:
+    This service domain orchestrates the consolidation and presentation of summary transaction details in order to assemble a timely and accurate view of the overall treasury position of the Bank at any one time. It is also responsible for determining the different interest and exchange rates applied to different products and services within the bank
+
+    ## Example of Use:
+    Example of use:The Bank Treasury consolidates trading and lending activity across its corporate clients to develop timely views of current positions and maturity projections
+
+    ## Description:
+    This service domain manages and administers the consolidation of transaction details and summaries in order to derive and report on the array of consolidated positions managed by Treasury. This includes the assembly of related maturity ladders (cash flow projections) and managing tactical and strategic funding activity for the bank. It is also responsible for tracking prevailing market conditions and determining the various bank rates that should be applied throughout the bank
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-corporate-treasury/1.0.0
+schemes:
+ - https
+paths:
+  /corporate-treasury/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCorporateTreasury
+      summary: Activate  a SDCorporateTreasury servicing session
+      description: Activate  a  SDCorporateTreasury servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCorporateTreasury Request Payload
+        schema:
+          $ref: '#/definitions/SDCorporateTreasuryActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCorporateTreasuryActivateOutputModel'
+  /corporate-treasury/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCorporateTreasury
+      summary: Update an active SDCorporateTreasury session configuration
+      description: Update an active SDCorporateTreasury session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateTreasury Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorporateTreasury Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCorporateTreasuryConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCorporateTreasuryConfigureOutputModel'
+  /corporate-treasury/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCorporateTreasury
+      summary: "Capturing feedback against the SDCorporateTreasury service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCorporateTreasury service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateTreasury Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorporateTreasury Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCorporateTreasuryFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCorporateTreasuryFeedbackOutputModel'
+  /corporate-treasury/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCorporateTreasury
+      summary: Analytical views maintained by the SDCorporateTreasury service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCorporateTreasury service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateTreasury Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorporateTreasury Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCorporateTreasuryRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCorporateTreasuryRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorporateTreasuryManagementPlan
+      summary: Details of a new CorporateTreasuryManagementPlan instance
+      description: Initiate the corporate treasury plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CorporateTreasuryManagementPlan Request Payload
+        schema:
+          $ref: '#/definitions/CRCorporateTreasuryManagementPlanInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CorporateTreasuryManagementPlan instance
+          schema:
+            $ref: '#/definitions/CRCorporateTreasuryManagementPlanInitiateOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateTreasuryManagementPlan
+      summary: Update to any amendable fields of the CorporateTreasuryManagementPlan instance
+      description: Update the corporate treasury plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Treasury Management Plan Request Payload
+        schema:
+          $ref: '#/definitions/CRCorporateTreasuryManagementPlanUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Corporate Treasury Management Plan Instance
+          schema:
+            $ref: '#/definitions/CRCorporateTreasuryManagementPlanUpdateOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCorporateTreasuryManagementPlanUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture various financial reports and analysis used in planning
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Treasury Management Plan Request Payload
+        schema:
+          $ref: '#/definitions/CRCorporateTreasuryManagementPlanCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Corporate Treasury Management Plan Instance
+          schema:
+            $ref: '#/definitions/CRCorporateTreasuryManagementPlanCaptureOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateTreasury
+      summary: Invoke a reporting action to obtain a Corporate Treasury Management Plan instance related report
+      description: Retrieve details about the corporate treasury plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCorporateTreasuryManagementPlanRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Corporate Treasury Management Plan Instance
+          schema:
+            $ref: '#/definitions/CRCorporateTreasuryManagementPlanRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/liquidity/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCorporateTreasuryManagementPlanLiquidityUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture transactions feeding into liquidity analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Liquidity Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Liquidity request payload
+        schema:
+          $ref: '#/definitions/BQLiquidityCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Liquidity Instance Record
+          schema:
+            $ref: '#/definitions/BQLiquidityCaptureOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/liquidity/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanLiquidity
+      summary: Invoke a reporting action to obtain a Liquidity instance related report.
+      description: Retrieve liquidity analysis details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Liquidity Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQLiquidityRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Liquidity Instance Record
+          schema:
+            $ref: '#/definitions/BQLiquidityRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/tacticalfunding/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanTacticalFunding
+      summary: Invoke a reporting action to obtain a TacticalFunding instance related report.
+      description: Retrieve tactical funding details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: TacticalFunding Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQTacticalFundingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved TacticalFunding Instance Record
+          schema:
+            $ref: '#/definitions/BQTacticalFundingRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/strategicfunding/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCorporateTreasuryManagementPlanStrategicFundingUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture details of large strategic transactions
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: StrategicFunding Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: StrategicFunding request payload
+        schema:
+          $ref: '#/definitions/BQStrategicFundingCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of StrategicFunding Instance Record
+          schema:
+            $ref: '#/definitions/BQStrategicFundingCaptureOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/strategicfunding/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanStrategicFunding
+      summary: Invoke a reporting action to obtain a StrategicFunding instance related report.
+      description: Retrieve strategic funding details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: StrategicFunding Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQStrategicFundingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved StrategicFunding Instance Record
+          schema:
+            $ref: '#/definitions/BQStrategicFundingRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/securitization/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateTreasuryManagementPlanSecuritization
+      summary: Update to any amendable fields of the Securitization instance
+      description: Update securitization tranche and task details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Securitization Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Securitization Request Payload
+        schema:
+          $ref: '#/definitions/BQSecuritizationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Securitization Instance
+          schema:
+            $ref: '#/definitions/BQSecuritizationUpdateOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/securitization/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanSecuritization
+      summary: Invoke a reporting action to obtain a Securitization instance related report.
+      description: Retrieve securitization tranche and task related details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Securitization Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQSecuritizationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Securitization Instance Record
+          schema:
+            $ref: '#/definitions/BQSecuritizationRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/bankrates/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateTreasuryManagementPlanBankRates
+      summary: Invoke a reporting action to obtain a BankRates instance related report.
+      description: Retrieve bank rate table and details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: BankRates Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQBankRatesRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved BankRates Instance Record
+          schema:
+            $ref: '#/definitions/BQBankRatesRetrieveOutputModel'
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorporateTreasuryReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CorporateTreasury Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /corporate-treasury/corporate-treasury-management-plan/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorporateTreasuryBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Liquidity',  'TacticalFunding',  'StrategicFunding',  'Securitization',  'BankRates', ]
+  /corporate-treasury/{sd-reference-id}/corporate-treasury-management-plan/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorporateTreasuryBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Treasury Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Treasury Management Plan Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- BankRates
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- BankRates Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [BankRatesID1, BankRatesID2]

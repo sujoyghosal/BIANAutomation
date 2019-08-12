@@ -1,0 +1,668 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Card eCommerce Gateway'
+ description: >
+
+    ## Executive Summary:
+    This service domain orchestrates the processing of e-commerce transactions for authentication, authorization and capture of the financial transactions.
+
+    ## Example of Use:
+    When a Card is used for making a payment on an e-commerce site of a Merchant, the Merchant initiates three steps to process the payment: 1) request authentication of the Card and the Cardholder, 2) request an authorization of the charge amount, and 3) submit the charge details to the Card Acquirer for processing and payment.
+
+    ## Description:
+    This service domain is used by the Card Acquiring bank to handle the authentication, authorization and submission of a Card payment from an e-commerce merchant. It supports the 3-D Secure method of authentication which routes the authentication request to the Card Issuing Bank, which may use multi-factor authentication for the authentication of the Card and the Cardholder. It also handles the routing of the authorization request through the Card Transaction Switch service domain and the routing of the submitted charges to the Card Clearing service domain.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-card-ecommerce-gateway/1.0.0
+schemes:
+ - https
+paths:
+  /card-ecommerce-gateway/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCardECommerceGateway
+      summary: Activate  a SDCardECommerceGateway servicing session
+      description: Activate  a  SDCardECommerceGateway servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCardECommerceGateway Request Payload
+        schema:
+          $ref: '#/definitions/SDCardECommerceGatewayActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCardECommerceGatewayActivateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCardECommerceGateway
+      summary: Update an active SDCardECommerceGateway session configuration
+      description: Update an active SDCardECommerceGateway session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardECommerceGateway Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardECommerceGateway Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCardECommerceGatewayConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCardECommerceGatewayConfigureOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCardECommerceGateway
+      summary: "Capturing feedback against the SDCardECommerceGateway service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCardECommerceGateway service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardECommerceGateway Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardECommerceGateway Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCardECommerceGatewayFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCardECommerceGatewayFeedbackOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCardECommerceGateway
+      summary: Analytical views maintained by the SDCardECommerceGateway service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCardECommerceGateway service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardECommerceGateway Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardECommerceGateway Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCardECommerceGatewayRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCardECommerceGatewayRetrieveOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controleCommerceGatewayOperatingSessionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the Card e Commerce Gateway operation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: eCommerce Gateway Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CReCommerceGatewayOperatingSessionControlInputModel'
+      responses:
+        200:
+          description: Successful control of eCommerce Gateway Operating Session Instance
+          schema:
+            $ref: '#/definitions/CReCommerceGatewayOperatingSessionControlOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardeCommerceGateway
+      summary: Invoke a reporting action to obtain a eCommerce Gateway Operating Session instance related report
+      description: Retrieve details about the Card eCommerce session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CReCommerceGatewayOperatingSessionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved eCommerce Gateway Operating Session Instance
+          schema:
+            $ref: '#/definitions/CReCommerceGatewayOperatingSessionRetrieveOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/cardtransaction/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateeCommerceGatewayOperatingSessionCardTransaction
+      summary: Details of a new CardTransaction instance
+      description: Initiate a card transaction (initiated at merchant location)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: eCommerce Gateway Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQCardTransactionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of eCommerce Gateway Operating Session instance
+          schema:
+            $ref: '#/definitions/BQCardTransactionInitiateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/cardtransaction/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateeCommerceGatewayOperatingSessionCardTransaction
+      summary: Update to any amendable fields of the CardTransaction instance
+      description: Update details of a card transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: CardTransaction Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardTransaction Request Payload
+        schema:
+          $ref: '#/definitions/BQCardTransactionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated CardTransaction Instance
+          schema:
+            $ref: '#/definitions/BQCardTransactionUpdateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/cardtransaction/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveeCommerceGatewayOperatingSessionCardTransaction
+      summary: Invoke a reporting action to obtain a CardTransaction instance related report.
+      description: Retrieve details about a card transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: CardTransaction Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQCardTransactionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved CardTransaction Instance Record
+          schema:
+            $ref: '#/definitions/BQCardTransactionRetrieveOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/transactionbatch/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateeCommerceGatewayOperatingSessionTransactionBatch
+      summary: Details of a new TransactionBatch instance
+      description: Update details of a batch of card transactions
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: eCommerce Gateway Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQTransactionBatchInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of eCommerce Gateway Operating Session instance
+          schema:
+            $ref: '#/definitions/BQTransactionBatchInitiateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/transactionbatch/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateeCommerceGatewayOperatingSessionTransactionBatch
+      summary: Update to any amendable fields of the TransactionBatch instance
+      description: Initiate a batch of card transaction (initiated at merchant location)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: TransactionBatch Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: TransactionBatch Request Payload
+        schema:
+          $ref: '#/definitions/BQTransactionBatchUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated TransactionBatch Instance
+          schema:
+            $ref: '#/definitions/BQTransactionBatchUpdateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/transactionbatch/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveeCommerceGatewayOperatingSessionTransactionBatch
+      summary: Invoke a reporting action to obtain a TransactionBatch instance related report.
+      description: Retrieve details about a batch of card transactions .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: TransactionBatch Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQTransactionBatchRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved TransactionBatch Instance Record
+          schema:
+            $ref: '#/definitions/BQTransactionBatchRetrieveOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/cardauthentication/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateeCommerceGatewayOperatingSessionCardAuthentication
+      summary: Details of a new CardAuthentication instance
+      description: Initiate card authentication (routed to issuing bank)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: eCommerce Gateway Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQCardAuthenticationInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of eCommerce Gateway Operating Session instance
+          schema:
+            $ref: '#/definitions/BQCardAuthenticationInitiateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/cardauthentication/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateeCommerceGatewayOperatingSessionCardAuthentication
+      summary: Update to any amendable fields of the CardAuthentication instance
+      description: Update details of a card transaction used in authentication
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: CardAuthentication Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardAuthentication Request Payload
+        schema:
+          $ref: '#/definitions/BQCardAuthenticationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated CardAuthentication Instance
+          schema:
+            $ref: '#/definitions/BQCardAuthenticationUpdateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/cardauthentication/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveeCommerceGatewayOperatingSessionCardAuthentication
+      summary: Invoke a reporting action to obtain a CardAuthentication instance related report.
+      description: Retrieve details about a card authentication .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: CardAuthentication Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQCardAuthenticationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved CardAuthentication Instance Record
+          schema:
+            $ref: '#/definitions/BQCardAuthenticationRetrieveOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/transactionauthorization/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateeCommerceGatewayOperatingSessionTransactionAuthorization
+      summary: Details of a new TransactionAuthorization instance
+      description: Initiate card transaction authorization (routed to issuing bank)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: eCommerce Gateway Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQTransactionAuthorizationInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of eCommerce Gateway Operating Session instance
+          schema:
+            $ref: '#/definitions/BQTransactionAuthorizationInitiateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/transactionauthorization/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateeCommerceGatewayOperatingSessionTransactionAuthorization
+      summary: Update to any amendable fields of the TransactionAuthorization instance
+      description: Update details of a card transaction used for authorization
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: TransactionAuthorization Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: TransactionAuthorization Request Payload
+        schema:
+          $ref: '#/definitions/BQTransactionAuthorizationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated TransactionAuthorization Instance
+          schema:
+            $ref: '#/definitions/BQTransactionAuthorizationUpdateOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/transactionauthorization/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveeCommerceGatewayOperatingSessionTransactionAuthorization
+      summary: Invoke a reporting action to obtain a TransactionAuthorization instance related report.
+      description: Retrieve details about a card transaction authorization .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: TransactionAuthorization Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQTransactionAuthorizationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved TransactionAuthorization Instance Record
+          schema:
+            $ref: '#/definitions/BQTransactionAuthorizationRetrieveOutputModel'
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardeCommerceGatewayReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CardECommerceGateway Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /card-ecommerce-gateway/ecommerce-gateway-operating-session/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardeCommerceGatewayBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'CardTransaction',  'TransactionBatch',  'CardAuthentication',  'TransactionAuthorization', ]
+  /card-ecommerce-gateway/{sd-reference-id}/ecommerce-gateway-operating-session/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardeCommerceGatewayBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card eCommerce Gateway Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: eCommerce Gateway Operating Session Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- TransactionAuthorization
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- TransactionAuthorization Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [TransactionAuthorizationID1, TransactionAuthorizationID2]

@@ -3,6 +3,16 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Correspondent Bank'
  description: >
+
+    ## Executive Summary:
+    This service domain fulfils correspondent banking arrangements between the bank and its correspondent banking partners. This includes handling the clearing and settlement of payments to/from the correspondent banks, typically using the SWIFT payment network.
+
+    ## Example of Use:
+    Transfer funds from a customer account with the bank to an account with another bank.
+
+    ## Description:
+    This Service Domain handles incoming and outgoing payment clearing and settlement messages to the bank's correspondent banking partners. The actual message transmission is delegated to the Financial Message Gateway service domain. Correspondent Bank administers the mirror accounting for interbank payments undertaking the underlying account reconciliation tasks.
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-correspondent-bank/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDCorrespondentBank
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDCorrespondentBank servicing session
+      description: Activate  a  SDCorrespondentBank servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDCorrespondentBankActivateOutputModel'
-  /correspondent-bank/configure:
+  /correspondent-bank/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDCorrespondentBank
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDCorrespondentBank session configuration
+      description: Update an active SDCorrespondentBank session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorrespondentBank Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCorrespondentBankConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDCorrespondentBankConfigureOutputModel'
-  /correspondent-bank/feedback:
+  /correspondent-bank/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDCorrespondentBank
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDCorrespondentBank service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCorrespondentBank service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorrespondentBank Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCorrespondentBankFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDCorrespondentBankFeedbackOutputModel'
-  /correspondent-bank/retrieve:
+  /correspondent-bank/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDCorrespondentBank
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDCorrespondentBank service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCorrespondentBank service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorrespondentBank Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,97 +117,147 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDCorrespondentBankRetrieveOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/initiation:
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/initiation:
     post:
       tags:
       - initiate
       operationId: initiateCorrespondentBankFulfillmentArrangement
-      summary: 
+      summary: Details of a new CorrespondentBankFulfillmentArrangement instance
       description: Initialize a correspondent fulfillment arrangement
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
         description: CorrespondentBankFulfillmentArrangement Request Payload
         schema:
-          $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementinitiateInputModel'
+          $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementInitiateInputModel'
       responses:
         201:
-          description: Successful 
+          description: Successful initiation of new CorrespondentBankFulfillmentArrangement instance
           schema:
-            $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementinitiateOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/update:
+            $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementInitiateOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCorrespondentBankFulfillmentArrangement
-      summary: 
+      summary: Update to any amendable fields of the CorrespondentBankFulfillmentArrangement instance
       description: Update details of e correspondent fulfillment arrangement
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CorrespondentBankFulfillmentArrangement Request Payload
+        description: Correspondent Bank Fulfillment Arrangement Request Payload
         schema:
-          $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementupdateInputModel'
+          $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementUpdateInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successfully Updated Correspondent Bank Fulfillment Arrangement Instance
           schema:
-            $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementupdateOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/control:
+            $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementUpdateOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/control:
     put:
       tags:
       - control
       operationId: controlCorrespondentBankFulfillmentArrangementUpdate
-      summary: 
+      summary: Request specific processing (e.g. suspend, skip, terminate)
       description: Control the handling of an arrangement e.g. suspend, put on alert
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CorrespondentBankFulfillmentArrangement Request Payload
+        description: Correspondent Bank Fulfillment Arrangement Request Payload
         schema:
-          $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementcontrolInputModel'
+          $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementControlInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successful control of Correspondent Bank Fulfillment Arrangement Instance
           schema:
-            $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementcontrolOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/inboundpayments/{bq-reference-id}/update:
+            $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementControlOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorrespondentBank
+      summary: Invoke a reporting action to obtain a Correspondent Bank Fulfillment Arrangement instance related report
+      description: Retrieve details about a correspondent fulfillment arrangement
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCorrespondentBankFulfillmentArrangementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Correspondent Bank Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementRetrieveOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/inboundpayments/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCorrespondentBankFulfillmentArrangementInboundPayments
-      summary: 
+      summary: Update to any amendable fields of the InboundPayments instance
       description: Update inbound payment transactions for a correspondent
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: InboundPayments BQ Reference Id
+        description: InboundPayments Instance Reference
         required: true
         type: string
       - in: body
@@ -190,30 +265,35 @@ paths:
         required: true
         description: InboundPayments Request Payload
         schema:
-          $ref: '#/definitions/BQInboundPaymentsupdateInputModel'
+          $ref: '#/definitions/BQInboundPaymentsUpdateInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successfully Updated InboundPayments Instance
           schema:
-            $ref: '#/definitions/BQInboundPaymentsupdateOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/inboundpayments/{bq-reference-id}/execution:
+            $ref: '#/definitions/BQInboundPaymentsUpdateOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/inboundpayments/{bq-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executeCorrespondentBankFulfillmentArrangementInboundPaymentsUpdate
-      summary: 
+      summary: Invoke an automated execute action against the InboundPayments instance
       description: Execute inbound payment transactions from a correspondent
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: InboundPayments BQ Reference Id
+        description: InboundPayments Instance Reference
         required: true
         type: string
       - in: body
@@ -221,30 +301,70 @@ paths:
         required: true
         description: InboundPayments request payload
         schema:
-          $ref: '#/definitions/BQInboundPaymentsexecuteInputModel'
+          $ref: '#/definitions/BQInboundPaymentsExecuteInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successful execution of InboundPayments Instance Record
           schema:
-            $ref: '#/definitions/BQInboundPaymentsexecuteOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/outboundpayments/{bq-reference-id}/update:
-    put:
+            $ref: '#/definitions/BQInboundPaymentsExecuteOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/inboundpayments/{bq-reference-id}/:
+    get:
       tags:
-      - update
-      operationId: updateCorrespondentBankFulfillmentArrangementOutboundPayments
-      summary: 
-      description: Update outbound payment transactions to a correspondent
+      - retrieve
+      operationId: retrieveCorrespondentBankFulfillmentArrangementInboundPayments
+      summary: Invoke a reporting action to obtain a InboundPayments instance related report.
+      description: Retrieve details about inbound payments .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: OutboundPayments BQ Reference Id
+        description: InboundPayments Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInboundPaymentsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved InboundPayments Instance Record
+          schema:
+            $ref: '#/definitions/BQInboundPaymentsRetrieveOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/outboundpayments/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorrespondentBankFulfillmentArrangementOutboundPayments
+      summary: Update to any amendable fields of the OutboundPayments instance
+      description: Update outbound payment transactions to a correspondent
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OutboundPayments Instance Reference
         required: true
         type: string
       - in: body
@@ -252,30 +372,35 @@ paths:
         required: true
         description: OutboundPayments Request Payload
         schema:
-          $ref: '#/definitions/BQOutboundPaymentsupdateInputModel'
+          $ref: '#/definitions/BQOutboundPaymentsUpdateInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successfully Updated OutboundPayments Instance
           schema:
-            $ref: '#/definitions/BQOutboundPaymentsupdateOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/outboundpayments/{bq-reference-id}/execution:
+            $ref: '#/definitions/BQOutboundPaymentsUpdateOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/outboundpayments/{bq-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executeCorrespondentBankFulfillmentArrangementOutboundPaymentsUpdate
-      summary: 
+      summary: Invoke an automated execute action against the OutboundPayments instance
       description: Execute outbound payment transactions to a correspondent
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: OutboundPayments BQ Reference Id
+        description: OutboundPayments Instance Reference
         required: true
         type: string
       - in: body
@@ -283,199 +408,334 @@ paths:
         required: true
         description: OutboundPayments request payload
         schema:
-          $ref: '#/definitions/BQOutboundPaymentsexecuteInputModel'
+          $ref: '#/definitions/BQOutboundPaymentsExecuteInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successful execution of OutboundPayments Instance Record
           schema:
-            $ref: '#/definitions/BQOutboundPaymentsexecuteOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/clearingsettlement/{bq-reference-id}/update:
+            $ref: '#/definitions/BQOutboundPaymentsExecuteOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/outboundpayments/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorrespondentBankFulfillmentArrangementOutboundPayments
+      summary: Invoke a reporting action to obtain a OutboundPayments instance related report.
+      description: Retrieve details about outbound payments .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OutboundPayments Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOutboundPaymentsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved OutboundPayments Instance Record
+          schema:
+            $ref: '#/definitions/BQOutboundPaymentsRetrieveOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/clearingandsettlement/{bq-reference-id}/update:
     put:
       tags:
       - update
-      operationId: updateCorrespondentBankFulfillmentArrangementClearingSettlement
-      summary: 
+      operationId: updateCorrespondentBankFulfillmentArrangementClearingandSettlement
+      summary: Update to any amendable fields of the ClearingandSettlement instance
       description: Update a clearing and settlement transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: ClearingSettlement BQ Reference Id
+        description: ClearingandSettlement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: ClearingSettlement Request Payload
+        description: ClearingandSettlement Request Payload
         schema:
-          $ref: '#/definitions/BQClearingSettlementupdateInputModel'
+          $ref: '#/definitions/BQClearingandSettlementUpdateInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successfully Updated ClearingandSettlement Instance
           schema:
-            $ref: '#/definitions/BQClearingSettlementupdateOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/clearingsettlement/{bq-reference-id}/exchange:
+            $ref: '#/definitions/BQClearingandSettlementUpdateOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/clearingandsettlement/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
-      operationId: exchangeCorrespondentBankFulfillmentArrangementClearingSettlementUpdate
-      summary: 
+      operationId: exchangeCorrespondentBankFulfillmentArrangementClearingandSettlementUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
       description: Accept or verify a clearing and settlement task
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: ClearingSettlement BQ Reference Id
+        description: ClearingandSettlement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: ClearingSettlement request payload
+        description: ClearingandSettlement request payload
         schema:
-          $ref: '#/definitions/BQClearingSettlementexchangeInputModel'
+          $ref: '#/definitions/BQClearingandSettlementExchangeInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successful exchange of ClearingandSettlement Instance Record
           schema:
-            $ref: '#/definitions/BQClearingSettlementexchangeOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/clearingsettlement/{bq-reference-id}/requisition:
+            $ref: '#/definitions/BQClearingandSettlementExchangeOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/clearingandsettlement/{bq-reference-id}/requisition:
     put:
       tags:
       - request
-      operationId: requestCorrespondentBankFulfillmentArrangementClearingSettlementUpdate
-      summary: 
+      operationId: requestCorrespondentBankFulfillmentArrangementClearingandSettlementUpdate
+      summary: Invoke a service request action against the ClearingandSettlement instance
       description: Request clearing and settlement processing for a correspondent
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: ClearingSettlement BQ Reference Id
+        description: ClearingandSettlement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: ClearingSettlement request payload
+        description: ClearingandSettlement request payload
         schema:
-          $ref: '#/definitions/BQClearingSettlementrequestInputModel'
+          $ref: '#/definitions/BQClearingandSettlementRequestInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successful requisition of ClearingandSettlement Instance Record
           schema:
-            $ref: '#/definitions/BQClearingSettlementrequestOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/reconciliation/{bq-reference-id}/update:
+            $ref: '#/definitions/BQClearingandSettlementRequestOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/clearingandsettlement/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorrespondentBankFulfillmentArrangementClearingandSettlement
+      summary: Invoke a reporting action to obtain a ClearingandSettlement instance related report.
+      description: Retrieve details about clearing and settlement activity with a correspondent .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ClearingandSettlement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQClearingandSettlementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ClearingandSettlement Instance Record
+          schema:
+            $ref: '#/definitions/BQClearingandSettlementRetrieveOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/reconciliations/{bq-reference-id}/update:
     put:
       tags:
       - update
-      operationId: updateCorrespondentBankFulfillmentArrangementReconciliation
-      summary: 
+      operationId: updateCorrespondentBankFulfillmentArrangementReconciliations
+      summary: Update to any amendable fields of the Reconciliations instance
       description: Update a reconciliation task
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Reconciliation BQ Reference Id
+        description: Reconciliations Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Reconciliation Request Payload
+        description: Reconciliations Request Payload
         schema:
-          $ref: '#/definitions/BQReconciliationupdateInputModel'
+          $ref: '#/definitions/BQReconciliationsUpdateInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successfully Updated Reconciliations Instance
           schema:
-            $ref: '#/definitions/BQReconciliationupdateOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/reconciliation/{bq-reference-id}/exchange:
+            $ref: '#/definitions/BQReconciliationsUpdateOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/reconciliations/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
-      operationId: exchangeCorrespondentBankFulfillmentArrangementReconciliationUpdate
-      summary: 
+      operationId: exchangeCorrespondentBankFulfillmentArrangementReconciliationsUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
       description: Accept or verify a reconciliation task
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Reconciliation BQ Reference Id
+        description: Reconciliations Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Reconciliation request payload
+        description: Reconciliations request payload
         schema:
-          $ref: '#/definitions/BQReconciliationexchangeInputModel'
+          $ref: '#/definitions/BQReconciliationsExchangeInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successful exchange of Reconciliations Instance Record
           schema:
-            $ref: '#/definitions/BQReconciliationexchangeOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/reconciliation/{bq-reference-id}/requisition:
+            $ref: '#/definitions/BQReconciliationsExchangeOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/reconciliations/{bq-reference-id}/requisition:
     put:
       tags:
       - request
-      operationId: requestCorrespondentBankFulfillmentArrangementReconciliationUpdate
-      summary: 
+      operationId: requestCorrespondentBankFulfillmentArrangementReconciliationsUpdate
+      summary: Invoke a service request action against the Reconciliations instance
       description: Request reconciliation processing for a correspondent
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Reconciliation BQ Reference Id
+        description: Reconciliations Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Reconciliation request payload
+        description: Reconciliations request payload
         schema:
-          $ref: '#/definitions/BQReconciliationrequestInputModel'
+          $ref: '#/definitions/BQReconciliationsRequestInputModel'
       responses:
         200:
-          description: Successful 
+          description: Successful requisition of Reconciliations Instance Record
           schema:
-            $ref: '#/definitions/BQReconciliationrequestOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement:
+            $ref: '#/definitions/BQReconciliationsRequestOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/reconciliations/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorrespondentBankFulfillmentArrangementReconciliations
+      summary: Invoke a reporting action to obtain a Reconciliations instance related report.
+      description: Retrieve details about reconciliation activity with a correspondent .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Reconciliations Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQReconciliationsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Reconciliations Instance Record
+          schema:
+            $ref: '#/definitions/BQReconciliationsRetrieveOutputModel'
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement:
     get:
       tags:
       - retrieve
@@ -484,6 +744,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- CorrespondentBank Instance Status='active'
@@ -512,8 +777,8 @@ paths:
             type: array
             items:
               type: string
-            example: [ 'InboundPayments',  'OutboundPayments',  'ClearingSettlement',  'Reconciliation', ]
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/{behavior-qualifier}/:
+            example: [ 'InboundPayments',  'OutboundPayments',  'ClearingAndSettlement',  'Reconciliations', ]
+  /correspondent-bank/{sd-reference-id}/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -522,19 +787,24 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Correspondent Bank Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
+        description: Correspondent Bank Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
         in: path
-        description: Behavior Qualifier Name. ex- Reconciliation
+        description: Behavior Qualifier Name. ex- Reconciliations
         required: true
         type: string
       - name : collection-filter
         in: query
-        description: Filter to refine the result set. ex- Reconciliation Instance Status = 'pending'
+        description: Filter to refine the result set. ex- Reconciliations Instance Status = 'pending'
         required: false
         type: string
       responses:
@@ -544,157 +814,7 @@ paths:
             type: array
             items:
               type: string
-            example: [ReconciliationID1, ReconciliationID2]
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorrespondentBank
-      summary: Retrieve a Correspondent Bank Record
-      description: Retrieve a Correspondent Bank Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Correspondent Bank Request Payload
-        schema:
-          $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementretrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Correspondent Bank Report
-          schema:
-            $ref: '#/definitions/CRCorrespondentBankFulfillmentArrangementretrieveOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/inboundpayments/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorrespondentBankInboundPayments
-      summary: Retrieve a Correspondent Bank InboundPayments Record
-      description: Retrieve a Correspondent Bank InboundPayments Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: InboundPayments BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Correspondent Bank InboundPayments Request Payload
-        schema:
-          $ref: '#/definitions/BQInboundPaymentsRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Correspondent Bank InboundPayments Report
-          schema:
-            $ref: '#/definitions/BQInboundPaymentsRetrieveOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/outboundpayments/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorrespondentBankOutboundPayments
-      summary: Retrieve a Correspondent Bank OutboundPayments Record
-      description: Retrieve a Correspondent Bank OutboundPayments Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: OutboundPayments BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Correspondent Bank OutboundPayments Request Payload
-        schema:
-          $ref: '#/definitions/BQOutboundPaymentsRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Correspondent Bank OutboundPayments Report
-          schema:
-            $ref: '#/definitions/BQOutboundPaymentsRetrieveOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/clearingsettlement/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorrespondentBankClearingSettlement
-      summary: Retrieve a Correspondent Bank ClearingSettlement Record
-      description: Retrieve a Correspondent Bank ClearingSettlement Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: ClearingSettlement BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Correspondent Bank ClearingSettlement Request Payload
-        schema:
-          $ref: '#/definitions/BQClearingSettlementRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Correspondent Bank ClearingSettlement Report
-          schema:
-            $ref: '#/definitions/BQClearingSettlementRetrieveOutputModel'
-  /correspondent-bank/correspondent-bank-fulfillment-arrangement/{cr-reference-id}/reconciliation/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCorrespondentBankReconciliation
-      summary: Retrieve a Correspondent Bank Reconciliation Record
-      description: Retrieve a Correspondent Bank Reconciliation Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Correspondent Bank Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Reconciliation BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Correspondent Bank Reconciliation Request Payload
-        schema:
-          $ref: '#/definitions/BQReconciliationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Correspondent Bank Reconciliation Report
-          schema:
-            $ref: '#/definitions/BQReconciliationRetrieveOutputModel'
+            example: [ReconciliationsID1, ReconciliationsID2]
 definitions:
  SDCorrespondentBankActivateInputModel:
   type: object
@@ -1339,22 +1459,22 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRCorrespondentBankFulfillmentArrangementinitiateInputModel:
+ CRCorrespondentBankFulfillmentArrangementInitiateInputModel:
   type: object
   properties: 
+   correspondentBankServicingSessionReference:
+    type: string
+    example: "CBSSR718073"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    correspondentBankFulfillmentArrangementInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The Initiate service call input and output record
-   correspondentBankServicingSessionReference:
-    type: string
-    example: "CBSSR741185"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
    correspondentBankFulfillmentArrangementInstanceStatus:
     type: string
     description: |
@@ -1384,24 +1504,31 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "765544"
+      example: "723321"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "732461"
+      example: "785173"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated nostro account (our money at your bank)
- CRCorrespondentBankFulfillmentArrangementinitiateOutputModel:
+ CRCorrespondentBankFulfillmentArrangementInitiateOutputModel:
   type: object
   properties: 
+   correspondentBankFulfillmentArrangementInstanceReference:
+    type: string
+    example: "CBFAIR753557"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Correspondent Bank Fulfillment Arrangement instance
    correspondentBankFulfillmentArrangementInitiateActionReference:
     type: string
-    example: "CBFAIAR723258"
+    example: "CBFAIAR727415"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1412,13 +1539,6 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The Initiate service call input and output record
-   correspondentBankFulfillmentArrangementInstanceReference:
-    type: string
-    example: "CBFAIR751743"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Correspondent Bank Fulfillment Arrangement instance
    correspondentBankFulfillmentArrangementInstanceStatus:
     type: string
     description: |
@@ -1430,7 +1550,7 @@ definitions:
     properties:
      correspondentBankArrangementReference:
       type: string
-      example: "756984"
+      example: "738545"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1455,31 +1575,31 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "765544"
+      example: "723321"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "732461"
+      example: "785173"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated nostro account (our money at your bank)
- CRCorrespondentBankFulfillmentArrangementupdateInputModel:
+ CRCorrespondentBankFulfillmentArrangementUpdateInputModel:
   type: object
   properties: 
    correspondentBankServicingSessionReference:
     type: string
-    example: "CBSSR718300"
+    example: "CBSSR792148"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR765160"
+    example: "CBFAIR727354"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1489,7 +1609,7 @@ definitions:
     properties:
      correspondentBankArrangementReference:
       type: string
-      example: "709595"
+      example: "784840"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1514,14 +1634,14 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "794902"
+      example: "724521"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "752183"
+      example: "756499"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1538,7 +1658,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- CRCorrespondentBankFulfillmentArrangementupdateOutputModel:
+ CRCorrespondentBankFulfillmentArrangementUpdateOutputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceRecord:
@@ -1564,21 +1684,21 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "794902"
+      example: "724521"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "752183"
+      example: "756499"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated nostro account (our money at your bank)
    correspondentBankFulfillmentArrangementUpdateActionTaskReference:
     type: string
-    example: "CBFAUATR744093"
+    example: "CBFAUATR731286"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1595,19 +1715,19 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- CRCorrespondentBankFulfillmentArrangementcontrolInputModel:
+ CRCorrespondentBankFulfillmentArrangementControlInputModel:
   type: object
   properties: 
    correspondentBankServicingSessionReference:
     type: string
-    example: "CBSSR736748"
+    example: "CBSSR736238"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR773911"
+    example: "CBFAIR730820"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1627,12 +1747,12 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The type of processing action requested (e.g. suspend, skip, terminate)
- CRCorrespondentBankFulfillmentArrangementcontrolOutputModel:
+ CRCorrespondentBankFulfillmentArrangementControlOutputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementControlActionTaskReference:
     type: string
-    example: "CBFACATR775693"
+    example: "CBFACATR770919"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1649,7 +1769,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the control action service response
- CRCorrespondentBankFulfillmentArrangementretrieveInputModel:
+ CRCorrespondentBankFulfillmentArrangementRetrieveInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementRetrieveActionTaskRecord:
@@ -1669,7 +1789,7 @@ definitions:
     properties:
      correspondentBankFulfillmentArrangementInstanceReportReference:
       type: string
-      example: "728943"
+      example: "782409"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1691,7 +1811,7 @@ definitions:
     properties:
      correspondentBankFulfillmentArrangementInstanceAnalysisReference:
       type: string
-      example: "795974"
+      example: "797577"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1708,7 +1828,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the analysis (e.g. period, algorithm type)
- CRCorrespondentBankFulfillmentArrangementretrieveOutputModel:
+ CRCorrespondentBankFulfillmentArrangementRetrieveOutputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceRecord:
@@ -1716,7 +1836,7 @@ definitions:
     properties:
      correspondentBankArrangementReference:
       type: string
-      example: "789298"
+      example: "725078"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1741,21 +1861,21 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "764274"
+      example: "751805"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "705144"
+      example: "760908"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated nostro account (our money at your bank)
    correspondentBankFulfillmentArrangementRetrieveActionTaskReference:
     type: string
-    example: "CBFARATR725015"
+    example: "CBFARATR781849"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1817,44 +1937,47 @@ definitions:
    inboundPaymentsInstanceRecord:
     type: object
     properties:
+     correspondentTransactionRecord:
+      type: object
+      properties:
        payerBankReference:
         type: string
-        example: "758443"
+        example: "790723"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "795755"
+        example: "702809"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "783513"
+        example: "726165"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payeeReference:
         type: string
-        example: "789333"
+        example: "793401"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "795678"
+        example: "745222"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "757468"
+        example: "716243"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1882,19 +2005,19 @@ definitions:
            `status: Not Mapped`
             core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
             general-info: Specific date type value
- BQInboundPaymentsupdateInputModel:
+ BQInboundPaymentsUpdateInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR707676"
+    example: "CBFAIR700115"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
    inboundPaymentsInstanceReference:
     type: string
-    example: "IPIR708941"
+    example: "IPIR799837"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1907,56 +2030,56 @@ definitions:
       properties:
        sWIFTTransactionReference:
         type: string
-        example: "718280"
+        example: "792994"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: 
        payerBankReference:
         type: string
-        example: "773961"
+        example: "770649"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "754443"
+        example: "713443"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "774417"
+        example: "730098"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payerProductInstanceReference:
         type: string
-        example: "726911"
+        example: "755896"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Payer account reference or number
        payeeReference:
         type: string
-        example: "799199"
+        example: "730576"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "750555"
+        example: "754142"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "727661"
+        example: "739344"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2003,7 +2126,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- BQInboundPaymentsupdateOutputModel:
+ BQInboundPaymentsUpdateOutputModel:
   type: object
   properties: 
    inboundPaymentsInstanceRecord:
@@ -2014,56 +2137,56 @@ definitions:
       properties:
        sWIFTTransactionReference:
         type: string
-        example: "718280"
+        example: "792994"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: 
        payerBankReference:
         type: string
-        example: "773961"
+        example: "770649"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "754443"
+        example: "713443"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "774417"
+        example: "730098"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payerProductInstanceReference:
         type: string
-        example: "726911"
+        example: "755896"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Payer account reference or number
        payeeReference:
         type: string
-        example: "799199"
+        example: "730576"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "750555"
+        example: "754142"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "727661"
+        example: "739344"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2100,7 +2223,7 @@ definitions:
             general-info: Specific date type value
    inboundPaymentsUpdateActionTaskReference:
     type: string
-    example: "IPUATR761052"
+    example: "IPUATR735006"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2117,19 +2240,19 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- BQInboundPaymentsexecuteInputModel:
+ BQInboundPaymentsExecuteInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR758865"
+    example: "CBFAIR718154"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
    inboundPaymentsInstanceReference:
     type: string
-    example: "IPIR775049"
+    example: "IPIR715993"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2142,56 +2265,56 @@ definitions:
       properties:
        sWIFTTransactionReference:
         type: string
-        example: "785765"
+        example: "749512"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: 
        payerBankReference:
         type: string
-        example: "741460"
+        example: "797294"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "757250"
+        example: "738057"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "771770"
+        example: "783868"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payerProductInstanceReference:
         type: string
-        example: "709924"
+        example: "786315"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Payer account reference or number
        payeeReference:
         type: string
-        example: "755746"
+        example: "746345"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "798659"
+        example: "762079"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "724231"
+        example: "770437"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2241,12 +2364,12 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
- BQInboundPaymentsexecuteOutputModel:
+ BQInboundPaymentsExecuteOutputModel:
   type: object
   properties: 
    inboundPaymentsExecuteActionTaskReference:
     type: string
-    example: "IPEATR792586"
+    example: "IPEATR736543"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2259,7 +2382,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    inboundPaymentsExecuteRecordReference:
     type: string
-    example: "IPERR778601"
+    example: "IPERR771745"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2290,7 +2413,7 @@ definitions:
     properties:
      inboundPaymentsInstanceReportReference:
       type: string
-      example: "744934"
+      example: "708368"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2300,7 +2423,7 @@ definitions:
     properties:
      inboundPaymentsInstanceAnalysisReference:
       type: string
-      example: "767548"
+      example: "735106"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2313,7 +2436,7 @@ definitions:
     properties:
      correspondentBankArrangementReference:
       type: string
-      example: "702303"
+      example: "759037"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2338,14 +2461,14 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "717542"
+      example: "747646"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "778455"
+      example: "736517"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2358,56 +2481,56 @@ definitions:
       properties:
        sWIFTTransactionReference:
         type: string
-        example: "706100"
+        example: "796285"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: 
        payerBankReference:
         type: string
-        example: "765232"
+        example: "784334"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "747679"
+        example: "729212"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "719179"
+        example: "700119"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payerProductInstanceReference:
         type: string
-        example: "734138"
+        example: "741492"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Payer account reference or number
        payeeReference:
         type: string
-        example: "746677"
+        example: "774607"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "700289"
+        example: "789045"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "716792"
+        example: "782189"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2444,7 +2567,7 @@ definitions:
             general-info: Specific date type value
    inboundPaymentsRetrieveActionTaskReference:
     type: string
-    example: "IPRATR742261"
+    example: "IPRATR740311"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2515,19 +2638,19 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQOutboundPaymentsupdateInputModel:
+ BQOutboundPaymentsUpdateInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR785963"
+    example: "CBFAIR793218"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
    outboundPaymentsInstanceReference:
     type: string
-    example: "OPIR770726"
+    example: "OPIR739960"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2540,56 +2663,56 @@ definitions:
       properties:
        sWIFTTransactionReference:
         type: string
-        example: "794705"
+        example: "719121"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: 
        payerBankReference:
         type: string
-        example: "715588"
+        example: "737958"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "718413"
+        example: "703482"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "714868"
+        example: "704450"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payerProductInstanceReference:
         type: string
-        example: "736566"
+        example: "774761"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Payer account reference or number
        payeeReference:
         type: string
-        example: "779260"
+        example: "722261"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "711730"
+        example: "735693"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "764396"
+        example: "768710"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2636,7 +2759,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- BQOutboundPaymentsupdateOutputModel:
+ BQOutboundPaymentsUpdateOutputModel:
   type: object
   properties: 
    outboundPaymentsInstanceRecord:
@@ -2647,56 +2770,56 @@ definitions:
       properties:
        sWIFTTransactionReference:
         type: string
-        example: "794705"
+        example: "719121"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: 
        payerBankReference:
         type: string
-        example: "715588"
+        example: "737958"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "718413"
+        example: "703482"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "714868"
+        example: "704450"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payerProductInstanceReference:
         type: string
-        example: "736566"
+        example: "774761"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Payer account reference or number
        payeeReference:
         type: string
-        example: "779260"
+        example: "722261"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "711730"
+        example: "735693"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "764396"
+        example: "768710"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2733,7 +2856,7 @@ definitions:
             general-info: Specific date type value
    outboundPaymentsUpdateActionTaskReference:
     type: string
-    example: "OPUATR713698"
+    example: "OPUATR751046"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2750,19 +2873,19 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- BQOutboundPaymentsexecuteInputModel:
+ BQOutboundPaymentsExecuteInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR776342"
+    example: "CBFAIR794472"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
    outboundPaymentsInstanceReference:
     type: string
-    example: "OPIR793630"
+    example: "OPIR768115"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2775,56 +2898,56 @@ definitions:
       properties:
        sWIFTTransactionReference:
         type: string
-        example: "753493"
+        example: "768035"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: 
        payerBankReference:
         type: string
-        example: "760401"
+        example: "722245"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "793156"
+        example: "757342"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "745171"
+        example: "736939"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payerProductInstanceReference:
         type: string
-        example: "723435"
+        example: "759199"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Payer account reference or number
        payeeReference:
         type: string
-        example: "738703"
+        example: "707127"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "706035"
+        example: "796614"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "747480"
+        example: "728797"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2874,12 +2997,12 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
- BQOutboundPaymentsexecuteOutputModel:
+ BQOutboundPaymentsExecuteOutputModel:
   type: object
   properties: 
    outboundPaymentsExecuteActionTaskReference:
     type: string
-    example: "OPEATR752339"
+    example: "OPEATR705805"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2892,7 +3015,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    outboundPaymentsExecuteRecordReference:
     type: string
-    example: "OPERR792051"
+    example: "OPERR775470"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2923,7 +3046,7 @@ definitions:
     properties:
      outboundPaymentsInstanceReportReference:
       type: string
-      example: "703265"
+      example: "758515"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2933,7 +3056,7 @@ definitions:
     properties:
      outboundPaymentsInstanceAnalysisReference:
       type: string
-      example: "716985"
+      example: "773431"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2946,7 +3069,7 @@ definitions:
     properties:
      correspondentBankArrangementReference:
       type: string
-      example: "746615"
+      example: "756797"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2971,14 +3094,14 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "784565"
+      example: "758983"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "760732"
+      example: "709532"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2991,56 +3114,56 @@ definitions:
       properties:
        sWIFTTransactionReference:
         type: string
-        example: "787313"
+        example: "757276"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: 
        payerBankReference:
         type: string
-        example: "777405"
+        example: "795241"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The primary correspondent bank
        payerReference:
         type: string
-        example: "710423"
+        example: "767091"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        correspondedBankReference:
         type: string
-        example: "728494"
+        example: "795419"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Intermediary correspondents if needed
        payerProductInstanceReference:
         type: string
-        example: "718715"
+        example: "735884"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Payer account reference or number
        payeeReference:
         type: string
-        example: "797842"
+        example: "742519"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee
        payeeProductInstanceReference:
         type: string
-        example: "703289"
+        example: "749452"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee account as source of funds
        payeeBankReference:
         type: string
-        example: "773708"
+        example: "734962"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3077,7 +3200,7 @@ definitions:
             general-info: Specific date type value
    outboundPaymentsRetrieveActionTaskReference:
     type: string
-    example: "OPRATR775759"
+    example: "OPRATR730031"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3148,26 +3271,52 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQClearingSettlementupdateInputModel:
+ BQClearingandSettlementUpdateInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR770086"
+    example: "CBFAIR765620"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
-   clearingSettlementInstanceReference:
+   clearingandSettlementInstanceReference:
     type: string
-    example: "CSIR758671"
+    example: "CASIR713849"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Clearing Settlement instance
+      general-info: Reference to the Clearing and Settlement instance
    clearingandSettlementInstanceRecord:
     type: object
     properties:
+     correspondentBankClearingArrangementReference:
+      type: string
+      example: "731317"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The clearing arrangement between the bank and clearing house - includes schedule, limits
+     correspondentBankClearingArrangementClearingInstructions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Customer specific default clearing instructions
+     correspondentBankClearingArrangementSettlementInstructions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Customer specific default settlement instructions (e.g. to handle netting arrangements)
+     mirrorNostroAccountReference:
+      type: string
+      example: "717781"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info:  Used for central bank clearing reconciliations
      clearingTransaction:
       type: string
       description: |
@@ -3180,24 +3329,50 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: A record of a settlement transaction
-   clearingSettlementUpdateActionTaskRecord:
+   clearingandSettlementUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The update service call consolidated processing record
-   clearingSettlementUpdateActionRequest:
+   clearingandSettlementUpdateActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- BQClearingSettlementupdateOutputModel:
+ BQClearingandSettlementUpdateOutputModel:
   type: object
   properties: 
    clearingandSettlementInstanceRecord:
     type: object
     properties:
+     correspondentBankClearingArrangementReference:
+      type: string
+      example: "731317"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The clearing arrangement between the bank and clearing house - includes schedule, limits
+     correspondentBankClearingArrangementClearingInstructions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Customer specific default clearing instructions
+     correspondentBankClearingArrangementSettlementInstructions:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Customer specific default settlement instructions (e.g. to handle netting arrangements)
+     mirrorNostroAccountReference:
+      type: string
+      example: "717781"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info:  Used for central bank clearing reconciliations
      clearingTransaction:
       type: string
       description: |
@@ -3210,14 +3385,14 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: A record of a settlement transaction
-   clearingSettlementUpdateActionTaskReference:
+   clearingandSettlementUpdateActionTaskReference:
     type: string
-    example: "CSUATR779075"
+    example: "CASUATR759608"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to an update service call
-   clearingSettlementUpdateActionTaskRecord:
+   clearingandSettlementUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -3229,30 +3404,30 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- BQClearingSettlementexchangeInputModel:
+ BQClearingandSettlementExchangeInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR780206"
+    example: "CBFAIR785726"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
-   clearingSettlementInstanceReference:
+   clearingandSettlementInstanceReference:
     type: string
-    example: "CSIR729620"
+    example: "CASIR711811"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Clearing Settlement instance
-   clearingSettlementExchangeActionTaskRecord:
+      general-info: Reference to the Clearing and Settlement instance
+   clearingandSettlementExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
-   clearingSettlementExchangeActionRequest:
+   clearingandSettlementExchangeActionRequest:
     type: object
     properties:
      exchangeActionType:
@@ -3261,51 +3436,51 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The type of exchange (e.g. accept, reject, verify)
- BQClearingSettlementexchangeOutputModel:
+ BQClearingandSettlementExchangeOutputModel:
   type: object
   properties: 
-   clearingSettlementExchangeActionTaskReference:
+   clearingandSettlementExchangeActionTaskReference:
     type: string
-    example: "CSEATR709909"
+    example: "CASEATR756497"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Clearing Settlement instance exchange service call
-   clearingSettlementExchangeActionTaskRecord:
+      general-info: Reference to a Clearing and Settlement instance exchange service call
+   clearingandSettlementExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
-   clearingSettlementExchangeActionResponse:
+   clearingandSettlementExchangeActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the exchange action service response
-   clearingSettlementInstanceStatus:
+   clearingandSettlementInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Clearing Settlement instance (e.g. accepted, rejected, verified)
- BQClearingSettlementrequestInputModel:
+      general-info: The status of the Clearing and Settlement instance (e.g. accepted, rejected, verified)
+ BQClearingandSettlementRequestInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR763582"
+    example: "CBFAIR768010"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
-   clearingSettlementInstanceReference:
+   clearingandSettlementInstanceReference:
     type: string
-    example: "CSIR738170"
+    example: "CASIR708022"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Clearing Settlement instance
+      general-info: Reference to the Clearing and Settlement instance
    clearingandSettlementInstanceRecord:
     type: object
     properties:
@@ -3321,7 +3496,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: A record of a settlement transaction
-   clearingSettlementRequestActionTaskRecord:
+   clearingandSettlementRequestActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -3336,71 +3511,71 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: Request service record (e.g. rework function, refresh record, process workstep)
- BQClearingSettlementrequestOutputModel:
+ BQClearingandSettlementRequestOutputModel:
   type: object
   properties: 
-   clearingSettlementRequestActionTaskReference:
+   clearingandSettlementRequestActionTaskReference:
     type: string
-    example: "CSRATR702980"
+    example: "CASRATR750525"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Clearing Settlement instance request service call
-   clearingSettlementRequestActionTaskRecord:
+      general-info: Reference to a Clearing and Settlement instance request service call
+   clearingandSettlementRequestActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The request service call consolidated processing record
-   clearingSettlementRequestRecordReference:
+   clearingandSettlementRequestRecordReference:
     type: string
-    example: "CSRRR749007"
+    example: "CASRRR730842"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Clearing Settlement service request record
+      general-info: Reference to the Clearing and Settlement service request record
    requestResponseRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the request action service response
- BQClearingSettlementRetrieveInputModel:
+ BQClearingandSettlementRetrieveInputModel:
   type: object
   properties: 
-   clearingSettlementRetrieveActionTaskRecord:
+   clearingandSettlementRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   clearingSettlementRetrieveActionRequest:
+   clearingandSettlementRetrieveActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service request (lists requested reports)
-   clearingSettlementInstanceReport:
+   clearingandSettlementInstanceReport:
     type: object
     properties:
-     clearingSettlementInstanceReportReference:
+     clearingandSettlementInstanceReportReference:
       type: string
-      example: "748757"
+      example: "761222"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance report
-   clearingSettlementInstanceAnalysis:
+   clearingandSettlementInstanceAnalysis:
     type: object
     properties:
-     clearingSettlementInstanceAnalysisReference:
+     clearingandSettlementInstanceAnalysisReference:
       type: string
-      example: "711104"
+      example: "756824"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance analysis view
- BQClearingSettlementRetrieveOutputModel:
+ BQClearingandSettlementRetrieveOutputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceRecord:
@@ -3408,7 +3583,7 @@ definitions:
     properties:
      correspondentBankArrangementReference:
       type: string
-      example: "774697"
+      example: "792825"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3433,14 +3608,14 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "732913"
+      example: "723718"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "745509"
+      example: "719955"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3460,102 +3635,102 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: A record of a settlement transaction
-   clearingSettlementRetrieveActionTaskReference:
+   clearingandSettlementRetrieveActionTaskReference:
     type: string
-    example: "CSRATR766045"
+    example: "CASRATR745520"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Clearing Settlement instance retrieve service call
-   clearingSettlementRetrieveActionTaskRecord:
+      general-info: Reference to a Clearing and Settlement instance retrieve service call
+   clearingandSettlementRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   clearingSettlementRetrieveActionResponse:
+   clearingandSettlementRetrieveActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
-   clearingSettlementInstanceReport:
+   clearingandSettlementInstanceReport:
     type: object
     properties:
-     clearingSettlementInstanceReportRecord:
+     clearingandSettlementInstanceReportRecord:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
-     clearingSettlementInstanceReportType:
+     clearingandSettlementInstanceReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
-     clearingSettlementInstanceReportParameters:
+     clearingandSettlementInstanceReportParameters:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the report (e.g. period, content type)
-     clearingSettlementInstanceReport:
+     clearingandSettlementInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
-   clearingSettlementInstanceAnalysis:
+   clearingandSettlementInstanceAnalysis:
     type: object
     properties:
-     clearingSettlementInstanceAnalysisRecord:
+     clearingandSettlementInstanceAnalysisRecord:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
-     clearingSettlementInstanceAnalysisReportType:
+     clearingandSettlementInstanceAnalysisReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
-     clearingSettlementInstanceAnalysisParameters:
+     clearingandSettlementInstanceAnalysisParameters:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the analysis (e.g. period, algorithm type)
-     clearingSettlementInstanceAnalysisReport:
+     clearingandSettlementInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQReconciliationupdateInputModel:
+ BQReconciliationsUpdateInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR748675"
+    example: "CBFAIR783133"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
-   reconciliationInstanceReference:
+   reconciliationsInstanceReference:
     type: string
-    example: "RIR784655"
+    example: "RIR780671"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Reconciliation instance
+      general-info: Reference to the Reconciliations instance
    reconciliationsInstanceRecord:
     type: object
     properties:
      correspondentBankReconciliationTaskReference:
       type: string
-      example: "792803"
+      example: "762759"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3572,19 +3747,19 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Description of the resolution tasks agreed to reconcile
-   reconciliationUpdateActionTaskRecord:
+   reconciliationsUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The update service call consolidated processing record
-   reconciliationUpdateActionRequest:
+   reconciliationsUpdateActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- BQReconciliationupdateOutputModel:
+ BQReconciliationsUpdateOutputModel:
   type: object
   properties: 
    reconciliationsInstanceRecord:
@@ -3592,7 +3767,7 @@ definitions:
     properties:
      correspondentBankReconciliationTaskReference:
       type: string
-      example: "792803"
+      example: "762759"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3609,14 +3784,14 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Description of the resolution tasks agreed to reconcile
-   reconciliationUpdateActionTaskReference:
+   reconciliationsUpdateActionTaskReference:
     type: string
-    example: "RUATR761774"
+    example: "RUATR706529"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to an update service call
-   reconciliationUpdateActionTaskRecord:
+   reconciliationsUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -3628,30 +3803,30 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- BQReconciliationexchangeInputModel:
+ BQReconciliationsExchangeInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR757218"
+    example: "CBFAIR703958"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
-   reconciliationInstanceReference:
+   reconciliationsInstanceReference:
     type: string
-    example: "RIR738181"
+    example: "RIR794993"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Reconciliation instance
-   reconciliationExchangeActionTaskRecord:
+      general-info: Reference to the Reconciliations instance
+   reconciliationsExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
-   reconciliationExchangeActionRequest:
+   reconciliationsExchangeActionRequest:
     type: object
     properties:
      exchangeActionType:
@@ -3660,52 +3835,52 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The type of exchange (e.g. accept, reject, verify)
- BQReconciliationexchangeOutputModel:
+ BQReconciliationsExchangeOutputModel:
   type: object
   properties: 
-   reconciliationExchangeActionTaskReference:
+   reconciliationsExchangeActionTaskReference:
     type: string
-    example: "REATR733743"
+    example: "REATR780497"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Reconciliation instance exchange service call
-   reconciliationExchangeActionTaskRecord:
+      general-info: Reference to a Reconciliations instance exchange service call
+   reconciliationsExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
-   reconciliationExchangeActionResponse:
+   reconciliationsExchangeActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the exchange action service response
-   reconciliationInstanceStatus:
+   reconciliationsInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Reconciliation instance (e.g. accepted, rejected, verified)
- BQReconciliationrequestInputModel:
+      general-info: The status of the Reconciliations instance (e.g. accepted, rejected, verified)
+ BQReconciliationsRequestInputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceReference:
     type: string
-    example: "CBFAIR740612"
+    example: "CBFAIR782433"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Correspondent Bank Fulfillment Arrangement instance
-   reconciliationInstanceReference:
+   reconciliationsInstanceReference:
     type: string
-    example: "RIR725672"
+    example: "RIR732797"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Reconciliation instance
-   reconciliationRequestActionTaskRecord:
+      general-info: Reference to the Reconciliations instance
+   reconciliationsRequestActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -3720,7 +3895,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: Request service record (e.g. rework function, refresh record, process workstep)
- BQReconciliationrequestOutputModel:
+ BQReconciliationsRequestOutputModel:
   type: object
   properties: 
    reconciliationsInstanceRecord:
@@ -3728,7 +3903,7 @@ definitions:
     properties:
      correspondentBankReconciliationTaskReference:
       type: string
-      example: "748315"
+      example: "751349"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3745,68 +3920,68 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Description of the resolution tasks agreed to reconcile
-   reconciliationRequestActionTaskReference:
+   reconciliationsRequestActionTaskReference:
     type: string
-    example: "RRATR763343"
+    example: "RRATR734362"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Reconciliation instance request service call
-   reconciliationRequestActionTaskRecord:
+      general-info: Reference to a Reconciliations instance request service call
+   reconciliationsRequestActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The request service call consolidated processing record
-   reconciliationRequestRecordReference:
+   reconciliationsRequestRecordReference:
     type: string
-    example: "RRRR739733"
+    example: "RRRR765457"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Reconciliation service request record
+      general-info: Reference to the Reconciliations service request record
    requestResponseRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the request action service response
- BQReconciliationRetrieveInputModel:
+ BQReconciliationsRetrieveInputModel:
   type: object
   properties: 
-   reconciliationRetrieveActionTaskRecord:
+   reconciliationsRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   reconciliationRetrieveActionRequest:
+   reconciliationsRetrieveActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service request (lists requested reports)
-   reconciliationInstanceReport:
+   reconciliationsInstanceReport:
     type: object
     properties:
-     reconciliationInstanceReportReference:
+     reconciliationsInstanceReportReference:
       type: string
-      example: "729628"
+      example: "711540"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance report
-   reconciliationInstanceAnalysis:
+   reconciliationsInstanceAnalysis:
     type: object
     properties:
-     reconciliationInstanceAnalysisReference:
+     reconciliationsInstanceAnalysisReference:
       type: string
-      example: "778678"
+      example: "780025"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance analysis view
- BQReconciliationRetrieveOutputModel:
+ BQReconciliationsRetrieveOutputModel:
   type: object
   properties: 
    correspondentBankFulfillmentArrangementInstanceRecord:
@@ -3814,7 +3989,7 @@ definitions:
     properties:
      correspondentBankArrangementReference:
       type: string
-      example: "786338"
+      example: "781765"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3839,14 +4014,14 @@ definitions:
         general-info: A reference to the bank calendar details for payment processing
      vostroAccountReference:
       type: string
-      example: "773825"
+      example: "726777"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to associated vostro account (your money at our bank)
      nostroMirrorAccountReference:
       type: string
-      example: "793480"
+      example: "700643"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3856,7 +4031,7 @@ definitions:
     properties:
      correspondentBankReconciliationTaskReference:
       type: string
-      example: "712502"
+      example: "789588"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3873,74 +4048,74 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Description of the resolution tasks agreed to reconcile
-   reconciliationRetrieveActionTaskReference:
+   reconciliationsRetrieveActionTaskReference:
     type: string
-    example: "RRATR772223"
+    example: "RRATR791586"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Reconciliation instance retrieve service call
-   reconciliationRetrieveActionTaskRecord:
+      general-info: Reference to a Reconciliations instance retrieve service call
+   reconciliationsRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   reconciliationRetrieveActionResponse:
+   reconciliationsRetrieveActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
-   reconciliationInstanceReport:
+   reconciliationsInstanceReport:
     type: object
     properties:
-     reconciliationInstanceReportRecord:
+     reconciliationsInstanceReportRecord:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
-     reconciliationInstanceReportType:
+     reconciliationsInstanceReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
-     reconciliationInstanceReportParameters:
+     reconciliationsInstanceReportParameters:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the report (e.g. period, content type)
-     reconciliationInstanceReport:
+     reconciliationsInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
-   reconciliationInstanceAnalysis:
+   reconciliationsInstanceAnalysis:
     type: object
     properties:
-     reconciliationInstanceAnalysisRecord:
+     reconciliationsInstanceAnalysisRecord:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
-     reconciliationInstanceAnalysisReportType:
+     reconciliationsInstanceAnalysisReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
-     reconciliationInstanceAnalysisParameters:
+     reconciliationsInstanceAnalysisParameters:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the analysis (e.g. period, algorithm type)
-     reconciliationInstanceAnalysisReport:
+     reconciliationsInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`

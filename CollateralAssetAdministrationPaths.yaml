@@ -1,0 +1,598 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Collateral Asset Administration'
+ description: >
+
+    ## Executive Summary:
+    This service domain maintains the status of a customers collateral assets, including scheduled and ad-hoc valuations and confirmation of the correct completion of scheduled maintenance tasks.
+
+    ## Example of Use:
+    A back office unit determines which collateral items are due for a valuation review and documentation check and schedules the activities accordingly
+
+    ## Description:
+    This service domain handles the oversight, administration and confirmation of maintenance tasks associated with different types of collateral items. This includes arranging for scheduled and ad-hoc collateral valuations, item status/documentation and title checks and tracking upkeep actions that the item owner is obliged to undertake (such as insuring a house)
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-collateral-asset-administration/1.0.0
+schemes:
+ - https
+paths:
+  /collateral-asset-administration/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCollateralAssetAdministration
+      summary: Activate  a SDCollateralAssetAdministration servicing session
+      description: Activate  a  SDCollateralAssetAdministration servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCollateralAssetAdministration Request Payload
+        schema:
+          $ref: '#/definitions/SDCollateralAssetAdministrationActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCollateralAssetAdministrationActivateOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCollateralAssetAdministration
+      summary: Update an active SDCollateralAssetAdministration session configuration
+      description: Update an active SDCollateralAssetAdministration session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAssetAdministration Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCollateralAssetAdministration Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCollateralAssetAdministrationConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCollateralAssetAdministrationConfigureOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCollateralAssetAdministration
+      summary: "Capturing feedback against the SDCollateralAssetAdministration service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCollateralAssetAdministration service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAssetAdministration Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCollateralAssetAdministration Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCollateralAssetAdministrationFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCollateralAssetAdministrationFeedbackOutputModel'
+  /collateral-asset-administration/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCollateralAssetAdministration
+      summary: Analytical views maintained by the SDCollateralAssetAdministration service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCollateralAssetAdministration service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAssetAdministration Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCollateralAssetAdministration Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCollateralAssetAdministrationRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCollateralAssetAdministrationRetrieveOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCollateralAssetAdministrativePlan
+      summary: Details of a new CollateralAssetAdministrativePlan instance
+      description: Create a collateral asset administrative plan for a new item
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CollateralAssetAdministrativePlan Request Payload
+        schema:
+          $ref: '#/definitions/CRCollateralAssetAdministrativePlanInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CollateralAssetAdministrativePlan instance
+          schema:
+            $ref: '#/definitions/CRCollateralAssetAdministrativePlanInitiateOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCollateralAssetAdministrativePlan
+      summary: Update to any amendable fields of the CollateralAssetAdministrativePlan instance
+      description: Update details of the administrative plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Collateral Asset Administrative Plan Request Payload
+        schema:
+          $ref: '#/definitions/CRCollateralAssetAdministrativePlanUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Collateral Asset Administrative Plan Instance
+          schema:
+            $ref: '#/definitions/CRCollateralAssetAdministrativePlanUpdateOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCollateralAssetAdministration
+      summary: Invoke a reporting action to obtain a Collateral Asset Administrative Plan instance related report
+      description: Retrieve details about an active collateral asset administrative plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCollateralAssetAdministrativePlanRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Collateral Asset Administrative Plan Instance
+          schema:
+            $ref: '#/definitions/CRCollateralAssetAdministrativePlanRetrieveOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/valuation/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCollateralAssetAdministrativePlanValuation
+      summary: Details of a new Valuation instance
+      description: Create a valuation for a collateral asset
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Collateral Asset Administrative Plan Request Payload
+        schema:
+          $ref: '#/definitions/BQValuationInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Collateral Asset Administrative Plan instance
+          schema:
+            $ref: '#/definitions/BQValuationInitiateOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCollateralAssetAdministrativePlanValuation
+      summary: Update to any amendable fields of the Valuation instance
+      description: Update details for a valuation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Valuation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Valuation Request Payload
+        schema:
+          $ref: '#/definitions/BQValuationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Valuation Instance
+          schema:
+            $ref: '#/definitions/BQValuationUpdateOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCollateralAssetAdministrativePlanValuationUpdate
+      summary: Invoke a service request action against the Valuation instance
+      description: Request an ad-hoc valuation (override the schedule) 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Valuation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Valuation request payload
+        schema:
+          $ref: '#/definitions/BQValuationRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Valuation Instance Record
+          schema:
+            $ref: '#/definitions/BQValuationRequestOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: requestCollateralAssetAdministrativePlanValuation
+      summary: Invoke a reporting action to obtain a Valuation instance related report.
+      description: Retrieve details about an valuation task .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Valuation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQValuationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Valuation Instance Record
+          schema:
+            $ref: '#/definitions/BQValuationRetrieveOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCollateralAssetAdministrativePlanMaintenance
+      summary: Details of a new Maintenance instance
+      description: Create a maintenance task for a collateral asset
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Collateral Asset Administrative Plan Request Payload
+        schema:
+          $ref: '#/definitions/BQMaintenanceInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Collateral Asset Administrative Plan instance
+          schema:
+            $ref: '#/definitions/BQMaintenanceInitiateOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCollateralAssetAdministrativePlanMaintenance
+      summary: Update to any amendable fields of the Maintenance instance
+      description: Update details for a maintenance task
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Maintenance Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Maintenance Request Payload
+        schema:
+          $ref: '#/definitions/BQMaintenanceUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Maintenance Instance
+          schema:
+            $ref: '#/definitions/BQMaintenanceUpdateOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCollateralAssetAdministrativePlanMaintenanceUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or reject the results of a maintenance task
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Maintenance Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Maintenance request payload
+        schema:
+          $ref: '#/definitions/BQMaintenanceExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Maintenance Instance Record
+          schema:
+            $ref: '#/definitions/BQMaintenanceExchangeOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCollateralAssetAdministrativePlanMaintenanceUpdate
+      summary: Invoke a service request action against the Maintenance instance
+      description: Request an ad-hoc maintenance task (override the schedule)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Maintenance Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Maintenance request payload
+        schema:
+          $ref: '#/definitions/BQMaintenanceRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Maintenance Instance Record
+          schema:
+            $ref: '#/definitions/BQMaintenanceRequestOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: requestCollateralAssetAdministrativePlanMaintenance
+      summary: Invoke a reporting action to obtain a Maintenance instance related report.
+      description: Retrieve details about a maintenance task .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Maintenance Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQMaintenanceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Maintenance Instance Record
+          schema:
+            $ref: '#/definitions/BQMaintenanceRetrieveOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCollateralAssetAdministrationReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CollateralAssetAdministration Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /collateral-asset-administration/collateral-asset-administrative-plan/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCollateralAssetAdministrationBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Valuation',  'Maintenance', ]
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCollateralAssetAdministrationBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Maintenance
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Maintenance Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [MaintenanceID1, MaintenanceID2]

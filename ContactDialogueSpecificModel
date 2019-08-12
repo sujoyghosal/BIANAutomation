@@ -1,0 +1,44 @@
+CR Customer Contact Session Procedure Instance Record	Customer Contact Session Procedure	CR Customer Contact Session Procedure Instance Record	##			Handles a customer interaction by optimizing the dialogue	IO	IO			IO	IO	O	IO	IO	O	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O
+			Customer Contact Operating Session Instance Record			Reference to the parent contact record	I	IO			I	I	O	I		O		O	I		O	I		O	I		O	I		O	I		O	I		O	I		O
+			Customer Reference 			Reference to the customer (can be extracted from Contact Record or provided by customer)	I	IO			I	I	O	I		O		O	I		O	I		O	I		O	I		O	I		O	I		O	I		O
+			Employee Reference			Reference to the servicing agent	I	IO			I	I	O	I		O			I		O	I		O	I		O	I		O	I		O	I		O	I		O
+			Servicing Position Reference			Reference to the servicing location/desk for assisted customer exchanges	I	IO			I	I	O	I		O			I		O	I		O	I		O	I		O	I		O	I		O	I		O
+			Session Mechanism			The type of channel device involved in the session exchange (e.g. web, phone, chat, video, VOIP, face to face at a branch - note there can be concurrent sessions within a single customer contact)	I	IO			I	I	O	I		O			I		O	I		O	I		O	I		O	I		O	I		O	I		O
+			Session Start/End Time			The start and duration of the dialogue	IO	IO			IO	IO	O	IO		O			IO		O	IO		O	IO		O	IO		O	IO		O	IO		O	IO		O
+			Contact Dialogue Record	##		The session dialogue log of actions is returned to SD-Contact Handler and added to the contact record	IO	IO			IO	IO	O	IO	IO	O	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O
+				Contact Dialogue Type		The general type of customer exchange (e.g. verified customer, anonymous contact, topic - used to structure/script dialogue)	IO	IO			IO	IO	O	IO		O			IO		O	IO		O	IO		O	IO		O	IO		O	IO		O	IO		O
+				Contact Dialogue Script		In cases a prompt or script can provided to structure the interaction for self-service and assisted interactions	O	IO			IO	IO	O	IO		O			IO		O	IO		O	IO		O	IO		O	IO		O	IO		O	IO		O
+				Contact Dialogue Log Reference		Reference to a dialogue log that is built up	O	IO			I	I	O	I		O			I		O	I		O	I		O	I		O	I		O	I		O	I		O
+				Contact Dialogue Log		The dialogue log, used for training and root cause analysis etc. (e.g. click-stream, video/audio recording)	O	IO			IO	IO	O	IO	IO	O	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O
+				Contact Dialogue Result		The outcome of the dialogue (e.g. customer satisfied, on-ward routing, hang-up)	O	IO			IO	IO	O	IO	IO	O	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O	IO	IO	O
+BQ Query Instance Record		Query Instance Record	##			An optional interaction step within the session - to answer general queries for which there can be standard responses								IO	IO	O																							
+			Query Type 			The type of question/answer addressed in the session - e.g. branch location/hours								I	IO	O																							
+			Query Task Result			Details the response and any customer reaction								O	IO	O																							
+BQ Authentication Instance Record		Authentication Instance Record	##			An optional interaction within the session - to obtain a higher level of authentication to enable some action											IO	O																					
+			Required Authentication Level			The target level of authentication required											IO	O																					
+			Authentication Task Result			The result of the authentication request (the request is handles by Contact Handler and Party Authentication service domains											IO	O																					
+BQ Sales Instance Record		Sales Instance Record	##			An optional interaction within the session - to attempt a sale to the customer (can be self service)													IO	IO	O																		
+			Product/Service Type 			A description of the type of product of interest (e.g. lending or deposit products)													I	IO	O																		
+			Product/Service Properties 			A description of the selected product's features and options desired													I	IO	O																		
+			Sales Task Result			The result of the sales attempt (can be an identified lead/opportunity registered for future action or may lead to the invocation of Customer Offer within this dialogue. It may also provide insights into the customer's preferences)													O	IO	O																		
+BQ Offer Instance Record		Offer Instance Record	##			An optional interaction within the session - to invoke customer offer processing when the customer has made a selection of a product or service for which they are eligible																IO	IO	O															
+			Product/Service Type 			The selected product/service																I	IO	O															
+			Offer Task Result			The result of the invoked offer procedure (e.g. abandoned, in process/pending, offer accepted)																O	IO	O															
+BQ Product/Service Instance Record		Product/Service Instance Record	##			An optional interaction within the session - to access an in-force product or service. Note the associated fulfillment service domain will perform the necessary actions																			IO	IO	O												
+			Product Instance Reference			Reference to a specific product instance provided by the customer																			I	IO	O												
+			Product/Service Task Result			The result of the invoked product or service fulfillment service domain (e.g. balance provided, payment initiated, reference details updated)																			O	IO	O												
+BQ Case Instance Record		Case Instance Record	##			An optional interaction within the session - to raise a customer case																						IO	IO	O									
+			Product Instance Reference			Reference to a specific product instance provided by the customer																						I	IO	O									
+			Customer Case Type			The type of case being processed including any supporting narrative (e.g. disputed charges, suspected account fraud, stolen device, change of status)																						I	IO	O									
+			Case Task Result			The result of the invocation (e.g. case active)																						O	IO	O									
+BQ Order Instance Record		Order Instance Record	##			An optional interaction within the session - to process a customer order (a standard type of customer support/assistance that is supported directly by the service domain as a structured dialogue)																									IO	IO	O						
+			Order Type			Reference to a specific type of customer order (e.g. consolidated balance, change of address, simple product/service guidance)																									I	IO	O						
+			Order Task Record	##		The type of case being processed including any supporting narrative (e.g. disputed charges, suspected account fraud, stolen device, change of status)																									IO	IO	O						
+				Order Task Work Products		Forms and actions agreed and registered during the order																									IO	IO	O						
+				Order Task Result		The result of the order task (e.g. order completed, actions pending)																									IO	IO	O						
+BQ Intelligence Record		BQ Intelligence Record	##			An optional interaction within the session - to capture customer insights such as detected life events and or product and service preferences or concerns																												IO	IO	O			
+			Customer Insight Type 			Defines a type of maintained customer insight (e.g. retention candidate, cross-sell candidate)																												IO	IO	O			
+			Customer Insight			The derived value of the specific insight for the customer and past values if appropriate																												IO	IO	O			
+			Insight Task Result			The result of the task (e.g. customer insight detected)																												O	IO	O			
+BQ History Instance Record		History Instance Record	##			An optional interaction step within the session - to record the event in the customer's history (only applicable when the customer has been positively identified - some simple dialogues can be anonymous)																															IO	IO	O
+			History Task Result			Confirmation that the contact session is captured																															IO	IO	O

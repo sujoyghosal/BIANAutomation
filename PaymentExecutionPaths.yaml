@@ -1,0 +1,392 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Payment Execution'
+ description: >
+
+    ## Executive Summary:
+    This service domains processes the movement of funds between accounts within the bank or to/from an account held with another bank, selecting the appropriate payment mechanism
+
+    ## Example of Use:
+    Funds are transferred from a customer's account with the bank to a payee account held at another bank
+
+    ## Description:
+    Payment Execution handles the back-end processing of a movement funds from a debtor account to a creditor account. Payments need to have been authorized and validated against customer/bank agreements before being instructed to Payment Execution. Payment Execution then determines whether debtor and creditor accounts are held within the bank and if not selects the appropriate payment mechanism/channel to use to complete the transfer. It is responsible for ensuring that both (or neither) sides of the exchange are completed successfully
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-payment-execution/1.0.0
+schemes:
+ - https
+paths:
+  /payment-execution/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDPaymentExecution
+      summary: Activate  a SDPaymentExecution servicing session
+      description: Activate  a  SDPaymentExecution servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDPaymentExecution Request Payload
+        schema:
+          $ref: '#/definitions/SDPaymentExecutionActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDPaymentExecutionActivateOutputModel'
+  /payment-execution/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDPaymentExecution
+      summary: Update an active SDPaymentExecution session configuration
+      description: Update an active SDPaymentExecution session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPaymentExecution Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPaymentExecution Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDPaymentExecutionConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDPaymentExecutionConfigureOutputModel'
+  /payment-execution/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDPaymentExecution
+      summary: "Capturing feedback against the SDPaymentExecution service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDPaymentExecution service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPaymentExecution Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPaymentExecution Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDPaymentExecutionFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDPaymentExecutionFeedbackOutputModel'
+  /payment-execution/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDPaymentExecution
+      summary: Analytical views maintained by the SDPaymentExecution service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDPaymentExecution service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPaymentExecution Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDPaymentExecution Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDPaymentExecutionRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDPaymentExecutionRetrieveOutputModel'
+  /payment-execution/{sd-reference-id}/payment-execution-procedure/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePaymentExecutionProcedure
+      summary: Details of a new PaymentExecutionProcedure instance
+      description: Initiate a payment execution procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Execution Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PaymentExecutionProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRPaymentExecutionProcedureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new PaymentExecutionProcedure instance
+          schema:
+            $ref: '#/definitions/CRPaymentExecutionProcedureInitiateOutputModel'
+  /payment-execution/{sd-reference-id}/payment-execution-procedure/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePaymentExecutionProcedure
+      summary: Update to any amendable fields of the PaymentExecutionProcedure instance
+      description: Update details of a payment execution instruction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Execution Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Payment Execution Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payment Execution Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRPaymentExecutionProcedureUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Payment Execution Procedure Instance
+          schema:
+            $ref: '#/definitions/CRPaymentExecutionProcedureUpdateOutputModel'
+  /payment-execution/{sd-reference-id}/payment-execution-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePaymentExecution
+      summary: Invoke a reporting action to obtain a Payment Execution Procedure instance related report
+      description: Retrieve details about a payment execution instruction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Execution Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Payment Execution Procedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRPaymentExecutionProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Payment Execution Procedure Instance
+          schema:
+            $ref: '#/definitions/CRPaymentExecutionProcedureRetrieveOutputModel'
+  /payment-execution/{sd-reference-id}/payment-execution-procedure/{cr-reference-id}/paymentmechanism/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePaymentExecutionProcedureMechanism
+      summary: Invoke a reporting action to obtain a PaymentMechanism instance related report.
+      description: Retrieve details about the payment mechanism selection .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Execution Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Payment Execution Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PaymentMechanism Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentMechanismRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved PaymentMechanism Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentMechanismRetrieveOutputModel'
+  /payment-execution/{sd-reference-id}/payment-execution-procedure/{cr-reference-id}/paymentexecution/{bq-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlPaymentExecutionProcedurePaymentExecutionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the execution of the gateway transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Execution Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Payment Execution Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PaymentExecution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PaymentExecution request payload
+        schema:
+          $ref: '#/definitions/BQPaymentExecutionControlInputModel'
+      responses:
+        200:
+          description: Successful control of PaymentExecution Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentExecutionControlOutputModel'
+  /payment-execution/{sd-reference-id}/payment-execution-procedure/{cr-reference-id}/paymentexecution/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePaymentExecutionProcedurePaymentExecution
+      summary: Invoke a reporting action to obtain a PaymentExecution instance related report.
+      description: Retrieve details about the gateway transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Execution Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Payment Execution Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PaymentExecution Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentExecutionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved PaymentExecution Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentExecutionRetrieveOutputModel'
+  /payment-execution/{sd-reference-id}/payment-execution-procedure:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePaymentExecutionReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Execution Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- PaymentExecution Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /payment-execution/payment-execution-procedure/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePaymentExecutionBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'PaymentMechanism',  'PaymentExecution', ]
+  /payment-execution/{sd-reference-id}/payment-execution-procedure/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrievePaymentExecutionBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Execution Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Payment Execution Procedure Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- PaymentExecution
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- PaymentExecution Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [PaymentExecutionID1, PaymentExecutionID2]

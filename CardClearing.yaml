@@ -3,6 +3,16 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Card Clearing'
  description: >
+
+    ## Executive Summary:
+    This service domain orchestrates the capture and consolidation of card financial transactions originating from various sources, such as POS Network, E-Commerce Gateway, ATM Network, or Card Case Management. It also handles the clearing of the transactions from the Acquirers to the Issuers through the Card Networks
+
+    ## Example of Use:
+    An Acquiring Bank receives charge transactions submitted by Merchants through Point of Sale Terminals or batch submission for recurring billing and forwards these transactions to the respective Card Issuing Banks through the Card Network (e.g. Visa, MC, AMEX, Diners, etc.). This process may take place multiple times during the day.
+
+    ## Description:
+    The behavior varies depending on the role of the participant bank/network. A card acquiring Bank consolidates all incoming transactions from Merchants, determining their routing, and transmitting to the respective Card Networks. For the Card Networks it receives and consolidates the transactions from all Acquiring Banks and to distribute and route them to the respective Card Issuing Banks. For the Card Issuing Banks it receives their cardholder transactions from the Card Networks and routes them to the instance of the Credit/Charge Card service domain which is responsible for the card used in the transaction. The transactions may include charges, refunds, and chargebacks.
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-card-clearing/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDCardClearing
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDCardClearing servicing session
+      description: Activate  a  SDCardClearing servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDCardClearingActivateOutputModel'
-  /card-clearing/configure:
+  /card-clearing/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDCardClearing
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDCardClearing session configuration
+      description: Update an active SDCardClearing session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardClearing Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCardClearingConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDCardClearingConfigureOutputModel'
-  /card-clearing/feedback:
+  /card-clearing/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDCardClearing
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDCardClearing service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCardClearing service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardClearing Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCardClearingFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDCardClearingFeedbackOutputModel'
-  /card-clearing/retrieve:
+  /card-clearing/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDCardClearing
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDCardClearing service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCardClearing service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardClearing Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +117,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDCardClearingRetrieveOutputModel'
-  /card-clearing/card-clearing-procedure/initiation:
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/initiation:
     post:
       tags:
       - initiate
       operationId: initiateCardClearingProcedure
-      summary: Details of a new Card Clearing Procedure instance
+      summary: Details of a new CardClearingProcedure instance
       description: Initiate a card clearing process
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,36 +140,71 @@ paths:
           $ref: '#/definitions/CRCardClearingProcedureInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Card Clearing Procedure instance
+          description: Successful initiation of new CardClearingProcedure instance
           schema:
             $ref: '#/definitions/CRCardClearingProcedureInitiateOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/update:
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCardClearingProcedure
-      summary: Update to any amendable fields of the Card Clearing Procedure instance
+      summary: Update to any amendable fields of the CardClearingProcedure instance
       description: Update details of a card clearing processing batch
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Clearing Procedure Instance
+        description: Card Clearing Procedure Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CardClearingProcedure Request Payload
+        description: Card Clearing Procedure Request Payload
         schema:
           $ref: '#/definitions/CRCardClearingProcedureUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Card Clearing Procedure instance
+          description: Successfully Updated Card Clearing Procedure Instance
           schema:
             $ref: '#/definitions/CRCardClearingProcedureUpdateOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/capture/{bq-reference-id}/update:
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardClearing
+      summary: Invoke a reporting action to obtain a Card Clearing Procedure instance related report
+      description: Retrieve details about a card clearing process
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Clearing Procedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCardClearingProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Card Clearing Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardClearingProcedureRetrieveOutputModel'
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/capture/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -149,14 +214,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Clearing Procedure Instance
+        description: Card Clearing Procedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Capture BQ Reference Id
+        description: Capture Instance Reference
         required: true
         type: string
       - in: body
@@ -167,10 +237,80 @@ paths:
           $ref: '#/definitions/BQCaptureUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Capture instance
+          description: Successfully Updated Capture Instance
           schema:
             $ref: '#/definitions/BQCaptureUpdateOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/fees/{bq-reference-id}/update:
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/capture/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardClearingProcedureCapture
+      summary: Invoke a reporting action to obtain a Capture instance related report.
+      description: Retrieve details about a captured card transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Clearing Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Capture Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQCaptureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Capture Instance Record
+          schema:
+            $ref: '#/definitions/BQCaptureRetrieveOutputModel'
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/addressing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardClearingProcedureAddressing
+      summary: Invoke a reporting action to obtain a Addressing instance related report.
+      description: Retrieve details about card transaction addressing .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Clearing Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Addressing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAddressingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Addressing Instance Record
+          schema:
+            $ref: '#/definitions/BQAddressingRetrieveOutputModel'
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/fees/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -180,14 +320,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Clearing Procedure Instance
+        description: Card Clearing Procedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Fees BQ Reference Id
+        description: Fees Instance Reference
         required: true
         type: string
       - in: body
@@ -198,41 +343,151 @@ paths:
           $ref: '#/definitions/BQFeesUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Fees instance
+          description: Successfully Updated Fees Instance
           schema:
             $ref: '#/definitions/BQFeesUpdateOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/reconciliation/{bq-reference-id}/update:
-    put:
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/fees/{bq-reference-id}/:
+    get:
       tags:
-      - update
-      operationId: updateCardClearingProcedureReconciliation
-      summary: Update to any amendable fields of the Reconciliation instance
-      description: Update details of a card transaction reconciliation
+      - retrieve
+      operationId: retrieveCardClearingProcedureFees
+      summary: Invoke a reporting action to obtain a Fees instance related report.
+      description: Retrieve details about card transaction intercharge fees .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Clearing Procedure Instance
+        description: Card Clearing Procedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Reconciliation BQ Reference Id
+        description: Fees Instance Reference
         required: true
         type: string
-      - in: body
-        name: body
-        required: true
-        description: Reconciliation Request Payload
-        schema:
-          $ref: '#/definitions/BQReconciliationUpdateInputModel'
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQFeesRetrieveInputModel'
+        type: string
       responses:
         200:
-          description: Successful Update to any amendable fields of the Reconciliation instance
+          description: Successfully  Retrieved Fees Instance Record
           schema:
-            $ref: '#/definitions/BQReconciliationUpdateOutputModel'
-  /card-clearing/card-clearing-procedure:
+            $ref: '#/definitions/BQFeesRetrieveOutputModel'
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/matching/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardClearingProcedureMatching
+      summary: Invoke a reporting action to obtain a Matching instance related report.
+      description: Retrieve details about card transaction matching .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Clearing Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Matching Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQMatchingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Matching Instance Record
+          schema:
+            $ref: '#/definitions/BQMatchingRetrieveOutputModel'
+  
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/reconciliation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardClearingProcedureReconciliation
+      summary: Invoke a reporting action to obtain a Reconciliation instance related report.
+      description: Retrieve details about card transaction reconciliation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Clearing Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Reconciliation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQReconciliationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Reconciliation Instance Record
+          schema:
+            $ref: '#/definitions/BQReconciliationRetrieveOutputModel'
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/routing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardClearingProcedureRouting
+      summary: Invoke a reporting action to obtain a Routing instance related report.
+      description: Retrieve details about card transaction routing .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Clearing Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Routing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQRoutingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Routing Instance Record
+          schema:
+            $ref: '#/definitions/BQRoutingRetrieveOutputModel'
+  /card-clearing/{sd-reference-id}/card-clearing-procedure:
     get:
       tags:
       - retrieve
@@ -241,6 +496,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- CardClearing Instance Status='active'
@@ -270,7 +530,7 @@ paths:
             items:
               type: string
             example: [ 'Capture',  'Addressing',  'FXConversion',  'Fees',  'Matching',  'Reconciliation',  'Routing', ]
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/{behavior-qualifier}/:
+  /card-clearing/{sd-reference-id}/card-clearing-procedure/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -279,9 +539,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Clearing Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Clearing Procedure Instance
+        description: Card Clearing Procedure Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -302,249 +567,6 @@ paths:
             items:
               type: string
             example: [RoutingID1, RoutingID2]
-  /card-clearing/card-clearing-procedure/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardClearing
-      summary: Retrieve a Card Clearing Record
-      description: Retrieve a Card Clearing Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Clearing Procedure Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Clearing Request Payload
-        schema:
-          $ref: '#/definitions/CRCardClearingProcedureRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Clearing Report
-          schema:
-            $ref: '#/definitions/CRCardClearingProcedureRetrieveOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/capture/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardClearingCapture
-      summary: Retrieve a Card Clearing Capture Record
-      description: Retrieve a Card Clearing Capture Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Clearing Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Capture BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Clearing Capture Request Payload
-        schema:
-          $ref: '#/definitions/BQCaptureRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Clearing Capture Report
-          schema:
-            $ref: '#/definitions/BQCaptureRetrieveOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/addressing/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardClearingAddressing
-      summary: Retrieve a Card Clearing Addressing Record
-      description: Retrieve a Card Clearing Addressing Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Clearing Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Addressing BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Clearing Addressing Request Payload
-        schema:
-          $ref: '#/definitions/BQAddressingRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Clearing Addressing Report
-          schema:
-            $ref: '#/definitions/BQAddressingRetrieveOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/fxconversion/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardClearingFXConversion
-      summary: Retrieve a Card Clearing FXConversion Record
-      description: Retrieve a Card Clearing FXConversion Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Clearing Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: FXConversion BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Clearing FXConversion Request Payload
-        schema:
-          $ref: '#/definitions/BQFXConversionRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Clearing FXConversion Report
-          schema:
-            $ref: '#/definitions/BQFXConversionRetrieveOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/fees/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardClearingFees
-      summary: Retrieve a Card Clearing Fees Record
-      description: Retrieve a Card Clearing Fees Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Clearing Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Fees BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Clearing Fees Request Payload
-        schema:
-          $ref: '#/definitions/BQFeesRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Clearing Fees Report
-          schema:
-            $ref: '#/definitions/BQFeesRetrieveOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/matching/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardClearingMatching
-      summary: Retrieve a Card Clearing Matching Record
-      description: Retrieve a Card Clearing Matching Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Clearing Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Matching BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Clearing Matching Request Payload
-        schema:
-          $ref: '#/definitions/BQMatchingRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Clearing Matching Report
-          schema:
-            $ref: '#/definitions/BQMatchingRetrieveOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/reconciliation/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardClearingReconciliation
-      summary: Retrieve a Card Clearing Reconciliation Record
-      description: Retrieve a Card Clearing Reconciliation Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Clearing Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Reconciliation BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Clearing Reconciliation Request Payload
-        schema:
-          $ref: '#/definitions/BQReconciliationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Clearing Reconciliation Report
-          schema:
-            $ref: '#/definitions/BQReconciliationRetrieveOutputModel'
-  /card-clearing/card-clearing-procedure/{cr-reference-id}/routing/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardClearingRouting
-      summary: Retrieve a Card Clearing Routing Record
-      description: Retrieve a Card Clearing Routing Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Clearing Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Routing BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Clearing Routing Request Payload
-        schema:
-          $ref: '#/definitions/BQRoutingRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Clearing Routing Report
-          schema:
-            $ref: '#/definitions/BQRoutingRetrieveOutputModel'
 definitions:
  SDCardClearingActivateInputModel:
   type: object
@@ -1192,6 +1214,13 @@ definitions:
  CRCardClearingProcedureInitiateInputModel:
   type: object
   properties: 
+   cardClearingServicingSessionReference:
+    type: string
+    example: "CCSSR744392"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    cardClearingProcedureInitiateActionRecord:
     type: object
     description: |
@@ -1209,21 +1238,21 @@ definitions:
     properties:
      networkReference:
       type: string
-      example: "740938"
+      example: "760445"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card network
      participantAcquirerBankReference:
       type: string
-      example: "738298"
+      example: "790244"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the Acquiring bank for which the Network orchestrates clearing processing
      participantIssuerBankReference:
       type: string
-      example: "715792"
+      example: "792419"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1250,9 +1279,16 @@ definitions:
  CRCardClearingProcedureInitiateOutputModel:
   type: object
   properties: 
+   cardClearingProcedureInstanceReference:
+    type: string
+    example: "CCPIR765777"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Card Clearing Procedure instance
    cardClearingProcedureInitiateActionReference:
     type: string
-    example: "CCPIAR716397"
+    example: "CCPIAR748775"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1274,7 +1310,7 @@ definitions:
     properties:
      networkReference:
       type: string
-      example: "740938"
+      example: "760445"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1307,19 +1343,33 @@ definitions:
  CRCardClearingProcedureUpdateInputModel:
   type: object
   properties: 
+   cardClearingServicingSessionReference:
+    type: string
+    example: "CCSSR707635"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   cardClearingProcedureInstanceReference:
+    type: string
+    example: "CCPIR706450"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Card Clearing Procedure instance
    cardClearingProcedureInstanceRecord:
     type: object
     properties:
      networkReference:
       type: string
-      example: "779475"
+      example: "702982"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card network
      participantAcquirerBankReference:
       type: string
-      example: "753422"
+      example: "788649"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1332,7 +1382,7 @@ definitions:
         general-info: Defines card clearing fees/terms in force - referenced by Network 
      participantIssuerBankReference:
       type: string
-      example: "719670"
+      example: "721300"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1382,14 +1432,14 @@ definitions:
     properties:
      networkReference:
       type: string
-      example: "779475"
+      example: "702982"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card network
      participantAcquirerBankReference:
       type: string
-      example: "753422"
+      example: "788649"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1402,7 +1452,7 @@ definitions:
         general-info: Defines card clearing fees/terms in force - referenced by Network 
      participantIssuerBankReference:
       type: string
-      example: "719670"
+      example: "721300"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1434,7 +1484,7 @@ definitions:
         general-info: The schedule of activities for card clearing
    cardClearingProcedureUpdateActionTaskReference:
     type: string
-    example: "CCPUATR749387"
+    example: "CCPUATR723139"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1471,7 +1521,7 @@ definitions:
     properties:
      cardClearingProcedureInstanceReportReference:
       type: string
-      example: "749174"
+      example: "760587"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1493,7 +1543,7 @@ definitions:
     properties:
      cardClearingProcedureInstanceAnalysisReference:
       type: string
-      example: "788731"
+      example: "702429"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1518,14 +1568,14 @@ definitions:
     properties:
      networkReference:
       type: string
-      example: "773834"
+      example: "754790"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card network
      participantAcquirerBankReference:
       type: string
-      example: "786192"
+      example: "705576"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1538,7 +1588,7 @@ definitions:
         general-info: Defines card clearing fees/terms in force - referenced by Network 
      participantIssuerBankReference:
       type: string
-      example: "711748"
+      example: "784478"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1570,7 +1620,7 @@ definitions:
         general-info: The schedule of activities for card clearing
    cardClearingProcedureRetrieveActionTaskReference:
     type: string
-    example: "CCPRATR749802"
+    example: "CCPRATR722874"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1632,40 +1682,54 @@ definitions:
  BQCaptureUpdateInputModel:
   type: object
   properties: 
+   cardClearingProcedureInstanceReference:
+    type: string
+    example: "CCPIR793158"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Card Clearing Procedure instance
+   captureInstanceReference:
+    type: string
+    example: "CIR768999"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Capture instance
    captureInstanceRecord:
     type: object
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "753151"
+      example: "766695"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "722638"
+      example: "768951"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "753258"
+      example: "792934"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "775604"
+      example: "767763"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "762598"
+      example: "728757"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1698,21 +1762,21 @@ definitions:
         general-info: The amount corresponding to the type
      cardTransactionMerchantReference:
       type: string
-      example: "761821"
+      example: "752870"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the merchant initiating settlement
      cardTransactionLocationReference:
       type: string
-      example: "799384"
+      example: "755184"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the point of sale location
      cardTransactionProductServiceReference:
       type: string
-      example: "778983"
+      example: "793718"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1764,35 +1828,35 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "753151"
+      example: "766695"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "722638"
+      example: "768951"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "753258"
+      example: "792934"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "775604"
+      example: "767763"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "762598"
+      example: "728757"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1825,21 +1889,21 @@ definitions:
         general-info: The amount corresponding to the type
      cardTransactionMerchantReference:
       type: string
-      example: "761821"
+      example: "752870"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the merchant initiating settlement
      cardTransactionLocationReference:
       type: string
-      example: "799384"
+      example: "755184"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the point of sale location
      cardTransactionProductServiceReference:
       type: string
-      example: "778983"
+      example: "793718"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1873,7 +1937,7 @@ definitions:
         general-info: Details the reference, amount, timestamp of the transaction authorization)
    captureUpdateActionTaskReference:
     type: string
-    example: "CUATR729622"
+    example: "CUATR709249"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1910,7 +1974,7 @@ definitions:
     properties:
      captureInstanceReportReference:
       type: string
-      example: "791045"
+      example: "778488"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1920,7 +1984,7 @@ definitions:
     properties:
      captureInstanceAnalysisReference:
       type: string
-      example: "729090"
+      example: "753462"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1933,14 +1997,14 @@ definitions:
     properties:
      participantAcquirerBankReference:
       type: string
-      example: "710117"
+      example: "768860"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the Acquiring bank for which the Network orchestrates clearing processing
      participantIssuerBankReference:
       type: string
-      example: "723619"
+      example: "787458"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1950,35 +2014,35 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "731831"
+      example: "759235"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "783149"
+      example: "731163"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "796777"
+      example: "781647"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "761608"
+      example: "757379"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "768872"
+      example: "757612"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2011,21 +2075,21 @@ definitions:
         general-info: The amount corresponding to the type
      cardTransactionMerchantReference:
       type: string
-      example: "772425"
+      example: "713609"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the merchant initiating settlement
      cardTransactionLocationReference:
       type: string
-      example: "756149"
+      example: "797481"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the point of sale location
      cardTransactionProductServiceReference:
       type: string
-      example: "773379"
+      example: "726547"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2059,7 +2123,7 @@ definitions:
         general-info: Details the reference, amount, timestamp of the transaction authorization)
    captureRetrieveActionTaskReference:
     type: string
-    example: "CRATR724750"
+    example: "CRATR756878"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2150,7 +2214,7 @@ definitions:
     properties:
      addressingInstanceReportReference:
       type: string
-      example: "750837"
+      example: "752651"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2160,7 +2224,7 @@ definitions:
     properties:
      addressingInstanceAnalysisReference:
       type: string
-      example: "742008"
+      example: "735648"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2173,14 +2237,14 @@ definitions:
     properties:
      participantAcquirerBankReference:
       type: string
-      example: "717476"
+      example: "712048"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the Acquiring bank for which the Network orchestrates clearing processing
      participantIssuerBankReference:
       type: string
-      example: "746983"
+      example: "707265"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2190,35 +2254,35 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "713386"
+      example: "778436"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "783216"
+      example: "730478"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "734772"
+      example: "712392"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "702805"
+      example: "748416"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "752100"
+      example: "756950"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2234,7 +2298,7 @@ definitions:
         general-info: Details of the transaction addressing 
    addressingRetrieveActionTaskReference:
     type: string
-    example: "ARATR755880"
+    example: "ARATR709476"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2325,7 +2389,7 @@ definitions:
     properties:
      fXConversionInstanceReportReference:
       type: string
-      example: "778731"
+      example: "726412"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2335,7 +2399,7 @@ definitions:
     properties:
      fXConversionInstanceAnalysisReference:
       type: string
-      example: "780211"
+      example: "779936"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2348,14 +2412,14 @@ definitions:
     properties:
      participantAcquirerBankReference:
       type: string
-      example: "793735"
+      example: "727802"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the Acquiring bank for which the Network orchestrates clearing processing
      participantIssuerBankReference:
       type: string
-      example: "778733"
+      example: "755116"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2365,35 +2429,35 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "719637"
+      example: "722361"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "722040"
+      example: "795485"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "710442"
+      example: "764908"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "735894"
+      example: "708826"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "706970"
+      example: "776785"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2426,21 +2490,21 @@ definitions:
         general-info: The amount corresponding to the type
      cardTransactionMerchantReference:
       type: string
-      example: "718963"
+      example: "785388"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the merchant initiating settlement
      cardTransactionLocationReference:
       type: string
-      example: "763774"
+      example: "709428"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the point of sale location
      cardTransactionProductServiceReference:
       type: string
-      example: "715434"
+      example: "794836"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2489,7 +2553,7 @@ definitions:
         general-info: Details of the transaction FX conversion 
    fXConversionRetrieveActionTaskReference:
     type: string
-    example: "FCRATR727943"
+    example: "FCRATR795328"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2563,6 +2627,20 @@ definitions:
  BQFeesUpdateInputModel:
   type: object
   properties: 
+   cardClearingProcedureInstanceReference:
+    type: string
+    example: "CCPIR747329"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Card Clearing Procedure instance
+   feesInstanceReference:
+    type: string
+    example: "FIR709582"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Fees instance
    feesInstanceRecord:
     type: object
     properties:
@@ -2610,7 +2688,7 @@ definitions:
         general-info: Details of the transaction fee processing
    feesUpdateActionTaskReference:
     type: string
-    example: "FUATR774991"
+    example: "FUATR798221"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2647,7 +2725,7 @@ definitions:
     properties:
      feesInstanceReportReference:
       type: string
-      example: "798674"
+      example: "708251"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2657,7 +2735,7 @@ definitions:
     properties:
      feesInstanceAnalysisReference:
       type: string
-      example: "778358"
+      example: "751486"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2670,14 +2748,14 @@ definitions:
     properties:
      participantAcquirerBankReference:
       type: string
-      example: "721697"
+      example: "749605"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the Acquiring bank for which the Network orchestrates clearing processing
      participantIssuerBankReference:
       type: string
-      example: "728567"
+      example: "722268"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2687,35 +2765,35 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "720797"
+      example: "730647"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "768014"
+      example: "782207"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "724881"
+      example: "743939"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "774419"
+      example: "764506"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "774704"
+      example: "781421"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2748,21 +2826,21 @@ definitions:
         general-info: The amount corresponding to the type
      cardTransactionMerchantReference:
       type: string
-      example: "725063"
+      example: "738404"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the merchant initiating settlement
      cardTransactionLocationReference:
       type: string
-      example: "762106"
+      example: "715665"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the point of sale location
      cardTransactionProductServiceReference:
       type: string
-      example: "768863"
+      example: "724365"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2811,7 +2889,7 @@ definitions:
         general-info: Details of the transaction fee processing
    feesRetrieveActionTaskReference:
     type: string
-    example: "FRATR722340"
+    example: "FRATR745914"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2902,7 +2980,7 @@ definitions:
     properties:
      matchingInstanceReportReference:
       type: string
-      example: "735464"
+      example: "787772"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2912,7 +2990,7 @@ definitions:
     properties:
      matchingInstanceAnalysisReference:
       type: string
-      example: "797875"
+      example: "743498"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2925,14 +3003,14 @@ definitions:
     properties:
      participantAcquirerBankReference:
       type: string
-      example: "715282"
+      example: "773742"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the Acquiring bank for which the Network orchestrates clearing processing
      participantIssuerBankReference:
       type: string
-      example: "711413"
+      example: "771658"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2942,35 +3020,35 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "731961"
+      example: "735128"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "761676"
+      example: "751990"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "717097"
+      example: "769300"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "732428"
+      example: "708743"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "733513"
+      example: "714760"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3003,21 +3081,21 @@ definitions:
         general-info: The amount corresponding to the type
      cardTransactionMerchantReference:
       type: string
-      example: "759406"
+      example: "765867"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the merchant initiating settlement
      cardTransactionLocationReference:
       type: string
-      example: "771281"
+      example: "733650"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the point of sale location
      cardTransactionProductServiceReference:
       type: string
-      example: "748093"
+      example: "764265"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3060,7 +3138,7 @@ definitions:
         general-info: Details of the transaction matching processing
    matchingRetrieveActionTaskReference:
     type: string
-    example: "MRATR785367"
+    example: "MRATR754659"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3131,43 +3209,6 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQReconciliationUpdateInputModel:
-  type: object
-  properties: 
-   reconciliationUpdateActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The update service call consolidated processing record
-   reconciliationUpdateActionRequest:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of the update action service request
- BQReconciliationUpdateOutputModel:
-  type: object
-  properties: 
-   reconciliationUpdateActionTaskReference:
-    type: string
-    example: "RUATR783557"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an update service call
-   reconciliationUpdateActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The update service call consolidated processing record
-   updateResponseRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: Details of the Update action service response
  BQReconciliationRetrieveInputModel:
   type: object
   properties: 
@@ -3188,7 +3229,7 @@ definitions:
     properties:
      reconciliationInstanceReportReference:
       type: string
-      example: "749823"
+      example: "771984"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3198,7 +3239,7 @@ definitions:
     properties:
      reconciliationInstanceAnalysisReference:
       type: string
-      example: "701917"
+      example: "760289"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3211,14 +3252,14 @@ definitions:
     properties:
      participantAcquirerBankReference:
       type: string
-      example: "771626"
+      example: "724957"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the Acquiring bank for which the Network orchestrates clearing processing
      participantIssuerBankReference:
       type: string
-      example: "752149"
+      example: "700021"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3228,35 +3269,35 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "730138"
+      example: "700370"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "717924"
+      example: "784479"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "757443"
+      example: "732678"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "769127"
+      example: "715074"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "767625"
+      example: "720168"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3289,21 +3330,21 @@ definitions:
         general-info: The amount corresponding to the type
      cardTransactionMerchantReference:
       type: string
-      example: "708523"
+      example: "795757"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the merchant initiating settlement
      cardTransactionLocationReference:
       type: string
-      example: "708941"
+      example: "756332"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the point of sale location
      cardTransactionProductServiceReference:
       type: string
-      example: "773919"
+      example: "775239"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3346,7 +3387,7 @@ definitions:
         general-info: Details of the transaction matching processing
    reconciliationRetrieveActionTaskReference:
     type: string
-    example: "RRATR733657"
+    example: "RRATR710992"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3437,7 +3478,7 @@ definitions:
     properties:
      routingInstanceReportReference:
       type: string
-      example: "758363"
+      example: "759837"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3447,7 +3488,7 @@ definitions:
     properties:
      routingInstanceAnalysisReference:
       type: string
-      example: "768690"
+      example: "756684"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3460,14 +3501,14 @@ definitions:
     properties:
      participantAcquirerBankReference:
       type: string
-      example: "738788"
+      example: "797935"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the Acquiring bank for which the Network orchestrates clearing processing
      participantIssuerBankReference:
       type: string
-      example: "786271"
+      example: "715264"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3477,35 +3518,35 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "702484"
+      example: "789445"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the card transaction as recorded by issuer and/or acquirer - these can be batched for some clearing processes
      cardTransactionProductInstanceReference:
       type: string
-      example: "737626"
+      example: "791431"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The account number associated with the card transaction
      cardTransactionNetworkReference:
       type: string
-      example: "754024"
+      example: "774852"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the network the card transaction is handled by
      cardTransactionIssuingBankReference:
       type: string
-      example: "757116"
+      example: "779723"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the card holder's issuing bank
      cardTransactionMerchantAcquiringBankReference:
       type: string
-      example: "749316"
+      example: "722464"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3538,21 +3579,21 @@ definitions:
         general-info: The amount corresponding to the type
      cardTransactionMerchantReference:
       type: string
-      example: "715352"
+      example: "719852"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the merchant initiating settlement
      cardTransactionLocationReference:
       type: string
-      example: "772543"
+      example: "710608"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the point of sale location
      cardTransactionProductServiceReference:
       type: string
-      example: "709036"
+      example: "764724"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3595,7 +3636,7 @@ definitions:
         general-info: Details of the transaction routing processing
    routingRetrieveActionTaskReference:
     type: string
-    example: "RRATR736488"
+    example: "RRATR774461"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

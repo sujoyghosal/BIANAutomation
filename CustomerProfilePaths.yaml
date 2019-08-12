@@ -1,0 +1,736 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Customer Profile'
+ description: >
+
+    ## Executive Summary:
+    This service domain maintains a small profile of key indicators for a customer that is referenced during customer interactions to facilitate routing, servicing and product/service fulfillment decisions. This can include status (such as account in arrears), ratings (such as high value customer) and alerts (such possible fraud activity detected) 
+
+    ## Example of Use:
+    Example of use:The identity and active status of a customer is checked as they present themselves on-line to access their bank account
+
+    ## Description:
+    The customer profile service domain is used to tune the customer experience during any real-time interaction with the bank. A collection of status indicators, ratings and alerts can be maintained that are then used to influence the routing and servicing decisions that govern the customer interaction. For example a status indicator could include a warning that the account is in distress which would limit sales activity and might result in routing a contact to a specialist account recovery servicing facility.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-customer-profile/1.0.0
+schemes:
+ - https
+paths:
+  /customer-profile/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCustomerProfile
+      summary: Activate  a SDCustomerProfile servicing session
+      description: Activate  a  SDCustomerProfile servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerProfile Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerProfileActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCustomerProfileActivateOutputModel'
+  /customer-profile/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCustomerProfile
+      summary: Update an active SDCustomerProfile session configuration
+      description: Update an active SDCustomerProfile session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerProfile Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerProfile Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerProfileConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCustomerProfileConfigureOutputModel'
+  /customer-profile/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCustomerProfile
+      summary: "Capturing feedback against the SDCustomerProfile service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCustomerProfile service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerProfile Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerProfile Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerProfileFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCustomerProfileFeedbackOutputModel'
+  /customer-profile/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCustomerProfile
+      summary: Analytical views maintained by the SDCustomerProfile service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCustomerProfile service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerProfile Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerProfile Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerProfileRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCustomerProfileRetrieveOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiatePartyState
+      summary: Details of a new PartyState instance
+      description: Initiate profile state monitoring for a party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PartyState Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyStateInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new PartyState instance
+          schema:
+            $ref: '#/definitions/CRPartyStateInitiateOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePartyState
+      summary: Update to any amendable fields of the PartyState instance
+      description: Update monitoring for a party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party State Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyStateUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Party State Instance
+          schema:
+            $ref: '#/definitions/CRPartyStateUpdateOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlPartyStateUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the party monitoring (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party State Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyStateControlInputModel'
+      responses:
+        200:
+          description: Successful control of Party State Instance
+          schema:
+            $ref: '#/definitions/CRPartyStateControlOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executePartyStateUpdate
+      summary: Invoke an automated execute action against the PartyState instance
+      description: Execute an automated action for a monitored party (e.g. refresh)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party State Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyStateExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Party State Instance
+          schema:
+            $ref: '#/definitions/CRPartyStateExecuteOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestPartyStateUpdate
+      summary: Invoke a service request action against the PartyState instance
+      description: Request manual intervention for a monitored party (e.g. review settings)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party State Request Payload
+        schema:
+          $ref: '#/definitions/CRPartyStateRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Party State Instance
+          schema:
+            $ref: '#/definitions/CRPartyStateRequestOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerProfile
+      summary: Invoke a reporting action to obtain a Party State instance related report
+      description: Retrieve details about the monitored party state 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRPartyStateRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Party State Instance
+          schema:
+            $ref: '#/definitions/CRPartyStateRetrieveOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/status/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePartyStateStatus
+      summary: Update to any amendable fields of the Status instance
+      description: Update status measures for a monitored party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Status Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Status Request Payload
+        schema:
+          $ref: '#/definitions/BQStatusUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Status Instance
+          schema:
+            $ref: '#/definitions/BQStatusUpdateOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/status/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: capturePartyStateStatusUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture status measures for a monitored party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Status Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Status request payload
+        schema:
+          $ref: '#/definitions/BQStatusCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Status Instance Record
+          schema:
+            $ref: '#/definitions/BQStatusCaptureOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/status/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyStateStatus
+      summary: Invoke a reporting action to obtain a Status instance related report.
+      description: Retrieve details about status measures for a party .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Status Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQStatusRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Status Instance Record
+          schema:
+            $ref: '#/definitions/BQStatusRetrieveOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/rating/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePartyStateRating
+      summary: Update to any amendable fields of the Rating instance
+      description: Update rating measures for a monitored party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Rating Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Rating Request Payload
+        schema:
+          $ref: '#/definitions/BQRatingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Rating Instance
+          schema:
+            $ref: '#/definitions/BQRatingUpdateOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/rating/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: capturePartyStateRatingUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture rating measures for a monitored party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Rating Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Rating request payload
+        schema:
+          $ref: '#/definitions/BQRatingCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Rating Instance Record
+          schema:
+            $ref: '#/definitions/BQRatingCaptureOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/rating/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyStateRating
+      summary: Invoke a reporting action to obtain a Rating instance related report.
+      description: Retrieve details about rating measures for a party .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Rating Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQRatingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Rating Instance Record
+          schema:
+            $ref: '#/definitions/BQRatingRetrieveOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/alert/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePartyStateAlert
+      summary: Update to any amendable fields of the Alert instance
+      description: Update alerts for a monitored party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Alert Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Alert Request Payload
+        schema:
+          $ref: '#/definitions/BQAlertUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Alert Instance
+          schema:
+            $ref: '#/definitions/BQAlertUpdateOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/alert/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangePartyStateAlertUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify etc. an alert for a monitored party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Alert Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Alert request payload
+        schema:
+          $ref: '#/definitions/BQAlertExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Alert Instance Record
+          schema:
+            $ref: '#/definitions/BQAlertExchangeOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/alert/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: capturePartyStateAlertUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture alerts for a monitored party
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Alert Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Alert request payload
+        schema:
+          $ref: '#/definitions/BQAlertCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Alert Instance Record
+          schema:
+            $ref: '#/definitions/BQAlertCaptureOutputModel'
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/alert/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyStateAlert
+      summary: Invoke a reporting action to obtain a Alert instance related report.
+      description: Retrieve details about alerts for a party .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Alert Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAlertRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Alert Instance Record
+          schema:
+            $ref: '#/definitions/BQAlertRetrieveOutputModel'
+  /customer-profile/{sd-reference-id}/party-state:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerProfileReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CustomerProfile Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /customer-profile/party-state/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerProfileBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Status',  'Rating',  'Alert', ]
+  /customer-profile/{sd-reference-id}/party-state/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerProfileBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Profile Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party State Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Alert
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Alert Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [AlertID1, AlertID2]

@@ -3,6 +3,16 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Card Financial Settlement'
  description: >
+
+    ## Executive Summary:
+    This service domain orchestrates the settlement of the transactions between the Issuers and the Acquirers through the Card Networks.
+
+    ## Example of Use:
+    Card Charge transactions that are acquired from the Merchants by the Acquiring Bank and forwarded to the Issuing Banks through Card Clearing are periodically settled (generally once a day). 
+
+    ## Description:
+    This service domain is used by the Card Network to initiate either gross or net settlement for the charges cleared during a specified period and to issue settlement instructions to the Issuing and Acquiring Banks. This requires the Card Network to issue settlement instructions to each Issuing Bank directing them to remit the total amounts corresponding to the cleared charges to designated bank accounts that are managed by the Card Network, which in turn makes the corresponding remittances to the designated bank accounts for the Card Issuers.The service domain is also used by the Issuing and Acquiring banks to perform reconciliation of the settlement instructions against the cleared charges and to initiate remittances through the Payment Order service domain.
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-card-financial-settlement/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDCardFinancialSettlement
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDCardFinancialSettlement servicing session
+      description: Activate  a  SDCardFinancialSettlement servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDCardFinancialSettlementActivateOutputModel'
-  /card-financial-settlement/configure:
+  /card-financial-settlement/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDCardFinancialSettlement
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDCardFinancialSettlement session configuration
+      description: Update an active SDCardFinancialSettlement session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardFinancialSettlement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCardFinancialSettlementConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDCardFinancialSettlementConfigureOutputModel'
-  /card-financial-settlement/feedback:
+  /card-financial-settlement/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDCardFinancialSettlement
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDCardFinancialSettlement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCardFinancialSettlement service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardFinancialSettlement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCardFinancialSettlementFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDCardFinancialSettlementFeedbackOutputModel'
-  /card-financial-settlement/retrieve:
+  /card-financial-settlement/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDCardFinancialSettlement
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDCardFinancialSettlement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCardFinancialSettlement service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardFinancialSettlement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +117,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDCardFinancialSettlementRetrieveOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/initiation:
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/initiation:
     post:
       tags:
       - initiate
       operationId: initiateCardFinancialSettlementProcedure
-      summary: Details of a new Card Financial Settlement Procedure instance
+      summary: Details of a new CardFinancialSettlementProcedure instance
       description: Initiate card financial settlement processing
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,36 +140,71 @@ paths:
           $ref: '#/definitions/CRCardFinancialSettlementProcedureInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Card Financial Settlement Procedure instance
+          description: Successful initiation of new CardFinancialSettlementProcedure instance
           schema:
             $ref: '#/definitions/CRCardFinancialSettlementProcedureInitiateOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/update:
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCardFinancialSettlementProcedure
-      summary: Update to any amendable fields of the Card Financial Settlement Procedure instance
+      summary: Update to any amendable fields of the CardFinancialSettlementProcedure instance
       description: Update the card financial settlement processing
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Financial Settlement Procedure Instance
+        description: Card Financial Settlement Procedure Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CardFinancialSettlementProcedure Request Payload
+        description: Card Financial Settlement Procedure Request Payload
         schema:
           $ref: '#/definitions/CRCardFinancialSettlementProcedureUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Card Financial Settlement Procedure instance
+          description: Successfully Updated Card Financial Settlement Procedure Instance
           schema:
             $ref: '#/definitions/CRCardFinancialSettlementProcedureUpdateOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/consolidation/{bq-reference-id}/update:
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlement
+      summary: Invoke a reporting action to obtain a Card Financial Settlement Procedure instance related report
+      description: Retrieve details and reports about the card settlement processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCardFinancialSettlementProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Card Financial Settlement Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCardFinancialSettlementProcedureRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/consolidation/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -149,14 +214,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Financial Settlement Procedure Instance
+        description: Card Financial Settlement Procedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Consolidation BQ Reference Id
+        description: Consolidation Instance Reference
         required: true
         type: string
       - in: body
@@ -167,10 +237,45 @@ paths:
           $ref: '#/definitions/BQConsolidationUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Consolidation instance
+          description: Successfully Updated Consolidation Instance
           schema:
             $ref: '#/definitions/BQConsolidationUpdateOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/processing/{bq-reference-id}/update:
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/consolidation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlementProcedureConsolidation
+      summary: Invoke a reporting action to obtain a Consolidation instance related report.
+      description: Retrieve consolidated transaction details for a settlement procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Consolidation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQConsolidationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Consolidation Instance Record
+          schema:
+            $ref: '#/definitions/BQConsolidationRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/processing/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -180,14 +285,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Financial Settlement Procedure Instance
+        description: Card Financial Settlement Procedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Processing BQ Reference Id
+        description: Processing Instance Reference
         required: true
         type: string
       - in: body
@@ -198,27 +308,67 @@ paths:
           $ref: '#/definitions/BQProcessingUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Processing instance
+          description: Successfully Updated Processing Instance
           schema:
             $ref: '#/definitions/BQProcessingUpdateOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/instruction/{bq-reference-id}/update:
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/processing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlementProcedureProcessing
+      summary: Invoke a reporting action to obtain a Processing instance related report.
+      description: Retrieve processing transaction details for a settlement procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Processing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQProcessingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Processing Instance Record
+          schema:
+            $ref: '#/definitions/BQProcessingRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/instruction/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCardFinancialSettlementProcedureInstruction
       summary: Update to any amendable fields of the Instruction instance
-      description: UpBQ Update payment instruction details for a settlement procedure
+      description: Update payment instruction details for a settlement procedure
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Financial Settlement Procedure Instance
+        description: Card Financial Settlement Procedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Instruction BQ Reference Id
+        description: Instruction Instance Reference
         required: true
         type: string
       - in: body
@@ -229,10 +379,45 @@ paths:
           $ref: '#/definitions/BQInstructionUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Instruction instance
+          description: Successfully Updated Instruction Instance
           schema:
             $ref: '#/definitions/BQInstructionUpdateOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/payment/{bq-reference-id}/update:
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/instruction/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlementProcedureInstruction
+      summary: Invoke a reporting action to obtain a Instruction instance related report.
+      description: Retrieve payment instruction details for a settlement procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Instruction Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInstructionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Instruction Instance Record
+          schema:
+            $ref: '#/definitions/BQInstructionRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/payment/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -242,14 +427,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Financial Settlement Procedure Instance
+        description: Card Financial Settlement Procedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Payment BQ Reference Id
+        description: Payment Instance Reference
         required: true
         type: string
       - in: body
@@ -260,10 +450,45 @@ paths:
           $ref: '#/definitions/BQPaymentUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Payment instance
+          description: Successfully Updated Payment Instance
           schema:
             $ref: '#/definitions/BQPaymentUpdateOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure:
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/payment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardFinancialSettlementProcedurePayment
+      summary: Invoke a reporting action to obtain a Payment instance related report.
+      description: Retrieve payment processing details for a settlement procedure .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Financial Settlement Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Payment Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentRetrieveOutputModel'
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure:
     get:
       tags:
       - retrieve
@@ -272,6 +497,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- CardFinancialSettlement Instance Status='active'
@@ -301,7 +531,7 @@ paths:
             items:
               type: string
             example: [ 'Consolidation',  'Processing',  'Instruction',  'Payment', ]
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/{behavior-qualifier}/:
+  /card-financial-settlement/{sd-reference-id}/card-financial-settlement-procedure/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -310,9 +540,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Financial Settlement Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Card Financial Settlement Procedure Instance
+        description: Card Financial Settlement Procedure Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -333,156 +568,6 @@ paths:
             items:
               type: string
             example: [PaymentID1, PaymentID2]
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardFinancialSettlement
-      summary: Retrieve a Card Financial Settlement Record
-      description: Retrieve a Card Financial Settlement Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Financial Settlement Procedure Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Financial Settlement Request Payload
-        schema:
-          $ref: '#/definitions/CRCardFinancialSettlementProcedureRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Financial Settlement Report
-          schema:
-            $ref: '#/definitions/CRCardFinancialSettlementProcedureRetrieveOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/consolidation/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardFinancialSettlementConsolidation
-      summary: Retrieve a Card Financial Settlement Consolidation Record
-      description: Retrieve a Card Financial Settlement Consolidation Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Financial Settlement Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Consolidation BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Financial Settlement Consolidation Request Payload
-        schema:
-          $ref: '#/definitions/BQConsolidationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Financial Settlement Consolidation Report
-          schema:
-            $ref: '#/definitions/BQConsolidationRetrieveOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/processing/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardFinancialSettlementProcessing
-      summary: Retrieve a Card Financial Settlement Processing Record
-      description: Retrieve a Card Financial Settlement Processing Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Financial Settlement Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Processing BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Financial Settlement Processing Request Payload
-        schema:
-          $ref: '#/definitions/BQProcessingRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Financial Settlement Processing Report
-          schema:
-            $ref: '#/definitions/BQProcessingRetrieveOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/instruction/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardFinancialSettlementInstruction
-      summary: Retrieve a Card Financial Settlement Instruction Record
-      description: Retrieve a Card Financial Settlement Instruction Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Financial Settlement Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Instruction BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Financial Settlement Instruction Request Payload
-        schema:
-          $ref: '#/definitions/BQInstructionRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Financial Settlement Instruction Report
-          schema:
-            $ref: '#/definitions/BQInstructionRetrieveOutputModel'
-  /card-financial-settlement/card-financial-settlement-procedure/{cr-reference-id}/payment/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCardFinancialSettlementPayment
-      summary: Retrieve a Card Financial Settlement Payment Record
-      description: Retrieve a Card Financial Settlement Payment Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Card Financial Settlement Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Payment BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Card Financial Settlement Payment Request Payload
-        schema:
-          $ref: '#/definitions/BQPaymentRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Card Financial Settlement Payment Report
-          schema:
-            $ref: '#/definitions/BQPaymentRetrieveOutputModel'
 definitions:
  SDCardFinancialSettlementActivateInputModel:
   type: object
@@ -1130,19 +1215,19 @@ definitions:
  CRCardFinancialSettlementProcedureInitiateInputModel:
   type: object
   properties: 
+   cardFinancialSettlementServicingSessionReference:
+    type: string
+    example: "CFSSSR759533"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    cardFinancialSettlementProcedureInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The Initiate service call input and output record
-   cardFinancialSettlementServicingSessionReference:
-    type: string
-    example: "CFSSSR783454"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
    cardFinancialSettlementProcedureInstanceStatus:
     type: string
     description: |
@@ -1154,7 +1239,7 @@ definitions:
     properties:
      networkReference:
       type: string
-      example: "785228"
+      example: "754510"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1173,14 +1258,14 @@ definitions:
         general-info: Defines the type and scheduling of card settlement processing, includes Issuer and Acquirer involvement/scheduling details as necessary
      participantAcquirerBankReference:
       type: string
-      example: "794802"
+      example: "747379"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Acquiring bank for which the Network orchestrates settlement processing
      participantIssuerBankReference:
       type: string
-      example: "755376"
+      example: "770521"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1188,9 +1273,16 @@ definitions:
  CRCardFinancialSettlementProcedureInitiateOutputModel:
   type: object
   properties: 
+   cardFinancialSettlementProcedureInstanceReference:
+    type: string
+    example: "CFSPIR740258"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Card Financial Settlement Procedure instance
    cardFinancialSettlementProcedureInitiateActionReference:
     type: string
-    example: "CFSPIAR743593"
+    example: "CFSPIAR783281"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1201,13 +1293,6 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The Initiate service call input and output record
-   cardFinancialSettlementProcedureInstanceReference:
-    type: string
-    example: "CFSPIR700636"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Card Financial Settlement Procedure instance
    cardFinancialSettlementProcedureInstanceStatus:
     type: string
     description: |
@@ -1235,14 +1320,14 @@ definitions:
   properties: 
    cardFinancialSettlementServicingSessionReference:
     type: string
-    example: "CFSSSR724411"
+    example: "CFSSSR778038"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    cardFinancialSettlementProcedureInstanceReference:
     type: string
-    example: "CFSPIR764923"
+    example: "CFSPIR706769"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1271,14 +1356,14 @@ definitions:
         general-info: Defines the type and scheduling of card settlement processing, includes Issuer and Acquirer involvement/scheduling details as necessary
      participantAcquirerBankReference:
       type: string
-      example: "732784"
+      example: "768983"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Acquiring bank for which the Network orchestrates settlement processing
      participantIssuerBankReference:
       type: string
-      example: "794186"
+      example: "792367"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1322,21 +1407,21 @@ definitions:
         general-info: Defines the type and scheduling of card settlement processing, includes Issuer and Acquirer involvement/scheduling details as necessary
      participantAcquirerBankReference:
       type: string
-      example: "732784"
+      example: "768983"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Acquiring bank for which the Network orchestrates settlement processing
      participantIssuerBankReference:
       type: string
-      example: "794186"
+      example: "792367"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Issuing bank for which the Network orchestrates settlement processing
    cardFinancialSettlementProcedureUpdateActionTaskReference:
     type: string
-    example: "CFSPUATR706903"
+    example: "CFSPUATR739425"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1373,7 +1458,7 @@ definitions:
     properties:
      cardFinancialSettlementProcedureInstanceReportReference:
       type: string
-      example: "798191"
+      example: "758928"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1395,7 +1480,7 @@ definitions:
     properties:
      cardFinancialSettlementProcedureInstanceAnalysisReference:
       type: string
-      example: "735181"
+      example: "746894"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1420,7 +1505,7 @@ definitions:
     properties:
      networkReference:
       type: string
-      example: "741006"
+      example: "753118"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1446,21 +1531,21 @@ definitions:
         general-info: Defines the type and scheduling of card settlement processing, includes Issuer and Acquirer involvement/scheduling details as necessary
      participantAcquirerBankReference:
       type: string
-      example: "722507"
+      example: "723493"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Acquiring bank for which the Network orchestrates settlement processing
      participantIssuerBankReference:
       type: string
-      example: "708256"
+      example: "774418"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Issuing bank for which the Network orchestrates settlement processing
    cardFinancialSettlementProcedureRetrieveActionTaskReference:
     type: string
-    example: "CFSPRATR764737"
+    example: "CFSPRATR780678"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1522,12 +1607,26 @@ definitions:
  BQConsolidationUpdateInputModel:
   type: object
   properties: 
+   cardFinancialSettlementProcedureInstanceReference:
+    type: string
+    example: "CFSPIR726692"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Card Financial Settlement Procedure instance
+   consolidationInstanceReference:
+    type: string
+    example: "CIR719480"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Consolidation instance
    consolidationInstanceRecord:
     type: object
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "746376"
+      example: "719020"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1537,21 +1636,21 @@ definitions:
       properties:
        cardTransactionProductInstanceReference:
         type: string
-        example: "775184"
+        example: "797340"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The account number associated with the card transaction
        cardTransactionIssuingBankReference:
         type: string
-        example: "755653"
+        example: "783469"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the card holder's issuing bank
        cardTransactionMerchantAcquiringBankReference:
         type: string
-        example: "736648"
+        example: "795572"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1584,21 +1683,21 @@ definitions:
           general-info: The amount corresponding to the type
        cardTransactionMerchantReference:
         type: string
-        example: "749092"
+        example: "745282"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the merchant initiating settlement
        cardTransactionLocationReference:
         type: string
-        example: "758378"
+        example: "785130"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the point of sale location
        cardTransactionProductServiceReference:
         type: string
-        example: "789528"
+        example: "733999"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1630,7 +1729,7 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "746376"
+      example: "719020"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1640,21 +1739,21 @@ definitions:
       properties:
        cardTransactionProductInstanceReference:
         type: string
-        example: "775184"
+        example: "797340"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The account number associated with the card transaction
        cardTransactionIssuingBankReference:
         type: string
-        example: "755653"
+        example: "783469"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the card holder's issuing bank
        cardTransactionMerchantAcquiringBankReference:
         type: string
-        example: "736648"
+        example: "795572"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1687,21 +1786,21 @@ definitions:
           general-info: The amount corresponding to the type
        cardTransactionMerchantReference:
         type: string
-        example: "749092"
+        example: "745282"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the merchant initiating settlement
        cardTransactionLocationReference:
         type: string
-        example: "758378"
+        example: "785130"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the point of sale location
        cardTransactionProductServiceReference:
         type: string
-        example: "789528"
+        example: "733999"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1715,7 +1814,7 @@ definitions:
           general-info: Significant dates and times associated with the transaction
    consolidationUpdateActionTaskReference:
     type: string
-    example: "CUATR721656"
+    example: "CUATR791844"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1752,7 +1851,7 @@ definitions:
     properties:
      consolidationInstanceReportReference:
       type: string
-      example: "766714"
+      example: "764367"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1762,7 +1861,7 @@ definitions:
     properties:
      consolidationInstanceAnalysisReference:
       type: string
-      example: "712840"
+      example: "799131"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1781,14 +1880,14 @@ definitions:
         general-info: Defines the type and scheduling of card settlement processing, includes Issuer and Acquirer involvement/scheduling details as necessary
      participantAcquirerBankReference:
       type: string
-      example: "786484"
+      example: "777792"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Acquiring bank for which the Network orchestrates settlement processing
      participantIssuerBankReference:
       type: string
-      example: "747342"
+      example: "753420"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1798,7 +1897,7 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "708626"
+      example: "720149"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1808,21 +1907,21 @@ definitions:
       properties:
        cardTransactionProductInstanceReference:
         type: string
-        example: "772147"
+        example: "739117"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The account number associated with the card transaction
        cardTransactionIssuingBankReference:
         type: string
-        example: "733102"
+        example: "765904"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the card holder's issuing bank
        cardTransactionMerchantAcquiringBankReference:
         type: string
-        example: "723653"
+        example: "793716"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1855,21 +1954,21 @@ definitions:
           general-info: The amount corresponding to the type
        cardTransactionMerchantReference:
         type: string
-        example: "779343"
+        example: "720904"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the merchant initiating settlement
        cardTransactionLocationReference:
         type: string
-        example: "785772"
+        example: "727981"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the point of sale location
        cardTransactionProductServiceReference:
         type: string
-        example: "742501"
+        example: "718218"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1883,7 +1982,7 @@ definitions:
           general-info: Significant dates and times associated with the transaction
    consolidationRetrieveActionTaskReference:
     type: string
-    example: "CRATR752198"
+    example: "CRATR781629"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1959,14 +2058,14 @@ definitions:
   properties: 
    cardFinancialSettlementProcedureInstanceReference:
     type: string
-    example: "CFSPIR712239"
+    example: "CFSPIR773309"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Card Financial Settlement Procedure instance
    processingInstanceReference:
     type: string
-    example: "CFSPIR712239"
+    example: "CFSPIR773309"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2018,7 +2117,7 @@ definitions:
         general-info: Defines card settlement fees/terms in force
    processingUpdateActionTaskReference:
     type: string
-    example: "CFSPUATR733697"
+    example: "CFSPUATR725237"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2055,7 +2154,7 @@ definitions:
     properties:
      processingInstanceReportReference:
       type: string
-      example: "778608"
+      example: "786900"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2065,7 +2164,7 @@ definitions:
     properties:
      processingInstanceAnalysisReference:
       type: string
-      example: "774550"
+      example: "700737"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2084,14 +2183,14 @@ definitions:
         general-info: Defines the type and scheduling of card settlement processing, includes Issuer and Acquirer involvement/scheduling details as necessary
      participantAcquirerBankReference:
       type: string
-      example: "722266"
+      example: "758823"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Acquiring bank for which the Network orchestrates settlement processing
      participantIssuerBankReference:
       type: string
-      example: "723002"
+      example: "766618"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2101,7 +2200,7 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "739442"
+      example: "717692"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2111,21 +2210,21 @@ definitions:
       properties:
        cardTransactionProductInstanceReference:
         type: string
-        example: "742159"
+        example: "760511"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The account number associated with the card transaction
        cardTransactionIssuingBankReference:
         type: string
-        example: "722844"
+        example: "784408"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the card holder's issuing bank
        cardTransactionMerchantAcquiringBankReference:
         type: string
-        example: "743353"
+        example: "715557"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2158,21 +2257,21 @@ definitions:
           general-info: The amount corresponding to the type
        cardTransactionMerchantReference:
         type: string
-        example: "793574"
+        example: "769951"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the merchant initiating settlement
        cardTransactionLocationReference:
         type: string
-        example: "778892"
+        example: "721405"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the point of sale location
        cardTransactionProductServiceReference:
         type: string
-        example: "748861"
+        example: "747168"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2201,7 +2300,7 @@ definitions:
         general-info: Defines card settlement fees/terms in force
    processingRetrieveActionTaskReference:
     type: string
-    example: "CFSPRATR777354"
+    example: "CFSPRATR757555"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2277,14 +2376,14 @@ definitions:
   properties: 
    cardFinancialSettlementProcedureInstanceReference:
     type: string
-    example: "CFSPIR788413"
+    example: "CFSPIR771668"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Card Financial Settlement Procedure instance
    instructionInstanceReference:
     type: string
-    example: "IIR709031"
+    example: "IIR791291"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2336,7 +2435,7 @@ definitions:
         general-info: Settlement account statement for processing window - used to confirm payments
    instructionUpdateActionTaskReference:
     type: string
-    example: "IUATR747618"
+    example: "IUATR714333"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2373,7 +2472,7 @@ definitions:
     properties:
      instructionInstanceReportReference:
       type: string
-      example: "760864"
+      example: "724328"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2383,7 +2482,7 @@ definitions:
     properties:
      instructionInstanceAnalysisReference:
       type: string
-      example: "706865"
+      example: "706057"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2402,14 +2501,14 @@ definitions:
         general-info: Defines the type and scheduling of card settlement processing, includes Issuer and Acquirer involvement/scheduling details as necessary
      participantAcquirerBankReference:
       type: string
-      example: "749037"
+      example: "700212"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Acquiring bank for which the Network orchestrates settlement processing
      participantIssuerBankReference:
       type: string
-      example: "793417"
+      example: "776886"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2419,7 +2518,7 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "710942"
+      example: "759503"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2429,21 +2528,21 @@ definitions:
       properties:
        cardTransactionProductInstanceReference:
         type: string
-        example: "790079"
+        example: "735072"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The account number associated with the card transaction
        cardTransactionIssuingBankReference:
         type: string
-        example: "765663"
+        example: "715261"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the card holder's issuing bank
        cardTransactionMerchantAcquiringBankReference:
         type: string
-        example: "743969"
+        example: "715060"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2476,21 +2575,21 @@ definitions:
           general-info: The amount corresponding to the type
        cardTransactionMerchantReference:
         type: string
-        example: "714158"
+        example: "739163"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the merchant initiating settlement
        cardTransactionLocationReference:
         type: string
-        example: "755231"
+        example: "786380"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the point of sale location
        cardTransactionProductServiceReference:
         type: string
-        example: "705995"
+        example: "786122"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2534,7 +2633,7 @@ definitions:
         general-info: Settlement account statement for processing window - used to confirm payments
    instructionRetrieveActionTaskReference:
     type: string
-    example: "IRATR790829"
+    example: "IRATR712626"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2610,14 +2709,14 @@ definitions:
   properties: 
    cardFinancialSettlementProcedureInstanceReference:
     type: string
-    example: "CFSPIR785655"
+    example: "CFSPIR760456"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Card Financial Settlement Procedure instance
    paymentInstanceReference:
     type: string
-    example: "CFSPIR785655"
+    example: "CFSPIR760456"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2657,7 +2756,7 @@ definitions:
         general-info: Transaction details
    paymentUpdateActionTaskReference:
     type: string
-    example: "CFSPUATR759324"
+    example: "CFSPUATR719970"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2694,7 +2793,7 @@ definitions:
     properties:
      paymentInstanceReportReference:
       type: string
-      example: "710629"
+      example: "734263"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2704,7 +2803,7 @@ definitions:
     properties:
      paymentInstanceAnalysisReference:
       type: string
-      example: "742696"
+      example: "735826"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2723,14 +2822,14 @@ definitions:
         general-info: Defines the type and scheduling of card settlement processing, includes Issuer and Acquirer involvement/scheduling details as necessary
      participantAcquirerBankReference:
       type: string
-      example: "703839"
+      example: "753925"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the Acquiring bank for which the Network orchestrates settlement processing
      participantIssuerBankReference:
       type: string
-      example: "728352"
+      example: "739227"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2740,7 +2839,7 @@ definitions:
     properties:
      cardTransactionRecordReference:
       type: string
-      example: "777969"
+      example: "780121"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2750,21 +2849,21 @@ definitions:
       properties:
        cardTransactionProductInstanceReference:
         type: string
-        example: "705800"
+        example: "784280"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The account number associated with the card transaction
        cardTransactionIssuingBankReference:
         type: string
-        example: "718774"
+        example: "707082"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the card holder's issuing bank
        cardTransactionMerchantAcquiringBankReference:
         type: string
-        example: "729811"
+        example: "779063"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2797,21 +2896,21 @@ definitions:
           general-info: The amount corresponding to the type
        cardTransactionMerchantReference:
         type: string
-        example: "764767"
+        example: "737199"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the merchant initiating settlement
        cardTransactionLocationReference:
         type: string
-        example: "794235"
+        example: "739955"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Refers to the point of sale location
        cardTransactionProductServiceReference:
         type: string
-        example: "776811"
+        example: "783305"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2864,7 +2963,7 @@ definitions:
         general-info: Transaction details
    paymentRetrieveActionTaskReference:
     type: string
-    example: "CFSPRATR744180"
+    example: "CFSPRATR792620"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

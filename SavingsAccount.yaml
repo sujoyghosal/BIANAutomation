@@ -3,6 +3,21 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Savings Account'
  description: >
+
+    ## Executive Summary:
+    This service domain orchestrates a consumer savings account. The typical range of services and fees covers 
+    payments from and scheduled and ad-hoc deposits to the account, standing orders, sweeps, and liens.
+
+    ## Example of Use:
+    A customer transfers money from a current account to savings account in order to obtain a better rate of 
+    interest.
+
+    ## Description:
+    The savings account product may share many features with a standard bank current account (e.g. standing orders, 
+    direct debits, payments and deposit services) with some constraints/limitations. There can be restrictions on 
+    the amount and frequency of withdrawals with an associated fee/penalty structure to offset higher interest 
+    benefits. Sweep mechanisms linked to other products (current account) can also be supported.
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-savings-account/1.0.0
 schemes:
@@ -13,8 +28,8 @@ paths:
       tags:
       - activate
       operationId: activateSDSavingsAccount
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDSavingsAccount servicing session
+      description: Activate  a  SDSavingsAccount servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +44,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDSavingsAccountActivateOutputModel'
-  /savings-account/configure:
+  /savings-account/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDSavingsAccount
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDSavingsAccount session configuration
+      description: Update an active SDSavingsAccount session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDSavingsAccount Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +66,25 @@ paths:
         schema:
           $ref: '#/definitions/SDSavingsAccountConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDSavingsAccountConfigureOutputModel'
-  /savings-account/feedback:
+  /savings-account/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDSavingsAccount
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDSavingsAccount service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDSavingsAccount service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDSavingsAccount Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +92,25 @@ paths:
         schema:
           $ref: '#/definitions/SDSavingsAccountFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDSavingsAccountFeedbackOutputModel'
-  /savings-account/retrieve:
+  /savings-account/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDSavingsAccount
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDSavingsAccount service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDSavingsAccount service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDSavingsAccount Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +122,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDSavingsAccountRetrieveOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/initiation:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/initiation:
     post:
       tags:
       - initiate
       operationId: initiateSavingsAccountFulfillmentArrangement
-      summary: Details of a new Savings Account Fulfillment Arrangement instance
+      summary: Details of a new SavingsAccountFulfillmentArrangement instance
       description: Initiate A new savings account
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,36 +145,41 @@ paths:
           $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Savings Account Fulfillment Arrangement instance
+          description: Successful initiation of new SavingsAccountFulfillmentArrangement instance
           schema:
             $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementInitiateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/update:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateSavingsAccountFulfillmentArrangement
-      summary: Update to any amendable fields of the Savings Account Fulfillment Arrangement instance
+      summary: Update to any amendable fields of the SavingsAccountFulfillmentArrangement instance
       description: Update properties of an active savings account
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: SavingsAccountFulfillmentArrangement Request Payload
+        description: Savings Account Fulfillment Arrangement Request Payload
         schema:
           $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Savings Account Fulfillment Arrangement instance
+          description: Successfully Updated Savings Account Fulfillment Arrangement Instance
           schema:
             $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementUpdateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/control:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/control:
     put:
       tags:
       - control
@@ -149,66 +189,146 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: SavingsAccountFulfillmentArrangement Request Payload
+        description: Savings Account Fulfillment Arrangement Request Payload
         schema:
           $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementControlInputModel'
       responses:
         200:
-          description: Successful Request specific processing (e.g. suspend, skip, terminate)
+          description: Successful control of Savings Account Fulfillment Arrangement Instance
           schema:
             $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementControlOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/servicefees/initiation:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSavingsAccount
+      summary: Invoke a reporting action to obtain a Savings Account Fulfillment Arrangement instance related report
+      description: Retrieve information about a savings account - either standard canned reports or selected instance attribute values
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Savings Account Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRSavingsAccountFulfillmentArrangementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Savings Account Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementRetrieveOutputModel'
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/interest/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSavingsAccountFulfillmentArrangementInterest
+      summary: Invoke a reporting action to obtain a Interest instance related report.
+      description: Retrieve details of an interest transaction applied internally to the account .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Savings Account Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Interest Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInterestRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Interest Instance Record
+          schema:
+            $ref: '#/definitions/BQInterestRetrieveOutputModel'
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/servicefees/initiation:
     post:
       tags:
       - initiate
       operationId: initiateSavingsAccountFulfillmentArrangementServiceFees
-      summary: Details of a new Service Fees instance
+      summary: Details of a new ServiceFees instance
       description: Initiate service fees against an account
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: ServiceFees Request Payload
+        description: Savings Account Fulfillment Arrangement Request Payload
         schema:
           $ref: '#/definitions/BQServiceFeesInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Service Fees instance
+          description: Successful initiation of Savings Account Fulfillment Arrangement instance
           schema:
             $ref: '#/definitions/BQServiceFeesInitiateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/servicefees/{bq-reference-id}/execution:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/servicefees/{bq-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executeSavingsAccountFulfillmentArrangementServiceFeesUpdate
-      summary: Invoke an automated execute action against the Service Fees instance
-      description: Apply a service fee to the account
+      summary: Invoke an automated execute action against the ServiceFees instance
+      description: Apply a service fee to the account 
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: ServiceFees BQ Reference Id
+        description: ServiceFees Instance Reference
         required: true
         type: string
       - in: body
@@ -219,53 +339,98 @@ paths:
           $ref: '#/definitions/BQServiceFeesExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Service Fees instance
+          description: Successful execution of ServiceFees Instance Record
           schema:
             $ref: '#/definitions/BQServiceFeesExecuteOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/accountlien/initiation:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/servicefees/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSavingsAccountFulfillmentArrangementServiceFees
+      summary: Invoke a reporting action to obtain a ServiceFees instance related report.
+      description: Retrieve information about a service fee applied to the account .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Savings Account Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ServiceFees Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQServiceFeesRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ServiceFees Instance Record
+          schema:
+            $ref: '#/definitions/BQServiceFeesRetrieveOutputModel'
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/accountlien/initiation:
     post:
       tags:
       - initiate
       operationId: initiateSavingsAccountFulfillmentArrangementAccountLien
-      summary: Details of a new Account Lien instance
+      summary: Details of a new AccountLien instance
       description: Set up an account lien
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: AccountLien Request Payload
+        description: Savings Account Fulfillment Arrangement Request Payload
         schema:
           $ref: '#/definitions/BQAccountLienInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Account Lien instance
+          description: Successful initiation of Savings Account Fulfillment Arrangement instance
           schema:
             $ref: '#/definitions/BQAccountLienInitiateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}/update:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateSavingsAccountFulfillmentArrangementAccountLien
-      summary: Update to any amendable fields of the Account Lien instance
+      summary: Update to any amendable fields of the AccountLien instance
       description: Update details of an existing account lien
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: AccountLien BQ Reference Id
+        description: AccountLien Instance Reference
         required: true
         type: string
       - in: body
@@ -276,10 +441,10 @@ paths:
           $ref: '#/definitions/BQAccountLienUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Account Lien instance
+          description: Successfully Updated AccountLien Instance
           schema:
             $ref: '#/definitions/BQAccountLienUpdateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}/exchange:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -289,14 +454,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: AccountLien BQ Reference Id
+        description: AccountLien Instance Reference
         required: true
         type: string
       - in: body
@@ -307,53 +477,98 @@ paths:
           $ref: '#/definitions/BQAccountLienExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of AccountLien Instance Record
           schema:
             $ref: '#/definitions/BQAccountLienExchangeOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/accountsweep/initiation:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSavingsAccountFulfillmentArrangementAccountLien
+      summary: Invoke a reporting action to obtain a AccountLien instance related report.
+      description: Retrieve details about an active account lien .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Savings Account Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AccountLien Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAccountLienRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved AccountLien Instance Record
+          schema:
+            $ref: '#/definitions/BQAccountLienRetrieveOutputModel'
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/accountsweep/initiation:
     post:
       tags:
       - initiate
       operationId: initiateSavingsAccountFulfillmentArrangementAccountSweep
-      summary: Details of a new Account Sweep instance
+      summary: Details of a new AccountSweep instance
       description: Set up an account sweep
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: AccountSweep Request Payload
+        description: Savings Account Fulfillment Arrangement Request Payload
         schema:
           $ref: '#/definitions/BQAccountSweepInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Account Sweep instance
+          description: Successful initiation of Savings Account Fulfillment Arrangement instance
           schema:
             $ref: '#/definitions/BQAccountSweepInitiateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}/update:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateSavingsAccountFulfillmentArrangementAccountSweep
-      summary: Update to any amendable fields of the Account Sweep instance
+      summary: Update to any amendable fields of the AccountSweep instance
       description: Update details of an existing account sweep
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: AccountSweep BQ Reference Id
+        description: AccountSweep Instance Reference
         required: true
         type: string
       - in: body
@@ -364,27 +579,32 @@ paths:
           $ref: '#/definitions/BQAccountSweepUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Account Sweep instance
+          description: Successfully Updated AccountSweep Instance
           schema:
             $ref: '#/definitions/BQAccountSweepUpdateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}/execution:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executeSavingsAccountFulfillmentArrangementAccountSweepUpdate
-      summary: Invoke an automated execute action against the Account Sweep instance
+      summary: Invoke an automated execute action against the AccountSweep instance
       description: Trigger an account sweep transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: AccountSweep BQ Reference Id
+        description: AccountSweep Instance Reference
         required: true
         type: string
       - in: body
@@ -395,53 +615,98 @@ paths:
           $ref: '#/definitions/BQAccountSweepExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Account Sweep instance
+          description: Successful execution of AccountSweep Instance Record
           schema:
             $ref: '#/definitions/BQAccountSweepExecuteOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/initiation:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSavingsAccountFulfillmentArrangementAccountSweep
+      summary: Invoke a reporting action to obtain a AccountSweep instance related report.
+      description: Retrieve details about an active sweep facility or specific sweep transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Savings Account Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AccountSweep Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAccountSweepRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved AccountSweep Instance Record
+          schema:
+            $ref: '#/definitions/BQAccountSweepRetrieveOutputModel'
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/initiation:
     post:
       tags:
       - initiate
       operationId: initiateSavingsAccountFulfillmentArrangementDepositsandWithdrawals
-      summary: Details of a new Deposits and Withdrawals instance
+      summary: Details of a new DepositsandWithdrawals instance
       description: Initialize deposit or withdrawal transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: DepositsandWithdrawals Request Payload
+        description: Savings Account Fulfillment Arrangement Request Payload
         schema:
           $ref: '#/definitions/BQDepositsandWithdrawalsInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Deposits and Withdrawals instance
+          description: Successful initiation of Savings Account Fulfillment Arrangement instance
           schema:
             $ref: '#/definitions/BQDepositsandWithdrawalsInitiateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}/update:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateSavingsAccountFulfillmentArrangementDepositsandWithdrawals
-      summary: Update to any amendable fields of the Deposits and Withdrawals instance
+      summary: Update to any amendable fields of the DepositsandWithdrawals instance
       description: Update/correct a deposit or withdrawal transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: DepositsandWithdrawals BQ Reference Id
+        description: DepositsandWithdrawals Instance Reference
         required: true
         type: string
       - in: body
@@ -452,27 +717,32 @@ paths:
           $ref: '#/definitions/BQDepositsandWithdrawalsUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Deposits and Withdrawals instance
+          description: Successfully Updated DepositsandWithdrawals Instance
           schema:
             $ref: '#/definitions/BQDepositsandWithdrawalsUpdateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}/execution:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executeSavingsAccountFulfillmentArrangementDepositsandWithdrawalsUpdate
-      summary: Invoke an automated execute action against the Deposits and Withdrawals instance
+      summary: Invoke an automated execute action against the DepositsandWithdrawals instance
       description: Execute a deposit or withdrawal transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: DepositsandWithdrawals BQ Reference Id
+        description: DepositsandWithdrawals Instance Reference
         required: true
         type: string
       - in: body
@@ -483,10 +753,45 @@ paths:
           $ref: '#/definitions/BQDepositsandWithdrawalsExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Deposits and Withdrawals instance
+          description: Successful execution of DepositsandWithdrawals Instance Record
           schema:
             $ref: '#/definitions/BQDepositsandWithdrawalsExecuteOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/initiation:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSavingsAccountFulfillmentArrangementDepositsandWithdrawals
+      summary: Invoke a reporting action to obtain a DepositsandWithdrawals instance related report.
+      description: Retrieve details about a deposit or withdrawal transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Savings Account Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: DepositsandWithdrawals Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQDepositsandWithdrawalsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved DepositsandWithdrawals Instance Record
+          schema:
+            $ref: '#/definitions/BQDepositsandWithdrawalsRetrieveOutputModel'
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/initiation:
     post:
       tags:
       - initiate
@@ -496,23 +801,28 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Payments Request Payload
+        description: Savings Account Fulfillment Arrangement Request Payload
         schema:
           $ref: '#/definitions/BQPaymentsInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Payments instance
+          description: Successful initiation of Savings Account Fulfillment Arrangement instance
           schema:
             $ref: '#/definitions/BQPaymentsInitiateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/update:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -522,14 +832,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Payments BQ Reference Id
+        description: Payments Instance Reference
         required: true
         type: string
       - in: body
@@ -540,10 +855,10 @@ paths:
           $ref: '#/definitions/BQPaymentsUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Payments instance
+          description: Successfully Updated Payments Instance
           schema:
             $ref: '#/definitions/BQPaymentsUpdateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/exchange:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -553,14 +868,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Payments BQ Reference Id
+        description: Payments Instance Reference
         required: true
         type: string
       - in: body
@@ -571,10 +891,10 @@ paths:
           $ref: '#/definitions/BQPaymentsExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Payments Instance Record
           schema:
             $ref: '#/definitions/BQPaymentsExchangeOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/execution:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/execution:
     put:
       tags:
       - execute
@@ -584,14 +904,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Payments BQ Reference Id
+        description: Payments Instance Reference
         required: true
         type: string
       - in: body
@@ -602,53 +927,98 @@ paths:
           $ref: '#/definitions/BQPaymentsExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Payments instance
+          description: Successful execution of Payments Instance Record
           schema:
             $ref: '#/definitions/BQPaymentsExecuteOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/issueddevice/initiation:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSavingsAccountFulfillmentArrangementPayments
+      summary: Invoke a reporting action to obtain a Payments instance related report.
+      description: Retrieve details about a payment transaction or arrangement .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Savings Account Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payments Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Payments Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentsRetrieveOutputModel'
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/issueddevice/initiation:
     post:
       tags:
       - initiate
       operationId: initiateSavingsAccountFulfillmentArrangementIssuedDevice
-      summary: Details of a new Issued Device instance
+      summary: Details of a new IssuedDevice instance
       description: Initiate the provision of issued inventory for the account (include initial issuance)
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: IssuedDevice Request Payload
+        description: Savings Account Fulfillment Arrangement Request Payload
         schema:
           $ref: '#/definitions/BQIssuedDeviceInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Issued Device instance
+          description: Successful initiation of Savings Account Fulfillment Arrangement instance
           schema:
             $ref: '#/definitions/BQIssuedDeviceInitiateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}/update:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateSavingsAccountFulfillmentArrangementIssuedDevice
-      summary: Update to any amendable fields of the Issued Device instance
+      summary: Update to any amendable fields of the IssuedDevice instance
       description: Update the issued inventory details and provisioning configuration or status
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: IssuedDevice BQ Reference Id
+        description: IssuedDevice Instance Reference
         required: true
         type: string
       - in: body
@@ -659,27 +1029,32 @@ paths:
           $ref: '#/definitions/BQIssuedDeviceUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Issued Device instance
+          description: Successfully Updated IssuedDevice Instance
           schema:
             $ref: '#/definitions/BQIssuedDeviceUpdateOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}/requisition:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestSavingsAccountFulfillmentArrangementIssuedDeviceUpdate
-      summary: Invoke a service request action against the Issued Device instance
+      summary: Invoke a service request action against the IssuedDevice instance
       description: Request changes or replacement devices or inventory
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: IssuedDevice BQ Reference Id
+        description: IssuedDevice Instance Reference
         required: true
         type: string
       - in: body
@@ -690,10 +1065,45 @@ paths:
           $ref: '#/definitions/BQIssuedDeviceRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Issued Device instance
+          description: Successful requisition of IssuedDevice Instance Record
           schema:
             $ref: '#/definitions/BQIssuedDeviceRequestOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSavingsAccountFulfillmentArrangementIssuedDevice
+      summary: Invoke a reporting action to obtain a IssuedDevice instance related report.
+      description: Retrieve details about issued devices or inventory .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Savings Account Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: IssuedDevice Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQIssuedDeviceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved IssuedDevice Instance Record
+          schema:
+            $ref: '#/definitions/BQIssuedDeviceRetrieveOutputModel'
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement:
     get:
       tags:
       - retrieve
@@ -702,6 +1112,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- SavingsAccount Instance Status='active'
@@ -731,7 +1146,7 @@ paths:
             items:
               type: string
             example: [ 'Interest',  'ServiceFees',  'AccountLien',  'AccountSweep',  'DepositsAndWithdrawals',  'Payments',  'IssuedDevice', ]
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/{behavior-qualifier}/:
+  /savings-account/{sd-reference-id}/savings-account-fulfillment-arrangement/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -740,9 +1155,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Savings Account Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Savings Account Fulfillment Arrangement Instance
+        description: Savings Account Fulfillment Arrangement Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -763,249 +1183,6 @@ paths:
             items:
               type: string
             example: [IssuedDeviceID1, IssuedDeviceID2]
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveSavingsAccount
-      summary: Retrieve information about a savings account - either standard canned reports or selected instance attribute values
-      description: Retrieve a Savings Account Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Savings Account Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Savings Account Request Payload
-        schema:
-          $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Savings Account Report
-          schema:
-            $ref: '#/definitions/CRSavingsAccountFulfillmentArrangementRetrieveOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/interest/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveSavingsAccountInterest
-      summary: Retrieve details of an interest transaction applied internally to the account
-      description: Retrieve a Savings Account Interest Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Savings Account Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Interest BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Savings Account Interest Request Payload
-        schema:
-          $ref: '#/definitions/BQInterestRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Savings Account Interest Report
-          schema:
-            $ref: '#/definitions/BQInterestRetrieveOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/servicefees/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveSavingsAccountServiceFees
-      summary: Retrieve information about a service fee applied to the account
-      description: Retrieve a Savings Account ServiceFees Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Savings Account Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: ServiceFees BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Savings Account ServiceFees Request Payload
-        schema:
-          $ref: '#/definitions/BQServiceFeesRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Savings Account ServiceFees Report
-          schema:
-            $ref: '#/definitions/BQServiceFeesRetrieveOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveSavingsAccountAccountLien
-      summary: Retrieve details about an active account lien
-      description: Retrieve a Savings Account AccountLien Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Savings Account Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: AccountLien BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Savings Account AccountLien Request Payload
-        schema:
-          $ref: '#/definitions/BQAccountLienRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Savings Account AccountLien Report
-          schema:
-            $ref: '#/definitions/BQAccountLienRetrieveOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveSavingsAccountAccountSweep
-      summary: Retrieve details about an active sweep facility or specific sweep transaction
-      description: Retrieve a Savings Account AccountSweep Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Savings Account Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: AccountSweep BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Savings Account AccountSweep Request Payload
-        schema:
-          $ref: '#/definitions/BQAccountSweepRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Savings Account AccountSweep Report
-          schema:
-            $ref: '#/definitions/BQAccountSweepRetrieveOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveSavingsAccountDepositsAndWithdrawals
-      summary: Retrieve details about a deposit or withdrawal transaction
-      description: Retrieve a Savings Account DepositsAndWithdrawals Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Savings Account Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: DepositsAndWithdrawals BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Savings Account DepositsAndWithdrawals Request Payload
-        schema:
-          $ref: '#/definitions/BQDepositsAndWithdrawalsRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Savings Account DepositsAndWithdrawals Report
-          schema:
-            $ref: '#/definitions/BQDepositsAndWithdrawalsRetrieveOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveSavingsAccountPayments
-      summary: Retrieve details about a payment transaction or arrangement
-      description: Retrieve a Savings Account Payments Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Savings Account Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Payments BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Savings Account Payments Request Payload
-        schema:
-          $ref: '#/definitions/BQPaymentsRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Savings Account Payments Report
-          schema:
-            $ref: '#/definitions/BQPaymentsRetrieveOutputModel'
-  /savings-account/savings-account-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveSavingsAccountIssuedDevice
-      summary: Retrieve details about issued devices or inventory
-      description: Retrieve a Savings Account IssuedDevice Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Savings Account Fulfillment Arrangement Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: IssuedDevice BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Savings Account IssuedDevice Request Payload
-        schema:
-          $ref: '#/definitions/BQIssuedDeviceRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Savings Account IssuedDevice Report
-          schema:
-            $ref: '#/definitions/BQIssuedDeviceRetrieveOutputModel'
 definitions:
  SDSavingsAccountActivateInputModel:
   type: object
@@ -1655,7 +1832,7 @@ definitions:
   properties: 
    savingsAccountServicingSessionReference:
     type: string
-    example: "SASSR708782"
+    example: "SASSR788589"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1677,14 +1854,14 @@ definitions:
     properties:
      customerReference:
       type: string
-      example: "750898"
+      example: "772036"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "751702"
+      example: "708556"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1704,7 +1881,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "759246"
+      example: "703654"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1738,7 +1915,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "779877"
+        example: "760914"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1809,14 +1986,14 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR796610"
+    example: "SAFAIR772968"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Savings Account Fulfillment Arrangement instance
    savingsAccountFulfillmentArrangementInitiateActionReference:
     type: string
-    example: "SAFAIAR727580"
+    example: "SAFAIAR780693"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1838,7 +2015,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "719461"
+      example: "781526"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1916,14 +2093,14 @@ definitions:
   properties: 
    savingsAccountServicingSessionReference:
     type: string
-    example: "SASSR737591"
+    example: "SASSR788791"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR707449"
+    example: "SAFAIR766247"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1933,7 +2110,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "760130"
+      example: "726170"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1946,14 +2123,14 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "703686"
+      example: "773340"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "775953"
+      example: "745981"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1973,7 +2150,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "759377"
+      example: "723243"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2019,7 +2196,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "732382"
+        example: "718183"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2117,7 +2294,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "760130"
+      example: "726170"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2130,14 +2307,14 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "703686"
+      example: "773340"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "775953"
+      example: "745981"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2157,7 +2334,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "759377"
+      example: "723243"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2203,7 +2380,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "732382"
+        example: "718183"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2283,7 +2460,7 @@ definitions:
           general-info: The statement content
    savingsAccountFulfillmentArrangementUpdateActionTaskReference:
     type: string
-    example: "SAFAUATR712404"
+    example: "SAFAUATR723170"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2305,14 +2482,14 @@ definitions:
   properties: 
    savingsAccountServicingSessionReference:
     type: string
-    example: "SASSR751657"
+    example: "SASSR732303"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR726403"
+    example: "SAFAIR728084"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2337,7 +2514,7 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementControlActionTaskReference:
     type: string
-    example: "SAFACATR725944"
+    example: "SAFACATR731007"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2374,7 +2551,7 @@ definitions:
     properties:
      savingsAccountFulfillmentArrangementInstanceReportReference:
       type: string
-      example: "798063"
+      example: "787706"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2396,7 +2573,7 @@ definitions:
     properties:
      savingsAccountFulfillmentArrangementInstanceAnalysisReference:
       type: string
-      example: "734733"
+      example: "762664"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2421,7 +2598,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "705639"
+      example: "783627"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2434,14 +2611,14 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "778796"
+      example: "775363"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "705235"
+      example: "775972"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2461,7 +2638,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "772043"
+      example: "700360"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2507,7 +2684,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "769077"
+        example: "744993"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2587,7 +2764,7 @@ definitions:
           general-info: The statement content
    savingsAccountFulfillmentArrangementRetrieveActionTaskReference:
     type: string
-    example: "SAFARATR777156"
+    example: "SAFARATR700893"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2654,7 +2831,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "779286"
+      example: "717184"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2680,7 +2857,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "751191"
+      example: "731717"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2803,7 +2980,7 @@ definitions:
     properties:
      interestInstanceReportReference:
       type: string
-      example: "735653"
+      example: "704278"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2813,7 +2990,7 @@ definitions:
     properties:
      interestInstanceAnalysisReference:
       type: string
-      example: "743962"
+      example: "748610"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2836,7 +3013,7 @@ definitions:
           general-info: Value of the date type
    interestRetrieveActionTaskReference:
     type: string
-    example: "IRATR701220"
+    example: "IRATR705915"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2912,7 +3089,7 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR748396"
+    example: "SAFAIR753001"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2999,14 +3176,14 @@ definitions:
             general-info: The accrued amount of applied interest
    serviceFeesInstanceReference:
     type: string
-    example: "SFIR725957"
+    example: "SFIR741707"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Service Fees instance
    serviceFeesInitiateActionReference:
     type: string
-    example: "SFIAR744271"
+    example: "SFIAR734736"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3031,7 +3208,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "799433"
+      example: "742214"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3057,7 +3234,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "757945"
+      example: "786686"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3143,14 +3320,14 @@ definitions:
           general-info: The statement content
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR727263"
+    example: "SAFAIR747516"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    serviceFeesInstanceReference:
     type: string
-    example: "SFIR742922"
+    example: "SFIR719202"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3212,7 +3389,7 @@ definitions:
           general-info: Definition of the fee or penalty including when and how to apply
    serviceFeesExecuteActionTaskReference:
     type: string
-    example: "SFEATR728873"
+    example: "SFEATR743454"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3225,7 +3402,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    serviceFeesExecuteRecordReference:
     type: string
-    example: "SFERR739788"
+    example: "SFERR743456"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3310,7 +3487,7 @@ definitions:
     properties:
      serviceFeesInstanceReportReference:
       type: string
-      example: "755082"
+      example: "789084"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3320,7 +3497,7 @@ definitions:
     properties:
      serviceFeesInstanceAnalysisReference:
       type: string
-      example: "726020"
+      example: "757538"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3393,7 +3570,7 @@ definitions:
             general-info: The accrued amount of fees and penalties
    serviceFeesRetrieveActionTaskReference:
     type: string
-    example: "SFRATR767329"
+    example: "SFRATR797448"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3469,7 +3646,7 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR714933"
+    example: "SAFAIR746736"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3566,14 +3743,14 @@ definitions:
             general-info: The accrued amount of fees and penalties
    accountLienInstanceReference:
     type: string
-    example: "ALIR721958"
+    example: "ALIR744489"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Account Lien instance
    accountLienInitiateActionReference:
     type: string
-    example: "ALIAR732047"
+    example: "ALIAR775045"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3598,7 +3775,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "776444"
+      example: "715878"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3611,14 +3788,14 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "761620"
+      example: "760479"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "799354"
+      example: "745670"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3683,14 +3860,14 @@ definitions:
           general-info: Value of the date type
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR743459"
+    example: "SAFAIR726960"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    accountLienInstanceReference:
     type: string
-    example: "ALIR743648"
+    example: "ALIR756761"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3824,7 +4001,7 @@ definitions:
         general-info: Definition of the type of lien including processing guidelines
    accountLienUpdateActionTaskReference:
     type: string
-    example: "ALUATR711941"
+    example: "ALUATR775064"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3846,14 +4023,14 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR783749"
+    example: "SAFAIR709676"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    accountLienInstanceReference:
     type: string
-    example: "ALIR712942"
+    example: "ALIR730539"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3992,7 +4169,7 @@ definitions:
           general-info: The status on the lien
    accountLienExchangeActionTaskReference:
     type: string
-    example: "ALEATR715994"
+    example: "ALEATR746033"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4035,7 +4212,7 @@ definitions:
     properties:
      accountLienInstanceReportReference:
       type: string
-      example: "724267"
+      example: "705502"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4045,7 +4222,7 @@ definitions:
     properties:
      accountLienInstanceAnalysisReference:
       type: string
-      example: "777692"
+      example: "782245"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4055,7 +4232,7 @@ definitions:
   properties: 
    accountLienRetrieveActionTaskReference:
     type: string
-    example: "ALRATR731956"
+    example: "ALRATR799707"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4131,7 +4308,7 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR766752"
+    example: "SAFAIR747137"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4210,14 +4387,14 @@ definitions:
           general-info: The status on the lien
    accountSweepInstanceReference:
     type: string
-    example: "ASIR749929"
+    example: "ASIR744149"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Account Sweep instance
    accountSweepInitiateActionReference:
     type: string
-    example: "ASIAR717586"
+    example: "ASIAR751210"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4242,7 +4419,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "796392"
+      example: "719159"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4255,14 +4432,14 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "760366"
+      example: "737128"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "791855"
+      example: "772313"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4282,7 +4459,7 @@ definitions:
         general-info: The primary account currency
      taxReference:
       type: string
-      example: "740306"
+      example: "795966"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4326,14 +4503,14 @@ definitions:
           general-info: Value of the date type
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR770117"
+    example: "SAFAIR719213"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    accountSweepInstanceReference:
     type: string
-    example: "ASIR756628"
+    example: "ASIR717392"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4420,7 +4597,7 @@ definitions:
         general-info: Sweep processing guidelines and scheduling rules
    accountSweepUpdateActionTaskReference:
     type: string
-    example: "ASUATR748136"
+    example: "ASUATR794051"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4442,14 +4619,14 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR738650"
+    example: "SAFAIR750593"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    accountSweepInstanceReference:
     type: string
-    example: "ASIR736567"
+    example: "ASIR719792"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4606,7 +4783,7 @@ definitions:
           general-info: The date and time the sweep is initiated
    accountSweepExecuteActionTaskReference:
     type: string
-    example: "ASEATR783264"
+    example: "ASEATR749389"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4619,7 +4796,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    accountSweepExecuteRecordReference:
     type: string
-    example: "ASERR781232"
+    example: "ASERR717859"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4676,7 +4853,7 @@ definitions:
     properties:
      accountSweepInstanceReportReference:
       type: string
-      example: "730926"
+      example: "724941"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4686,7 +4863,7 @@ definitions:
     properties:
      accountSweepInstanceAnalysisReference:
       type: string
-      example: "738374"
+      example: "719294"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4696,7 +4873,7 @@ definitions:
   properties: 
    accountSweepRetrieveActionTaskReference:
     type: string
-    example: "ASRATR711279"
+    example: "ASRATR701131"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4772,7 +4949,7 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR747909"
+    example: "SAFAIR731626"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4854,14 +5031,14 @@ definitions:
           general-info: The date and time the sweep is initiated
    depositsandWithdrawalsInstanceReference:
     type: string
-    example: "DAWIR762103"
+    example: "DAWIR798226"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Deposits and Withdrawals instance
    depositsandWithdrawalsInitiateActionReference:
     type: string
-    example: "DAWIAR737081"
+    example: "DAWIAR716816"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4886,7 +5063,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "790786"
+      example: "701913"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4899,14 +5076,14 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "777241"
+      example: "747961"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "778947"
+      example: "703333"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4957,14 +5134,14 @@ definitions:
           general-info: Value of the date type
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR783692"
+    example: "SAFAIR725808"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    depositsandWithdrawalsInstanceReference:
     type: string
-    example: "DAWIR706707"
+    example: "DAWIR734396"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5029,7 +5206,7 @@ definitions:
           general-info: Value of the date type
    depositsandWithdrawalsUpdateActionTaskReference:
     type: string
-    example: "DAWUATR737541"
+    example: "DAWUATR701558"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5051,14 +5228,14 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR733721"
+    example: "SAFAIR724037"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    depositsandWithdrawalsInstanceReference:
     type: string
-    example: "DAWIR799741"
+    example: "DAWIR771560"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5089,7 +5266,7 @@ definitions:
       properties:
        depositTransactionSourceReference:
         type: string
-        example: "734040"
+        example: "752626"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5125,7 +5302,7 @@ definitions:
       properties:
        withdrawalTransactionSourceReference:
         type: string
-        example: "754375"
+        example: "748479"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5200,7 +5377,7 @@ definitions:
       properties:
        depositTransactionSourceReference:
         type: string
-        example: "734040"
+        example: "752626"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5236,7 +5413,7 @@ definitions:
       properties:
        withdrawalTransactionSourceReference:
         type: string
-        example: "754375"
+        example: "748479"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5269,7 +5446,7 @@ definitions:
           general-info: The date and time the withdrawal was initiated
    depositsandWithdrawalsExecuteActionTaskReference:
     type: string
-    example: "DAWEATR757814"
+    example: "DAWEATR708140"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5282,7 +5459,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    depositsandWithdrawalsExecuteRecordReference:
     type: string
-    example: "DAWERR789822"
+    example: "DAWERR790885"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5293,7 +5470,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the execute action service response
- BQDepositsAndWithdrawalsRetrieveInputModel:
+ BQDepositsandWithdrawalsRetrieveInputModel:
   type: object
   properties: 
    deposits&WithdrawalsInstanceRecord:
@@ -5304,7 +5481,7 @@ definitions:
       properties:
        depositTransactionSourceReference:
         type: string
-        example: "769197"
+        example: "737313"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5340,7 +5517,7 @@ definitions:
       properties:
        withdrawalTransactionSourceReference:
         type: string
-        example: "716386"
+        example: "780199"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5388,7 +5565,7 @@ definitions:
     properties:
      depositsandWithdrawalsInstanceReportReference:
       type: string
-      example: "725272"
+      example: "780686"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5398,17 +5575,17 @@ definitions:
     properties:
      depositsandWithdrawalsInstanceAnalysisReference:
       type: string
-      example: "718916"
+      example: "739433"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance analysis view
- BQDepositsAndWithdrawalsRetrieveOutputModel:
+ BQDepositsandWithdrawalsRetrieveOutputModel:
   type: object
   properties: 
    depositsandWithdrawalsRetrieveActionTaskReference:
     type: string
-    example: "DAWRATR785570"
+    example: "DAWRATR705003"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5484,7 +5661,7 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR795210"
+    example: "SAFAIR713235"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5524,7 +5701,7 @@ definitions:
       properties:
        depositTransactionSourceReference:
         type: string
-        example: "782886"
+        example: "768115"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5560,7 +5737,7 @@ definitions:
       properties:
        withdrawalTransactionSourceReference:
         type: string
-        example: "707544"
+        example: "721066"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5593,14 +5770,14 @@ definitions:
           general-info: The date and time the withdrawal was initiated
    paymentsInstanceReference:
     type: string
-    example: "PIR781221"
+    example: "PIR729293"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Payments instance
    paymentsInitiateActionReference:
     type: string
-    example: "PIAR799940"
+    example: "PIAR763091"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5625,7 +5802,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "725552"
+      example: "724265"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5638,14 +5815,14 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "750530"
+      example: "708943"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "709622"
+      example: "769504"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5723,14 +5900,14 @@ definitions:
           general-info: The statement content
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR722223"
+    example: "SAFAIR727457"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    paymentsInstanceReference:
     type: string
-    example: "PIR781439"
+    example: "PIR784373"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5803,7 +5980,7 @@ definitions:
     properties:
      taxReference:
       type: string
-      example: "798638"
+      example: "769218"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5825,7 +6002,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "776561"
+        example: "723984"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5866,7 +6043,7 @@ definitions:
         general-info: Definition of the processing option and impact (e.g. frequency and cumulative amount constraints)
    paymentsUpdateActionTaskReference:
     type: string
-    example: "PUATR704718"
+    example: "PUATR727474"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5888,14 +6065,14 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR758238"
+    example: "SAFAIR798153"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    paymentsInstanceReference:
     type: string
-    example: "PIR764225"
+    example: "PIR717216"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -5959,21 +6136,21 @@ definitions:
           general-info: The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)
        paymentTransactionPayeeReference:
         type: string
-        example: "720098"
+        example: "760082"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the party to whom the payment is made
        paymentTransactionPayeeAccountReference:
         type: string
-        example: "730888"
+        example: "762655"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the account to which the payment is made
        paymentTransactionPayeeBankReference:
         type: string
-        example: "755034"
+        example: "752318"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6019,7 +6196,7 @@ definitions:
           general-info: Description of the purpose including any external reference to the transaction
        paymentTransactionBankBranchLocationReference:
         type: string
-        example: "711941"
+        example: "707689"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6101,21 +6278,21 @@ definitions:
           general-info: The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)
        paymentTransactionPayeeReference:
         type: string
-        example: "720098"
+        example: "760082"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the party to whom the payment is made
        paymentTransactionPayeeAccountReference:
         type: string
-        example: "730888"
+        example: "762655"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the account to which the payment is made
        paymentTransactionPayeeBankReference:
         type: string
-        example: "755034"
+        example: "752318"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6161,7 +6338,7 @@ definitions:
           general-info: Description of the purpose including any external reference to the transaction
        paymentTransactionBankBranchLocationReference:
         type: string
-        example: "711941"
+        example: "707689"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6174,7 +6351,7 @@ definitions:
           general-info: The processing status of the transaction (e.g. captured, approved, initiated, confirmed, settled)
    paymentsExchangeActionTaskReference:
     type: string
-    example: "PEATR798285"
+    example: "PEATR714541"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6202,14 +6379,14 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR731019"
+    example: "SAFAIR769752"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    paymentsInstanceReference:
     type: string
-    example: "PIR737897"
+    example: "PIR766992"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6234,7 +6411,7 @@ definitions:
   properties: 
    paymentsExecuteActionTaskReference:
     type: string
-    example: "PEATR711038"
+    example: "PEATR725547"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6247,7 +6424,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    paymentsExecuteRecordReference:
     type: string
-    example: "PERR785747"
+    example: "PERR767381"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6275,21 +6452,21 @@ definitions:
           general-info: The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)
        paymentTransactionPayeeReference:
         type: string
-        example: "706821"
+        example: "777830"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the party to whom the payment is made
        paymentTransactionPayeeAccountReference:
         type: string
-        example: "761885"
+        example: "742530"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the account to which the payment is made
        paymentTransactionPayeeBankReference:
         type: string
-        example: "797484"
+        example: "709000"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6335,7 +6512,7 @@ definitions:
           general-info: Description of the purpose including any external reference to the transaction
        paymentTransactionBankBranchLocationReference:
         type: string
-        example: "746511"
+        example: "729700"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6363,7 +6540,7 @@ definitions:
     properties:
      paymentsInstanceReportReference:
       type: string
-      example: "746174"
+      example: "710126"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6373,7 +6550,7 @@ definitions:
     properties:
      paymentsInstanceAnalysisReference:
       type: string
-      example: "727783"
+      example: "718720"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6402,7 +6579,7 @@ definitions:
           general-info: The processing status of the transaction (e.g. captured, approved, initiated, confirmed, settled)
    paymentsRetrieveActionTaskReference:
     type: string
-    example: "PRATR724523"
+    example: "PRATR756476"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6478,7 +6655,7 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR794930"
+    example: "SAFAIR721839"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6557,21 +6734,21 @@ definitions:
           general-info: The type of payment transaction (e.g. customer payment, standing order, direct debit, bill pay)
        paymentTransactionPayeeReference:
         type: string
-        example: "763216"
+        example: "765146"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the party to whom the payment is made
        paymentTransactionPayeeAccountReference:
         type: string
-        example: "771307"
+        example: "719781"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the account to which the payment is made
        paymentTransactionPayeeBankReference:
         type: string
-        example: "794498"
+        example: "754930"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6617,7 +6794,7 @@ definitions:
           general-info: Description of the purpose including any external reference to the transaction
        paymentTransactionBankBranchLocationReference:
         type: string
-        example: "768761"
+        example: "701624"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6630,14 +6807,14 @@ definitions:
           general-info: The processing status of the transaction (e.g. captured, approved, initiated, confirmed, settled)
    issuedDeviceInstanceReference:
     type: string
-    example: "IDIR789944"
+    example: "IDIR777193"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Issued Device instance
    issuedDeviceInitiateActionReference:
     type: string
-    example: "IDIAR708375"
+    example: "IDIAR748164"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6662,7 +6839,7 @@ definitions:
     properties:
      productInstanceReference:
       type: string
-      example: "732157"
+      example: "709441"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6675,14 +6852,14 @@ definitions:
         general-info: The associated account number in any suitable format (e.g. IBAN)
      customerReference:
       type: string
-      example: "795648"
+      example: "770346"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the account primary party/owner
      bankBranchLocationReference:
       type: string
-      example: "710676"
+      example: "797370"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6733,14 +6910,14 @@ definitions:
           general-info: Value of the date type
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR763652"
+    example: "SAFAIR744250"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    issuedDeviceInstanceReference:
     type: string
-    example: "IDIR704938"
+    example: "IDIR713159"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6825,7 +7002,7 @@ definitions:
           general-info: Description of the role, obligations or entitlements of the associated party
        associationReference:
         type: string
-        example: "797006"
+        example: "784570"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6890,7 +7067,7 @@ definitions:
           general-info: The tracked status of the device/inventory item (e.g. active, suspended, cancelled)
    issuedDeviceUpdateActionTaskReference:
     type: string
-    example: "IDUATR738322"
+    example: "IDUATR738343"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -6912,14 +7089,14 @@ definitions:
   properties: 
    savingsAccountFulfillmentArrangementInstanceReference:
     type: string
-    example: "SAFAIR727652"
+    example: "SAFAIR799601"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Savings Account Fulfillment Arrangement instance
    issuedDeviceInstanceReference:
     type: string
-    example: "IDIR777360"
+    example: "IDIR702328"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -7034,7 +7211,7 @@ definitions:
           general-info: The tracked status of the device/inventory item (e.g. active, suspended, cancelled)
    issuedDeviceRequestActionTaskReference:
     type: string
-    example: "IDRATR784087"
+    example: "IDRATR792006"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -7047,7 +7224,7 @@ definitions:
       general-info: The request service call consolidated processing record
    issuedDeviceRequestRecordReference:
     type: string
-    example: "IDRRR763219"
+    example: "IDRRR741290"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -7111,7 +7288,7 @@ definitions:
     properties:
      issuedDeviceInstanceReportReference:
       type: string
-      example: "741386"
+      example: "752431"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -7121,7 +7298,7 @@ definitions:
     properties:
      issuedDeviceInstanceAnalysisReference:
       type: string
-      example: "711698"
+      example: "785332"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -7170,7 +7347,7 @@ definitions:
           general-info: The tracked status of the device/inventory item (e.g. active, suspended, cancelled)
    issuedDeviceRetrieveActionTaskReference:
     type: string
-    example: "IDRATR789297"
+    example: "IDRATR796426"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

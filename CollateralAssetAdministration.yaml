@@ -3,6 +3,21 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Collateral Asset Administration'
  description: >
+
+    ## Executive Summary:
+    This service domain maintains the status of a customers collateral assets, including scheduled and ad-hoc 
+    valuations and confirmation of the correct completion of scheduled maintenance tasks.
+
+    ## Example of Use:
+    A back office unit determines which collateral items are due for a valuation review and documentation 
+    check and schedules the activities accordingly
+
+    ## Description:
+    This service domain handles the oversight, administration and confirmation of maintenance tasks associated 
+    with different types of collateral items. This includes arranging for scheduled and ad-hoc collateral 
+    valuations, item status/documentation and title checks and tracking upkeep actions that the item owner is 
+    obliged to undertake (such as insuring a house)
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-collateral-asset-administration/1.0.0
 schemes:
@@ -13,8 +28,8 @@ paths:
       tags:
       - activate
       operationId: activateSDCollateralAssetAdministration
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDCollateralAssetAdministration servicing session
+      description: Activate  a  SDCollateralAssetAdministration servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +44,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDCollateralAssetAdministrationActivateOutputModel'
-  /collateral-asset-administration/configure:
+  /collateral-asset-administration/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDCollateralAssetAdministration
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDCollateralAssetAdministration session configuration
+      description: Update an active SDCollateralAssetAdministration session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAssetAdministration Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +66,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCollateralAssetAdministrationConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDCollateralAssetAdministrationConfigureOutputModel'
-  /collateral-asset-administration/feedback:
+  /collateral-asset-administration/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDCollateralAssetAdministration
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDCollateralAssetAdministration service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCollateralAssetAdministration service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAssetAdministration Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +92,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCollateralAssetAdministrationFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDCollateralAssetAdministrationFeedbackOutputModel'
-  /collateral-asset-administration/retrieve:
+  /collateral-asset-administration/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDCollateralAssetAdministration
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDCollateralAssetAdministration service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCollateralAssetAdministration service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAssetAdministration Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +122,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDCollateralAssetAdministrationRetrieveOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/initiation:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/initiation:
     post:
       tags:
       - initiate
       operationId: initiateCollateralAssetAdministrativePlan
-      summary: Details of a new Collateral Asset Administrative Plan instance
+      summary: Details of a new CollateralAssetAdministrativePlan instance
       description: Create a collateral asset administrative plan for a new item
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,36 +145,71 @@ paths:
           $ref: '#/definitions/CRCollateralAssetAdministrativePlanInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Collateral Asset Administrative Plan instance
+          description: Successful initiation of new CollateralAssetAdministrativePlan instance
           schema:
             $ref: '#/definitions/CRCollateralAssetAdministrativePlanInitiateOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/update:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCollateralAssetAdministrativePlan
-      summary: Update to any amendable fields of the Collateral Asset Administrative Plan instance
+      summary: Update to any amendable fields of the CollateralAssetAdministrativePlan instance
       description: Update details of the administrative plan
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CollateralAssetAdministrativePlan Request Payload
+        description: Collateral Asset Administrative Plan Request Payload
         schema:
           $ref: '#/definitions/CRCollateralAssetAdministrativePlanUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Collateral Asset Administrative Plan instance
+          description: Successfully Updated Collateral Asset Administrative Plan Instance
           schema:
             $ref: '#/definitions/CRCollateralAssetAdministrativePlanUpdateOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/valuation/initiation:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCollateralAssetAdministration
+      summary: Invoke a reporting action to obtain a Collateral Asset Administrative Plan instance related report
+      description: Retrieve details about an active collateral asset administrative plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCollateralAssetAdministrativePlanRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Collateral Asset Administrative Plan Instance
+          schema:
+            $ref: '#/definitions/CRCollateralAssetAdministrativePlanRetrieveOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/valuation/initiation:
     post:
       tags:
       - initiate
@@ -149,23 +219,28 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Valuation Request Payload
+        description: Collateral Asset Administrative Plan Request Payload
         schema:
           $ref: '#/definitions/BQValuationInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Valuation instance
+          description: Successful initiation of Collateral Asset Administrative Plan instance
           schema:
             $ref: '#/definitions/BQValuationInitiateOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}/update:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -175,14 +250,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Valuation BQ Reference Id
+        description: Valuation Instance Reference
         required: true
         type: string
       - in: body
@@ -193,27 +273,32 @@ paths:
           $ref: '#/definitions/BQValuationUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Valuation instance
+          description: Successfully Updated Valuation Instance
           schema:
             $ref: '#/definitions/BQValuationUpdateOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}/requisition:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestCollateralAssetAdministrativePlanValuationUpdate
       summary: Invoke a service request action against the Valuation instance
-      description: Request an ad-hoc valuation (override the schedule) 
+      description: Request an ad-hoc valuation (override the schedule) 
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Valuation BQ Reference Id
+        description: Valuation Instance Reference
         required: true
         type: string
       - in: body
@@ -224,10 +309,45 @@ paths:
           $ref: '#/definitions/BQValuationRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Valuation instance
+          description: Successful requisition of Valuation Instance Record
           schema:
             $ref: '#/definitions/BQValuationRequestOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/initiation:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: requestCollateralAssetAdministrativePlanValuation
+      summary: Invoke a reporting action to obtain a Valuation instance related report.
+      description: Retrieve details about an valuation task .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Valuation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQValuationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Valuation Instance Record
+          schema:
+            $ref: '#/definitions/BQValuationRetrieveOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/initiation:
     post:
       tags:
       - initiate
@@ -237,23 +357,28 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Maintenance Request Payload
+        description: Collateral Asset Administrative Plan Request Payload
         schema:
           $ref: '#/definitions/BQMaintenanceInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Maintenance instance
+          description: Successful initiation of Collateral Asset Administrative Plan instance
           schema:
             $ref: '#/definitions/BQMaintenanceInitiateOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/update:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -263,14 +388,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Maintenance BQ Reference Id
+        description: Maintenance Instance Reference
         required: true
         type: string
       - in: body
@@ -281,10 +411,10 @@ paths:
           $ref: '#/definitions/BQMaintenanceUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Maintenance instance
+          description: Successfully Updated Maintenance Instance
           schema:
             $ref: '#/definitions/BQMaintenanceUpdateOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/exchange:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -294,14 +424,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Maintenance BQ Reference Id
+        description: Maintenance Instance Reference
         required: true
         type: string
       - in: body
@@ -312,10 +447,10 @@ paths:
           $ref: '#/definitions/BQMaintenanceExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Maintenance Instance Record
           schema:
             $ref: '#/definitions/BQMaintenanceExchangeOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/requisition:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/requisition:
     put:
       tags:
       - request
@@ -325,14 +460,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Maintenance BQ Reference Id
+        description: Maintenance Instance Reference
         required: true
         type: string
       - in: body
@@ -343,10 +483,45 @@ paths:
           $ref: '#/definitions/BQMaintenanceRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Maintenance instance
+          description: Successful requisition of Maintenance Instance Record
           schema:
             $ref: '#/definitions/BQMaintenanceRequestOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: requestCollateralAssetAdministrativePlanMaintenance
+      summary: Invoke a reporting action to obtain a Maintenance instance related report.
+      description: Retrieve details about a maintenance task .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Maintenance Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQMaintenanceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Maintenance Instance Record
+          schema:
+            $ref: '#/definitions/BQMaintenanceRetrieveOutputModel'
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan:
     get:
       tags:
       - retrieve
@@ -355,6 +530,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- CollateralAssetAdministration Instance Status='active'
@@ -384,7 +564,7 @@ paths:
             items:
               type: string
             example: [ 'Valuation',  'Maintenance', ]
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/{behavior-qualifier}/:
+  /collateral-asset-administration/{sd-reference-id}/collateral-asset-administrative-plan/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -393,9 +573,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Asset Administration Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Administrative Plan Instance
+        description: Collateral Asset Administrative Plan Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -416,94 +601,6 @@ paths:
             items:
               type: string
             example: [MaintenanceID1, MaintenanceID2]
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCollateralAssetAdministration
-      summary: Retrieve a Collateral Asset Administration Record
-      description: Retrieve a Collateral Asset Administration Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Collateral Asset Administrative Plan Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Collateral Asset Administration Request Payload
-        schema:
-          $ref: '#/definitions/CRCollateralAssetAdministrationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Collateral Asset Administration Report
-          schema:
-            $ref: '#/definitions/CRCollateralAssetAdministrationRetrieveOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/valuation/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCollateralAssetAdministrationValuation
-      summary: Retrieve a Collateral Asset Administration Valuation Record
-      description: Retrieve a Collateral Asset Administration Valuation Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Collateral Asset Administrative Plan Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Valuation BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Collateral Asset Administration Valuation Request Payload
-        schema:
-          $ref: '#/definitions/BQValuationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Collateral Asset Administration Valuation Report
-          schema:
-            $ref: '#/definitions/BQValuationRetrieveOutputModel'
-  /collateral-asset-administration/collateral-asset-administrative-plan/{cr-reference-id}/maintenance/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCollateralAssetAdministrationMaintenance
-      summary: Retrieve a Collateral Asset Administration Maintenance Record
-      description: Retrieve a Collateral Asset Administration Maintenance Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Collateral Asset Administrative Plan Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Maintenance BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Collateral Asset Administration Maintenance Request Payload
-        schema:
-          $ref: '#/definitions/BQMaintenanceRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Collateral Asset Administration Maintenance Report
-          schema:
-            $ref: '#/definitions/BQMaintenanceRetrieveOutputModel'
 definitions:
  SDCollateralAssetAdministrationActivateInputModel:
   type: object
@@ -1151,6 +1248,13 @@ definitions:
  CRCollateralAssetAdministrativePlanInitiateInputModel:
   type: object
   properties: 
+   collateralAssetAdministrationServicingSessionReference:
+    type: string
+    example: "CAASSR723716"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    collateralAssetAdministrativePlanInitiateActionRecord:
     type: object
     description: |
@@ -1225,7 +1329,7 @@ definitions:
           general-info: The type of document relating to the asset
        collateralAssetInsuranceReference:
         type: string
-        example: "735193"
+        example: "749966"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1258,9 +1362,16 @@ definitions:
  CRCollateralAssetAdministrativePlanInitiateOutputModel:
   type: object
   properties: 
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR744838"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Collateral Asset Administrative Plan instance
    collateralAssetAdministrativePlanInitiateActionReference:
     type: string
-    example: "CAAPIAR758372"
+    example: "CAAPIAR722208"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1282,7 +1393,7 @@ definitions:
     properties:
      collateralAssetReference:
       type: string
-      example: "763421"
+      example: "773664"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1292,7 +1403,7 @@ definitions:
       properties:
        collateralAssetDocumentReference:
         type: string
-        example: "782321"
+        example: "781825"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1312,12 +1423,26 @@ definitions:
  CRCollateralAssetAdministrativePlanUpdateInputModel:
   type: object
   properties: 
+   collateralAssetAdministrationServicingSessionReference:
+    type: string
+    example: "CAASSR733844"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR769680"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Collateral Asset Administrative Plan instance
    collateralAssetAdministrativePlanInstanceRecord:
     type: object
     properties:
      collateralAssetReference:
       type: string
-      example: "791252"
+      example: "739388"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1375,7 +1500,7 @@ definitions:
           general-info: The jurisdiction that governs title and access to the asset
        collateralAssetDocumentReference:
         type: string
-        example: "713614"
+        example: "741667"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1388,7 +1513,7 @@ definitions:
           general-info: The type of document relating to the asset
        collateralAssetInsuranceReference:
         type: string
-        example: "748477"
+        example: "750114"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1444,7 +1569,7 @@ definitions:
     properties:
      collateralAssetReference:
       type: string
-      example: "791252"
+      example: "739388"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1502,7 +1627,7 @@ definitions:
           general-info: The jurisdiction that governs title and access to the asset
        collateralAssetDocumentReference:
         type: string
-        example: "713614"
+        example: "741667"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1515,7 +1640,7 @@ definitions:
           general-info: The type of document relating to the asset
        collateralAssetInsuranceReference:
         type: string
-        example: "748477"
+        example: "750114"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1553,7 +1678,7 @@ definitions:
           general-info: A general status indicator for the asset (can cover multiple properties as necessary)
    collateralAssetAdministrativePlanUpdateActionTaskReference:
     type: string
-    example: "CAAPUATR719694"
+    example: "CAAPUATR730920"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1590,7 +1715,7 @@ definitions:
     properties:
      collateralAssetAdministrativePlanInstanceReportReference:
       type: string
-      example: "705136"
+      example: "734441"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1612,7 +1737,7 @@ definitions:
     properties:
      collateralAssetAdministrativePlanInstanceAnalysisReference:
       type: string
-      example: "733178"
+      example: "721213"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1637,7 +1762,7 @@ definitions:
     properties:
      collateralAssetReference:
       type: string
-      example: "755660"
+      example: "739896"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1695,7 +1820,7 @@ definitions:
           general-info: The jurisdiction that governs title and access to the asset
        collateralAssetDocumentReference:
         type: string
-        example: "767707"
+        example: "772497"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1708,7 +1833,7 @@ definitions:
           general-info: The type of document relating to the asset
        collateralAssetInsuranceReference:
         type: string
-        example: "715734"
+        example: "763909"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1746,7 +1871,7 @@ definitions:
           general-info: A general status indicator for the asset (can cover multiple properties as necessary)
    collateralAssetAdministrativePlanRetrieveActionTaskReference:
     type: string
-    example: "CAAPRATR797350"
+    example: "CAAPRATR757071"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1813,7 +1938,7 @@ definitions:
     properties:
      collateralAssetReference:
       type: string
-      example: "750414"
+      example: "768602"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1871,7 +1996,7 @@ definitions:
           general-info: The jurisdiction that governs title and access to the asset
        collateralAssetDocumentReference:
         type: string
-        example: "743759"
+        example: "757068"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1884,7 +2009,7 @@ definitions:
           general-info: The type of document relating to the asset
        collateralAssetInsuranceReference:
         type: string
-        example: "763763"
+        example: "714083"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1914,6 +2039,13 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: A general status indicator for the asset (can cover multiple properties as necessary)
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR730277"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Administrative Plan instance
    valuationInitiateActionRecord:
     type: object
     description: |
@@ -1931,7 +2063,7 @@ definitions:
         general-info: The type of valuation applied (e.g. mark to market, book value, agency)
      collateralAssetValuationServiceReference:
       type: string
-      example: "765386"
+      example: "717391"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1945,9 +2077,16 @@ definitions:
  BQValuationInitiateOutputModel:
   type: object
   properties: 
+   valuationInstanceReference:
+    type: string
+    example: "VIR748940"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Valuation instance
    valuationInitiateActionReference:
     type: string
-    example: "VIAR788054"
+    example: "VIAR718762"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1995,6 +2134,20 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The schedule for maintaining an up to date valuation
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR752680"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Administrative Plan instance
+   valuationInstanceReference:
+    type: string
+    example: "VIR793627"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Valuation instance
    valuationInstanceRecord:
     type: object
     properties:
@@ -2006,7 +2159,7 @@ definitions:
         general-info: The type of valuation applied (e.g. mark to market, book value, agency)
      collateralAssetValuationServiceReference:
       type: string
-      example: "746364"
+      example: "720008"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2055,7 +2208,7 @@ definitions:
         general-info: The type of valuation applied (e.g. mark to market, book value, agency)
      collateralAssetValuationServiceReference:
       type: string
-      example: "746364"
+      example: "720008"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2068,7 +2221,7 @@ definitions:
         general-info: The applied loan to value ratio used in determining collateral value
    valuationUpdateActionTaskReference:
     type: string
-    example: "VUATR745190"
+    example: "VUATR762581"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2100,6 +2253,20 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The schedule for maintaining an up to date valuation
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR750813"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Administrative Plan instance
+   valuationInstanceReference:
+    type: string
+    example: "VIR742463"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Valuation instance
    valuationInstanceRecord:
     type: object
     properties:
@@ -2111,7 +2278,7 @@ definitions:
         general-info: The type of valuation applied (e.g. mark to market, book value, agency)
      collateralAssetValuationServiceReference:
       type: string
-      example: "712126"
+      example: "775307"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2158,7 +2325,7 @@ definitions:
         general-info: The date of a valuation
    valuationRequestActionTaskReference:
     type: string
-    example: "VRATR744693"
+    example: "VRATR794403"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2171,7 +2338,7 @@ definitions:
       general-info: The request service call consolidated processing record
    valuationRequestRecordReference:
     type: string
-    example: "VRRR746066"
+    example: "VRRR770344"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2202,7 +2369,7 @@ definitions:
     properties:
      valuationInstanceReportReference:
       type: string
-      example: "793533"
+      example: "758260"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2212,7 +2379,7 @@ definitions:
     properties:
      valuationInstanceAnalysisReference:
       type: string
-      example: "704713"
+      example: "778037"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2225,7 +2392,7 @@ definitions:
     properties:
      collateralAssetReference:
       type: string
-      example: "738080"
+      example: "724891"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2283,7 +2450,7 @@ definitions:
           general-info: The jurisdiction that governs title and access to the asset
        collateralAssetDocumentReference:
         type: string
-        example: "730661"
+        example: "790159"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2296,7 +2463,7 @@ definitions:
           general-info: The type of document relating to the asset
        collateralAssetInsuranceReference:
         type: string
-        example: "762967"
+        example: "756355"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2337,7 +2504,7 @@ definitions:
         general-info: The type of valuation applied (e.g. mark to market, book value, agency)
      collateralAssetValuationServiceReference:
       type: string
-      example: "781187"
+      example: "739051"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2363,7 +2530,7 @@ definitions:
         general-info: The date of a valuation
    valuationRetrieveActionTaskReference:
     type: string
-    example: "VRATR785824"
+    example: "VRATR728586"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2442,7 +2609,7 @@ definitions:
     properties:
      collateralAssetReference:
       type: string
-      example: "749722"
+      example: "709911"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2500,7 +2667,7 @@ definitions:
           general-info: The jurisdiction that governs title and access to the asset
        collateralAssetDocumentReference:
         type: string
-        example: "750342"
+        example: "789667"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2513,7 +2680,7 @@ definitions:
           general-info: The type of document relating to the asset
        collateralAssetInsuranceReference:
         type: string
-        example: "704033"
+        example: "721128"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2543,6 +2710,13 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: A general status indicator for the asset (can cover multiple properties as necessary)
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR778627"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Administrative Plan instance
    maintenanceInitiateActionRecord:
     type: object
     description: |
@@ -2560,7 +2734,7 @@ definitions:
         general-info: The type of action or check performed to oversee maintenance (e.g. insurance coverage, upkeep review)
      collateralAssetMaintenanceServiceProviderReference:
       type: string
-      example: "767855"
+      example: "789462"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2568,9 +2742,16 @@ definitions:
  BQMaintenanceInitiateOutputModel:
   type: object
   properties: 
+   maintenanceInstanceReference:
+    type: string
+    example: "MIR757446"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Maintenance instance
    maintenanceInitiateActionReference:
     type: string
-    example: "MIAR742092"
+    example: "MIAR700298"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2617,6 +2798,20 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The schedule planned and actual for undertaking asset maintenance checks)
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR792893"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Administrative Plan instance
+   maintenanceInstanceReference:
+    type: string
+    example: "MIR706759"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Maintenance instance
    maintenanceInstanceRecord:
     type: object
     properties:
@@ -2628,7 +2823,7 @@ definitions:
         general-info: The type of action or check performed to oversee maintenance (e.g. insurance coverage, upkeep review)
      collateralAssetMaintenanceServiceProviderReference:
       type: string
-      example: "733867"
+      example: "744619"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2671,14 +2866,14 @@ definitions:
         general-info: The type of action or check performed to oversee maintenance (e.g. insurance coverage, upkeep review)
      collateralAssetMaintenanceServiceProviderReference:
       type: string
-      example: "733867"
+      example: "744619"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to 3rd party maintenance service provider (e.g. insurer, custodian)
    maintenanceUpdateActionTaskReference:
     type: string
-    example: "MUATR715583"
+    example: "MUATR778209"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2698,6 +2893,20 @@ definitions:
  BQMaintenanceExchangeInputModel:
   type: object
   properties: 
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR788347"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Administrative Plan instance
+   maintenanceInstanceReference:
+    type: string
+    example: "MIR746505"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Maintenance instance
    maintenanceExchangeActionTaskRecord:
     type: object
     description: |
@@ -2718,7 +2927,7 @@ definitions:
   properties: 
    maintenanceExchangeActionTaskReference:
     type: string
-    example: "MEATR717009"
+    example: "MEATR751482"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2756,6 +2965,20 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The schedule planned and actual for undertaking asset maintenance checks)
+   collateralAssetAdministrativePlanInstanceReference:
+    type: string
+    example: "CAAPIR724056"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Administrative Plan instance
+   maintenanceInstanceReference:
+    type: string
+    example: "MIR712117"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Maintenance instance
    maintenanceInstanceRecord:
     type: object
     properties:
@@ -2767,7 +2990,7 @@ definitions:
         general-info: The type of action or check performed to oversee maintenance (e.g. insurance coverage, upkeep review)
      collateralAssetMaintenanceServiceProviderReference:
       type: string
-      example: "789470"
+      example: "743199"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2819,7 +3042,7 @@ definitions:
         general-info: Record of any fees incurred in the collateral asset maintenance (e.g. 3rd party fees)
    maintenanceRequestActionTaskReference:
     type: string
-    example: "MRATR751845"
+    example: "MRATR725498"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2832,7 +3055,7 @@ definitions:
       general-info: The request service call consolidated processing record
    maintenanceRequestRecordReference:
     type: string
-    example: "MRRR735378"
+    example: "MRRR799830"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2863,7 +3086,7 @@ definitions:
     properties:
      maintenanceInstanceReportReference:
       type: string
-      example: "764957"
+      example: "774530"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2873,7 +3096,7 @@ definitions:
     properties:
      maintenanceInstanceAnalysisReference:
       type: string
-      example: "742765"
+      example: "773168"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2886,7 +3109,7 @@ definitions:
     properties:
      collateralAssetReference:
       type: string
-      example: "702454"
+      example: "782796"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2944,7 +3167,7 @@ definitions:
           general-info: The jurisdiction that governs title and access to the asset
        collateralAssetDocumentReference:
         type: string
-        example: "786639"
+        example: "774504"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2957,7 +3180,7 @@ definitions:
           general-info: The type of document relating to the asset
        collateralAssetInsuranceReference:
         type: string
-        example: "770367"
+        example: "764717"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2998,7 +3221,7 @@ definitions:
         general-info: The type of action or check performed to oversee maintenance (e.g. insurance coverage, upkeep review)
      collateralAssetMaintenanceServiceProviderReference:
       type: string
-      example: "771972"
+      example: "734034"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3017,7 +3240,7 @@ definitions:
         general-info: Record of any fees incurred in the collateral asset maintenance (e.g. 3rd party fees)
    maintenanceRetrieveActionTaskReference:
     type: string
-    example: "MRATR790271"
+    example: "MRATR729653"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

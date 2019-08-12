@@ -3,6 +3,22 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Collateral Allocation Management'
  description: >
+
+    ## Executive Summary:
+    This service domain manages the holding, valuation and allocation of a customer's collateral assets to 
+    products on behalf of a customer
+
+    ## Example of Use:
+    A corporate applies for a new facility and the available collateral is checked to see if there is 
+    sufficient collateral on hand to allocate to the loan
+
+    ## Description:
+    This service domain manages the collateral holdings for a customer, tracking and authorizing the allocation 
+    of collateral to different financial facilities. The service domain oversees periodic valuations and 
+    collateral asset maintenance activity as needed. The service domain also provides reports on overall 
+    collateral usage which can include applying specific analytical assessments to support general risk management
+     (e.g. exposure to property value fluctuations based on prevailing market conditions)
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-collateral-allocation-management/1.0.0
 schemes:
@@ -13,8 +29,8 @@ paths:
       tags:
       - activate
       operationId: activateSDCollateralAllocationManagement
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDCollateralAllocationManagement servicing session
+      description: Activate  a  SDCollateralAllocationManagement servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +45,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDCollateralAllocationManagementActivateOutputModel'
-  /collateral-allocation-management/configure:
+  /collateral-allocation-management/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDCollateralAllocationManagement
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDCollateralAllocationManagement session configuration
+      description: Update an active SDCollateralAllocationManagement session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAllocationManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +67,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCollateralAllocationManagementConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDCollateralAllocationManagementConfigureOutputModel'
-  /collateral-allocation-management/feedback:
+  /collateral-allocation-management/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDCollateralAllocationManagement
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDCollateralAllocationManagement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCollateralAllocationManagement service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAllocationManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +93,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCollateralAllocationManagementFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDCollateralAllocationManagementFeedbackOutputModel'
-  /collateral-allocation-management/retrieve:
+  /collateral-allocation-management/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDCollateralAllocationManagement
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDCollateralAllocationManagement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCollateralAllocationManagement service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCollateralAllocationManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +123,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDCollateralAllocationManagementRetrieveOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/initiation:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/initiation:
     post:
       tags:
       - initiate
       operationId: initiateCollateralAssetAllocation
-      summary: Details of a new Collateral Asset Allocation instance
+      summary: Details of a new CollateralAssetAllocation instance
       description: Record an asset provided for collateralization
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,36 +146,71 @@ paths:
           $ref: '#/definitions/CRCollateralAssetAllocationInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Collateral Asset Allocation instance
+          description: Successful initiation of new CollateralAssetAllocation instance
           schema:
             $ref: '#/definitions/CRCollateralAssetAllocationInitiateOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/update:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCollateralAssetAllocation
-      summary: Update to any amendable fields of the Collateral Asset Allocation instance
+      summary: Update to any amendable fields of the CollateralAssetAllocation instance
       description: Update details and status of a collateral asset and its allocation
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Allocation Instance
+        description: Collateral Asset Allocation Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CollateralAssetAllocation Request Payload
+        description: Collateral Asset Allocation Request Payload
         schema:
           $ref: '#/definitions/CRCollateralAssetAllocationUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Collateral Asset Allocation instance
+          description: Successfully Updated Collateral Asset Allocation Instance
           schema:
             $ref: '#/definitions/CRCollateralAssetAllocationUpdateOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/allocation/initiation:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCollateralAllocationManagement
+      summary: Invoke a reporting action to obtain a Collateral Asset Allocation instance related report
+      description: Retrieve details and status of a collateral asset and its allocation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Allocation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCollateralAssetAllocationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Collateral Asset Allocation Instance
+          schema:
+            $ref: '#/definitions/CRCollateralAssetAllocationRetrieveOutputModel'
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/allocation/initiation:
     post:
       tags:
       - initiate
@@ -149,23 +220,28 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Allocation Instance
+        description: Collateral Asset Allocation Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Allocation Request Payload
+        description: Collateral Asset Allocation Request Payload
         schema:
           $ref: '#/definitions/BQAllocationInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Allocation instance
+          description: Successful initiation of Collateral Asset Allocation instance
           schema:
             $ref: '#/definitions/BQAllocationInitiateOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/update:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -175,14 +251,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Allocation Instance
+        description: Collateral Asset Allocation Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Allocation BQ Reference Id
+        description: Allocation Instance Reference
         required: true
         type: string
       - in: body
@@ -193,10 +274,10 @@ paths:
           $ref: '#/definitions/BQAllocationUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Allocation instance
+          description: Successfully Updated Allocation Instance
           schema:
             $ref: '#/definitions/BQAllocationUpdateOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/control:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/control:
     put:
       tags:
       - control
@@ -206,14 +287,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Allocation Instance
+        description: Collateral Asset Allocation Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Allocation BQ Reference Id
+        description: Allocation Instance Reference
         required: true
         type: string
       - in: body
@@ -224,10 +310,10 @@ paths:
           $ref: '#/definitions/BQAllocationControlInputModel'
       responses:
         200:
-          description: Successful Request specific processing (e.g. suspend, skip, terminate)
+          description: Successful control of Allocation Instance Record
           schema:
             $ref: '#/definitions/BQAllocationControlOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/exchange:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -237,14 +323,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Allocation Instance
+        description: Collateral Asset Allocation Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Allocation BQ Reference Id
+        description: Allocation Instance Reference
         required: true
         type: string
       - in: body
@@ -255,10 +346,10 @@ paths:
           $ref: '#/definitions/BQAllocationExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Allocation Instance Record
           schema:
             $ref: '#/definitions/BQAllocationExchangeOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/capture:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/capture:
     put:
       tags:
       - capture
@@ -268,14 +359,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Allocation Instance
+        description: Collateral Asset Allocation Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Allocation BQ Reference Id
+        description: Allocation Instance Reference
         required: true
         type: string
       - in: body
@@ -286,27 +382,32 @@ paths:
           $ref: '#/definitions/BQAllocationCaptureInputModel'
       responses:
         200:
-          description: Successful Provide a structured input transaction/record (e.g. timesheet, event)
+          description: Successful capture of Allocation Instance Record
           schema:
             $ref: '#/definitions/BQAllocationCaptureOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/grant:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/grant:
     put:
       tags:
       - grant
       operationId: grantCollateralAssetAllocationAllocationUpdate
       summary: Invoke a grant request action from the Allocation instance to obtain access permission
-      description: Obtain permission for access to the collateral asset
+      description: Obtain permission for access to  the collateral asset
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Allocation Instance
+        description: Collateral Asset Allocation Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Allocation BQ Reference Id
+        description: Allocation Instance Reference
         required: true
         type: string
       - in: body
@@ -317,10 +418,45 @@ paths:
           $ref: '#/definitions/BQAllocationGrantInputModel'
       responses:
         200:
-          description: Successful Invoke a grant request action from the Allocation instance to obtain access permission
+          description: Successful grant of Allocation Instance Record
           schema:
             $ref: '#/definitions/BQAllocationGrantOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCollateralAssetAllocationAllocation
+      summary: Invoke a reporting action to obtain a Allocation instance related report.
+      description: Retrieve details about a collateral allocation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Collateral Asset Allocation Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Allocation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAllocationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Allocation Instance Record
+          schema:
+            $ref: '#/definitions/BQAllocationRetrieveOutputModel'
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation:
     get:
       tags:
       - retrieve
@@ -329,6 +465,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- CollateralAllocationManagement Instance Status='active'
@@ -358,7 +499,7 @@ paths:
             items:
               type: string
             example: [ 'Allocation', ]
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/{behavior-qualifier}/:
+  /collateral-allocation-management/{sd-reference-id}/collateral-asset-allocation/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -367,9 +508,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Collateral Allocation Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Collateral Asset Allocation Instance
+        description: Collateral Asset Allocation Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -390,63 +536,6 @@ paths:
             items:
               type: string
             example: [AllocationID1, AllocationID2]
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCollateralAllocationManagement
-      summary: Retrieve a Collateral Allocation Management Record
-      description: Retrieve a Collateral Allocation Management Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Collateral Asset Allocation Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Collateral Allocation Management Request Payload
-        schema:
-          $ref: '#/definitions/CRCollateralAssetAllocationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Collateral Allocation Management Report
-          schema:
-            $ref: '#/definitions/CRCollateralAssetAllocationRetrieveOutputModel'
-  /collateral-allocation-management/collateral-asset-allocation/{cr-reference-id}/allocation/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveCollateralAllocationManagementAllocation
-      summary: Retrieve a Collateral Allocation Management Allocation Record
-      description: Retrieve a Collateral Allocation Management Allocation Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Collateral Asset Allocation Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Allocation BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Collateral Allocation Management Allocation Request Payload
-        schema:
-          $ref: '#/definitions/BQAllocationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Collateral Allocation Management Allocation Report
-          schema:
-            $ref: '#/definitions/BQAllocationRetrieveOutputModel'
 definitions:
  SDCollateralAllocationManagementActivateInputModel:
   type: object
@@ -1094,6 +1183,13 @@ definitions:
  CRCollateralAssetAllocationInitiateInputModel:
   type: object
   properties: 
+   collateralAllocationManagementServicingSessionReference:
+    type: string
+    example: "CAMSSR719767"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    collateralAssetAllocationInitiateActionRecord:
     type: object
     description: |
@@ -1111,7 +1207,7 @@ definitions:
     properties:
      customerReference:
       type: string
-      example: "789488"
+      example: "753596"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1124,7 +1220,7 @@ definitions:
         general-info: The type of asset (e.g. building, machinery, inventory, financial instrument, art)
      collateralAssetReference:
       type: string
-      example: "725753"
+      example: "799473"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1169,9 +1265,16 @@ definitions:
  CRCollateralAssetAllocationInitiateOutputModel:
   type: object
   properties: 
+   collateralAssetAllocationInstanceReference:
+    type: string
+    example: "CAAIR795875"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Collateral Asset Allocation instance
    collateralAssetAllocationInitiateActionReference:
     type: string
-    example: "CAAIAR712688"
+    example: "CAAIAR743161"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1193,7 +1296,7 @@ definitions:
     properties:
      collateralAssetAdministrationInstanceReference:
       type: string
-      example: "704180"
+      example: "765607"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1201,12 +1304,26 @@ definitions:
  CRCollateralAssetAllocationUpdateInputModel:
   type: object
   properties: 
+   collateralAllocationManagementServicingSessionReference:
+    type: string
+    example: "CAMSSR725021"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   collateralAssetAllocationInstanceReference:
+    type: string
+    example: "CAAIR708439"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Collateral Asset Allocation instance
    collateralAssetAllocationInstanceRecord:
     type: object
     properties:
      customerReference:
       type: string
-      example: "766124"
+      example: "747087"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1219,7 +1336,7 @@ definitions:
         general-info: The type of asset (e.g. building, machinery, inventory, financial instrument, art)
      collateralAssetReference:
       type: string
-      example: "704008"
+      example: "736297"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1232,7 +1349,7 @@ definitions:
         general-info: Description of significant details and properties of the asset
      collateralAssetAdministrationInstanceReference:
       type: string
-      example: "751998"
+      example: "714597"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1288,7 +1405,7 @@ definitions:
     properties:
      customerReference:
       type: string
-      example: "766124"
+      example: "747087"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1301,7 +1418,7 @@ definitions:
         general-info: The type of asset (e.g. building, machinery, inventory, financial instrument, art)
      collateralAssetReference:
       type: string
-      example: "704008"
+      example: "736297"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1314,7 +1431,7 @@ definitions:
         general-info: Description of significant details and properties of the asset
      collateralAssetAdministrationInstanceReference:
       type: string
-      example: "751998"
+      example: "714597"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1352,7 +1469,7 @@ definitions:
         general-info: The ratio of the valuation that can be used as collateral (depends on liquidity, title, etc.)
    collateralAssetAllocationUpdateActionTaskReference:
     type: string
-    example: "CAAUATR764849"
+    example: "CAAUATR747866"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1389,7 +1506,7 @@ definitions:
     properties:
      collateralAssetAllocationInstanceReportReference:
       type: string
-      example: "751837"
+      example: "719699"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1411,7 +1528,7 @@ definitions:
     properties:
      collateralAssetAllocationInstanceAnalysisReference:
       type: string
-      example: "796780"
+      example: "738123"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1436,7 +1553,7 @@ definitions:
     properties:
      customerReference:
       type: string
-      example: "759520"
+      example: "718868"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1449,7 +1566,7 @@ definitions:
         general-info: The type of asset (e.g. building, machinery, inventory, financial instrument, art)
      collateralAssetReference:
       type: string
-      example: "725264"
+      example: "728509"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1462,7 +1579,7 @@ definitions:
         general-info: Description of significant details and properties of the asset
      collateralAssetAdministrationInstanceReference:
       type: string
-      example: "781195"
+      example: "772602"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1500,7 +1617,7 @@ definitions:
         general-info: The ratio of the valuation that can be used as collateral (depends on liquidity, title, etc.)
    collateralAssetAllocationRetrieveActionTaskReference:
     type: string
-    example: "CAARATR721402"
+    example: "CAARATR760940"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1567,7 +1684,7 @@ definitions:
     properties:
      customerReference:
       type: string
-      example: "721774"
+      example: "790728"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1580,7 +1697,7 @@ definitions:
         general-info: The type of asset (e.g. building, machinery, inventory, financial instrument, art)
      collateralAssetReference:
       type: string
-      example: "771779"
+      example: "769353"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1622,6 +1739,13 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The ratio of the valuation that can be used as collateral (depends on liquidity, title, etc.)
+   collateralAssetAllocationInstanceReference:
+    type: string
+    example: "CAAIR716722"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Allocation instance
    allocationInitiateActionRecord:
     type: object
     description: |
@@ -1639,14 +1763,14 @@ definitions:
         general-info: Defines the requested action (e.g. earmark for future allocation, allocate or recall an allocation of a collateral asset)
      productInstanceReference:
       type: string
-      example: "738489"
+      example: "701405"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product to which the collateral is allocated
      customerOfferReference:
       type: string
-      example: "749935"
+      example: "797748"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1704,14 +1828,21 @@ definitions:
     properties:
      collateralAssetAdministrationInstanceReference:
       type: string
-      example: "716484"
+      example: "742295"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the administration record of the asset item
+   allocationInstanceReference:
+    type: string
+    example: "CAAIR716722"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Allocation instance
    allocationInitiateActionReference:
     type: string
-    example: "CAAIAR764144"
+    example: "CAAIAR769026"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1752,6 +1883,20 @@ definitions:
  BQAllocationUpdateInputModel:
   type: object
   properties: 
+   collateralAssetAllocationInstanceReference:
+    type: string
+    example: "CAAIR773567"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Allocation instance
+   allocationInstanceReference:
+    type: string
+    example: "CAAIR773567"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Allocation instance
    allocationInstanceRecord:
     type: object
     properties:
@@ -1763,14 +1908,14 @@ definitions:
         general-info: Defines the requested action (e.g. earmark for future allocation, allocate or recall an allocation of a collateral asset)
      productInstanceReference:
       type: string
-      example: "720579"
+      example: "767625"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product to which the collateral is allocated
      customerOfferReference:
       type: string
-      example: "749836"
+      example: "708325"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1858,14 +2003,14 @@ definitions:
         general-info: Defines the requested action (e.g. earmark for future allocation, allocate or recall an allocation of a collateral asset)
      productInstanceReference:
       type: string
-      example: "720579"
+      example: "767625"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product to which the collateral is allocated
      customerOfferReference:
       type: string
-      example: "749836"
+      example: "708325"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1929,7 +2074,7 @@ definitions:
         general-info: Record of the workstep and result of the allocation process
    allocationUpdateActionTaskReference:
     type: string
-    example: "CAAUATR745645"
+    example: "CAAUATR728742"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1949,6 +2094,20 @@ definitions:
  BQAllocationControlInputModel:
   type: object
   properties: 
+   collateralAssetAllocationInstanceReference:
+    type: string
+    example: "CAAIR755976"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Allocation instance
+   allocationInstanceReference:
+    type: string
+    example: "CAAIR755976"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Allocation instance
    allocationControlActionTaskRecord:
     type: object
     description: |
@@ -1969,7 +2128,7 @@ definitions:
   properties: 
    allocationControlActionTaskReference:
     type: string
-    example: "ACATR764198"
+    example: "ACATR792208"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1995,6 +2154,20 @@ definitions:
  BQAllocationExchangeInputModel:
   type: object
   properties: 
+   collateralAssetAllocationInstanceReference:
+    type: string
+    example: "CAAIR736471"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Allocation instance
+   allocationInstanceReference:
+    type: string
+    example: "CAAIR736471"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Allocation instance
    allocationExchangeActionTaskRecord:
     type: object
     description: |
@@ -2015,7 +2188,7 @@ definitions:
   properties: 
    allocationExchangeActionTaskReference:
     type: string
-    example: "AEATR730812"
+    example: "AEATR740077"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2041,6 +2214,20 @@ definitions:
  BQAllocationCaptureInputModel:
   type: object
   properties: 
+   collateralAssetAllocationInstanceReference:
+    type: string
+    example: "CAAIR715382"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Allocation instance
+   allocationInstanceReference:
+    type: string
+    example: "CAAIR715382"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Allocation instance
    allocationInstanceRecord:
     type: object
     properties:
@@ -2143,7 +2330,7 @@ definitions:
         general-info: State of the allocation as there can be different states for the allocation of a single asset to several products
    allocationCaptureActionTaskReference:
     type: string
-    example: "ACATR731379"
+    example: "ACATR796886"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2156,7 +2343,7 @@ definitions:
       general-info: The capture service call consolidated processing record
    allocationCaptureRecordReference:
     type: string
-    example: "ACRR766657"
+    example: "ACRR745601"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2170,6 +2357,20 @@ definitions:
  BQAllocationGrantInputModel:
   type: object
   properties: 
+   collateralAssetAllocationInstanceReference:
+    type: string
+    example: "CAAIR786784"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Collateral Asset Allocation instance
+   allocationInstanceReference:
+    type: string
+    example: "CAAIR786784"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Allocation instance
    allocationGrantActionTaskRecord:
     type: object
     description: |
@@ -2196,7 +2397,7 @@ definitions:
   properties: 
    allocationGrantActionTaskReference:
     type: string
-    example: "AGATR763245"
+    example: "AGATR700526"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2209,7 +2410,7 @@ definitions:
       general-info: The grant service call consolidated processing record
    grantRequestRecordReference:
     type: string
-    example: "GRRR736345"
+    example: "GRRR773993"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2243,7 +2444,7 @@ definitions:
     properties:
      allocationInstanceReportReference:
       type: string
-      example: "783973"
+      example: "728686"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2253,7 +2454,7 @@ definitions:
     properties:
      allocationInstanceAnalysisReference:
       type: string
-      example: "735501"
+      example: "763262"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2266,7 +2467,7 @@ definitions:
     properties:
      customerReference:
       type: string
-      example: "760909"
+      example: "728724"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2279,7 +2480,7 @@ definitions:
         general-info: The type of asset (e.g. building, machinery, inventory, financial instrument, art)
      collateralAssetReference:
       type: string
-      example: "793757"
+      example: "730834"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2292,7 +2493,7 @@ definitions:
         general-info: Description of significant details and properties of the asset
      collateralAssetAdministrationInstanceReference:
       type: string
-      example: "714729"
+      example: "763397"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2339,14 +2540,14 @@ definitions:
         general-info: Defines the requested action (e.g. earmark for future allocation, allocate or recall an allocation of a collateral asset)
      productInstanceReference:
       type: string
-      example: "757697"
+      example: "717938"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product to which the collateral is allocated
      customerOfferReference:
       type: string
-      example: "709597"
+      example: "796590"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2410,7 +2611,7 @@ definitions:
         general-info: Record of the workstep and result of the allocation process
    allocationRetrieveActionTaskReference:
     type: string
-    example: "CAARATR751418"
+    example: "CAARATR767189"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

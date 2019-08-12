@@ -1,0 +1,480 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Card Transaction Switch'
+ description: >
+
+    ## Executive Summary:
+    This service domain orchestrates the switching and routing of Card Authorization and Financial transactions received through the Card POS Network, Card E-Commerce Gateway, or the ATM Network from the Acquirer to the Issuer through the Card Networks.
+
+    ## Example of Use:
+    An authorization request or sale transaction message is received from the Point of Sale device by the Acquiring Bank, which then needs to route the message to the Card Issuing Bank through the Card Network (e.g. Visa, MC, AMEX or Diners etc.), await the response from the Card Issuer and communicate it to the Merchant through the Point of Sale device.
+
+    ## Description:
+    This service domain handles the processing and asynchronous switching of Card Transaction related messages, such as Authorization, Sale, Void, Refund, etc. between the Acquiring Bank and the Issuing Bank through the Card Network. It has a role within the Acquiring Bank in switching transactions acquired from the Merchant to the Card Network, within the Card Network to switch the transaction to the applicable Card Issuer, and within the Card Issuer to switch the transaction to the instance of the Card Authorization service domain for the card product involved.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-card-transaction-switch/1.0.0
+schemes:
+ - https
+paths:
+  /card-transaction-switch/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCardTransactionSwitch
+      summary: Activate  a SDCardTransactionSwitch servicing session
+      description: Activate  a  SDCardTransactionSwitch servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCardTransactionSwitch Request Payload
+        schema:
+          $ref: '#/definitions/SDCardTransactionSwitchActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCardTransactionSwitchActivateOutputModel'
+  /card-transaction-switch/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCardTransactionSwitch
+      summary: Update an active SDCardTransactionSwitch session configuration
+      description: Update an active SDCardTransactionSwitch session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardTransactionSwitch Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardTransactionSwitch Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCardTransactionSwitchConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCardTransactionSwitchConfigureOutputModel'
+  /card-transaction-switch/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCardTransactionSwitch
+      summary: "Capturing feedback against the SDCardTransactionSwitch service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCardTransactionSwitch service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardTransactionSwitch Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardTransactionSwitch Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCardTransactionSwitchFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCardTransactionSwitchFeedbackOutputModel'
+  /card-transaction-switch/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCardTransactionSwitch
+      summary: Analytical views maintained by the SDCardTransactionSwitch service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCardTransactionSwitch service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCardTransactionSwitch Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCardTransactionSwitch Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCardTransactionSwitchRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCardTransactionSwitchRetrieveOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCardTransactionSwitchOperatingSession
+      summary: Details of a new CardTransactionSwitchOperatingSession instance
+      description: Initiate a card transaction switch operating session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CardTransactionSwitchOperatingSession Request Payload
+        schema:
+          $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CardTransactionSwitchOperatingSession instance
+          schema:
+            $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionInitiateOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCardTransactionSwitchOperatingSession
+      summary: Update to any amendable fields of the CardTransactionSwitchOperatingSession instance
+      description: Update an active card transaction switch operating session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Transaction Switch Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Card Transaction Switch Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionUpdateOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCardTransactionSwitchOperatingSessionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the processing of a card transaction operating session (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Transaction Switch Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionControlInputModel'
+      responses:
+        200:
+          description: Successful control of Card Transaction Switch Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionControlOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCardTransactionSwitchOperatingSessionUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, etc. a card transaction switch session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Transaction Switch Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Card Transaction Switch Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionExchangeOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardTransactionSwitch
+      summary: Invoke a reporting action to obtain a Card Transaction Switch Operating Session instance related report
+      description: Retrieve details about an active card transaction switch operating session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCardTransactionSwitchOperatingSessionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Card Transaction Switch Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRCardTransactionSwitchOperatingSessionRetrieveOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}/capture/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCardTransactionSwitchOperatingSessionCapture
+      summary: Details of a new Capture instance
+      description: Initiate a card transaction switch capture function
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Transaction Switch Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQCaptureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Card Transaction Switch Operating Session instance
+          schema:
+            $ref: '#/definitions/BQCaptureInitiateOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}/capture/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardTransactionSwitchOperatingSessionCapture
+      summary: Invoke a reporting action to obtain a Capture instance related report.
+      description: Retrieve details about a card capture transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Capture Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQCaptureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Capture Instance Record
+          schema:
+            $ref: '#/definitions/BQCaptureRetrieveOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}/routing/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCardTransactionSwitchOperatingSessionRouting
+      summary: Details of a new Routing instance
+      description: Initiate the routing function
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Card Transaction Switch Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQRoutingInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Card Transaction Switch Operating Session instance
+          schema:
+            $ref: '#/definitions/BQRoutingInitiateOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}/routing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCardTransactionSwitchOperatingSessionRouting
+      summary: Invoke a reporting action to obtain a Routing instance related report.
+      description: Retrieve details about a card transaction switch routing transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Routing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQRoutingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Routing Instance Record
+          schema:
+            $ref: '#/definitions/BQRoutingRetrieveOutputModel'
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardTransactionSwitchReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CardTransactionSwitch Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /card-transaction-switch/card-transaction-switch-operating-session/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardTransactionSwitchBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Capture',  'Routing', ]
+  /card-transaction-switch/{sd-reference-id}/card-transaction-switch-operating-session/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCardTransactionSwitchBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Card Transaction Switch Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Card Transaction Switch Operating Session Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Routing
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Routing Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [RoutingID1, RoutingID2]

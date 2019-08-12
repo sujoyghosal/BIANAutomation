@@ -3,6 +3,22 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Product Directory'
  description: >
+
+    ## Executive Summary:
+    This service domain maintains a comprehensive directory of the bank's products and services. It can be 
+    referenced to obtain product details used to support activities including product selection, sales and 
+    marketing, on-boarding, servicing and product fulfillment.
+
+    ## Example of Use:
+    A customer accesses the product directory to obtain product feature descriptions, eligibility and pricing 
+    guidelines
+
+    ## Description:
+    The product directory service domain provides a central service to reference product specifications and
+    related details. The broad range of specification information available includes product feature descriptions; 
+    pricing and eligibility requirements used in sales and on-boarding; servicing support and guidelines; 
+    and operational and production requirements
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-product-directory/1.0.0
 schemes:
@@ -13,8 +29,8 @@ paths:
       tags:
       - activate
       operationId: activateSDProductDirectory
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDProductDirectory servicing session
+      description: Activate  a  SDProductDirectory servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +45,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDProductDirectoryActivateOutputModel'
-  /product-directory/configuration:
+  /product-directory/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDProductDirectory
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDProductDirectory session configuration
+      description: Update an active SDProductDirectory session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductDirectory Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -50,16 +71,21 @@ paths:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDProductDirectoryConfigureOutputModel'
-  /product-directory/feedback:
+  /product-directory/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDProductDirectory
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDProductDirectory service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDProductDirectory service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductDirectory Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -71,16 +97,21 @@ paths:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDProductDirectoryFeedbackOutputModel'
-  /product-directory/:
+  /product-directory/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDProductDirectory
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDProductDirectory service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDProductDirectory service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductDirectory Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +123,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDProductDirectoryRetrieveOutputModel'
-  /product-directory/product-directory-entry/initiation:
+  /product-directory/{sd-reference-id}/product-directory-entry/initiation:
     post:
       tags:
       - initiate
       operationId: initiateProductDirectoryEntry
-      summary: Details of a new Product Directory Entry instance
+      summary: Details of a new ProductDirectoryEntry instance
       description: Register a new product or service in the catalog
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,62 +146,102 @@ paths:
           $ref: '#/definitions/CRProductDirectoryEntryInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Product Directory Entry instance
+          description: Successful initiation of new ProductDirectoryEntry instance
           schema:
             $ref: '#/definitions/CRProductDirectoryEntryInitiateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/update:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateProductDirectoryEntry
-      summary: Update to any amendable fields of the Product Directory Entry instance
+      summary: Update to any amendable fields of the ProductDirectoryEntry instance
       description: Update details of a product or service in the catalog
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: ProductDirectoryEntry Request Payload
+        description: Product Directory Entry Request Payload
         schema:
           $ref: '#/definitions/CRProductDirectoryEntryUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Product Directory Entry instance
+          description: Successfully Updated Product Directory Entry Instance
           schema:
             $ref: '#/definitions/CRProductDirectoryEntryUpdateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/requisition:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestProductDirectoryEntryUpdate
-      summary: Invoke a service request action against the Product Directory Entry instance
+      summary: Invoke a service request action against the ProductDirectoryEntry instance
       description: Request that an existing entry is updated or revised
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: ProductDirectoryEntry Request Payload
+        description: Product Directory Entry Request Payload
         schema:
           $ref: '#/definitions/CRProductDirectoryEntryRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Product Directory Entry instance
+          description: Successful requisition of Product Directory Entry Instance
           schema:
             $ref: '#/definitions/CRProductDirectoryEntryRequestOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/operations/initiation:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectory
+      summary: Invoke a reporting action to obtain a Product Directory Entry instance related report
+      description: Retrieve product or service details from the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRProductDirectoryEntryRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Product Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRProductDirectoryEntryRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/operations/initiation:
     post:
       tags:
       - initiate
@@ -175,23 +251,28 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Operations Request Payload
+        description: Product Directory Entry Request Payload
         schema:
           $ref: '#/definitions/BQOperationsInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Operations instance
+          description: Successful initiation of Product Directory Entry instance
           schema:
             $ref: '#/definitions/BQOperationsInitiateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}/update:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -201,14 +282,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Operations BQ Reference Id
+        description: Operations Instance Reference
         required: true
         type: string
       - in: body
@@ -219,10 +305,10 @@ paths:
           $ref: '#/definitions/BQOperationsUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Operations instance
+          description: Successfully Updated Operations Instance
           schema:
             $ref: '#/definitions/BQOperationsUpdateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}/requisition:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}/requisition:
     put:
       tags:
       - request
@@ -232,14 +318,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Operations BQ Reference Id
+        description: Operations Instance Reference
         required: true
         type: string
       - in: body
@@ -250,53 +341,98 @@ paths:
           $ref: '#/definitions/BQOperationsRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Operations instance
+          description: Successful requisition of Operations Instance Record
           schema:
             $ref: '#/definitions/BQOperationsRequestOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/salesandmarketing/initiation:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectoryEntryOperations
+      summary: Invoke a reporting action to obtain a Operations instance related report.
+      description: Retrieve product or service operations details from the catalog .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Operations Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOperationsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Operations Instance Record
+          schema:
+            $ref: '#/definitions/BQOperationsRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/salesandmarketing/initiation:
     post:
       tags:
       - initiate
       operationId: initiateProductDirectoryEntrySalesandMarketing
-      summary: Details of a new Sales and Marketing instance
+      summary: Details of a new SalesandMarketing instance
       description: Register a new product or service sales and marketing details in the catalog
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: SalesandMarketing Request Payload
+        description: Product Directory Entry Request Payload
         schema:
           $ref: '#/definitions/BQSalesandMarketingInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Sales and Marketing instance
+          description: Successful initiation of Product Directory Entry instance
           schema:
             $ref: '#/definitions/BQSalesandMarketingInitiateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}/update:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateProductDirectoryEntrySalesandMarketing
-      summary: Update to any amendable fields of the Sales and Marketing instance
+      summary: Update to any amendable fields of the SalesandMarketing instance
       description: Update details of a product or service sales and marketing details in the catalog
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: SalesandMarketing BQ Reference Id
+        description: SalesandMarketing Instance Reference
         required: true
         type: string
       - in: body
@@ -307,27 +443,32 @@ paths:
           $ref: '#/definitions/BQSalesandMarketingUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Sales and Marketing instance
+          description: Successfully Updated SalesandMarketing Instance
           schema:
             $ref: '#/definitions/BQSalesandMarketingUpdateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}/requisition:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestProductDirectoryEntrySalesandMarketingUpdate
-      summary: Invoke a service request action against the Sales and Marketing instance
+      summary: Invoke a service request action against the SalesandMarketing instance
       description: Request that an existing entry is updated or revised
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: SalesandMarketing BQ Reference Id
+        description: SalesandMarketing Instance Reference
         required: true
         type: string
       - in: body
@@ -338,10 +479,45 @@ paths:
           $ref: '#/definitions/BQSalesandMarketingRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Sales and Marketing instance
+          description: Successful requisition of SalesandMarketing Instance Record
           schema:
             $ref: '#/definitions/BQSalesandMarketingRequestOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/servicing/initiation:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectoryEntrySalesandMarketing
+      summary: Invoke a reporting action to obtain a SalesandMarketing instance related report.
+      description: Retrieve product or service sales and marketing details from the catalog .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: SalesandMarketing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQSalesandMarketingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved SalesandMarketing Instance Record
+          schema:
+            $ref: '#/definitions/BQSalesandMarketingRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/servicing/initiation:
     post:
       tags:
       - initiate
@@ -351,23 +527,28 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Servicing Request Payload
+        description: Product Directory Entry Request Payload
         schema:
           $ref: '#/definitions/BQServicingInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Servicing instance
+          description: Successful initiation of Product Directory Entry instance
           schema:
             $ref: '#/definitions/BQServicingInitiateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}/update:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -377,14 +558,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Servicing BQ Reference Id
+        description: Servicing Instance Reference
         required: true
         type: string
       - in: body
@@ -395,10 +581,10 @@ paths:
           $ref: '#/definitions/BQServicingUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Servicing instance
+          description: Successfully Updated Servicing Instance
           schema:
             $ref: '#/definitions/BQServicingUpdateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}/requisition:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}/requisition:
     put:
       tags:
       - request
@@ -408,14 +594,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Servicing BQ Reference Id
+        description: Servicing Instance Reference
         required: true
         type: string
       - in: body
@@ -426,10 +617,45 @@ paths:
           $ref: '#/definitions/BQServicingRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Servicing instance
+          description: Successful requisition of Servicing Instance Record
           schema:
             $ref: '#/definitions/BQServicingRequestOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/production/initiation:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectoryEntryServicing
+      summary: Invoke a reporting action to obtain a Servicing instance related report.
+      description: Retrieve product or service servicing details from the catalog .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Servicing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQServicingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Servicing Instance Record
+          schema:
+            $ref: '#/definitions/BQServicingRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/production/initiation:
     post:
       tags:
       - initiate
@@ -439,23 +665,28 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Production Request Payload
+        description: Product Directory Entry Request Payload
         schema:
           $ref: '#/definitions/BQProductionInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Production instance
+          description: Successful initiation of Product Directory Entry instance
           schema:
             $ref: '#/definitions/BQProductionInitiateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}/update:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -465,14 +696,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Production BQ Reference Id
+        description: Production Instance Reference
         required: true
         type: string
       - in: body
@@ -483,10 +719,10 @@ paths:
           $ref: '#/definitions/BQProductionUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Production instance
+          description: Successfully Updated Production Instance
           schema:
             $ref: '#/definitions/BQProductionUpdateOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}/requisition:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}/requisition:
     put:
       tags:
       - request
@@ -496,14 +732,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Production BQ Reference Id
+        description: Production Instance Reference
         required: true
         type: string
       - in: body
@@ -514,10 +755,45 @@ paths:
           $ref: '#/definitions/BQProductionRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Production instance
+          description: Successful requisition of Production Instance Record
           schema:
             $ref: '#/definitions/BQProductionRequestOutputModel'
-  /product-directory/product-directory-entry:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductDirectoryEntryProduction
+      summary: Invoke a reporting action to obtain a Production instance related report.
+      description: Retrieve product or service production details from the catalog .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Product Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Production Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQProductionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Production Instance Record
+          schema:
+            $ref: '#/definitions/BQProductionRetrieveOutputModel'
+  /product-directory/{sd-reference-id}/product-directory-entry:
     get:
       tags:
       - retrieve
@@ -526,6 +802,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- ProductDirectory Instance Status='active'
@@ -555,7 +836,7 @@ paths:
             items:
               type: string
             example: [ 'Operations',  'SalesAndMarketing',  'Servicing',  'Production', ]
-  /product-directory/product-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
+  /product-directory/{sd-reference-id}/product-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -564,9 +845,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Product Directory Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Product Directory Entry Instance
+        description: Product Directory Entry Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -587,156 +873,6 @@ paths:
             items:
               type: string
             example: [ProductionID1, ProductionID2]
-  /product-directory/product-directory-entry/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveProductDirectory
-      summary: Retrieve a Product Directory Record
-      description: Retrieve a Product Directory Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Product Directory Entry Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Product Directory Request Payload
-        schema:
-          $ref: '#/definitions/CRProductDirectoryRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Product Directory Report
-          schema:
-            $ref: '#/definitions/CRProductDirectoryRetrieveOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/operations/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveProductDirectoryOperations
-      summary: Retrieve a Product Directory Operations Record
-      description: Retrieve a Product Directory Operations Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Product Directory Entry Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Operations BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Product Directory Operations Request Payload
-        schema:
-          $ref: '#/definitions/BQOperationsRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Product Directory Operations Report
-          schema:
-            $ref: '#/definitions/BQOperationsRetrieveOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/salesandmarketing/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveProductDirectorySalesAndMarketing
-      summary: Retrieve a Product Directory SalesAndMarketing Record
-      description: Retrieve a Product Directory SalesAndMarketing Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Product Directory Entry Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: SalesAndMarketing BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Product Directory SalesAndMarketing Request Payload
-        schema:
-          $ref: '#/definitions/BQSalesAndMarketingRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Product Directory SalesAndMarketing Report
-          schema:
-            $ref: '#/definitions/BQSalesAndMarketingRetrieveOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/servicing/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveProductDirectoryServicing
-      summary: Retrieve a Product Directory Servicing Record
-      description: Retrieve a Product Directory Servicing Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Product Directory Entry Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Servicing BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Product Directory Servicing Request Payload
-        schema:
-          $ref: '#/definitions/BQServicingRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Product Directory Servicing Report
-          schema:
-            $ref: '#/definitions/BQServicingRetrieveOutputModel'
-  /product-directory/product-directory-entry/{cr-reference-id}/production/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveProductDirectoryProduction
-      summary: Retrieve a Product Directory Production Record
-      description: Retrieve a Product Directory Production Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Product Directory Entry Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Production BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Product Directory Production Request Payload
-        schema:
-          $ref: '#/definitions/BQProductionRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Product Directory Production Report
-          schema:
-            $ref: '#/definitions/BQProductionRetrieveOutputModel'
 definitions:
  SDProductDirectoryActivateInputModel:
   type: object
@@ -1384,6 +1520,13 @@ definitions:
  CRProductDirectoryEntryInitiateInputModel:
   type: object
   properties: 
+   productDirectoryServicingSessionReference:
+    type: string
+    example: "PDSSR718608"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    productDirectoryEntryInitiateActionRecord:
     type: object
     description: |
@@ -1414,9 +1557,16 @@ definitions:
  CRProductDirectoryEntryInitiateOutputModel:
   type: object
   properties: 
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR770413"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Product Directory Entry instance
    productDirectoryEntryInitiateActionReference:
     type: string
-    example: "PDEIAR719844"
+    example: "PDEIAR779870"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1433,9 +1583,38 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: The status of the Product Directory Entry instance (e.g. initialised, pending, active)
+   productDirectoryEntryInstanceRecord:
+    type: object
+    properties:
+     productVersion:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The current version of the product referenced in the directory
+     productDirectoryEntryConfiguration:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
  CRProductDirectoryEntryUpdateInputModel:
   type: object
   properties: 
+   productDirectoryServicingSessionReference:
+    type: string
+    example: "PDSSR725619"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR730081"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Product Directory Entry instance
    productDirectoryEntryInstanceRecord:
     type: object
     properties:
@@ -1483,7 +1662,7 @@ definitions:
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
    productDirectoryEntryUpdateActionTaskReference:
     type: string
-    example: "PDEUATR743018"
+    example: "PDEUATR765507"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1503,6 +1682,20 @@ definitions:
  CRProductDirectoryEntryRequestInputModel:
   type: object
   properties: 
+   productDirectoryServicingSessionReference:
+    type: string
+    example: "PDSSR716937"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR760066"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Product Directory Entry instance
    productDirectoryEntryInstanceRecord:
     type: object
     properties:
@@ -1553,7 +1746,7 @@ definitions:
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
    productDirectoryEntryRequestActionTaskReference:
     type: string
-    example: "PDERATR728534"
+    example: "PDERATR711723"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1566,7 +1759,7 @@ definitions:
       general-info: The request service call consolidated processing record
    requestRecordReference:
     type: string
-    example: "RRR760979"
+    example: "RRR781937"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1597,7 +1790,7 @@ definitions:
     properties:
      productDirectoryEntryInstanceReportReference:
       type: string
-      example: "751008"
+      example: "754876"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1619,7 +1812,7 @@ definitions:
     properties:
      productDirectoryEntryInstanceAnalysisReference:
       type: string
-      example: "707911"
+      example: "761493"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1656,7 +1849,7 @@ definitions:
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
    productDirectoryEntryRetrieveActionTaskReference:
     type: string
-    example: "PDERATR777395"
+    example: "PDERATR740442"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1733,6 +1926,13 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR714334"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
    operationsInitiateActionRecord:
     type: object
     description: |
@@ -1769,9 +1969,16 @@ definitions:
  BQOperationsInitiateOutputModel:
   type: object
   properties: 
+   operationsInstanceReference:
+    type: string
+    example: "OIR740403"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Operations instance
    operationsInitiateActionReference:
     type: string
-    example: "OIAR780039"
+    example: "OIAR724920"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1806,6 +2013,20 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR702314"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
+   operationsInstanceReference:
+    type: string
+    example: "OIR764673"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Operations instance
    operationsInstanceRecord:
     type: object
     properties:
@@ -1892,7 +2113,7 @@ definitions:
         general-info:  The default parameter setting and possible value range
    operationsUpdateActionTaskReference:
     type: string
-    example: "OUATR775757"
+    example: "OUATR728137"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1927,6 +2148,20 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR785489"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
+   operationsInstanceReference:
+    type: string
+    example: "OIR792371"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Operations instance
    operationsInstanceRecord:
     type: object
     properties:
@@ -2016,7 +2251,7 @@ definitions:
         general-info:  The default parameter setting and possible value range
    operationsRequestActionTaskReference:
     type: string
-    example: "ORATR710903"
+    example: "ORATR705066"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2029,7 +2264,7 @@ definitions:
       general-info: The request service call consolidated processing record
    operationsRequestRecordReference:
     type: string
-    example: "ORRR753346"
+    example: "ORRR728254"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2060,7 +2295,7 @@ definitions:
     properties:
      operationsInstanceReportReference:
       type: string
-      example: "708686"
+      example: "778370"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2070,7 +2305,7 @@ definitions:
     properties:
      operationsInstanceAnalysisReference:
       type: string
-      example: "773034"
+      example: "730761"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2122,7 +2357,7 @@ definitions:
         general-info:  The default parameter setting and possible value range
    operationsRetrieveActionTaskReference:
     type: string
-    example: "ORATR770830"
+    example: "ORATR774593"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2211,6 +2446,13 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR776920"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
    salesandMarketingInitiateActionRecord:
     type: object
     description: |
@@ -2271,9 +2513,16 @@ definitions:
  BQSalesandMarketingInitiateOutputModel:
   type: object
   properties: 
+   salesandMarketingInstanceReference:
+    type: string
+    example: "SAMIR720215"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Sales and Marketing instance
    salesandMarketingInitiateActionReference:
     type: string
-    example: "SAMIAR777884"
+    example: "SAMIAR720362"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2293,6 +2542,20 @@ definitions:
  BQSalesandMarketingUpdateInputModel:
   type: object
   properties: 
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR725697"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
+   salesandMarketingInstanceReference:
+    type: string
+    example: "SAMIR727163"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Sales and Marketing instance
    salesandMarketingInstanceRecord:
     type: object
     properties:
@@ -2412,7 +2675,7 @@ definitions:
         general-info: Details the tasks required to complete a customer offer
    salesandMarketingUpdateActionTaskReference:
     type: string
-    example: "SAMUATR798174"
+    example: "SAMUATR792030"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2432,6 +2695,20 @@ definitions:
  BQSalesandMarketingRequestInputModel:
   type: object
   properties: 
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR746684"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
+   salesandMarketingInstanceReference:
+    type: string
+    example: "SAMIR705382"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Sales and Marketing instance
    salesandMarketingInstanceRecord:
     type: object
     properties:
@@ -2554,7 +2831,7 @@ definitions:
         general-info: Details the tasks required to complete a customer offer
    salesandMarketingRequestActionTaskReference:
     type: string
-    example: "SAMRATR772021"
+    example: "SAMRATR751113"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2567,7 +2844,7 @@ definitions:
       general-info: The request service call consolidated processing record
    salesandMarketingRequestRecordReference:
     type: string
-    example: "SAMRRR718845"
+    example: "SAMRRR750340"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2598,7 +2875,7 @@ definitions:
     properties:
      salesandMarketingInstanceReportReference:
       type: string
-      example: "765071"
+      example: "719892"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2608,7 +2885,7 @@ definitions:
     properties:
      salesandMarketingInstanceAnalysisReference:
       type: string
-      example: "741648"
+      example: "722157"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2684,7 +2961,7 @@ definitions:
         general-info: Details the tasks required to complete a customer offer
    salesandMarketingRetrieveActionTaskReference:
     type: string
-    example: "SAMRATR720558"
+    example: "SAMRATR728354"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2773,6 +3050,13 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR751534"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
    servicingInitiateActionRecord:
     type: object
     description: |
@@ -2809,9 +3093,16 @@ definitions:
  BQServicingInitiateOutputModel:
   type: object
   properties: 
+   servicingInstanceReference:
+    type: string
+    example: "SIR797805"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing instance
    servicingInitiateActionReference:
     type: string
-    example: "SIAR771933"
+    example: "SIAR742145"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2831,6 +3122,20 @@ definitions:
  BQServicingUpdateInputModel:
   type: object
   properties: 
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR719939"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
+   servicingInstanceReference:
+    type: string
+    example: "SIR756908"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing instance
    servicingInstanceRecord:
     type: object
     properties:
@@ -2902,7 +3207,7 @@ definitions:
         general-info: Resolution guide for resolving reported issue with a product or service feature
    servicingUpdateActionTaskReference:
     type: string
-    example: "SUATR742171"
+    example: "SUATR740048"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2922,6 +3227,20 @@ definitions:
  BQServicingRequestInputModel:
   type: object
   properties: 
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR706017"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
+   servicingInstanceReference:
+    type: string
+    example: "SIR790771"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing instance
    servicingInstanceRecord:
     type: object
     properties:
@@ -2996,7 +3315,7 @@ definitions:
         general-info: Resolution guide for resolving reported issue with a product or service feature
    servicingRequestActionTaskReference:
     type: string
-    example: "SRATR795269"
+    example: "SRATR769886"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3009,7 +3328,7 @@ definitions:
       general-info: The request service call consolidated processing record
    servicingRequestRecordReference:
     type: string
-    example: "SRRR744472"
+    example: "SRRR786433"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3040,7 +3359,7 @@ definitions:
     properties:
      servicingInstanceReportReference:
       type: string
-      example: "788541"
+      example: "728930"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3050,7 +3369,7 @@ definitions:
     properties:
      servicingInstanceAnalysisReference:
       type: string
-      example: "707159"
+      example: "768276"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3102,7 +3421,7 @@ definitions:
         general-info: Resolution guide for resolving reported issue with a product or service feature
    servicingRetrieveActionTaskReference:
     type: string
-    example: "SRATR721892"
+    example: "SRATR737302"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3191,6 +3510,13 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any configuration settings for the directory entry (e.g. generally available, provisional)
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR711574"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
    productionInitiateActionRecord:
     type: object
     description: |
@@ -3221,9 +3547,16 @@ definitions:
  BQProductionInitiateOutputModel:
   type: object
   properties: 
+   productionInstanceReference:
+    type: string
+    example: "PIR734357"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Production instance
    productionInitiateActionReference:
     type: string
-    example: "PIAR772986"
+    example: "PIAR760757"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3243,6 +3576,20 @@ definitions:
  BQProductionUpdateInputModel:
   type: object
   properties: 
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR722850"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
+   productionInstanceReference:
+    type: string
+    example: "PIR751205"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Production instance
    productionInstanceRecord:
     type: object
     properties:
@@ -3302,7 +3649,7 @@ definitions:
         general-info: The access channels and devices that are supported by the product or service
    productionUpdateActionTaskReference:
     type: string
-    example: "PUATR793752"
+    example: "PUATR787461"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3322,6 +3669,20 @@ definitions:
  BQProductionRequestInputModel:
   type: object
   properties: 
+   productDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR753972"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Product Directory Entry instance
+   productionInstanceReference:
+    type: string
+    example: "PIR782071"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Production instance
    productionInstanceRecord:
     type: object
     properties:
@@ -3384,7 +3745,7 @@ definitions:
         general-info: The access channels and devices that are supported by the product or service
    productionRequestActionTaskReference:
     type: string
-    example: "PRATR794247"
+    example: "PRATR722300"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3397,7 +3758,7 @@ definitions:
       general-info: The request service call consolidated processing record
    productionRequestRecordReference:
     type: string
-    example: "PRRR783713"
+    example: "PRRR751262"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3428,7 +3789,7 @@ definitions:
     properties:
      productionInstanceReportReference:
       type: string
-      example: "788607"
+      example: "748120"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3438,7 +3799,7 @@ definitions:
     properties:
      productionInstanceAnalysisReference:
       type: string
-      example: "738775"
+      example: "794081"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3484,7 +3845,7 @@ definitions:
         general-info: The access channels and devices that are supported by the product or service
    productionRetrieveActionTaskReference:
     type: string
-    example: "PRATR751015"
+    example: "PRATR768242"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

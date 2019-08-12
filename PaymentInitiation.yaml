@@ -3,6 +3,22 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Payment Initiation'
  description: >
+
+    ## Executive Summary:
+    This service domain provides a customer payment service. It captures the payer and payee details and other 
+    key properties of the payment and orchestrates the transaction. It provides support for repeating/scheduled 
+    payments
+
+    ## Example of Use:
+    An established customer transfers an amount from their current account to an overseas account for a family 
+    member. As this is a recurring transaction, the details are maintained and updated as necessary
+
+    ## Description:
+    This service domain supports payment services for consumer and business customers. Payments are made to 
+    other accounts within the bank, other banks and possibly internationally using whatever payments mechanism 
+    is suited to the transaction (See Payments Order/Execution). The service domain can support single 
+    transactions, or manage repeating/scheduled payments if requested.
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-payment-initiation/1.0.0
 schemes:
@@ -13,8 +29,8 @@ paths:
       tags:
       - activate
       operationId: activateSDPaymentInitiation
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDPaymentInitiation servicing session
+      description: Activate  a  SDPaymentInitiation servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +45,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDPaymentInitiationActivateOutputModel'
-  /payment-initiation/configure:
+  /payment-initiation/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDPaymentInitiation
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDPaymentInitiation session configuration
+      description: Update an active SDPaymentInitiation session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPaymentInitiation Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +67,25 @@ paths:
         schema:
           $ref: '#/definitions/SDPaymentInitiationConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDPaymentInitiationConfigureOutputModel'
-  /payment-initiation/feedback:
+  /payment-initiation/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDPaymentInitiation
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDPaymentInitiation service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDPaymentInitiation service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPaymentInitiation Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +93,25 @@ paths:
         schema:
           $ref: '#/definitions/SDPaymentInitiationFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDPaymentInitiationFeedbackOutputModel'
-  /payment-initiation/retrieve:
+  /payment-initiation/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDPaymentInitiation
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDPaymentInitiation service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDPaymentInitiation service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPaymentInitiation Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +123,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDPaymentInitiationRetrieveOutputModel'
-  /payment-initiation/payment-initiation-transaction/initiation:
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction/initiation:
     post:
       tags:
       - initiate
       operationId: initiatePaymentInitiationTransaction
-      summary: Details of a new Payment Initiation Transaction instance
+      summary: Details of a new PaymentInitiationTransaction instance
       description: Initiate a payment transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Initiation Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,114 +146,141 @@ paths:
           $ref: '#/definitions/CRPaymentInitiationTransactionInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Payment Initiation Transaction instance
+          description: Successful initiation of new PaymentInitiationTransaction instance
           schema:
             $ref: '#/definitions/CRPaymentInitiationTransactionInitiateOutputModel'
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/update:
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updatePaymentInitiationTransaction
-      summary: Update to any amendable fields of the Payment Initiation Transaction instance
+      summary: Update to any amendable fields of the PaymentInitiationTransaction instance
       description: Update details of a payment transaction instruction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Initiation Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Payment Initiation Transaction Instance
+        description: Payment Initiation Transaction Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: PaymentInitiationTransaction Request Payload
+        description: Payment Initiation Transaction Request Payload
         schema:
           $ref: '#/definitions/CRPaymentInitiationTransactionUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Payment Initiation Transaction instance
+          description: Successfully Updated Payment Initiation Transaction Instance
           schema:
             $ref: '#/definitions/CRPaymentInitiationTransactionUpdateOutputModel'
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/compliance/initiation:
-    post:
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction/{cr-reference-id}:
+    get:
       tags:
-      - initiate
-      operationId: initiatePaymentInitiationTransactionCompliance
-      summary: Details of a new Compliance instance
-      description: Initiate a payment compliance transaction
+      - retrieve
+      operationId: retrievePaymentInitiation
+      summary: Invoke a reporting action to obtain a Payment Initiation Transaction instance related report
+      description: Retrieve details about a payment transaction
       produces:
       - application/json
       parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Payment Initiation Transaction Instance
+        description: Payment Initiation Servicing Session Reference
         required: true
         type: string
-      - in: body
-        name: body
+      - name: cr-reference-id
+        in: path
+        description: Payment Initiation Transaction Instance Reference
         required: true
-        description: Compliance Request Payload
-        schema:
-          $ref: '#/definitions/BQComplianceInitiateInputModel'
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRPaymentInitiationTransactionRetrieveInputModel'
+        type: string
       responses:
-        201:
-          description: Successful Details of a new Compliance instance
+        200:
+          description: Successfully Retrieved Payment Initiation Transaction Instance
           schema:
-            $ref: '#/definitions/BQComplianceInitiateOutputModel'
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/fundingcheck/initiation:
-    post:
+            $ref: '#/definitions/CRPaymentInitiationTransactionRetrieveOutputModel'
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction/{cr-reference-id}/compliance/{bq-reference-id}/:
+    get:
       tags:
-      - initiate
-      operationId: initiatePaymentInitiationTransactionFundingCheck
-      summary: Details of a new Funding Check instance
-      description: Initiate a payment funding check transaction
+      - retrieve
+      operationId: retrievePaymentInitiationTransactionCompliance
+      summary: Invoke a reporting action to obtain a Compliance instance related report.
+      description: Retrieve details about a payment transaction compliance check .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Payment Initiation Transaction Instance
+        description: Payment Initiation Servicing Session Reference
         required: true
         type: string
-      - in: body
-        name: body
+      - name: cr-reference-id
+        in: path
+        description: Payment Initiation Transaction Instance Reference
         required: true
-        description: FundingCheck Request Payload
-        schema:
-          $ref: '#/definitions/BQFundingCheckInitiateInputModel'
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Compliance Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQComplianceRetrieveInputModel'
+        type: string
       responses:
-        201:
-          description: Successful Details of a new Funding Check instance
+        200:
+          description: Successfully  Retrieved Compliance Instance Record
           schema:
-            $ref: '#/definitions/BQFundingCheckInitiateOutputModel'
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/orderinitiation/initiation:
-    post:
+            $ref: '#/definitions/BQComplianceRetrieveOutputModel'
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction/{cr-reference-id}/fundingcheck/{bq-reference-id}/:
+    get:
       tags:
-      - initiate
-      operationId: initiatePaymentInitiationTransactionOrderInitiation
-      summary: Details of a new Order Initiation instance
-      description: Initiate a payment order initiation
+      - retrieve
+      operationId: retrievePaymentInitiationTransactionFundingCheck
+      summary: Invoke a reporting action to obtain a FundingCheck instance related report.
+      description: Retrieve details about a payment transaction funds available .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Payment Initiation Transaction Instance
+        description: Payment Initiation Servicing Session Reference
         required: true
         type: string
-      - in: body
-        name: body
+      - name: cr-reference-id
+        in: path
+        description: Payment Initiation Transaction Instance Reference
         required: true
-        description: OrderInitiation Request Payload
-        schema:
-          $ref: '#/definitions/BQOrderInitiationInitiateInputModel'
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FundingCheck Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQFundingCheckRetrieveInputModel'
+        type: string
       responses:
-        201:
-          description: Successful Details of a new Order Initiation instance
+        200:
+          description: Successfully  Retrieved FundingCheck Instance Record
           schema:
-            $ref: '#/definitions/BQOrderInitiationInitiateOutputModel'
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/orderinitiation/{bq-reference-id}/exchange:
+            $ref: '#/definitions/BQFundingCheckRetrieveOutputModel'
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction/{cr-reference-id}/orderinitiation/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -227,14 +290,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Initiation Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Payment Initiation Transaction Instance
+        description: Payment Initiation Transaction Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: OrderInitiation BQ Reference Id
+        description: OrderInitiation Instance Reference
         required: true
         type: string
       - in: body
@@ -245,10 +313,45 @@ paths:
           $ref: '#/definitions/BQOrderInitiationExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of OrderInitiation Instance Record
           schema:
             $ref: '#/definitions/BQOrderInitiationExchangeOutputModel'
-  /payment-initiation/payment-initiation-transaction:
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction/{cr-reference-id}/orderinitiation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePaymentInitiationTransactionOrderInitiation
+      summary: Invoke a reporting action to obtain a OrderInitiation instance related report.
+      description: Retrieve details about the payment order initiation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Initiation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Payment Initiation Transaction Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OrderInitiation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOrderInitiationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved OrderInitiation Instance Record
+          schema:
+            $ref: '#/definitions/BQOrderInitiationRetrieveOutputModel'
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction:
     get:
       tags:
       - retrieve
@@ -257,6 +360,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Initiation Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- PaymentInitiation Instance Status='active'
@@ -286,7 +394,7 @@ paths:
             items:
               type: string
             example: [ 'Compliance',  'FundingCheck',  'OrderInitiation', ]
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/{behavior-qualifier}/:
+  /payment-initiation/{sd-reference-id}/payment-initiation-transaction/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -295,9 +403,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Initiation Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Payment Initiation Transaction Instance
+        description: Payment Initiation Transaction Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -318,125 +431,6 @@ paths:
             items:
               type: string
             example: [OrderInitiationID1, OrderInitiationID2]
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePaymentInitiation
-      summary: Retrieve details about a payment transaction
-      description: Retrieve a Payment Initiation Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Payment Initiation Transaction Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Payment Initiation Request Payload
-        schema:
-          $ref: '#/definitions/CRPaymentInitiationTransactionRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Payment Initiation Report
-          schema:
-            $ref: '#/definitions/CRPaymentInitiationTransactionRetrieveOutputModel'
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/compliance/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePaymentInitiationCompliance
-      summary: Retrieve details about a payment transaction compliance check
-      description: Retrieve a Payment Initiation Compliance Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Payment Initiation Transaction Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Compliance BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Payment Initiation Compliance Request Payload
-        schema:
-          $ref: '#/definitions/BQComplianceRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Payment Initiation Compliance Report
-          schema:
-            $ref: '#/definitions/BQComplianceRetrieveOutputModel'
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/fundingcheck/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePaymentInitiationFundingCheck
-      summary: Retrieve details about a payment transaction funds available
-      description: Retrieve a Payment Initiation FundingCheck Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Payment Initiation Transaction Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: FundingCheck BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Payment Initiation FundingCheck Request Payload
-        schema:
-          $ref: '#/definitions/BQFundingCheckRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Payment Initiation FundingCheck Report
-          schema:
-            $ref: '#/definitions/BQFundingCheckRetrieveOutputModel'
-  /payment-initiation/payment-initiation-transaction/{cr-reference-id}/orderinitiation/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePaymentInitiationOrderInitiation
-      summary: Retrieve details about the payment order initiation
-      description: Retrieve a Payment Initiation OrderInitiation Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Payment Initiation Transaction Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: OrderInitiation BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Payment Initiation OrderInitiation Request Payload
-        schema:
-          $ref: '#/definitions/BQOrderInitiationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Payment Initiation OrderInitiation Report
-          schema:
-            $ref: '#/definitions/BQOrderInitiationRetrieveOutputModel'
 definitions:
  SDPaymentInitiationActivateInputModel:
   type: object
@@ -1084,6 +1078,13 @@ definitions:
  CRPaymentInitiationTransactionInitiateInputModel:
   type: object
   properties: 
+   paymentInitiationServicingSessionReference:
+    type: string
+    example: "PISSR775324"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    paymentInitiationTransactionInitiateActionRecord:
     type: object
     description: |
@@ -1110,14 +1111,23 @@ definitions:
       properties:
        recurringPaymentCustomerReference:
         type: string
-        example: "716674"
+        example: "775633"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference for a customer that uses recurring payments facility
+       recurringPaymentReference:
+        type: object
+        properties:
+         recurringPaymentRecord:
+          type: object
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+            general-info: Details of the recurring payment. Can be used to pre-populate the payment request
      customerReference:
       type: string
-      example: "786223"
+      example: "702248"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1127,42 +1137,42 @@ definitions:
       properties:
        payerReference:
         type: string
-        example: "724952"
+        example: "737152"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        payerBankReference:
         type: string
-        example: "774258"
+        example: "775961"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer's bank
        payerProductInstanceReference:
         type: string
-        example: "754919"
+        example: "720412"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer's account (the source of funds)
        payeeReference:
         type: string
-        example: "716678"
+        example: "741649"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The target for the payment
        payeeBankReference:
         type: string
-        example: "729909"
+        example: "728183"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee's bank
        payeeProductInstanceReference:
         type: string
-        example: "747717"
+        example: "713078"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1215,9 +1225,16 @@ definitions:
  CRPaymentInitiationTransactionInitiateOutputModel:
   type: object
   properties: 
+   paymentInitiationTransactionInstanceReference:
+    type: string
+    example: "PITIR771406"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Payment Initiation Transaction instance
    paymentInitiationTransactionInitiateActionReference:
     type: string
-    example: "PITIAR748847"
+    example: "PITIAR792054"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1242,7 +1259,7 @@ definitions:
       properties:
        recurringPaymentCustomerReference:
         type: string
-        example: "716674"
+        example: "775633"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1256,9 +1273,6 @@ definitions:
            `status: Not Mapped`
             core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
             general-info: Details of the recurring payment. Can be used to pre-populate the payment request
-     paymentTransaction:
-      type: object
-      properties:
        dateType:
         type: object
         properties:
@@ -1275,9 +1289,32 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Processing and exchange fees as appropriate
+       documentReference:
+        type: object
+        properties:
+         documentRecord:
+          type: object
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+            general-info: The copy of the identification document used
  CRPaymentInitiationTransactionUpdateInputModel:
   type: object
   properties: 
+   paymentInitiationServicingSessionReference:
+    type: string
+    example: "PISSR727767"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   paymentInitiationTransactionInstanceReference:
+    type: string
+    example: "PITIR743005"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Payment Initiation Transaction instance
    paymentInitiationTransactionInstanceRecord:
     type: object
     properties:
@@ -1292,7 +1329,7 @@ definitions:
       properties:
        recurringPaymentCustomerReference:
         type: string
-        example: "711657"
+        example: "795096"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1308,7 +1345,7 @@ definitions:
             general-info: Details of the recurring payment. Can be used to pre-populate the payment request
      customerReference:
       type: string
-      example: "712178"
+      example: "781225"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1318,42 +1355,42 @@ definitions:
       properties:
        payerReference:
         type: string
-        example: "734089"
+        example: "770206"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        payerBankReference:
         type: string
-        example: "788481"
+        example: "705350"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer's bank
        payerProductInstanceReference:
         type: string
-        example: "760285"
+        example: "742427"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer's account (the source of funds)
        payeeReference:
         type: string
-        example: "791042"
+        example: "767083"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The target for the payment
        payeeBankReference:
         type: string
-        example: "785802"
+        example: "799182"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee's bank
        payeeProductInstanceReference:
         type: string
-        example: "772628"
+        example: "794000"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1438,7 +1475,7 @@ definitions:
       properties:
        recurringPaymentCustomerReference:
         type: string
-        example: "711657"
+        example: "795096"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1454,7 +1491,7 @@ definitions:
             general-info: Details of the recurring payment. Can be used to pre-populate the payment request
      customerReference:
       type: string
-      example: "712178"
+      example: "781225"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1464,42 +1501,42 @@ definitions:
       properties:
        payerReference:
         type: string
-        example: "734089"
+        example: "770206"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        payerBankReference:
         type: string
-        example: "788481"
+        example: "705350"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer's bank
        payerProductInstanceReference:
         type: string
-        example: "760285"
+        example: "742427"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer's account (the source of funds)
        payeeReference:
         type: string
-        example: "791042"
+        example: "767083"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The target for the payment
        payeeBankReference:
         type: string
-        example: "785802"
+        example: "799182"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee's bank
        payeeProductInstanceReference:
         type: string
-        example: "772628"
+        example: "794000"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1557,7 +1594,7 @@ definitions:
             general-info: The copy of the identification document used
    paymentInitiationTransactionUpdateActionTaskReference:
     type: string
-    example: "PITUATR764099"
+    example: "PITUATR700061"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1594,7 +1631,7 @@ definitions:
     properties:
      paymentInitiationTransactionInstanceReportReference:
       type: string
-      example: "711335"
+      example: "762253"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1616,7 +1653,7 @@ definitions:
     properties:
      paymentInitiationTransactionInstanceAnalysisReference:
       type: string
-      example: "739771"
+      example: "791355"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1636,9 +1673,140 @@ definitions:
  CRPaymentInitiationTransactionRetrieveOutputModel:
   type: object
   properties: 
+   paymentInitiationTransactionInstanceRecord:
+    type: object
+    properties:
+     paymentTransactionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of payment transaction (e.g. over the counter-OTC, intra-account, overseas)
+     recurringPaymentRecord:
+      type: object
+      properties:
+       recurringPaymentCustomerReference:
+        type: string
+        example: "743076"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference for a customer that uses recurring payments facility
+       recurringPaymentReference:
+        type: object
+        properties:
+         recurringPaymentRecord:
+          type: object
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+            general-info: Details of the recurring payment. Can be used to pre-populate the payment request
+     customerReference:
+      type: string
+      example: "767909"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer initiating the payment transaction
+     paymentTransaction:
+      type: object
+      properties:
+       payerReference:
+        type: string
+        example: "713333"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer 
+       payerBankReference:
+        type: string
+        example: "717137"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer's bank
+       payerProductInstanceReference:
+        type: string
+        example: "713283"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer's account (the source of funds)
+       payeeReference:
+        type: string
+        example: "796112"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: The target for the payment
+       payeeBankReference:
+        type: string
+        example: "797764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payee's bank
+       payeeProductInstanceReference:
+        type: string
+        example: "726322"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payee's account (the target for the funds)
+       amount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: Key amounts included in the transaction
+       currency:
+        type: string
+        example: USD
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Currency
+          general-info: Currency for the amounts
+       dateType:
+        type: object
+        properties:
+         date:
+          type: string
+          example: "09-22-2018"
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+            general-info: Value of the specific date
+       paymentFeesCharges:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Processing and exchange fees as appropriate
+       paymentMechanism:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Selection of the preferred mechanism (e.g. SWIFT, ACH, Intra account) 
+       paymentPurpose:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details captured for reference and compliance reporting purposes
+       documentReference:
+        type: object
+        properties:
+         documentRecord:
+          type: object
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+            general-info: The copy of the identification document used
    paymentInitiationTransactionRetrieveActionTaskReference:
     type: string
-    example: "PITRATR792238"
+    example: "PITRATR792885"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1697,37 +1865,6 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQComplianceInitiateInputModel:
-  type: object
-  properties: 
-   complianceInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
- BQComplianceInitiateOutputModel:
-  type: object
-  properties: 
-   complianceInitiateActionReference:
-    type: string
-    example: "CIAR794277"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   complianceInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   complianceInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Compliance instance (e.g. initialised, pending, active)
  BQComplianceRetrieveInputModel:
   type: object
   properties: 
@@ -1748,7 +1885,7 @@ definitions:
     properties:
      complianceInstanceReportReference:
       type: string
-      example: "761266"
+      example: "743224"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1758,7 +1895,7 @@ definitions:
     properties:
      complianceInstanceAnalysisReference:
       type: string
-      example: "709923"
+      example: "714494"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1766,9 +1903,130 @@ definitions:
  BQComplianceRetrieveOutputModel:
   type: object
   properties: 
+   paymentInitiationTransactionInstanceRecord:
+    type: object
+    properties:
+     paymentTransactionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of payment transaction (e.g. over the counter-OTC, intra-account, overseas)
+     customerReference:
+      type: string
+      example: "749841"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer initiating the payment transaction
+     paymentTransaction:
+      type: object
+      properties:
+       payerReference:
+        type: string
+        example: "758717"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer 
+       payerBankReference:
+        type: string
+        example: "725137"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer's bank
+       payerProductInstanceReference:
+        type: string
+        example: "780911"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer's account (the source of funds)
+       payeeReference:
+        type: string
+        example: "797206"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: The target for the payment
+       payeeBankReference:
+        type: string
+        example: "724084"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payee's bank
+       payeeProductInstanceReference:
+        type: string
+        example: "782811"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payee's account (the target for the funds)
+       amount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: Key amounts included in the transaction
+       currency:
+        type: string
+        example: USD
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Currency
+          general-info: Currency for the amounts
+       dateType:
+        type: object
+        properties:
+         date:
+          type: string
+          example: "09-22-2018"
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+            general-info: Value of the specific date
+       paymentPurpose:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details captured for reference and compliance reporting purposes
+       documentReference:
+        type: object
+        properties:
+         documentRecord:
+          type: object
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+            general-info: The copy of the identification document used
+   complianceInstanceRecord:
+    type: object
+    properties:
+     paymentTransactionComplianceCheckType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of compliance check performed (e.g. AML, Watchlists)
+     paymentTransactionComplianceCheckResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The outcome of the compliance check
+     paymentTransactionComplianceTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the overall compliance checking process
    complianceRetrieveActionTaskReference:
     type: string
-    example: "CRATR797195"
+    example: "CRATR776668"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1839,37 +2097,6 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQFundingCheckInitiateInputModel:
-  type: object
-  properties: 
-   fundingCheckInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
- BQFundingCheckInitiateOutputModel:
-  type: object
-  properties: 
-   fundingCheckInitiateActionReference:
-    type: string
-    example: "FCIAR772679"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   fundingCheckInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   fundingCheckInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Funding Check instance (e.g. initialised, pending, active)
  BQFundingCheckRetrieveInputModel:
   type: object
   properties: 
@@ -1890,7 +2117,7 @@ definitions:
     properties:
      fundingCheckInstanceReportReference:
       type: string
-      example: "720175"
+      example: "738621"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1900,7 +2127,7 @@ definitions:
     properties:
      fundingCheckInstanceAnalysisReference:
       type: string
-      example: "752590"
+      example: "732152"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1908,9 +2135,88 @@ definitions:
  BQFundingCheckRetrieveOutputModel:
   type: object
   properties: 
+   paymentInitiationTransactionInstanceRecord:
+    type: object
+    properties:
+     paymentTransactionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of payment transaction (e.g. over the counter-OTC, intra-account, overseas)
+     customerReference:
+      type: string
+      example: "705364"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer initiating the payment transaction
+     paymentTransaction:
+      type: object
+      properties:
+       payerReference:
+        type: string
+        example: "722936"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer 
+       payerBankReference:
+        type: string
+        example: "797037"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer's bank
+       payerProductInstanceReference:
+        type: string
+        example: "780468"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the payer's account (the source of funds)
+       amount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: Key amounts included in the transaction
+       currency:
+        type: string
+        example: USD
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Currency
+          general-info: Currency for the amounts
+       dateType:
+        type: object
+        properties:
+         date:
+          type: string
+          example: "09-22-2018"
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+            general-info: Value of the specific date
+       paymentFeesCharges:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Processing and exchange fees as appropriate
+   fundingCheckInstanceRecord:
+    type: object
+    properties:
+     paymentTransactionFundingCheckResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The outcome of the funds available check
    fundingCheckRetrieveActionTaskReference:
     type: string
-    example: "FCRATR702083"
+    example: "FCRATR796644"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1981,40 +2287,23 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQOrderInitiationInitiateInputModel:
-  type: object
-  properties: 
-   orderInitiationInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
- BQOrderInitiationInitiateOutputModel:
-  type: object
-  properties: 
-   orderInitiationInitiateActionReference:
-    type: string
-    example: "OIIAR722676"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   orderInitiationInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   orderInitiationInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Order Initiation instance (e.g. initialised, pending, active)
  BQOrderInitiationExchangeInputModel:
   type: object
   properties: 
+   paymentInitiationTransactionInstanceReference:
+    type: string
+    example: "PITIR708389"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Payment Initiation Transaction instance
+   orderInitiationInstanceReference:
+    type: string
+    example: "OIIR717806"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Order Initiation instance
    orderInitiationExchangeActionTaskRecord:
     type: object
     description: |
@@ -2033,6 +2322,69 @@ definitions:
  BQOrderInitiationExchangeOutputModel:
   type: object
   properties: 
+   orderInitiationExchangeActionTaskReference:
+    type: string
+    example: "OIEATR771615"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Order Initiation instance exchange service call
+   orderInitiationExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   orderInitiationExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   orderInitiationInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Order Initiation instance (e.g. accepted, rejected, verified)
+ BQOrderInitiationRetrieveInputModel:
+  type: object
+  properties: 
+   orderInitiationRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   orderInitiationRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   orderInitiationInstanceReport:
+    type: object
+    properties:
+     orderInitiationInstanceReportReference:
+      type: string
+      example: "739902"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   orderInitiationInstanceAnalysis:
+    type: object
+    properties:
+     orderInitiationInstanceAnalysisReference:
+      type: string
+      example: "797092"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQOrderInitiationRetrieveOutputModel:
+  type: object
+  properties: 
    paymentInitiationTransactionInstanceRecord:
     type: object
     properties:
@@ -2042,28 +2394,9 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The type of payment transaction (e.g. over the counter-OTC, intra-account, overseas)
-     recurringPaymentRecord:
-      type: object
-      properties:
-       recurringPaymentCustomerReference:
-        type: string
-        example: "792649"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference for a customer that uses recurring payments facility
-       recurringPaymentReference:
-        type: object
-        properties:
-         recurringPaymentRecord:
-          type: object
-          description: |
-           `status: Not Mapped`
-            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-            general-info: Details of the recurring payment. Can be used to pre-populate the payment request
      customerReference:
       type: string
-      example: "714527"
+      example: "739199"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2073,42 +2406,42 @@ definitions:
       properties:
        payerReference:
         type: string
-        example: "732138"
+        example: "785699"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer 
        payerBankReference:
         type: string
-        example: "781707"
+        example: "730405"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer's bank
        payerProductInstanceReference:
         type: string
-        example: "771492"
+        example: "761349"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payer's account (the source of funds)
        payeeReference:
         type: string
-        example: "729632"
+        example: "773256"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The target for the payment
        payeeBankReference:
         type: string
-        example: "739645"
+        example: "732938"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the payee's bank
        payeeProductInstanceReference:
         type: string
-        example: "750611"
+        example: "740194"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2164,209 +2497,31 @@ definitions:
            `status: Not Mapped`
             core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
             general-info: The copy of the identification document used
-   orderInitiationExchangeActionTaskReference:
-    type: string
-    example: "OIEATR712715"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Order Initiation instance exchange service call
-   orderInitiationExchangeActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The exchange service call consolidated processing record
-   orderInitiationExchangeActionResponse:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of the exchange action service response
-   orderInitiationInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Order Initiation instance (e.g. accepted, rejected, verified)
- BQOrderInitiationRetrieveInputModel:
-  type: object
-  properties: 
-   paymentInitiationTransactionInstanceRecord:
+   orderInitiationInstanceRecord:
     type: object
     properties:
-     paymentTransactionType:
+     paymentOrderProcedureInstanceReference:
       type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of payment transaction (e.g. over the counter-OTC, intra-account, overseas)
-     customerReference:
-      type: string
-      example: "758171"
+      example: "704341"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer initiating the payment transaction
-     paymentTransaction:
-      type: object
-      properties:
-       payerReference:
-        type: string
-        example: "701006"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the payer 
-       payerBankReference:
-        type: string
-        example: "769723"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the payer's bank
-       payerProductInstanceReference:
-        type: string
-        example: "759419"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the payer's account (the source of funds)
-       payeeReference:
-        type: string
-        example: "713303"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: The target for the payment
-       payeeBankReference:
-        type: string
-        example: "717239"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the payee's bank
-       payeeProductInstanceReference:
-        type: string
-        example: "750745"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the payee's account (the target for the funds)
-       amount:
-        type: string
-        example: USD 250
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-          general-info: Key amounts included in the transaction
-       currency:
-        type: string
-        example: USD
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Currency
-          general-info: Currency for the amounts
-       dateType:
-        type: object
-        properties:
-         date:
-          type: string
-          example: "09-22-2018"
-          description: |
-           `status: Not Mapped`
-            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-            general-info: Value of the specific date
-       paymentPurpose:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: Details captured for reference and compliance reporting purposes
-       documentReference:
-        type: object
-        properties:
-         documentRecord:
-          type: object
-          description: |
-           `status: Not Mapped`
-            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-            general-info: The copy of the identification document used
-   complianceInstanceRecord:
-    type: object
-    properties:
-     paymentTransactionComplianceCheckType:
+        general-info: The reference to the payment order processing task
+     paymentOrderProcedureInstanceStatus:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of compliance check performed (e.g. AML, Watchlists)
-   orderInitiationRetrieveActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The retrieve service call consolidated processing record
-   orderInitiationRetrieveActionRequest:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of the retrieve action service request (lists requested reports)
-   orderInitiationInstanceReport:
-    type: object
-    properties:
-     orderInitiationInstanceReportReference:
-      type: string
-      example: "711178"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the control record instance report
-   orderInitiationInstanceAnalysis:
-    type: object
-    properties:
-     orderInitiationInstanceAnalysisReference:
-      type: string
-      example: "704001"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the control record instance analysis view
- BQOrderInitiationRetrieveOutputModel:
-  type: object
-  properties: 
-   paymentInitiationTransactionInstanceRecord:
-    type: object
-    properties:
-       dateType:
-        type: object
-        properties:
-         date:
-          type: string
-          example: "09-22-2018"
-          description: |
-           `status: Not Mapped`
-            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-            general-info: Value of the specific date
-   complianceInstanceRecord:
-    type: object
-    properties:
-     paymentTransactionComplianceCheckResult:
+        general-info: The returned status of the payment order processing
+     orderInitiationTaskResult:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The outcome of the compliance check
-     paymentTransactionComplianceTaskResult:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details of the overall compliance checking process
+        general-info: Details of the payment order initiation task
    orderInitiationRetrieveActionTaskReference:
     type: string
-    example: "OIRATR718054"
+    example: "OIRATR718538"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

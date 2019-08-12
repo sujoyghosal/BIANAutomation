@@ -3,6 +3,16 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Account Recovery'
  description: >
+
+    ## Executive Summary:
+    This service domain handles the restructuring of a distressed account (loan) after standard recovery procedures have been exhausted
+
+    ## Example of Use:
+    Example of use: A non-performing customer account is handed over for recovery after the normal relationship management efforts have failed. Additional authority is provided to renegotiate/structure the account to enable the customer to attempt recovery. This restructuring can result in write downs that need to be booked appropriately
+
+    ## Description:
+    Handles the recovery of distressed accounts that have exceeded standard late/payment handling but have not yet been fully written off and passed to collections. The restructuring can involve partial write downs and leveraging any tax or other program of assistance that can be applied. The situation is managed until the account is recovered or a decision made to pass the account over to collections
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-account-recovery/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDAccountRecovery
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDAccountRecovery servicing session
+      description: Activate  a  SDAccountRecovery servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDAccountRecoveryActivateOutputModel'
-  /account-recovery/configure:
+  /account-recovery/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDAccountRecovery
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDAccountRecovery session configuration
+      description: Update an active SDAccountRecovery session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAccountRecovery Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDAccountRecoveryConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDAccountRecoveryConfigureOutputModel'
-  /account-recovery/feedback:
+  /account-recovery/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDAccountRecovery
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDAccountRecovery service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDAccountRecovery service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAccountRecovery Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDAccountRecoveryFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDAccountRecoveryFeedbackOutputModel'
-  /account-recovery/retrieve:
+  /account-recovery/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDAccountRecovery
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDAccountRecovery service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDAccountRecovery service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAccountRecovery Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +117,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDAccountRecoveryRetrieveOutputModel'
-  /account-recovery/account-recovery-procedure/initiation:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/initiation:
     post:
       tags:
       - initiate
       operationId: initiateAccountRecoveryProcedure
-      summary: Details of a new Account Recovery Procedure instance
+      summary: Details of a new AccountRecoveryProcedure instance
       description: Initiate the account recovery procedure
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,22 +140,27 @@ paths:
           $ref: '#/definitions/CRAccountRecoveryProcedureInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Account Recovery Procedure instance
+          description: Successful initiation of new AccountRecoveryProcedure instance
           schema:
             $ref: '#/definitions/CRAccountRecoveryProcedureInitiateOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/update:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateAccountRecoveryProcedure
-      summary: Update to any amendable fields of the Account Recovery Procedure instance
+      summary: Update to any amendable fields of the AccountRecoveryProcedure instance
       description: Update details of an active account recovery case
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - in: body
@@ -136,10 +171,10 @@ paths:
           $ref: '#/definitions/CRAccountRecoveryProcedureUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Account Recovery Procedure instance
+          description: Successfully Updated AccountRecoveryProcedure Instance
           schema:
             $ref: '#/definitions/CRAccountRecoveryProcedureUpdateOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/exchange:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -149,9 +184,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - in: body
@@ -162,10 +202,40 @@ paths:
           $ref: '#/definitions/CRAccountRecoveryProcedureExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of AccountRecoveryProcedure Instance
           schema:
             $ref: '#/definitions/CRAccountRecoveryProcedureExchangeOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/assessment/{bq-reference-id}/update:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecovery
+      summary: Invoke a reporting action to obtain a AccountRecoveryProcedure instance related report
+      description: Retrieve details about an active account recovery case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRAccountRecoveryProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved AccountRecoveryProcedure Instance
+          schema:
+            $ref: '#/definitions/CRAccountRecoveryProcedureRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/assessments/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -175,14 +245,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Assessment BQ Reference Id
+        description: Assessment Instance Reference
         required: true
         type: string
       - in: body
@@ -193,10 +268,45 @@ paths:
           $ref: '#/definitions/BQAssessmentUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Assessment instance
+          description: Successfully Updated Assessment Instance
           schema:
             $ref: '#/definitions/BQAssessmentUpdateOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/writedown/{bq-reference-id}/update:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/assessments/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedureAssessment
+      summary: Invoke a reporting action to obtain a Assessment instance related report.
+      description: Retrieve details of an active case assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assessment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAssessmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Assessment Instance Record
+          schema:
+            $ref: '#/definitions/BQAssessmentRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/writedowns/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -206,14 +316,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Writedown BQ Reference Id
+        description: Writedown Instance Reference
         required: true
         type: string
       - in: body
@@ -224,10 +339,10 @@ paths:
           $ref: '#/definitions/BQWritedownUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Writedown instance
+          description: Successfully Updated Writedown Instance
           schema:
             $ref: '#/definitions/BQWritedownUpdateOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/writedown/{bq-reference-id}/exchange:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/writedowns/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -237,14 +352,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Writedown BQ Reference Id
+        description: Writedown Instance Reference
         required: true
         type: string
       - in: body
@@ -255,10 +375,45 @@ paths:
           $ref: '#/definitions/BQWritedownExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Writedown Instance Record
           schema:
             $ref: '#/definitions/BQWritedownExchangeOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/planning/{bq-reference-id}/update:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/writedowns/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedureWritedown
+      summary: Invoke a reporting action to obtain a Writedown instance related report.
+      description: Retrieve details of an active case assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Writedown Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQWritedownRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Writedown Instance Record
+          schema:
+            $ref: '#/definitions/BQWritedownRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/plannings/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -268,14 +423,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Planning BQ Reference Id
+        description: Planning Instance Reference
         required: true
         type: string
       - in: body
@@ -286,10 +446,45 @@ paths:
           $ref: '#/definitions/BQPlanningUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Planning instance
+          description: Successfully Updated Planning Instance
           schema:
             $ref: '#/definitions/BQPlanningUpdateOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/negotiation/{bq-reference-id}/update:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/plannings/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedurePlanning
+      summary: Invoke a reporting action to obtain a Planning instance related report.
+      description: Retrieve details of an active case recovery plan .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Planning Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPlanningRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Planning Instance Record
+          schema:
+            $ref: '#/definitions/BQPlanningRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/negotiations/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -299,14 +494,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Negotiation BQ Reference Id
+        description: Negotiation Instance Reference
         required: true
         type: string
       - in: body
@@ -317,10 +517,10 @@ paths:
           $ref: '#/definitions/BQNegotiationUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Negotiation instance
+          description: Successfully Updated Negotiation Instance
           schema:
             $ref: '#/definitions/BQNegotiationUpdateOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/negotiation/{bq-reference-id}/exchange:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/negotiations/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -330,14 +530,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Negotiation BQ Reference Id
+        description: Negotiation Instance Reference
         required: true
         type: string
       - in: body
@@ -348,10 +553,10 @@ paths:
           $ref: '#/definitions/BQNegotiationExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Negotiation Instance Record
           schema:
             $ref: '#/definitions/BQNegotiationExchangeOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/negotiation/{bq-reference-id}/requisition:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/negotiations/{bq-reference-id}/requisition:
     put:
       tags:
       - request
@@ -361,14 +566,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Negotiation BQ Reference Id
+        description: Negotiation Instance Reference
         required: true
         type: string
       - in: body
@@ -379,10 +589,45 @@ paths:
           $ref: '#/definitions/BQNegotiationRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Negotiation instance
+          description: Successful requisition of Negotiation Instance Record
           schema:
             $ref: '#/definitions/BQNegotiationRequestOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/restructuring/{bq-reference-id}/update:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/negotiations/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedureNegotiation
+      summary: Invoke a reporting action to obtain a Negotiation instance related report.
+      description: Retrieve details of an active case negotiation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Negotiation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQNegotiationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Negotiation Instance Record
+          schema:
+            $ref: '#/definitions/BQNegotiationRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/restructurings/{bq-reference-id}/update:
     put:
       tags:
       - update
@@ -392,14 +637,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Restructuring BQ Reference Id
+        description: Restructuring Instance Reference
         required: true
         type: string
       - in: body
@@ -410,10 +660,10 @@ paths:
           $ref: '#/definitions/BQRestructuringUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Restructuring instance
+          description: Successfully Updated Restructuring Instance
           schema:
             $ref: '#/definitions/BQRestructuringUpdateOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/restructuring/{bq-reference-id}/exchange:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/restructurings/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -423,14 +673,19 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Restructuring BQ Reference Id
+        description: Restructuring Instance Reference
         required: true
         type: string
       - in: body
@@ -441,10 +696,45 @@ paths:
           $ref: '#/definitions/BQRestructuringExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Restructuring Instance Record
           schema:
             $ref: '#/definitions/BQRestructuringExchangeOutputModel'
-  /account-recovery/account-recovery-procedure:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/restructurings/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedureRestructuring
+      summary: Invoke a reporting action to obtain a Restructuring instance related report.
+      description: Retrieve details of case restructuring tasks .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Restructuring Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQRestructuringRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Restructuring Instance Record
+          schema:
+            $ref: '#/definitions/BQRestructuringRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure:
     get:
       tags:
       - retrieve
@@ -453,6 +743,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- AccountRecovery Instance Status='active'
@@ -482,7 +777,7 @@ paths:
             items:
               type: string
             example: [ 'Assessment',  'Writedown',  'Planning',  'Negotiation',  'Restructuring', ]
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/{behavior-qualifier}/:
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -491,9 +786,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Account Recovery Procedure Instance
+        description: AccountRecoveryProcedure Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -514,187 +814,6 @@ paths:
             items:
               type: string
             example: [RestructuringID1, RestructuringID2]
-  /account-recovery/account-recovery-procedure/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveAccountRecovery
-      summary: Retrieve a Account Recovery Record
-      description: Retrieve a Account Recovery Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Account Recovery Procedure Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Account Recovery Request Payload
-        schema:
-          $ref: '#/definitions/CRAccountRecoveryProcedureRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Account Recovery Report
-          schema:
-            $ref: '#/definitions/CRAccountRecoveryProcedureRetrieveOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/assessment/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveAccountRecoveryAssessment
-      summary: Retrieve a Account Recovery Assessment Record
-      description: Retrieve a Account Recovery Assessment Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Account Recovery Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Assessment BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Account Recovery Assessment Request Payload
-        schema:
-          $ref: '#/definitions/BQAssessmentRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Account Recovery Assessment Report
-          schema:
-            $ref: '#/definitions/BQAssessmentRetrieveOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/writedown/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveAccountRecoveryWritedown
-      summary: Retrieve a Account Recovery Writedown Record
-      description: Retrieve a Account Recovery Writedown Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Account Recovery Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Writedown BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Account Recovery Writedown Request Payload
-        schema:
-          $ref: '#/definitions/BQWritedownRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Account Recovery Writedown Report
-          schema:
-            $ref: '#/definitions/BQWritedownRetrieveOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/planning/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveAccountRecoveryPlanning
-      summary: Retrieve a Account Recovery Planning Record
-      description: Retrieve a Account Recovery Planning Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Account Recovery Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Planning BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Account Recovery Planning Request Payload
-        schema:
-          $ref: '#/definitions/BQPlanningRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Account Recovery Planning Report
-          schema:
-            $ref: '#/definitions/BQPlanningRetrieveOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/negotiation/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveAccountRecoveryNegotiation
-      summary: Retrieve a Account Recovery Negotiation Record
-      description: Retrieve a Account Recovery Negotiation Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Account Recovery Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Negotiation BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Account Recovery Negotiation Request Payload
-        schema:
-          $ref: '#/definitions/BQNegotiationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Account Recovery Negotiation Report
-          schema:
-            $ref: '#/definitions/BQNegotiationRetrieveOutputModel'
-  /account-recovery/account-recovery-procedure/{cr-reference-id}/restructuring/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveAccountRecoveryRestructuring
-      summary: Retrieve a Account Recovery Restructuring Record
-      description: Retrieve a Account Recovery Restructuring Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Account Recovery Procedure Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Restructuring BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Account Recovery Restructuring Request Payload
-        schema:
-          $ref: '#/definitions/BQRestructuringRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Account Recovery Restructuring Report
-          schema:
-            $ref: '#/definitions/BQRestructuringRetrieveOutputModel'
 definitions:
  SDAccountRecoveryActivateInputModel:
   type: object
@@ -1342,6 +1461,13 @@ definitions:
  CRAccountRecoveryProcedureInitiateInputModel:
   type: object
   properties: 
+   accountRecoveryServicingSessionReference:
+    type: string
+    example: "ARSSR734740"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    accountRecoveryProcedureInitiateActionRecord:
     type: object
     description: |
@@ -1365,28 +1491,28 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "739157"
+      example: "722522"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      linkedProductInstanceReference:
       type: string
-      example: "758312"
+      example: "707261"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to any new/replacement product established during the recovery/restructuring process
      customerReference:
       type: string
-      example: "714631"
+      example: "791642"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "771267"
+      example: "758805"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1399,7 +1525,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "717298"
+      example: "705196"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1456,7 +1582,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "742659"
+      example: "741951"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1502,7 +1628,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "710536"
+        example: "752829"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1522,9 +1648,16 @@ definitions:
  CRAccountRecoveryProcedureInitiateOutputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR735706"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Account Recovery Procedure instance
    accountRecoveryProcedureInitiateActionReference:
     type: string
-    example: "ARPIAR790731"
+    example: "ARPIAR797891"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1546,7 +1679,7 @@ definitions:
     properties:
      linkedProductInstanceReference:
       type: string
-      example: "758312"
+      example: "707261"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1572,7 +1705,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "710536"
+        example: "752829"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1598,6 +1731,20 @@ definitions:
  CRAccountRecoveryProcedureUpdateInputModel:
   type: object
   properties: 
+   accountRecoveryServicingSessionReference:
+    type: string
+    example: "ARSSR789220"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR796650"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Account Recovery Procedure instance
    accountRecoveryProcedureInstanceRecord:
     type: object
     properties:
@@ -1609,28 +1756,28 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "765343"
+      example: "717264"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      linkedProductInstanceReference:
       type: string
-      example: "729775"
+      example: "738925"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to any new/replacement product established during the recovery/restructuring process
      customerReference:
       type: string
-      example: "749392"
+      example: "781869"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "783049"
+      example: "777137"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1643,7 +1790,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "782014"
+      example: "702513"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1700,7 +1847,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "740494"
+      example: "731508"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1746,7 +1893,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "744106"
+        example: "747668"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1795,28 +1942,28 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "765343"
+      example: "717264"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      linkedProductInstanceReference:
       type: string
-      example: "729775"
+      example: "738925"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to any new/replacement product established during the recovery/restructuring process
      customerReference:
       type: string
-      example: "749392"
+      example: "781869"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "783049"
+      example: "777137"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1829,7 +1976,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "782014"
+      example: "702513"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1886,7 +2033,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "740494"
+      example: "731508"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1932,7 +2079,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "744106"
+        example: "747668"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1957,7 +2104,7 @@ definitions:
         general-info: The status of the recovery case (e.g. in assessment, write-down, planning, negotiation, restructuring)
    accountRecoveryProcedureUpdateActionTaskReference:
     type: string
-    example: "ARPUATR752933"
+    example: "ARPUATR748200"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1977,6 +2124,20 @@ definitions:
  CRAccountRecoveryProcedureExchangeInputModel:
   type: object
   properties: 
+   accountRecoveryServicingSessionReference:
+    type: string
+    example: "ARSSR791127"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR726745"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Account Recovery Procedure instance
    accountRecoveryProcedureExchangeActionTaskRecord:
     type: object
     description: |
@@ -1997,7 +2158,7 @@ definitions:
   properties: 
    accountRecoveryProcedureExchangeActionTaskReference:
     type: string
-    example: "ARPEATR779622"
+    example: "ARPEATR726671"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2034,7 +2195,7 @@ definitions:
     properties:
      accountRecoveryProcedureInstanceReportReference:
       type: string
-      example: "759995"
+      example: "773243"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2056,7 +2217,7 @@ definitions:
     properties:
      accountRecoveryProcedureInstanceAnalysisReference:
       type: string
-      example: "774471"
+      example: "757953"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2087,28 +2248,28 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "764960"
+      example: "726878"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      linkedProductInstanceReference:
       type: string
-      example: "748517"
+      example: "756441"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to any new/replacement product established during the recovery/restructuring process
      customerReference:
       type: string
-      example: "761612"
+      example: "771546"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "760377"
+      example: "725808"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2121,7 +2282,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "763446"
+      example: "706375"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2178,7 +2339,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "732440"
+      example: "711001"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2224,7 +2385,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "733780"
+        example: "747910"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2249,7 +2410,7 @@ definitions:
         general-info: The status of the recovery case (e.g. in assessment, write-down, planning, negotiation, restructuring)
    accountRecoveryProcedureRetrieveActionTaskReference:
     type: string
-    example: "ARPRATR732678"
+    example: "ARPRATR710850"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2311,6 +2472,20 @@ definitions:
  BQAssessmentUpdateInputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR791211"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   assessmentInstanceReference:
+    type: string
+    example: "AIR783450"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Assessment instance
    assessmentInstanceRecord:
     type: object
     properties:
@@ -2346,7 +2521,7 @@ definitions:
         general-info: Processing record for the assessment task within the account recovery process
    assessmentUpdateActionTaskReference:
     type: string
-    example: "AUATR775327"
+    example: "AUATR719027"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2383,7 +2558,7 @@ definitions:
     properties:
      assessmentInstanceReportReference:
       type: string
-      example: "756136"
+      example: "706634"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2393,7 +2568,7 @@ definitions:
     properties:
      assessmentInstanceAnalysisReference:
       type: string
-      example: "710170"
+      example: "721744"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2412,28 +2587,28 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "723123"
+      example: "797420"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      linkedProductInstanceReference:
       type: string
-      example: "780063"
+      example: "709591"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to any new/replacement product established during the recovery/restructuring process
      customerReference:
       type: string
-      example: "764016"
+      example: "764804"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "737783"
+      example: "727196"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2446,7 +2621,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "731093"
+      example: "725700"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2503,7 +2678,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "724086"
+      example: "724990"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2549,7 +2724,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "777935"
+        example: "754781"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2583,7 +2758,7 @@ definitions:
         general-info: Processing record for the assessment task within the account recovery process
    assessmentRetrieveActionTaskReference:
     type: string
-    example: "ARATR720494"
+    example: "ARATR765823"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2657,6 +2832,20 @@ definitions:
  BQWritedownUpdateInputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR717510"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   writedownInstanceReference:
+    type: string
+    example: "WIR799349"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Writedown instance
    writedownInstanceRecord:
     type: object
     properties:
@@ -2704,7 +2893,7 @@ definitions:
         general-info: Processing record for the write-down task within the account recovery process
    writedownUpdateActionTaskReference:
     type: string
-    example: "WUATR737871"
+    example: "WUATR732584"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2724,6 +2913,20 @@ definitions:
  BQWritedownExchangeInputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR730064"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   writedownInstanceReference:
+    type: string
+    example: "WIR782692"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Writedown instance
    writedownExchangeActionTaskRecord:
     type: object
     description: |
@@ -2744,7 +2947,7 @@ definitions:
   properties: 
    writedownExchangeActionTaskReference:
     type: string
-    example: "WEATR774257"
+    example: "WEATR761604"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2787,7 +2990,7 @@ definitions:
     properties:
      writedownInstanceReportReference:
       type: string
-      example: "765136"
+      example: "782814"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2797,7 +3000,7 @@ definitions:
     properties:
      writedownInstanceAnalysisReference:
       type: string
-      example: "756378"
+      example: "700093"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2816,21 +3019,21 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "738679"
+      example: "721587"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      customerReference:
       type: string
-      example: "709554"
+      example: "700891"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "753349"
+      example: "753562"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2843,7 +3046,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "712446"
+      example: "703369"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2900,7 +3103,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "793434"
+      example: "782778"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2946,7 +3149,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "775143"
+        example: "786791"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2986,7 +3189,7 @@ definitions:
         general-info: Processing record for the write-down task within the account recovery process
    writedownRetrieveActionTaskReference:
     type: string
-    example: "WRATR799262"
+    example: "WRATR728146"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3060,6 +3263,20 @@ definitions:
  BQPlanningUpdateInputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR795959"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   planningInstanceReference:
+    type: string
+    example: "ARPIR795959"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Planning instance
    planningInstanceRecord:
     type: object
     properties:
@@ -3107,7 +3324,7 @@ definitions:
         general-info: Processing record for the planning task within the account recovery process
    planningUpdateActionTaskReference:
     type: string
-    example: "ARPUATR763619"
+    example: "ARPUATR772110"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3144,7 +3361,7 @@ definitions:
     properties:
      planningInstanceReportReference:
       type: string
-      example: "782334"
+      example: "790414"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3154,7 +3371,7 @@ definitions:
     properties:
      planningInstanceAnalysisReference:
       type: string
-      example: "735593"
+      example: "728895"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3173,21 +3390,21 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "700312"
+      example: "762177"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      customerReference:
       type: string
-      example: "731220"
+      example: "778543"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "718294"
+      example: "754216"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3200,7 +3417,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "707836"
+      example: "752153"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3257,7 +3474,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "710578"
+      example: "734469"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3303,7 +3520,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "755762"
+        example: "782630"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3343,7 +3560,7 @@ definitions:
         general-info: Processing record for the planning task within the account recovery process
    planningRetrieveActionTaskReference:
     type: string
-    example: "ARPRATR719027"
+    example: "ARPRATR730463"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3417,6 +3634,20 @@ definitions:
  BQNegotiationUpdateInputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR740707"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   negotiationInstanceReference:
+    type: string
+    example: "NIR741447"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Negotiation instance
    negotiationInstanceRecord:
     type: object
     properties:
@@ -3428,7 +3659,7 @@ definitions:
         general-info: Defines bank's policies and guidelines for account recovery/write down handling
      correspondenceReference:
       type: string
-      example: "738649"
+      example: "785712"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3441,7 +3672,7 @@ definitions:
         general-info: Copies of correspondence content as appropriate
      documentReference:
       type: string
-      example: "719298"
+      example: "724693"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3484,7 +3715,7 @@ definitions:
         general-info: Defines bank's policies and guidelines for account recovery/write down handling
      correspondenceReference:
       type: string
-      example: "738649"
+      example: "785712"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3497,7 +3728,7 @@ definitions:
         general-info: Copies of correspondence content as appropriate
      documentReference:
       type: string
-      example: "719298"
+      example: "724693"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3516,7 +3747,7 @@ definitions:
         general-info: Processing record for the negotiation task within the account recovery process
    negotiationUpdateActionTaskReference:
     type: string
-    example: "NUATR735654"
+    example: "NUATR735379"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3536,6 +3767,20 @@ definitions:
  BQNegotiationExchangeInputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR712944"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   negotiationInstanceReference:
+    type: string
+    example: "NIR720599"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Negotiation instance
    negotiationExchangeActionTaskRecord:
     type: object
     description: |
@@ -3556,7 +3801,7 @@ definitions:
   properties: 
    negotiationExchangeActionTaskReference:
     type: string
-    example: "NEATR792602"
+    example: "NEATR740163"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3582,6 +3827,20 @@ definitions:
  BQNegotiationRequestInputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR701601"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   negotiationInstanceReference:
+    type: string
+    example: "NIR704078"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Negotiation instance
    negotiationRequestActionTaskRecord:
     type: object
     description: |
@@ -3602,7 +3861,7 @@ definitions:
   properties: 
    negotiationRequestActionTaskReference:
     type: string
-    example: "NRATR765878"
+    example: "NRATR739550"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3615,7 +3874,7 @@ definitions:
       general-info: The request service call consolidated processing record
    negotiationRequestRecordReference:
     type: string
-    example: "NRRR770874"
+    example: "NRRR713761"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3646,7 +3905,7 @@ definitions:
     properties:
      negotiationInstanceReportReference:
       type: string
-      example: "758470"
+      example: "708263"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3656,7 +3915,7 @@ definitions:
     properties:
      negotiationInstanceAnalysisReference:
       type: string
-      example: "776307"
+      example: "766537"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3675,21 +3934,21 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "759036"
+      example: "771176"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      customerReference:
       type: string
-      example: "739941"
+      example: "717993"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "722564"
+      example: "731885"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3702,7 +3961,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "703105"
+      example: "724816"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3759,7 +4018,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "712337"
+      example: "702597"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3805,7 +4064,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "753711"
+        example: "750562"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3839,7 +4098,7 @@ definitions:
         general-info: Defines bank's policies and guidelines for account recovery/write down handling
      correspondenceReference:
       type: string
-      example: "727384"
+      example: "749510"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3852,7 +4111,7 @@ definitions:
         general-info: Copies of correspondence content as appropriate
      documentReference:
       type: string
-      example: "758189"
+      example: "753932"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3871,7 +4130,7 @@ definitions:
         general-info: Processing record for the negotiation task within the account recovery process
    negotiationRetrieveActionTaskReference:
     type: string
-    example: "NRATR727355"
+    example: "NRATR700398"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3950,11 +4209,25 @@ definitions:
     properties:
      linkedProductInstanceReference:
       type: string
-      example: "748534"
+      example: "791973"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to any new/replacement product established during the recovery/restructuring process
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR786194"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   restructuringInstanceReference:
+    type: string
+    example: "RIR768906"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Restructuring instance
    restructuringInstanceRecord:
     type: object
     properties:
@@ -3984,7 +4257,7 @@ definitions:
     properties:
      linkedProductInstanceReference:
       type: string
-      example: "748534"
+      example: "791973"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4006,7 +4279,7 @@ definitions:
         general-info: Processing record for the restructuring task within the account recovery process
    restructuringUpdateActionTaskReference:
     type: string
-    example: "RUATR703824"
+    example: "RUATR703244"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4026,6 +4299,20 @@ definitions:
  BQRestructuringExchangeInputModel:
   type: object
   properties: 
+   accountRecoveryProcedureInstanceReference:
+    type: string
+    example: "ARPIR733058"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Account Recovery Procedure instance
+   restructuringInstanceReference:
+    type: string
+    example: "RIR745152"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Restructuring instance
    restructuringExchangeActionTaskRecord:
     type: object
     description: |
@@ -4046,7 +4333,7 @@ definitions:
   properties: 
    restructuringExchangeActionTaskReference:
     type: string
-    example: "REATR726125"
+    example: "REATR784761"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4089,7 +4376,7 @@ definitions:
     properties:
      restructuringInstanceReportReference:
       type: string
-      example: "765667"
+      example: "704073"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4099,7 +4386,7 @@ definitions:
     properties:
      restructuringInstanceAnalysisReference:
       type: string
-      example: "796917"
+      example: "727244"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4118,28 +4405,28 @@ definitions:
         general-info: This is the type of recovery case (e.g. lapsed payment, collateral revaluation, credit)
      productInstanceReference:
       type: string
-      example: "786755"
+      example: "721468"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to the product instance associated with the account recovery case
      linkedProductInstanceReference:
       type: string
-      example: "768183"
+      example: "710779"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Refers to any new/replacement product established during the recovery/restructuring process
      customerReference:
       type: string
-      example: "755447"
+      example: "743024"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with account recovery case - likely product 'owner'
      employeeBusinessUnitReference:
       type: string
-      example: "705942"
+      example: "749410"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4152,7 +4439,7 @@ definitions:
         general-info: Reference to the underlying account for the product instance being recovered
      bankBranchLocationReference:
       type: string
-      example: "783926"
+      example: "751268"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4209,7 +4496,7 @@ definitions:
         general-info: Any additional parties given access to the account (allowed roles and actions against the product)
      taxReference:
       type: string
-      example: "787879"
+      example: "711981"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4255,7 +4542,7 @@ definitions:
       properties:
        documentReference:
         type: string
-        example: "787553"
+        example: "754833"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -4295,7 +4582,7 @@ definitions:
         general-info: Processing record for the restructuring task within the account recovery process
    restructuringRetrieveActionTaskReference:
     type: string
-    example: "RRATR720868"
+    example: "RRATR772829"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

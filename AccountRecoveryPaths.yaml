@@ -1,0 +1,816 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Account Recovery'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles the restructuring of a distressed account (loan) after standard recovery procedures have been exhausted
+
+    ## Example of Use:
+    Example of use: A non-performing customer account is handed over for recovery after the normal relationship management efforts have failed. Additional authority is provided to renegotiate/structure the account to enable the customer to attempt recovery. This restructuring can result in write downs that need to be booked appropriately
+
+    ## Description:
+    Handles the recovery of distressed accounts that have exceeded standard late/payment handling but have not yet been fully written off and passed to collections. The restructuring can involve partial write downs and leveraging any tax or other program of assistance that can be applied. The situation is managed until the account is recovered or a decision made to pass the account over to collections
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-account-recovery/1.0.0
+schemes:
+ - https
+paths:
+  /account-recovery/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDAccountRecovery
+      summary: Activate  a SDAccountRecovery servicing session
+      description: Activate  a  SDAccountRecovery servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDAccountRecovery Request Payload
+        schema:
+          $ref: '#/definitions/SDAccountRecoveryActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDAccountRecoveryActivateOutputModel'
+  /account-recovery/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDAccountRecovery
+      summary: Update an active SDAccountRecovery session configuration
+      description: Update an active SDAccountRecovery session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAccountRecovery Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDAccountRecovery Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDAccountRecoveryConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDAccountRecoveryConfigureOutputModel'
+  /account-recovery/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDAccountRecovery
+      summary: "Capturing feedback against the SDAccountRecovery service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDAccountRecovery service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAccountRecovery Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDAccountRecovery Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDAccountRecoveryFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDAccountRecoveryFeedbackOutputModel'
+  /account-recovery/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDAccountRecovery
+      summary: Analytical views maintained by the SDAccountRecovery service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDAccountRecovery service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDAccountRecovery Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDAccountRecovery Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDAccountRecoveryRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDAccountRecoveryRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateAccountRecoveryProcedure
+      summary: Details of a new AccountRecoveryProcedure instance
+      description: Initiate the account recovery procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: AccountRecoveryProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRAccountRecoveryProcedureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new AccountRecoveryProcedure instance
+          schema:
+            $ref: '#/definitions/CRAccountRecoveryProcedureInitiateOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateAccountRecoveryProcedure
+      summary: Update to any amendable fields of the AccountRecoveryProcedure instance
+      description: Update details of an active account recovery case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: AccountRecoveryProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRAccountRecoveryProcedureUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated AccountRecoveryProcedure Instance
+          schema:
+            $ref: '#/definitions/CRAccountRecoveryProcedureUpdateOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeAccountRecoveryProcedureUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, verify etc. an active account recovery case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: AccountRecoveryProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRAccountRecoveryProcedureExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of AccountRecoveryProcedure Instance
+          schema:
+            $ref: '#/definitions/CRAccountRecoveryProcedureExchangeOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecovery
+      summary: Invoke a reporting action to obtain a AccountRecoveryProcedure instance related report
+      description: Retrieve details about an active account recovery case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRAccountRecoveryProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved AccountRecoveryProcedure Instance
+          schema:
+            $ref: '#/definitions/CRAccountRecoveryProcedureRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/assessment/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateAccountRecoveryProcedureAssessment
+      summary: Update to any amendable fields of the Assessment instance
+      description: Update details of an active case assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Assessment Request Payload
+        schema:
+          $ref: '#/definitions/BQAssessmentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Assessment Instance
+          schema:
+            $ref: '#/definitions/BQAssessmentUpdateOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/assessment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedureAssessment
+      summary: Invoke a reporting action to obtain a Assessment instance related report.
+      description: Retrieve details of an active case assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assessment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAssessmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Assessment Instance Record
+          schema:
+            $ref: '#/definitions/BQAssessmentRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/writedown/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateAccountRecoveryProcedureWritedown
+      summary: Update to any amendable fields of the Writedown instance
+      description: Update details of an active case write-down
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Writedown Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Writedown Request Payload
+        schema:
+          $ref: '#/definitions/BQWritedownUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Writedown Instance
+          schema:
+            $ref: '#/definitions/BQWritedownUpdateOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/writedown/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeAccountRecoveryProcedureWritedownUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, verify etc. an active case write-down
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Writedown Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Writedown request payload
+        schema:
+          $ref: '#/definitions/BQWritedownExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Writedown Instance Record
+          schema:
+            $ref: '#/definitions/BQWritedownExchangeOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/writedown/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedureWritedown
+      summary: Invoke a reporting action to obtain a Writedown instance related report.
+      description: Retrieve details of an active case assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Writedown Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQWritedownRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Writedown Instance Record
+          schema:
+            $ref: '#/definitions/BQWritedownRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/planning/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateAccountRecoveryProcedurePlanning
+      summary: Update to any amendable fields of the Planning instance
+      description: Update details of an active case recovery plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Planning Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Planning Request Payload
+        schema:
+          $ref: '#/definitions/BQPlanningUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Planning Instance
+          schema:
+            $ref: '#/definitions/BQPlanningUpdateOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/planning/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedurePlanning
+      summary: Invoke a reporting action to obtain a Planning instance related report.
+      description: Retrieve details of an active case recovery plan .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Planning Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPlanningRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Planning Instance Record
+          schema:
+            $ref: '#/definitions/BQPlanningRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/negotiation/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateAccountRecoveryProcedureNegotiation
+      summary: Update to any amendable fields of the Negotiation instance
+      description: Update details of an active case negotiation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Negotiation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Negotiation Request Payload
+        schema:
+          $ref: '#/definitions/BQNegotiationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Negotiation Instance
+          schema:
+            $ref: '#/definitions/BQNegotiationUpdateOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/negotiation/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeAccountRecoveryProcedureNegotiationUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, verify etc. an active case negotiation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Negotiation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Negotiation request payload
+        schema:
+          $ref: '#/definitions/BQNegotiationExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Negotiation Instance Record
+          schema:
+            $ref: '#/definitions/BQNegotiationExchangeOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/negotiation/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestAccountRecoveryProcedureNegotiationUpdate
+      summary: Invoke a service request action against the Negotiation instance
+      description: Request a negotiation for an active recovery case
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Negotiation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Negotiation request payload
+        schema:
+          $ref: '#/definitions/BQNegotiationRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Negotiation Instance Record
+          schema:
+            $ref: '#/definitions/BQNegotiationRequestOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/negotiation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedureNegotiation
+      summary: Invoke a reporting action to obtain a Negotiation instance related report.
+      description: Retrieve details of an active case negotiation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Negotiation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQNegotiationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Negotiation Instance Record
+          schema:
+            $ref: '#/definitions/BQNegotiationRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/restructuring/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateAccountRecoveryProcedureRestructuring
+      summary: Update to any amendable fields of the Restructuring instance
+      description: Update details of case restructuring tasks
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Restructuring Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Restructuring Request Payload
+        schema:
+          $ref: '#/definitions/BQRestructuringUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Restructuring Instance
+          schema:
+            $ref: '#/definitions/BQRestructuringUpdateOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/restructuring/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeAccountRecoveryProcedureRestructuringUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, verify etc. case restructuring task
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Restructuring Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Restructuring request payload
+        schema:
+          $ref: '#/definitions/BQRestructuringExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Restructuring Instance Record
+          schema:
+            $ref: '#/definitions/BQRestructuringExchangeOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/restructuring/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveAccountRecoveryProcedureRestructuring
+      summary: Invoke a reporting action to obtain a Restructuring instance related report.
+      description: Retrieve details of case restructuring tasks .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Restructuring Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQRestructuringRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Restructuring Instance Record
+          schema:
+            $ref: '#/definitions/BQRestructuringRetrieveOutputModel'
+  /account-recovery/{sd-reference-id}/account-recovery-procedure:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveAccountRecoveryReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- AccountRecovery Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /account-recovery/account-recovery-procedure/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveAccountRecoveryBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Assessment',  'Writedown',  'Planning',  'Negotiation',  'Restructuring', ]
+  /account-recovery/{sd-reference-id}/account-recovery-procedure/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveAccountRecoveryBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Account Recovery Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: AccountRecoveryProcedure Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Restructuring
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Restructuring Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [RestructuringID1, RestructuringID2]

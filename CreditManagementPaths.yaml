@@ -1,0 +1,348 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Credit Management'
+ description: >
+
+    ## Executive Summary:
+    This service domain provides a bank-wide/oversight function to qualify credit pricing for offered products and services to reflect the bank's appetite to write the business. This decision can override the standard product pricing procedure
+
+    ## Example of Use:
+    A corporate loan is presented for credit management pricing decisioning prior to completion of the offer process
+
+    ## Description:
+    This service domain supports a central bank credit management function that maintains an overarching credit perspective across all bank activity. Transactions can be re-priced to factor in this credit perspective
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-credit-management/1.0.0
+schemes:
+ - https
+paths:
+  /credit-management/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCreditManagement
+      summary: Activate  a SDCreditManagement servicing session
+      description: Activate  a  SDCreditManagement servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCreditManagement Request Payload
+        schema:
+          $ref: '#/definitions/SDCreditManagementActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCreditManagementActivateOutputModel'
+  /credit-management/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCreditManagement
+      summary: Update an active SDCreditManagement session configuration
+      description: Update an active SDCreditManagement session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCreditManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCreditManagement Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCreditManagementConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCreditManagementConfigureOutputModel'
+  /credit-management/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCreditManagement
+      summary: "Capturing feedback against the SDCreditManagement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCreditManagement service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCreditManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCreditManagement Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCreditManagementFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCreditManagementFeedbackOutputModel'
+  /credit-management/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCreditManagement
+      summary: Analytical views maintained by the SDCreditManagement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCreditManagement service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCreditManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCreditManagement Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCreditManagementRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCreditManagementRetrieveOutputModel'
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCreditPricingAssessment
+      summary: Details of a new CreditPricingAssessment instance
+      description: Evaluate a proposed transaction pricing against group credit policy
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CreditPricingAssessment Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditPricingAssessmentInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CreditPricingAssessment instance
+          schema:
+            $ref: '#/definitions/CRCreditPricingAssessmentInitiateOutputModel'
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCreditPricingAssessment
+      summary: Update to any amendable fields of the CreditPricingAssessment instance
+      description: Update details of an active credit pricing assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Credit Pricing Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditPricingAssessmentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Credit Pricing Assessment Instance
+          schema:
+            $ref: '#/definitions/CRCreditPricingAssessmentUpdateOutputModel'
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCreditPricingAssessmentUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept/reject a pricing assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Credit Pricing Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditPricingAssessmentExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Credit Pricing Assessment Instance
+          schema:
+            $ref: '#/definitions/CRCreditPricingAssessmentExchangeOutputModel'
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}/grant:
+    put:
+      tags:
+      - grant
+      operationId: grantCreditPricingAssessmentUpdate
+      summary: Invoke a grant request action from the CreditPricingAssessment instance to obtain access permission
+      description: Obtain a credit pricing policy acceptance grant to proceed with a transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Credit Pricing Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRCreditPricingAssessmentGrantInputModel'
+      responses:
+        200:
+          description: Successful grant of Credit Pricing Assessment Instance
+          schema:
+            $ref: '#/definitions/CRCreditPricingAssessmentGrantOutputModel'
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCreditManagement
+      summary: Invoke a reporting action to obtain a Credit Pricing Assessment instance related report
+      description: Retrieve details about a credit pricing assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCreditPricingAssessmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Credit Pricing Assessment Instance
+          schema:
+            $ref: '#/definitions/CRCreditPricingAssessmentRetrieveOutputModel'
+  /credit-management/{sd-reference-id}/credit-pricing-assessment:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCreditManagementReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CreditManagement Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /credit-management/credit-pricing-assessment/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCreditManagementBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCreditManagementBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ID1, ID2]

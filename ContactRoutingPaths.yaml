@@ -1,0 +1,558 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Contact Routing'
+ description: >
+
+    ## Executive Summary:
+    The Contact Routing service domain tracks servicing resource availability and uses any known details about the customer contact (e.g. identity, indicated purpose of call, status of the relationship) to make an optimal routing decision. The routing selection may include matching the required product knowledge/skills to the available servicing resources.
+
+    ## Example of Use:
+    A high value customer contacts the bank. They have been flagged as a sales prospect and so are routed to the next available rep that is registered as being skilled in the specific product of interest and also experienced in sales
+
+    ## Description:
+    Contact Routing is called from Contact Management to identify the next available and most suited servicing resource to handle a servicing session within an active customer contact. Selection is optimized to leverage of specialized/qualified servicing resources based on any known details about the customer and the purpose of their contact with the bank.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-contact-routing/1.0.0
+schemes:
+ - https
+paths:
+  /contact-routing/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDContactRouting
+      summary: Activate  a SDContactRouting servicing session
+      description: Activate  a  SDContactRouting servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDContactRouting Request Payload
+        schema:
+          $ref: '#/definitions/SDContactRoutingActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDContactRoutingActivateOutputModel'
+  /contact-routing/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDContactRouting
+      summary: Update an active SDContactRouting session configuration
+      description: Update an active SDContactRouting session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDContactRouting Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDContactRouting Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDContactRoutingConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDContactRoutingConfigureOutputModel'
+  /contact-routing/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDContactRouting
+      summary: "Capturing feedback against the SDContactRouting service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDContactRouting service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDContactRouting Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDContactRouting Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDContactRoutingFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDContactRoutingFeedbackOutputModel'
+  /contact-routing/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDContactRouting
+      summary: Analytical views maintained by the SDContactRouting service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDContactRouting service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDContactRouting Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDContactRouting Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDContactRoutingRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDContactRoutingRetrieveOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCustomerServicingResourceAllocation
+      summary: Details of a new CustomerServicingResourceAllocation instance
+      description: Enable the service resource pool allocation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CustomerServicingResourceAllocation Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerServicingResourceAllocationInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CustomerServicingResourceAllocation instance
+          schema:
+            $ref: '#/definitions/CRCustomerServicingResourceAllocationInitiateOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerServicingResourceAllocation
+      summary: Update to any amendable fields of the CustomerServicingResourceAllocation instance
+      description: Update details about the servicing resource pool
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Servicing Resource Allocation Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerServicingResourceAllocationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Customer Servicing Resource Allocation Instance
+          schema:
+            $ref: '#/definitions/CRCustomerServicingResourceAllocationUpdateOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCustomerServicingResourceAllocationUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the processing of the servicing resource allocation (e.g. adjust priorities)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Servicing Resource Allocation Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerServicingResourceAllocationControlInputModel'
+      responses:
+        200:
+          description: Successful control of Customer Servicing Resource Allocation Instance
+          schema:
+            $ref: '#/definitions/CRCustomerServicingResourceAllocationControlOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerServicingResourceAllocationUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify servicing resource pool activity
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Servicing Resource Allocation Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerServicingResourceAllocationExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Customer Servicing Resource Allocation Instance
+          schema:
+            $ref: '#/definitions/CRCustomerServicingResourceAllocationExchangeOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerServicingResourceAllocationUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture servicing resource pool data (e.g. resource status/availability)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Servicing Resource Allocation Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerServicingResourceAllocationCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Customer Servicing Resource Allocation Instance
+          schema:
+            $ref: '#/definitions/CRCustomerServicingResourceAllocationCaptureOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveContactRouting
+      summary: Invoke a reporting action to obtain a Customer Servicing Resource Allocation instance related report
+      description: Retrieve details about the servicing resource assignments
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCustomerServicingResourceAllocationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Customer Servicing Resource Allocation Instance
+          schema:
+            $ref: '#/definitions/CRCustomerServicingResourceAllocationRetrieveOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/allocation/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerServicingResourceAllocationAllocation
+      summary: Update to any amendable fields of the Allocation instance
+      description: Update details of a servicing resource allocation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Allocation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Allocation Request Payload
+        schema:
+          $ref: '#/definitions/BQAllocationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Allocation Instance
+          schema:
+            $ref: '#/definitions/BQAllocationUpdateOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/allocation/{bq-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCustomerServicingResourceAllocationAllocationUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control an allocation (e.g. terminate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Allocation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Allocation request payload
+        schema:
+          $ref: '#/definitions/BQAllocationControlInputModel'
+      responses:
+        200:
+          description: Successful control of Allocation Instance Record
+          schema:
+            $ref: '#/definitions/BQAllocationControlOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/allocation/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerServicingResourceAllocationAllocationUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, reject etc. an allocation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Allocation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Allocation request payload
+        schema:
+          $ref: '#/definitions/BQAllocationExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Allocation Instance Record
+          schema:
+            $ref: '#/definitions/BQAllocationExchangeOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/allocation/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerServicingResourceAllocationAllocationUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture data for an active allocation (e.g. availability)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Allocation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Allocation request payload
+        schema:
+          $ref: '#/definitions/BQAllocationCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Allocation Instance Record
+          schema:
+            $ref: '#/definitions/BQAllocationCaptureOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/allocation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerServicingResourceAllocationAllocation
+      summary: Invoke a reporting action to obtain a Allocation instance related report.
+      description: Retrieve details about a servicing resource allocation .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Allocation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAllocationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Allocation Instance Record
+          schema:
+            $ref: '#/definitions/BQAllocationRetrieveOutputModel'
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveContactRoutingReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ContactRouting Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /contact-routing/customer-servicing-resource-allocation/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveContactRoutingBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Allocation', ]
+  /contact-routing/{sd-reference-id}/customer-servicing-resource-allocation/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveContactRoutingBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Contact Routing Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Servicing Resource Allocation Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Allocation
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Allocation Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [AllocationID1, AllocationID2]

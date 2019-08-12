@@ -2,7 +2,17 @@ swagger: '2.0'
 info:
  version: '1.0.0'
  title: 'Service Domain - Credit Management'
- description: 'Description'
+ description: >
+
+    ## Executive Summary:
+    This service domain provides a bank-wide/oversight function to qualify credit pricing for offered products and services to reflect the bank's appetite to write the business. This decision can override the standard product pricing procedure
+
+    ## Example of Use:
+    A corporate loan is presented for credit management pricing decisioning prior to completion of the offer process
+
+    ## Description:
+    This service domain supports a central bank credit management function that maintains an overarching credit perspective across all bank activity. Transactions can be re-priced to factor in this credit perspective
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-credit-management/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDCreditManagement
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDCreditManagement servicing session
+      description: Activate  a  SDCreditManagement servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDCreditManagementActivateOutputModel'
-  /credit-management/configure:
+  /credit-management/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDCreditManagement
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDCreditManagement session configuration
+      description: Update an active SDCreditManagement session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCreditManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCreditManagementConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDCreditManagementConfigureOutputModel'
-  /credit-management/feedback:
+  /credit-management/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDCreditManagement
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDCreditManagement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCreditManagement service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCreditManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDCreditManagementFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDCreditManagementFeedbackOutputModel'
-  /credit-management/retrieve:
+  /credit-management/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDCreditManagement
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDCreditManagement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCreditManagement service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCreditManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,16 +117,21 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDCreditManagementRetrieveOutputModel'
-  /credit-management/credit-pricing-assessment/initiation:
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/initiation:
     post:
       tags:
       - initiate
       operationId: initiateCreditPricingAssessment
-      summary: Details of a new Credit Pricing Assessment instance
+      summary: Details of a new CreditPricingAssessment instance
       description: Evaluate a proposed transaction pricing against group credit policy
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
@@ -110,88 +140,133 @@ paths:
           $ref: '#/definitions/CRCreditPricingAssessmentInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Credit Pricing Assessment instance
+          description: Successful initiation of new CreditPricingAssessment instance
           schema:
             $ref: '#/definitions/CRCreditPricingAssessmentInitiateOutputModel'
-  /credit-management/credit-pricing-assessment/{cr-reference-id}/update:
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}/update:
     put:
       tags:
       - update
       operationId: updateCreditPricingAssessment
-      summary: Update to any amendable fields of the Credit Pricing Assessment instance
+      summary: Update to any amendable fields of the CreditPricingAssessment instance
       description: Update details of an active credit pricing assessment
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Credit Pricing Assessment Instance Record
+        description: Credit Pricing Assessment Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CreditPricingAssessment Request Payload
+        description: Credit Pricing Assessment Request Payload
         schema:
           $ref: '#/definitions/CRCreditPricingAssessmentUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Credit Pricing Assessment instance
+          description: Successfully Updated Credit Pricing Assessment Instance
           schema:
             $ref: '#/definitions/CRCreditPricingAssessmentUpdateOutputModel'
-  /credit-management/credit-pricing-assessment/{cr-reference-id}/exchange:
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}/exchange:
     put:
       tags:
       - exchange
-      operationId: processCreditPricingAssessmentAcceptanceUpdate
+      operationId: exchangeCreditPricingAssessmentUpdate
       summary: Handle an external exchange (e.g. accept, reject, verify)
       description: Accept/reject a pricing assessment
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Credit Pricing Assessment Instance Record
+        description: Credit Pricing Assessment Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CreditPricingAssessment Request Payload
+        description: Credit Pricing Assessment Request Payload
         schema:
           $ref: '#/definitions/CRCreditPricingAssessmentExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Credit Pricing Assessment Instance
           schema:
             $ref: '#/definitions/CRCreditPricingAssessmentExchangeOutputModel'
-  /credit-management/credit-pricing-assessment/{cr-reference-id}/grant:
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}/grant:
     put:
       tags:
       - grant
-      operationId: grantCreditPricingAssessmentAcceptanceUpdate
-      summary: Invoke a grant request action from the #BQ instance to obtain access permission
+      operationId: grantCreditPricingAssessmentUpdate
+      summary: Invoke a grant request action from the CreditPricingAssessment instance to obtain access permission
       description: Obtain a credit pricing policy acceptance grant to proceed with a transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Credit Pricing Assessment Instance Record
+        description: Credit Pricing Assessment Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CreditPricingAssessment Request Payload
+        description: Credit Pricing Assessment Request Payload
         schema:
           $ref: '#/definitions/CRCreditPricingAssessmentGrantInputModel'
       responses:
         200:
-          description: Successful Invoke a grant request action from the #BQ instance to obtain access permission
+          description: Successful grant of Credit Pricing Assessment Instance
           schema:
             $ref: '#/definitions/CRCreditPricingAssessmentGrantOutputModel'
-  /credit-management/credit-pricing-assessment:
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCreditManagement
+      summary: Invoke a reporting action to obtain a Credit Pricing Assessment instance related report
+      description: Retrieve details about a credit pricing assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCreditPricingAssessmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Credit Pricing Assessment Instance
+          schema:
+            $ref: '#/definitions/CRCreditPricingAssessmentRetrieveOutputModel'
+  /credit-management/{sd-reference-id}/credit-pricing-assessment:
     get:
       tags:
       - retrieve
@@ -200,6 +275,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Credit Management Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- CreditManagement Instance Status='active'
@@ -213,32 +293,59 @@ paths:
             items:
               type: string
             example: ['ID726464', 'ID7264642']
-  /credit-management/credit-pricing-assessment/{cr-reference-id}:
+  /credit-management/credit-pricing-assessment/behavior-qualifiers/:
     get:
       tags:
       - retrieve
-      operationId: retrieveCreditManagement
-      summary: Retrieve a Credit Management Record
-      description: Retrieve a Credit Management Record
+      operationId: RetrieveCreditManagementBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /credit-management/{sd-reference-id}/credit-pricing-assessment/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCreditManagementBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
       produces:
       - application/json
       parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Credit Pricing Assessment Instance Record
+        description: Credit Management Servicing Session Reference
         required: true
         type: string
-      - in: body
-        name: body
+      - name: cr-reference-id
+        in: path
+        description: Credit Pricing Assessment Instance Reference
         required: true
-        description: Credit Management Request Payload
-        schema:
-          $ref: '#/definitions/CRCreditPricingAssessmentRetrieveInputModel'
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        required: false
+        type: string
       responses:
         200:
-          description: Successfully Retrieved Credit Management Report
+          description: Successful
           schema:
-            $ref: '#/definitions/CRCreditPricingAssessmentRetrieveOutputModel'
+            type: array
+            items:
+              type: string
+            example: [ID1, ID2]
 definitions:
  SDCreditManagementActivateInputModel:
   type: object
@@ -886,45 +993,45 @@ definitions:
  CRCreditPricingAssessmentInitiateInputModel:
   type: object
   properties: 
+   creditManagementServicingSessionReference:
+    type: string
+    example: "CMSSR748007"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    creditPricingAssessmentInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The Initiate service call input and output record
-   creditPricingAssessmentServicingSessionReference:
-    type: string
-    example: "CPASSR718342"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
    creditPricingAssessmentInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the #CR instance (e.g. initialized, pending, active)
+      general-info: The status of the Credit Pricing Assessment instance (e.g. initialised, pending, active)
    creditPricingAssessmentInstanceRecord:
     type: object
     properties:
      businessUnitReference:
       type: string
-      example: "724916"
+      example: "786249"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Business unit submitting the proposed transaction for review
      customerReference:
       type: string
-      example: "754850"
+      example: "744396"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer related to the proposed transaction
      sectorReference:
       type: string
-      example: "769087"
+      example: "784134"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -937,7 +1044,7 @@ definitions:
         general-info: The product type/category of the proposed transaction for the credit pricing assessment
      proposedTransactionReference:
       type: string
-      example: "759853"
+      example: "722929"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -974,9 +1081,16 @@ definitions:
  CRCreditPricingAssessmentInitiateOutputModel:
   type: object
   properties: 
+   creditPricingAssessmentInstanceReference:
+    type: string
+    example: "CPAIR779213"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Credit Pricing Assessment instance
    creditPricingAssessmentInitiateActionReference:
     type: string
-    example: "CPAIAR770414"
+    example: "CPAIAR714658"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -987,19 +1101,12 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The Initiate service call input and output record
-   creditPricingAssessmentInstanceReference:
-    type: string
-    example: "CPAIR752845"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Credit Pricing Assessment instance
    creditPricingAssessmentInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the #CR instance (e.g. initialized, pending, active)
+      general-info: The status of the Credit Pricing Assessment instance (e.g. initialised, pending, active)
    creditPricingAssessmentInstanceRecord:
     type: object
     properties:
@@ -1012,16 +1119,16 @@ definitions:
  CRCreditPricingAssessmentUpdateInputModel:
   type: object
   properties: 
-   creditPricingAssessmentServicingSessionReference:
+   creditManagementServicingSessionReference:
     type: string
-    example: "CPASSR775435"
+    example: "CMSSR749246"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    creditPricingAssessmentInstanceReference:
     type: string
-    example: "CPAIR704117"
+    example: "CPAIR732620"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1031,21 +1138,21 @@ definitions:
     properties:
      businessUnitReference:
       type: string
-      example: "740828"
+      example: "762550"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Business unit submitting the proposed transaction for review
      customerReference:
       type: string
-      example: "736649"
+      example: "791467"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer related to the proposed transaction
      sectorReference:
       type: string
-      example: "761285"
+      example: "750384"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1058,7 +1165,7 @@ definitions:
         general-info: The product type/category of the proposed transaction for the credit pricing assessment
      proposedTransactionReference:
       type: string
-      example: "790243"
+      example: "731502"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1112,21 +1219,21 @@ definitions:
     properties:
      businessUnitReference:
       type: string
-      example: "740828"
+      example: "762550"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Business unit submitting the proposed transaction for review
      customerReference:
       type: string
-      example: "736649"
+      example: "791467"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer related to the proposed transaction
      sectorReference:
       type: string
-      example: "761285"
+      example: "750384"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1139,7 +1246,7 @@ definitions:
         general-info: The product type/category of the proposed transaction for the credit pricing assessment
      proposedTransactionReference:
       type: string
-      example: "790243"
+      example: "731502"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1175,7 +1282,7 @@ definitions:
           general-info: The booking entity within the bank that the proposed transaction would impact
    creditPricingAssessmentUpdateActionTaskReference:
     type: string
-    example: "CPAUATR713154"
+    example: "CPAUATR797236"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1195,16 +1302,16 @@ definitions:
  CRCreditPricingAssessmentExchangeInputModel:
   type: object
   properties: 
-   creditPricingAssessmentServicingSessionReference:
+   creditManagementServicingSessionReference:
     type: string
-    example: "CPASSR755132"
+    example: "CMSSR791341"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    creditPricingAssessmentInstanceReference:
     type: string
-    example: "CPAIR759136"
+    example: "CPAIR710802"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1229,7 +1336,7 @@ definitions:
   properties: 
    creditPricingAssessmentExchangeActionTaskReference:
     type: string
-    example: "CPAEATR704057"
+    example: "CPAEATR798187"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1249,16 +1356,16 @@ definitions:
  CRCreditPricingAssessmentGrantInputModel:
   type: object
   properties: 
-   creditPricingAssessmentServicingSessionReference:
+   creditManagementServicingSessionReference:
     type: string
-    example: "CPASSR770230"
+    example: "CMSSR792215"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    creditPricingAssessmentInstanceReference:
     type: string
-    example: "CPAIR726137"
+    example: "CPAIR712115"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1287,81 +1394,9 @@ definitions:
  CRCreditPricingAssessmentGrantOutputModel:
   type: object
   properties: 
-   creditPricingAssessmentInstanceRecord:
-    type: object
-    properties:
-     businessUnitReference:
-      type: string
-      example: "700413"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Business unit submitting the proposed transaction for review
-     customerReference:
-      type: string
-      example: "743914"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer related to the proposed transaction
-     sectorReference:
-      type: string
-      example: "701425"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: The sector where the proposed transaction would be booked
-     productType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The product type/category of the proposed transaction for the credit pricing assessment
-     proposedTransactionReference:
-      type: string
-      example: "794183"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to proposed transaction submitted for assessment
-     proposedTransactionRecord:
-      type: object
-      properties:
-       proposedTransactionType:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The type of credit instrument being considered
-       proposedTransactionAmount:
-        type: string
-        example: USD 250
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-          general-info: The financial structure of the proposed transaction
-       proposedTransactionRecordDate:
-        type: string
-        example: "09-22-2018"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-          general-info: One or more key dates associated with the transaction
-       proposedTransactionBookingEntity:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The booking entity within the bank that the proposed transaction would impact
-     proposedTransactionCreditPricingAssessment:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
    creditPricingAssessmentGrantActionTaskReference:
     type: string
-    example: "CPAGATR767726"
+    example: "CPAGATR723433"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1374,7 +1409,7 @@ definitions:
       general-info: The grant service call consolidated processing record
    grantRequestRecordReference:
     type: string
-    example: "GRRR751706"
+    example: "GRRR786929"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1408,7 +1443,7 @@ definitions:
     properties:
      creditPricingAssessmentInstanceReportReference:
       type: string
-      example: "792057"
+      example: "700150"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1430,7 +1465,7 @@ definitions:
     properties:
      creditPricingAssessmentInstanceAnalysisReference:
       type: string
-      example: "762247"
+      example: "758596"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1455,21 +1490,21 @@ definitions:
     properties:
      businessUnitReference:
       type: string
-      example: "740687"
+      example: "701214"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Business unit submitting the proposed transaction for review
      customerReference:
       type: string
-      example: "780060"
+      example: "712074"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer related to the proposed transaction
      sectorReference:
       type: string
-      example: "794921"
+      example: "706657"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1482,7 +1517,7 @@ definitions:
         general-info: The product type/category of the proposed transaction for the credit pricing assessment
      proposedTransactionReference:
       type: string
-      example: "730323"
+      example: "734452"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1524,7 +1559,7 @@ definitions:
         general-info: Details of the credit pricing assessment, permitting or adjusting terms as necessary
    creditPricingAssessmentRetrieveActionTaskReference:
     type: string
-    example: "CPARATR704066"
+    example: "CPARATR772400"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
