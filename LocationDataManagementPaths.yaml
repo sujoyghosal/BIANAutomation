@@ -1,0 +1,808 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Location Data Management'
+ description: >
+
+    ## Executive Summary:
+    This service domain maintain details of the use and state of locations of interest to the bank. This can include both physical and virtual addresses. It is used to check for valid use and for sales/marketing activities
+
+    ## Example of Use:
+    A new prospect provides an address as their place of residence. It is checked to be a valid/known location for residential use.
+
+    ## Description:
+    The maintenance of location details is used to check the validity, allowed use and occupancy of locations - both physical and virtual. This information can be augmented using external directory services when appropriate. The information is used for authentication and security purposes, and can also be used for interactive location based sales and marketing when combined with location tracking services/capabilities
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-location-data-management/1.0.0
+schemes:
+ - https
+paths:
+  /location-data-management/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDLocationDataManagement
+      summary: Activate  a SDLocationDataManagement servicing session
+      description: Activate  a  SDLocationDataManagement servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDLocationDataManagement Request Payload
+        schema:
+          $ref: '#/definitions/SDLocationDataManagementActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDLocationDataManagementActivateOutputModel'
+  /location-data-management/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDLocationDataManagement
+      summary: Update an active SDLocationDataManagement session configuration
+      description: Update an active SDLocationDataManagement session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDLocationDataManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDLocationDataManagement Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDLocationDataManagementConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDLocationDataManagementConfigureOutputModel'
+  /location-data-management/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDLocationDataManagement
+      summary: "Capturing feedback against the SDLocationDataManagement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDLocationDataManagement service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDLocationDataManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDLocationDataManagement Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDLocationDataManagementFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDLocationDataManagementFeedbackOutputModel'
+  /location-data-management/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDLocationDataManagement
+      summary: Analytical views maintained by the SDLocationDataManagement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDLocationDataManagement service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDLocationDataManagement Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDLocationDataManagement Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDLocationDataManagementRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDLocationDataManagementRetrieveOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateLocationDirectoryEntry
+      summary: Details of a new LocationDirectoryEntry instance
+      description: Register a location in the catalog
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: LocationDirectoryEntry Request Payload
+        schema:
+          $ref: '#/definitions/CRLocationDirectoryEntryInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new LocationDirectoryEntry instance
+          schema:
+            $ref: '#/definitions/CRLocationDirectoryEntryInitiateOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateLocationDirectoryEntry
+      summary: Update to any amendable fields of the LocationDirectoryEntry instance
+      description: Update details about the location's directory entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Location Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRLocationDirectoryEntryUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Location Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRLocationDirectoryEntryUpdateOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlLocationDirectoryEntryUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the handling of a location entry (e.g. terminate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Location Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRLocationDirectoryEntryControlInputModel'
+      responses:
+        200:
+          description: Successful control of Location Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRLocationDirectoryEntryControlOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeLocationDirectoryEntryUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, reject etc. details of a location directory entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Location Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRLocationDirectoryEntryExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Location Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRLocationDirectoryEntryExchangeOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestLocationDirectoryEntryUpdate
+      summary: Invoke a service request action against the LocationDirectoryEntry instance
+      description: Request manual intervention with an entry (e.g. refresh content)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Location Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRLocationDirectoryEntryRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Location Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRLocationDirectoryEntryRequestOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveLocationDataManagement
+      summary: Invoke a reporting action to obtain a Location Directory Entry instance related report
+      description: Retrieve details about a location directory entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRLocationDirectoryEntryRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Location Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRLocationDirectoryEntryRetrieveOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/location/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateLocationDirectoryEntryLocation
+      summary: Update to any amendable fields of the Location instance
+      description: Update details about a location entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Location Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Location Request Payload
+        schema:
+          $ref: '#/definitions/BQLocationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Location Instance
+          schema:
+            $ref: '#/definitions/BQLocationUpdateOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/location/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeLocationDirectoryEntryLocationUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, reject a directory entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Location Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Location request payload
+        schema:
+          $ref: '#/definitions/BQLocationExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Location Instance Record
+          schema:
+            $ref: '#/definitions/BQLocationExchangeOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/location/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeLocationDirectoryEntryLocationUpdate
+      summary: Invoke an automated execute action against the Location instance
+      description: Execute an automated action against an entry (e.g. notify status update)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Location Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Location request payload
+        schema:
+          $ref: '#/definitions/BQLocationExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Location Instance Record
+          schema:
+            $ref: '#/definitions/BQLocationExecuteOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/location/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveLocationDirectoryEntryLocation
+      summary: Invoke a reporting action to obtain a Location instance related report.
+      description: Retrieve details about location entries in the directory .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Location Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQLocationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Location Instance Record
+          schema:
+            $ref: '#/definitions/BQLocationRetrieveOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/use/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateLocationDirectoryEntryUse
+      summary: Update to any amendable fields of the Use instance
+      description: Update details about an usage entry for the location
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Use Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Use Request Payload
+        schema:
+          $ref: '#/definitions/BQUseUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Use Instance
+          schema:
+            $ref: '#/definitions/BQUseUpdateOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/use/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeLocationDirectoryEntryUseUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, reject a directory entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Use Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Use request payload
+        schema:
+          $ref: '#/definitions/BQUseExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Use Instance Record
+          schema:
+            $ref: '#/definitions/BQUseExchangeOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/use/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeLocationDirectoryEntryUseUpdate
+      summary: Invoke an automated execute action against the Use instance
+      description: Execute an automated action against an entry (e.g. notify status update)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Use Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Use request payload
+        schema:
+          $ref: '#/definitions/BQUseExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Use Instance Record
+          schema:
+            $ref: '#/definitions/BQUseExecuteOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/use/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveLocationDirectoryEntryUse
+      summary: Invoke a reporting action to obtain a Use instance related report.
+      description: Retrieve details about usage entries in the location directory .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Use Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQUseRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Use Instance Record
+          schema:
+            $ref: '#/definitions/BQUseRetrieveOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/occupancy/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateLocationDirectoryEntryOccupancy
+      summary: Update to any amendable fields of the Occupancy instance
+      description: Update details about a location's occupancy
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Occupancy Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Occupancy Request Payload
+        schema:
+          $ref: '#/definitions/BQOccupancyUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Occupancy Instance
+          schema:
+            $ref: '#/definitions/BQOccupancyUpdateOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/occupancy/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeLocationDirectoryEntryOccupancyUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, reject a directory entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Occupancy Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Occupancy request payload
+        schema:
+          $ref: '#/definitions/BQOccupancyExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Occupancy Instance Record
+          schema:
+            $ref: '#/definitions/BQOccupancyExchangeOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/occupancy/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeLocationDirectoryEntryOccupancyUpdate
+      summary: Invoke an automated execute action against the Occupancy instance
+      description: Execute an automated action against an entry (e.g. notify status update)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Occupancy Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Occupancy request payload
+        schema:
+          $ref: '#/definitions/BQOccupancyExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Occupancy Instance Record
+          schema:
+            $ref: '#/definitions/BQOccupancyExecuteOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/occupancy/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveLocationDirectoryEntryOccupancy
+      summary: Invoke a reporting action to obtain a Occupancy instance related report.
+      description: Retrieve details about location's occupancy entry in the directory .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Occupancy Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOccupancyRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Occupancy Instance Record
+          schema:
+            $ref: '#/definitions/BQOccupancyRetrieveOutputModel'
+  /location-data-management/{sd-reference-id}/location-directory-entry:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveLocationDataManagementReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- LocationDataManagement Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /location-data-management/location-directory-entry/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveLocationDataManagementBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Location',  'Use',  'Occupancy', ]
+  /location-data-management/{sd-reference-id}/location-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveLocationDataManagementBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Location Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Location Directory Entry Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Occupancy
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Occupancy Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [OccupancyID1, OccupancyID2]

@@ -1,0 +1,461 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Information Provider Operation'
+ description: >
+
+    ## Executive Summary:
+    TBD
+
+    ## Example of Use:
+    TBD
+
+    ## Description:
+    Operate the interface for importing and exporting non financial transaction fulfillment information/data feeds. This can be to commercial information providers (IPs) and regulatory/market authorities. One specific IP is used for internally generated broadcast information such as bank fees and rates
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-information-provider-operation/1.0.0
+schemes:
+ - https
+paths:
+  /information-provider-operation/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDInformationProviderOperation
+      summary: Activate  a SDInformationProviderOperation servicing session
+      description: Activate  a  SDInformationProviderOperation servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDInformationProviderOperation Request Payload
+        schema:
+          $ref: '#/definitions/SDInformationProviderOperationActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDInformationProviderOperationActivateOutputModel'
+  /information-provider-operation/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDInformationProviderOperation
+      summary: Update an active SDInformationProviderOperation session configuration
+      description: Update an active SDInformationProviderOperation session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDInformationProviderOperation Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDInformationProviderOperation Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDInformationProviderOperationConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDInformationProviderOperationConfigureOutputModel'
+  /information-provider-operation/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDInformationProviderOperation
+      summary: "Capturing feedback against the SDInformationProviderOperation service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDInformationProviderOperation service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDInformationProviderOperation Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDInformationProviderOperation Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDInformationProviderOperationFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDInformationProviderOperationFeedbackOutputModel'
+  /information-provider-operation/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDInformationProviderOperation
+      summary: Analytical views maintained by the SDInformationProviderOperation service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDInformationProviderOperation service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDInformationProviderOperation Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDInformationProviderOperation Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDInformationProviderOperationRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDInformationProviderOperationRetrieveOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateInformationFeedOperatingSession
+      summary: Details of a new InformationFeedOperatingSession instance
+      description: Start the IP service feed
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InformationFeedOperatingSession Request Payload
+        schema:
+          $ref: '#/definitions/CRInformationFeedOperatingSessionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new InformationFeedOperatingSession instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedOperatingSessionInitiateOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlInformationFeedOperatingSessionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Reconfigure the existing feed make-up
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Information Feed Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRInformationFeedOperatingSessionControlInputModel'
+      responses:
+        200:
+          description: Successful control of Information Feed Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedOperatingSessionControlOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestInformationFeedOperatingSessionUpdate
+      summary: Invoke a service request action against the InformationFeedOperatingSession instance
+      description: Request/change delivery of an allowed service feed (note service agreement/pricing handled elsewhere)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Information Feed Operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRInformationFeedOperatingSessionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Information Feed Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedOperatingSessionRequestOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveInformationProviderOperation
+      summary: Invoke a reporting action to obtain a Information Feed Operating Session instance related report
+      description: Read details/reports about the IP service feed
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Operating Session Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRInformationFeedOperatingSessionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Information Feed Operating Session Instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedOperatingSessionRetrieveOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/{cr-reference-id}/serviceselection/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestInformationFeedOperatingSessionServiceSelectionUpdate
+      summary: Invoke a service request action against the ServiceSelection instance
+      description: Request changes to the feed service make-up
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ServiceSelection Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ServiceSelection request payload
+        schema:
+          $ref: '#/definitions/BQServiceSelectionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of ServiceSelection Instance Record
+          schema:
+            $ref: '#/definitions/BQServiceSelectionRequestOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/{cr-reference-id}/informationimport/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeInformationFeedOperatingSessionInformationImportUpdate
+      summary: Invoke an automated execute action against the InformationImport instance
+      description: Execute an information service import instruction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InformationImport Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InformationImport request payload
+        schema:
+          $ref: '#/definitions/BQInformationImportExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of InformationImport Instance Record
+          schema:
+            $ref: '#/definitions/BQInformationImportExecuteOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/{cr-reference-id}/informationexport/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateInformationFeedOperatingSessionInformationExport
+      summary: Update to any amendable fields of the InformationExport instance
+      description: Update/correct an information service exported message
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InformationExport Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InformationExport Request Payload
+        schema:
+          $ref: '#/definitions/BQInformationExportUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated InformationExport Instance
+          schema:
+            $ref: '#/definitions/BQInformationExportUpdateOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/{cr-reference-id}/informationexport/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeInformationFeedOperatingSessionInformationExportUpdate
+      summary: Invoke an automated execute action against the InformationExport instance
+      description: Execute an information service export instruction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InformationExport Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InformationExport request payload
+        schema:
+          $ref: '#/definitions/BQInformationExportExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of InformationExport Instance Record
+          schema:
+            $ref: '#/definitions/BQInformationExportExecuteOutputModel'
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveInformationProviderOperationReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- InformationProviderOperation Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /information-provider-operation/information-feed-operating-session/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveInformationProviderOperationBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'ServiceSelection',  'InformationImport',  'InformationExport', ]
+  /information-provider-operation/{sd-reference-id}/information-feed-operating-session/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveInformationProviderOperationBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Information Provider Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Operating Session Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- InformationExport
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- InformationExport Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [InformationExportID1, InformationExportID2]

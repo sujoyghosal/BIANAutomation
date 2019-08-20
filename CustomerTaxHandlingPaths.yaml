@@ -1,0 +1,664 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Customer Tax Handling'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles consumer tax reporting obligations including the consolidation and reporting of customer tax related financial activity
+
+    ## Example of Use:
+    A consumer customer is provided with a year end tax report for products and services provided by the bank
+
+    ## Description:
+    There are different tax tracking and reporting obligations for products and services in different locations and jurisdictions. This service domain handles the consolidation and reporting of tax related activity as necessary for a customer. Note that this service domain is only responsible for the consolidation and reporting of tax related activity - other service domains will be required to handle actual tax processing obligations as may apply for certain products and services
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-customer-tax-handling/1.0.0
+schemes:
+ - https
+paths:
+  /customer-tax-handling/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCustomerTaxHandling
+      summary: Activate  a SDCustomerTaxHandling servicing session
+      description: Activate  a  SDCustomerTaxHandling servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerTaxHandling Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerTaxHandlingActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCustomerTaxHandlingActivateOutputModel'
+  /customer-tax-handling/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCustomerTaxHandling
+      summary: Update an active SDCustomerTaxHandling session configuration
+      description: Update an active SDCustomerTaxHandling session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerTaxHandling Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerTaxHandling Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerTaxHandlingConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCustomerTaxHandlingConfigureOutputModel'
+  /customer-tax-handling/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCustomerTaxHandling
+      summary: "Capturing feedback against the SDCustomerTaxHandling service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCustomerTaxHandling service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerTaxHandling Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerTaxHandling Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerTaxHandlingFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCustomerTaxHandlingFeedbackOutputModel'
+  /customer-tax-handling/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCustomerTaxHandling
+      summary: Analytical views maintained by the SDCustomerTaxHandling service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCustomerTaxHandling service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerTaxHandling Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerTaxHandling Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerTaxHandlingRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCustomerTaxHandlingRetrieveOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCustomerTaxObligationFulfillmentArrangement
+      summary: Details of a new CustomerTaxObligationFulfillmentArrangement instance
+      description: Initiate customer tax handling
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CustomerTaxObligationFulfillmentArrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CustomerTaxObligationFulfillmentArrangement instance
+          schema:
+            $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementInitiateOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerTaxObligationFulfillmentArrangement
+      summary: Update to any amendable fields of the CustomerTaxObligationFulfillmentArrangement instance
+      description: Update details of the customer tax handling facility
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Tax Obligation Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Customer Tax Obligation Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementUpdateOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCustomerTaxObligationFulfillmentArrangementUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the processing of the customer's tax handling (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Tax Obligation Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementControlInputModel'
+      responses:
+        200:
+          description: Successful control of Customer Tax Obligation Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementControlOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCustomerTaxObligationFulfillmentArrangementUpdate
+      summary: Invoke an automated execute action against the CustomerTaxObligationFulfillmentArrangement instance
+      description: Automated execution tax reporting
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Tax Obligation Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Customer Tax Obligation Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementExecuteOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerTaxObligationFulfillmentArrangementUpdate
+      summary: Invoke a service request action against the CustomerTaxObligationFulfillmentArrangement instance
+      description: Request for specific or ad-hoc tax reporting
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Tax Obligation Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Customer Tax Obligation Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementRequestOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerTaxHandling
+      summary: Invoke a reporting action to obtain a Customer Tax Obligation Fulfillment Arrangement instance related report
+      description: Retrieve details relating to the customer tax handling
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCustomerTaxObligationFulfillmentArrangementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Customer Tax Obligation Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCustomerTaxObligationFulfillmentArrangementRetrieveOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/consolidation/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerTaxObligationFulfillmentArrangementConsolidation
+      summary: Update to any amendable fields of the Consolidation instance
+      description: Update consolidated product reports
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Consolidation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Consolidation Request Payload
+        schema:
+          $ref: '#/definitions/BQConsolidationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Consolidation Instance
+          schema:
+            $ref: '#/definitions/BQConsolidationUpdateOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/consolidation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerTaxObligationFulfillmentArrangementConsolidation
+      summary: Invoke a reporting action to obtain a Consolidation instance related report.
+      description: Retrieve details about the consolidated reports used for tax reporting .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Consolidation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQConsolidationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Consolidation Instance Record
+          schema:
+            $ref: '#/definitions/BQConsolidationRetrieveOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/analysis/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerTaxObligationFulfillmentArrangementAnalysis
+      summary: Update to any amendable fields of the Analysis instance
+      description: Update aspects of the tax handling analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Analysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Analysis Request Payload
+        schema:
+          $ref: '#/definitions/BQAnalysisUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Analysis Instance
+          schema:
+            $ref: '#/definitions/BQAnalysisUpdateOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/analysis/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerTaxObligationFulfillmentArrangementAnalysisUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or verify the tax reporting position analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Analysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Analysis request payload
+        schema:
+          $ref: '#/definitions/BQAnalysisExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Analysis Instance Record
+          schema:
+            $ref: '#/definitions/BQAnalysisExchangeOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/analysis/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerTaxObligationFulfillmentArrangementAnalysis
+      summary: Invoke a reporting action to obtain a Analysis instance related report.
+      description: Retrieve details about the tax reporting analysis .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Analysis Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAnalysisRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Analysis Instance Record
+          schema:
+            $ref: '#/definitions/BQAnalysisRetrieveOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/reporting/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerTaxObligationFulfillmentArrangementReporting
+      summary: Update to any amendable fields of the Reporting instance
+      description: Update customer tax reporting details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Reporting Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Reporting Request Payload
+        schema:
+          $ref: '#/definitions/BQReportingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Reporting Instance
+          schema:
+            $ref: '#/definitions/BQReportingUpdateOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/reporting/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerTaxObligationFulfillmentArrangementReportingUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, approve etc. the customer tax reporting
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Reporting Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Reporting request payload
+        schema:
+          $ref: '#/definitions/BQReportingExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Reporting Instance Record
+          schema:
+            $ref: '#/definitions/BQReportingExchangeOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/reporting/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerTaxObligationFulfillmentArrangementReporting
+      summary: Invoke a reporting action to obtain a Reporting instance related report.
+      description: Retrieve details about the customer tax reporting .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Reporting Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQReportingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Reporting Instance Record
+          schema:
+            $ref: '#/definitions/BQReportingRetrieveOutputModel'
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerTaxHandlingReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CustomerTaxHandling Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /customer-tax-handling/customer-tax-obligation-fulfillment-arrangement/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerTaxHandlingBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Consolidation',  'Analysis',  'Reporting', ]
+  /customer-tax-handling/{sd-reference-id}/customer-tax-obligation-fulfillment-arrangement/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerTaxHandlingBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Tax Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Tax Obligation Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Reporting
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Reporting Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ReportingID1, ReportingID2]

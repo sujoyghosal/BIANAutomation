@@ -1,0 +1,348 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Regulatory Compliance'
+ description: >
+
+    ## Executive Summary:
+    This service domain provides a service to interpret regulatory requirements, provide guidance and define and implement a portfolio of regulatory compliance tests across all appropriate bank activities
+
+    ## Example of Use:
+    A new customer's details are passed for regulatory watch list checks. A subsequent transaction is reported for regulatory compliance checks
+
+    ## Description:
+    This service domain administers the scheduled and ad-hoc application of regulatory checks. This includes interpreting the full range of regulatory requirements governing the bank's operations and determining which regulations apply in specific circumstances across the enterprise. Support and guidelines are provided to activities in the bank that are subject to the regulations and scheduled and ad-hoc checks performed to confirm compliance
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-regulatory-compliance/1.0.0
+schemes:
+ - https
+paths:
+  /regulatory-compliance/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDRegulatoryCompliance
+      summary: Activate  a SDRegulatoryCompliance servicing session
+      description: Activate  a  SDRegulatoryCompliance servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDRegulatoryCompliance Request Payload
+        schema:
+          $ref: '#/definitions/SDRegulatoryComplianceActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDRegulatoryComplianceActivateOutputModel'
+  /regulatory-compliance/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDRegulatoryCompliance
+      summary: Update an active SDRegulatoryCompliance session configuration
+      description: Update an active SDRegulatoryCompliance session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDRegulatoryCompliance Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDRegulatoryCompliance Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDRegulatoryComplianceConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDRegulatoryComplianceConfigureOutputModel'
+  /regulatory-compliance/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDRegulatoryCompliance
+      summary: "Capturing feedback against the SDRegulatoryCompliance service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDRegulatoryCompliance service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDRegulatoryCompliance Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDRegulatoryCompliance Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDRegulatoryComplianceFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDRegulatoryComplianceFeedbackOutputModel'
+  /regulatory-compliance/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDRegulatoryCompliance
+      summary: Analytical views maintained by the SDRegulatoryCompliance service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDRegulatoryCompliance service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDRegulatoryCompliance Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDRegulatoryCompliance Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDRegulatoryComplianceRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDRegulatoryComplianceRetrieveOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/evaluation:
+    post:
+      tags:
+      - evaluate
+      operationId: evaluateRegulatoryCompliance
+      summary: Details of a new RegulatoryCompliance instance
+      description: Start a compliance evaluation assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: RegulatoryCompliance Request Payload
+        schema:
+          $ref: '#/definitions/CRRegulatoryComplianceEvaluateInputModel'
+      responses:
+        201:
+          description: Successful evaluation of new RegulatoryCompliance instance
+          schema:
+            $ref: '#/definitions/CRRegulatoryComplianceEvaluateOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateRegulatoryCompliance
+      summary: Update to any amendable fields of the RegulatoryCompliance instance
+      description: Update submitted details or content for an on-going compliance assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Regulatory Compliance Request Payload
+        schema:
+          $ref: '#/definitions/CRRegulatoryComplianceUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Regulatory Compliance Instance
+          schema:
+            $ref: '#/definitions/CRRegulatoryComplianceUpdateOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeRegulatoryComplianceUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or reject a compliance determination
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Regulatory Compliance Request Payload
+        schema:
+          $ref: '#/definitions/CRRegulatoryComplianceExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Regulatory Compliance Instance
+          schema:
+            $ref: '#/definitions/CRRegulatoryComplianceExchangeOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestRegulatoryComplianceUpdate
+      summary: Invoke a service request action against the RegulatoryCompliance instance
+      description: Request a review or adjudication for an assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Regulatory Compliance Request Payload
+        schema:
+          $ref: '#/definitions/CRRegulatoryComplianceRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Regulatory Compliance Instance
+          schema:
+            $ref: '#/definitions/CRRegulatoryComplianceRequestOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveRegulatoryCompliance
+      summary: Invoke a reporting action to obtain a Regulatory Compliance instance related report
+      description: Retrieve details and content from an active compliance assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRRegulatoryComplianceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Regulatory Compliance Instance
+          schema:
+            $ref: '#/definitions/CRRegulatoryComplianceRetrieveOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveRegulatoryComplianceReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- RegulatoryCompliance Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /regulatory-compliance/regulatory-compliance/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveRegulatoryComplianceBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveRegulatoryComplianceBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ID1, ID2]

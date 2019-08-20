@@ -1,10 +1,20 @@
 swagger: '2.0'
 info:
  version: '1.0.0'
- title: 'Service Domain - MarketResearch'
+ title: 'Service Domain - Market Research'
  description: >
+
+    ## Executive Summary:
+    This service domain handles the capture of market research from multiple external sources. This can include live feeds, analysis and reports in any form. The information is classified/catalogued and stored for retrieval.
+
+    ## Example of Use:
+    A market research department handles the access and consolidation and classification of market research
+
+    ## Description:
+    This service domain supports general market research for a wide range of uses and sources - including customer and competitor activity and related market assessments. It can combine subscribing to and consolidating market research with supporting on-line/interactive access to market news sources (general, not financial market). A more sophisticated implementation will support specific market information requests and the consolidation of gathered intelligence
+
 host: virtserver.swaggerhub.com
-basePath: /BIAN/sd-marketresearch/1.0.0
+basePath: /BIAN/sd-market-research/1.0.0
 schemes:
  - https
 paths:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDMarketResearch
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDMarketResearch servicing session
+      description: Activate  a  SDMarketResearch servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDMarketResearchActivateOutputModel'
-  /market-research/configure:
+  /market-research/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDMarketResearch
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDMarketResearch session configuration
+      description: Update an active SDMarketResearch session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketResearch Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDMarketResearchConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDMarketResearchConfigureOutputModel'
-  /market-research/feedback:
+  /market-research/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDMarketResearch
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDMarketResearch service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDMarketResearch service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketResearch Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDMarketResearchFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDMarketResearchFeedbackOutputModel'
-  /market-research/retrieve:
+  /market-research/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDMarketResearch
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDMarketResearch service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDMarketResearch service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketResearch Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,106 +117,156 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDMarketResearchRetrieveOutputModel'
-  /market-research/general-market-research-directory-entry/initiation:
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/registration:
     post:
       tags:
-      - initiate
-      operationId: initiateGeneralMarketResearch
-      summary: Details of a new Market Research instance
+      - register
+      operationId: registerGeneralMarketResearchDirectoryEntry
+      summary: Details of a new GeneralMarketResearchDirectoryEntry instance
       description: Register or establish a market research viewpoint
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
       - in: body
         name: body
         required: true
-        description: MarketResearch Request Payload
+        description: GeneralMarketResearchDirectoryEntry Request Payload
         schema:
-          $ref: '#/definitions/CRGeneralMarketResearchInitiateInputModel'
+          $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRegisterInputModel'
       responses:
         201:
-          description: Successful Details of a new Market Research instance
+          description: Successful registration of new GeneralMarketResearchDirectoryEntry instance
           schema:
-            $ref: '#/definitions/CRGeneralMarketResearchInitiateOutputModel'
-  /market-research/general-market-research-directory-entry/{cr-reference-id}/update:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRegisterOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}/update:
     put:
       tags:
       - update
-      operationId: updateGeneralMarketResearch
-      summary: Update to any amendable fields of the Market Research instance
+      operationId: updateGeneralMarketResearchDirectoryEntry
+      summary: Update to any amendable fields of the GeneralMarketResearchDirectoryEntry instance
       description: Update the details or make-up of a market research viewpoint
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: CR General Market Research Directory Entry Instance Record
+        description: General Market Research Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: MarketResearch Request Payload
+        description: General Market Research Directory Entry Request Payload
         schema:
-          $ref: '#/definitions/CRGeneralMarketResearchUpdateInputModel'
+          $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Market Research instance
+          description: Successfully Updated General Market Research Directory Entry Instance
           schema:
-            $ref: '#/definitions/CRGeneralMarketResearchUpdateOutputModel'
-  /market-research/general-market-research-directory-entry/{cr-reference-id}/execution:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryUpdateOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}/execution:
     put:
       tags:
       - execute
-      operationId: executeGeneralMarketResearchUpdate
-      summary: Invoke an automated execute action against the Market Research instance
+      operationId: executeGeneralMarketResearchDirectoryEntryUpdate
+      summary: Invoke an automated execute action against the GeneralMarketResearchDirectoryEntry instance
       description: Automatically extract details of a maintained market research viewpoint
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: CR General Market Research Directory Entry Instance Record
+        description: General Market Research Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: MarketResearch Request Payload
+        description: General Market Research Directory Entry Request Payload
         schema:
-          $ref: '#/definitions/CRGeneralMarketResearchExecuteInputModel'
+          $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Market Research instance
+          description: Successful execution of General Market Research Directory Entry Instance
           schema:
-            $ref: '#/definitions/CRGeneralMarketResearchExecuteOutputModel'
-  /market-research/general-market-research-directory-entry/{cr-reference-id}/requisition:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryExecuteOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}/requisition:
     put:
       tags:
       - request
-      operationId: requestGeneralMarketResearchUpdate
-      summary: Invoke a service request action against the Market Research instance
+      operationId: requestGeneralMarketResearchDirectoryEntryUpdate
+      summary: Invoke a service request action against the GeneralMarketResearchDirectoryEntry instance
       description: Request a viewpoint is refreshed or adjusted in some manner
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: CR General Market Research Directory Entry Instance Record
+        description: General Market Research Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: MarketResearch Request Payload
+        description: General Market Research Directory Entry Request Payload
         schema:
-          $ref: '#/definitions/CRGeneralMarketResearchRequestInputModel'
+          $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Market Research instance
+          description: Successful requisition of General Market Research Directory Entry Instance
           schema:
-            $ref: '#/definitions/CRGeneralMarketResearchRequestOutputModel'
-  /market-research/general-market-research-directory-entry:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRequestOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveMarketResearch
+      summary: Invoke a reporting action to obtain a General Market Research Directory Entry instance related report
+      description: Retrieve details about and the content of a maintained market research viewpoint
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRGeneralMarketResearchDirectoryEntryRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved General Market Research Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRetrieveOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry:
     get:
       tags:
       - retrieve
@@ -200,6 +275,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- MarketResearch Instance Status='active'
@@ -229,7 +309,7 @@ paths:
             items:
               type: string
             example: []
-  /market-research/general-market-research-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -238,9 +318,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: CR General Market Research Directory Entry Instance Record
+        description: General Market Research Directory Entry Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -261,32 +346,6 @@ paths:
             items:
               type: string
             example: [ID1, ID2]
-  /market-research/general-market-research-directory-entry/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveMarketResearch
-      summary: Retrieve details about and the content of a maintained market research viewpoint
-      description: Retrieve a MarketResearch Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: CR General Market Research Directory Entry Instance Record
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: MarketResearch Request Payload
-        schema:
-          $ref: '#/definitions/CRGeneralMarketResearchRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved MarketResearch Report
-          schema:
-            $ref: '#/definitions/CRGeneralMarketResearchRetrieveOutputModel'
 definitions:
  SDMarketResearchActivateInputModel:
   type: object
@@ -931,28 +990,28 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRGeneralMarketResearchInitiateInputModel:
+ CRGeneralMarketResearchDirectoryEntryRegisterInputModel:
   type: object
   properties: 
-   generalMarketResearchInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
    marketResearchServicingSessionReference:
     type: string
-    example: "MRSSR720088"
+    example: "MRSSR719823"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
-   generalMarketResearchInstanceStatus:
+   generalMarketResearchDirectoryEntryRegisterActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Register service call input and output record
+   generalMarketResearchDirectoryEntryInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the General Market Research instance (e.g. initialised, pending, active)
+      general-info: The status of the General Market Research Directory Entry instance (e.g. initialised, pending, active)
    generalMarketResearchDirectoryEntryInstanceRecord:
     type: object
     properties:
@@ -973,7 +1032,7 @@ definitions:
       properties:
        marketResearchReportTypeReference:
         type: string
-        example: "750564"
+        example: "795796"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -995,40 +1054,40 @@ definitions:
           general-info: Details of the research request
        employeeBusinessUnitReference:
         type: string
-        example: "718862"
+        example: "788551"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The employee/business unit requesting the research
- CRGeneralMarketResearchInitiateOutputModel:
+ CRGeneralMarketResearchDirectoryEntryRegisterOutputModel:
   type: object
   properties: 
-   generalMarketResearchInitiateActionReference:
+   generalMarketResearchDirectoryEntryInstanceReference:
     type: string
-    example: "GMRIAR718698"
+    example: "GMRDEIR715104"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   generalMarketResearchInitiateActionRecord:
+      general-info: Reference to the General Market Research Directory Entry instance
+   generalMarketResearchDirectoryEntryRegisterActionReference:
+    type: string
+    example: "GMRDERAR794182"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Register service call
+   generalMarketResearchDirectoryEntryRegisterActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   generalMarketResearchInstanceReference:
-    type: string
-    example: "GMRIR764366"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the General Market Research instance
-   generalMarketResearchInstanceStatus:
+      general-info: The Register service call input and output record
+   generalMarketResearchDirectoryEntryInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the General Market Research instance (e.g. initialised, pending, active)
+      general-info: The status of the General Market Research Directory Entry instance (e.g. initialised, pending, active)
    generalMarketResearchDirectoryEntryInstanceRecord:
     type: object
     properties:
@@ -1065,23 +1124,23 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
           general-info: Is the content of the report or database in any suitable form
- CRGeneralMarketResearchUpdateInputModel:
+ CRGeneralMarketResearchDirectoryEntryUpdateInputModel:
   type: object
   properties: 
    marketResearchServicingSessionReference:
     type: string
-    example: "MRSSR708459"
+    example: "MRSSR762935"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
-   generalMarketResearchInstanceReference:
+   generalMarketResearchDirectoryEntryInstanceReference:
     type: string
-    example: "GMRIR711347"
+    example: "GMRDEIR749670"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the General Market Research instance
+      general-info: Reference to the General Market Research Directory Entry instance
    generalMarketResearchDirectoryEntryInstanceRecord:
     type: object
     properties:
@@ -1102,7 +1161,7 @@ definitions:
       properties:
        marketResearchReportTypeReference:
         type: string
-        example: "764902"
+        example: "761107"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1113,7 +1172,7 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Defines the version and period covered by the research
-   generalMarketResearchUpdateActionTaskRecord:
+   generalMarketResearchDirectoryEntryUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1125,7 +1184,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- CRGeneralMarketResearchUpdateOutputModel:
+ CRGeneralMarketResearchDirectoryEntryUpdateOutputModel:
   type: object
   properties: 
    generalMarketResearchDirectoryEntryInstanceRecord:
@@ -1148,7 +1207,7 @@ definitions:
       properties:
        marketResearchReportTypeReference:
         type: string
-        example: "764902"
+        example: "761107"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1159,14 +1218,14 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Defines the version and period covered by the research
-   generalMarketResearchUpdateActionTaskReference:
+   generalMarketResearchDirectoryEntryUpdateActionTaskReference:
     type: string
-    example: "GMRUATR735563"
+    example: "GMRDEUATR721400"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to an update service call
-   generalMarketResearchUpdateActionTaskRecord:
+   generalMarketResearchDirectoryEntryUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1178,23 +1237,23 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- CRGeneralMarketResearchExecuteInputModel:
+ CRGeneralMarketResearchDirectoryEntryExecuteInputModel:
   type: object
   properties: 
    marketResearchServicingSessionReference:
     type: string
-    example: "MRSSR755556"
+    example: "MRSSR742666"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
-   generalMarketResearchInstanceReference:
+   generalMarketResearchDirectoryEntryInstanceReference:
     type: string
-    example: "GMRIR717108"
+    example: "GMRDEIR722841"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the General Market Research instance
+      general-info: Reference to the General Market Research Directory Entry instance
    generalMarketResearchDirectoryEntryInstanceRecord:
     type: object
     properties:
@@ -1209,12 +1268,12 @@ definitions:
           general-info: Details of the research request
        employeeBusinessUnitReference:
         type: string
-        example: "721756"
+        example: "733044"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The employee/business unit requesting the research
-   generalMarketResearchExecuteActionTaskRecord:
+   generalMarketResearchDirectoryEntryExecuteActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1229,7 +1288,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
- CRGeneralMarketResearchExecuteOutputModel:
+ CRGeneralMarketResearchDirectoryEntryExecuteOutputModel:
   type: object
   properties: 
    generalMarketResearchDirectoryEntryInstanceRecord:
@@ -1273,19 +1332,19 @@ definitions:
           general-info: Details of the research request
        employeeBusinessUnitReference:
         type: string
-        example: "721756"
+        example: "733044"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The employee/business unit requesting the research
-   generalMarketResearchExecuteActionTaskReference:
+   generalMarketResearchDirectoryEntryExecuteActionTaskReference:
     type: string
-    example: "GMREATR776428"
+    example: "GMRDEEATR717863"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a General Market Research instance execute service call
-   generalMarketResearchExecuteActionTaskRecord:
+      general-info: Reference to a General Market Research Directory Entry instance execute service call
+   generalMarketResearchDirectoryEntryExecuteActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1293,7 +1352,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    executeRecordReference:
     type: string
-    example: "ERR762404"
+    example: "ERR719108"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1304,23 +1363,23 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the execute action service response
- CRGeneralMarketResearchRequestInputModel:
+ CRGeneralMarketResearchDirectoryEntryRequestInputModel:
   type: object
   properties: 
    marketResearchServicingSessionReference:
     type: string
-    example: "MRSSR739725"
+    example: "MRSSR714915"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
-   generalMarketResearchInstanceReference:
+   generalMarketResearchDirectoryEntryInstanceReference:
     type: string
-    example: "GMRIR720111"
+    example: "GMRDEIR770263"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the General Market Research instance
+      general-info: Reference to the General Market Research Directory Entry instance
    generalMarketResearchDirectoryEntryInstanceRecord:
     type: object
     properties:
@@ -1335,12 +1394,12 @@ definitions:
           general-info: Details of the research request
        employeeBusinessUnitReference:
         type: string
-        example: "750843"
+        example: "700488"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The employee/business unit requesting the research
-   generalMarketResearchRequestActionTaskRecord:
+   generalMarketResearchDirectoryEntryRequestActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1355,7 +1414,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: Request service record (e.g. rework function, refresh record, process workstep)
- CRGeneralMarketResearchRequestOutputModel:
+ CRGeneralMarketResearchDirectoryEntryRequestOutputModel:
   type: object
   properties: 
    generalMarketResearchDirectoryEntryInstanceRecord:
@@ -1399,19 +1458,19 @@ definitions:
           general-info: Details of the research request
        employeeBusinessUnitReference:
         type: string
-        example: "750843"
+        example: "700488"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The employee/business unit requesting the research
-   generalMarketResearchRequestActionTaskReference:
+   generalMarketResearchDirectoryEntryRequestActionTaskReference:
     type: string
-    example: "GMRRATR769252"
+    example: "GMRDERATR716514"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a General Market Research instance request service call
-   generalMarketResearchRequestActionTaskRecord:
+      general-info: Reference to a General Market Research Directory Entry instance request service call
+   generalMarketResearchDirectoryEntryRequestActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1419,7 +1478,7 @@ definitions:
       general-info: The request service call consolidated processing record
    requestRecordReference:
     type: string
-    example: "RRR736522"
+    example: "RRR729571"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1430,66 +1489,66 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the request action service response
- CRGeneralMarketResearchRetrieveInputModel:
+ CRGeneralMarketResearchDirectoryEntryRetrieveInputModel:
   type: object
   properties: 
-   generalMarketResearchRetrieveActionTaskRecord:
+   generalMarketResearchDirectoryEntryRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   generalMarketResearchRetrieveActionRequest:
+   generalMarketResearchDirectoryEntryRetrieveActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service request (lists requested reports)
-   generalMarketResearchInstanceReportRecord:
+   generalMarketResearchDirectoryEntryInstanceReportRecord:
     type: object
     properties:
-     generalMarketResearchInstanceReportReference:
+     generalMarketResearchDirectoryEntryInstanceReportReference:
       type: string
-      example: "711020"
+      example: "743575"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance report
-     generalMarketResearchInstanceReportType:
+     generalMarketResearchDirectoryEntryInstanceReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
-     generalMarketResearchInstanceReportParameters:
+     generalMarketResearchDirectoryEntryInstanceReportParameters:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the report (e.g. period, content type)
-   generalMarketResearchInstanceAnalysis:
+   generalMarketResearchDirectoryEntryInstanceAnalysis:
     type: object
     properties:
-     generalMarketResearchInstanceAnalysisReference:
+     generalMarketResearchDirectoryEntryInstanceAnalysisReference:
       type: string
-      example: "785138"
+      example: "784710"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance analysis view
-     generalMarketResearchInstanceAnalysisReportType:
+     generalMarketResearchDirectoryEntryInstanceAnalysisReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
-     generalMarketResearchInstanceAnalysisParameters:
+     generalMarketResearchDirectoryEntryInstanceAnalysisParameters:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the analysis (e.g. period, algorithm type)
- CRGeneralMarketResearchRetrieveOutputModel:
+ CRGeneralMarketResearchDirectoryEntryRetrieveOutputModel:
   type: object
   properties: 
    generalMarketResearchDirectoryEntryInstanceRecord:
@@ -1512,7 +1571,7 @@ definitions:
       properties:
        marketResearchReportTypeReference:
         type: string
-        example: "701307"
+        example: "712257"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1546,67 +1605,67 @@ definitions:
           general-info: Details of the research request
        employeeBusinessUnitReference:
         type: string
-        example: "767248"
+        example: "767969"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: The employee/business unit requesting the research
-   generalMarketResearchRetrieveActionTaskReference:
+   generalMarketResearchDirectoryEntryRetrieveActionTaskReference:
     type: string
-    example: "GMRRATR763421"
+    example: "GMRDERATR791942"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a General Market Research instance retrieve service call
-   generalMarketResearchRetrieveActionTaskRecord:
+      general-info: Reference to a General Market Research Directory Entry instance retrieve service call
+   generalMarketResearchDirectoryEntryRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   generalMarketResearchRetrieveActionResponse:
+   generalMarketResearchDirectoryEntryRetrieveActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
-   generalMarketResearchInstanceReportRecord:
+   generalMarketResearchDirectoryEntryInstanceReportRecord:
     type: object
     properties:
-     generalMarketResearchInstanceReportData:
+     generalMarketResearchDirectoryEntryInstanceReportData:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
-     generalMarketResearchInstanceReportType:
+     generalMarketResearchDirectoryEntryInstanceReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
-     generalMarketResearchInstanceReport:
+     generalMarketResearchDirectoryEntryInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
-   generalMarketResearchInstanceAnalysis:
+   generalMarketResearchDirectoryEntryInstanceAnalysis:
     type: object
     properties:
-     generalMarketResearchInstanceAnalysisData:
+     generalMarketResearchDirectoryEntryInstanceAnalysisData:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
-     generalMarketResearchInstanceAnalysisReportType:
+     generalMarketResearchDirectoryEntryInstanceAnalysisReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
-     generalMarketResearchInstanceAnalysisReport:
+     generalMarketResearchDirectoryEntryInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`

@@ -1,0 +1,352 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Market Analysis'
+ description: >
+
+    ## Executive Summary:
+    This service domain analyzes internal and external market information sources as necessary to develop specific market insights. It may maintain a collection of predefined market analyses and may also offer specific ad-hoc analysis on request
+
+    ## Example of Use:
+    External market research is used to develop competitor analysis for bank products as input to a prospect campaign development
+
+    ## Description:
+    This service domain supports the broad range of market analysis needed to support business management decisions across the bank. It draws on external market research and internally generated business information as necessary. It is used to develop insights into market trends and potential opportunities/threats. It may also be used to evaluate key events that might impact the bank's business directly or that of important customers and customer segments. A standard set of analytical views can be defined that are maintained. Furthermore the service domain may provide ad-hoc/customized analysis services
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-market-analysis/1.0.0
+schemes:
+ - https
+paths:
+  /market-analysis/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDMarketAnalysis
+      summary: Activate  a SDMarketAnalysis servicing session
+      description: Activate  a  SDMarketAnalysis servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDMarketAnalysis Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketAnalysisActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDMarketAnalysisActivateOutputModel'
+  /market-analysis/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDMarketAnalysis
+      summary: Update an active SDMarketAnalysis session configuration
+      description: Update an active SDMarketAnalysis session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketAnalysis Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketAnalysis Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketAnalysisConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDMarketAnalysisConfigureOutputModel'
+  /market-analysis/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDMarketAnalysis
+      summary: "Capturing feedback against the SDMarketAnalysis service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDMarketAnalysis service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketAnalysis Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketAnalysis Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketAnalysisFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDMarketAnalysisFeedbackOutputModel'
+  /market-analysis/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDMarketAnalysis
+      summary: Analytical views maintained by the SDMarketAnalysis service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDMarketAnalysis service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketAnalysis Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketAnalysis Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketAnalysisRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDMarketAnalysisRetrieveOutputModel'
+  /market-analysis/{sd-reference-id}/general-market-research-analysis/evaluation:
+    post:
+      tags:
+      - evaluate
+      operationId: evaluateGeneralMarketResearchAnalysis
+      summary: Details of a new GeneralMarketResearchAnalysis instance
+      description: Initialize a market research analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Analysis Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: GeneralMarketResearchAnalysis Request Payload
+        schema:
+          $ref: '#/definitions/CRGeneralMarketResearchAnalysisEvaluateInputModel'
+      responses:
+        201:
+          description: Successful evaluation of new GeneralMarketResearchAnalysis instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchAnalysisEvaluateOutputModel'
+  /market-analysis/{sd-reference-id}/general-market-research-analysis/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeGeneralMarketResearchAnalysisUpdate
+      summary: Invoke an automated execute action against the GeneralMarketResearchAnalysis instance
+      description: Obtain an automated refresh of market research analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Analysis Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Analysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: General Market Research Analysis Request Payload
+        schema:
+          $ref: '#/definitions/CRGeneralMarketResearchAnalysisExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of General Market Research Analysis Instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchAnalysisExecuteOutputModel'
+  /market-analysis/{sd-reference-id}/general-market-research-analysis/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestGeneralMarketResearchAnalysisUpdate
+      summary: Invoke a service request action against the GeneralMarketResearchAnalysis instance
+      description: Request a manual refresh of market research analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Analysis Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Analysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: General Market Research Analysis Request Payload
+        schema:
+          $ref: '#/definitions/CRGeneralMarketResearchAnalysisRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of General Market Research Analysis Instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchAnalysisRequestOutputModel'
+  /market-analysis/{sd-reference-id}/general-market-research-analysis/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveMarketAnalysis
+      summary: Invoke a reporting action to obtain a General Market Research Analysis instance related report
+      description: Retrieve details about market research analysis, including recent results
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Analysis Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Analysis Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRGeneralMarketResearchAnalysisRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved General Market Research Analysis Instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchAnalysisRetrieveOutputModel'
+  /market-analysis/{sd-reference-id}/general-market-research-analysis/{cr-reference-id}/analysisalgorithm/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveGeneralMarketResearchAnalysisAnalysisAlgorithm
+      summary: Invoke a reporting action to obtain a AnalysisAlgorithm instance related report.
+      description: Retrieve details about market research analysis algorithm .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Analysis Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Analysis Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AnalysisAlgorithm Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAnalysisAlgorithmRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved AnalysisAlgorithm Instance Record
+          schema:
+            $ref: '#/definitions/BQAnalysisAlgorithmRetrieveOutputModel'
+  /market-analysis/{sd-reference-id}/general-market-research-analysis:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketAnalysisReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Analysis Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- MarketAnalysis Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /market-analysis/general-market-research-analysis/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketAnalysisBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'AnalysisAlgorithm', ]
+  /market-analysis/{sd-reference-id}/general-market-research-analysis/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketAnalysisBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Analysis Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Analysis Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- AnalysisAlgorithm
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- AnalysisAlgorithm Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [AnalysisAlgorithmID1, AnalysisAlgorithmID2]

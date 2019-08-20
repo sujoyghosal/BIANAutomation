@@ -1,0 +1,348 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Market Research'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles the capture of market research from multiple external sources. This can include live feeds, analysis and reports in any form. The information is classified/catalogued and stored for retrieval.
+
+    ## Example of Use:
+    A market research department handles the access and consolidation and classification of market research
+
+    ## Description:
+    This service domain supports general market research for a wide range of uses and sources - including customer and competitor activity and related market assessments. It can combine subscribing to and consolidating market research with supporting on-line/interactive access to market news sources (general, not financial market). A more sophisticated implementation will support specific market information requests and the consolidation of gathered intelligence
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-market-research/1.0.0
+schemes:
+ - https
+paths:
+  /market-research/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDMarketResearch
+      summary: Activate  a SDMarketResearch servicing session
+      description: Activate  a  SDMarketResearch servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDMarketResearch Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketResearchActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDMarketResearchActivateOutputModel'
+  /market-research/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDMarketResearch
+      summary: Update an active SDMarketResearch session configuration
+      description: Update an active SDMarketResearch session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketResearch Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketResearch Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketResearchConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDMarketResearchConfigureOutputModel'
+  /market-research/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDMarketResearch
+      summary: "Capturing feedback against the SDMarketResearch service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDMarketResearch service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketResearch Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketResearch Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketResearchFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDMarketResearchFeedbackOutputModel'
+  /market-research/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDMarketResearch
+      summary: Analytical views maintained by the SDMarketResearch service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDMarketResearch service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketResearch Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketResearch Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketResearchRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDMarketResearchRetrieveOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/registration:
+    post:
+      tags:
+      - register
+      operationId: registerGeneralMarketResearchDirectoryEntry
+      summary: Details of a new GeneralMarketResearchDirectoryEntry instance
+      description: Register or establish a market research viewpoint
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: GeneralMarketResearchDirectoryEntry Request Payload
+        schema:
+          $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRegisterInputModel'
+      responses:
+        201:
+          description: Successful registration of new GeneralMarketResearchDirectoryEntry instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRegisterOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateGeneralMarketResearchDirectoryEntry
+      summary: Update to any amendable fields of the GeneralMarketResearchDirectoryEntry instance
+      description: Update the details or make-up of a market research viewpoint
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: General Market Research Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated General Market Research Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryUpdateOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeGeneralMarketResearchDirectoryEntryUpdate
+      summary: Invoke an automated execute action against the GeneralMarketResearchDirectoryEntry instance
+      description: Automatically extract details of a maintained market research viewpoint
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: General Market Research Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of General Market Research Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryExecuteOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestGeneralMarketResearchDirectoryEntryUpdate
+      summary: Invoke a service request action against the GeneralMarketResearchDirectoryEntry instance
+      description: Request a viewpoint is refreshed or adjusted in some manner
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: General Market Research Directory Entry Request Payload
+        schema:
+          $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of General Market Research Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRequestOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveMarketResearch
+      summary: Invoke a reporting action to obtain a General Market Research Directory Entry instance related report
+      description: Retrieve details about and the content of a maintained market research viewpoint
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRGeneralMarketResearchDirectoryEntryRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved General Market Research Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRGeneralMarketResearchDirectoryEntryRetrieveOutputModel'
+  /market-research/{sd-reference-id}/general-market-research-directory-entry:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketResearchReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- MarketResearch Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /market-research/general-market-research-directory-entry/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketResearchBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /market-research/{sd-reference-id}/general-market-research-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketResearchBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Research Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: General Market Research Directory Entry Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ID1, ID2]

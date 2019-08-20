@@ -3,6 +3,16 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Regulatory Compliance'
  description: >
+
+    ## Executive Summary:
+    This service domain provides a service to interpret regulatory requirements, provide guidance and define and implement a portfolio of regulatory compliance tests across all appropriate bank activities
+
+    ## Example of Use:
+    A new customer's details are passed for regulatory watch list checks. A subsequent transaction is reported for regulatory compliance checks
+
+    ## Description:
+    This service domain administers the scheduled and ad-hoc application of regulatory checks. This includes interpreting the full range of regulatory requirements governing the bank's operations and determining which regulations apply in specific circumstances across the enterprise. Support and guidelines are provided to activities in the bank that are subject to the regulations and scheduled and ad-hoc checks performed to confirm compliance
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-regulatory-compliance/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDRegulatoryCompliance
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDRegulatoryCompliance servicing session
+      description: Activate  a  SDRegulatoryCompliance servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDRegulatoryComplianceActivateOutputModel'
-  /regulatory-compliance/configure:
+  /regulatory-compliance/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDRegulatoryCompliance
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDRegulatoryCompliance session configuration
+      description: Update an active SDRegulatoryCompliance session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDRegulatoryCompliance Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDRegulatoryComplianceConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDRegulatoryComplianceConfigureOutputModel'
-  /regulatory-compliance/feedback:
+  /regulatory-compliance/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDRegulatoryCompliance
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDRegulatoryCompliance service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDRegulatoryCompliance service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDRegulatoryCompliance Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDRegulatoryComplianceFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDRegulatoryComplianceFeedbackOutputModel'
-  /regulatory-compliance/retrieve:
+  /regulatory-compliance/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDRegulatoryCompliance
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDRegulatoryCompliance service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDRegulatoryCompliance service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDRegulatoryCompliance Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,40 +117,19 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDRegulatoryComplianceRetrieveOutputModel'
-  /regulatory-compliance/regulatory-compliance-assessment/initiation:
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/evaluation:
     post:
       tags:
-      - initiate
-      operationId: initiateRegulatoryComplianceAssessment
-      summary: Initiate/set-up a new Regulatory Compliance facility
+      - evaluate
+      operationId: evaluateRegulatoryCompliance
+      summary: Details of a new RegulatoryCompliance instance
       description: Start a compliance evaluation assessment
       produces:
       - application/json
       parameters:
-      - in: body
-        name: body
-        required: true
-        description: RegulatoryCompliance Request Payload
-        schema:
-          $ref: '#/definitions/CRRegulatoryComplianceAssessmentInitiateInputModel'
-      responses:
-        201:
-          description: Successful Initiate/set-up a new Regulatory Compliance facility
-          schema:
-            $ref: '#/definitions/CRRegulatoryComplianceAssessmentInitiateOutputModel'
-  /regulatory-compliance/regulatory-compliance-assessment/{cr-reference-id}/update:
-    put:
-      tags:
-      - update
-      operationId: updateRegulatoryComplianceAssessment
-      summary: Update reference details of an active Regulatory Compliance arrangement
-      description: Update submitted details or content for an on-going compliance assessment
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Regulatory Compliance Assessment Instance Record
+        description: Regulatory Compliance Servicing Session Reference
         required: true
         type: string
       - in: body
@@ -133,65 +137,136 @@ paths:
         required: true
         description: RegulatoryCompliance Request Payload
         schema:
-          $ref: '#/definitions/CRRegulatoryComplianceAssessmentUpdateInputModel'
+          $ref: '#/definitions/CRRegulatoryComplianceEvaluateInputModel'
+      responses:
+        201:
+          description: Successful evaluation of new RegulatoryCompliance instance
+          schema:
+            $ref: '#/definitions/CRRegulatoryComplianceEvaluateOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateRegulatoryCompliance
+      summary: Update to any amendable fields of the RegulatoryCompliance instance
+      description: Update submitted details or content for an on-going compliance assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Regulatory Compliance Request Payload
+        schema:
+          $ref: '#/definitions/CRRegulatoryComplianceUpdateInputModel'
       responses:
         200:
-          description: Successful Update reference details of an active Regulatory Compliance arrangement
+          description: Successfully Updated Regulatory Compliance Instance
           schema:
-            $ref: '#/definitions/CRRegulatoryComplianceAssessmentUpdateOutputModel'
-  /regulatory-compliance/regulatory-compliance-assessment/{cr-reference-id}/exchange:
+            $ref: '#/definitions/CRRegulatoryComplianceUpdateOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}/exchange:
     put:
       tags:
       - exchange
-      operationId: exchangeRegulatoryComplianceAssessmentUpdate
+      operationId: exchangeRegulatoryComplianceUpdate
       summary: Handle an external exchange (e.g. accept, reject, verify)
       description: Accept or reject a compliance determination
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Regulatory Compliance Assessment Instance Record
+        description: Regulatory Compliance Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: RegulatoryCompliance Request Payload
+        description: Regulatory Compliance Request Payload
         schema:
-          $ref: '#/definitions/CRRegulatoryComplianceAssessmentExchangeInputModel'
+          $ref: '#/definitions/CRRegulatoryComplianceExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Regulatory Compliance Instance
           schema:
-            $ref: '#/definitions/CRRegulatoryComplianceAssessmentExchangeOutputModel'
-  /regulatory-compliance/regulatory-compliance-assessment/{cr-reference-id}/requisition:
+            $ref: '#/definitions/CRRegulatoryComplianceExchangeOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}/requisition:
     put:
       tags:
       - request
-      operationId: requestRegulatoryComplianceAssessmentUpdate
-      summary: Invoke a service request action against the Regulatory Complaince Assessment instance
+      operationId: requestRegulatoryComplianceUpdate
+      summary: Invoke a service request action against the RegulatoryCompliance instance
       description: Request a review or adjudication for an assessment
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Regulatory Compliance Assessment Instance Record
+        description: Regulatory Compliance Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: RegulatoryCompliance Request Payload
+        description: Regulatory Compliance Request Payload
         schema:
-          $ref: '#/definitions/CRRegulatoryComplianceAssessmentRequestInputModel'
+          $ref: '#/definitions/CRRegulatoryComplianceRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Regulatory Complaince Assessment instance
+          description: Successful requisition of Regulatory Compliance Instance
           schema:
-            $ref: '#/definitions/CRRegulatoryComplianceAssessmentRequestOutputModel'
-  /regulatory-compliance/regulatory-compliance-assessment:
+            $ref: '#/definitions/CRRegulatoryComplianceRequestOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveRegulatoryCompliance
+      summary: Invoke a reporting action to obtain a Regulatory Compliance instance related report
+      description: Retrieve details and content from an active compliance assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRRegulatoryComplianceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Regulatory Compliance Instance
+          schema:
+            $ref: '#/definitions/CRRegulatoryComplianceRetrieveOutputModel'
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance:
     get:
       tags:
       - retrieve
@@ -200,6 +275,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- RegulatoryCompliance Instance Status='active'
@@ -213,7 +293,7 @@ paths:
             items:
               type: string
             example: ['ID726464', 'ID7264642']
-  /regulatory-compliance/regulatory-compliance-assessment/behavior-qualifiers/:
+  /regulatory-compliance/regulatory-compliance/behavior-qualifiers/:
     get:
       tags:
       - retrieve
@@ -229,7 +309,7 @@ paths:
             items:
               type: string
             example: []
-  /regulatory-compliance/regulatory-compliance-assessment/{cr-reference-id}/{behavior-qualifier}/:
+  /regulatory-compliance/{sd-reference-id}/regulatory-compliance/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -238,9 +318,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Compliance Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Regulatory Compliance Assessment Instance Record
+        description: Regulatory Compliance Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -261,32 +346,6 @@ paths:
             items:
               type: string
             example: [ID1, ID2]
-  /regulatory-compliance/regulatory-compliance-assessment/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveRegulatoryCompliance
-      summary: Retrieve a Regulatory Compliance Record
-      description: Retrieve a Regulatory Compliance Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Regulatory Compliance Assessment Instance Record
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Regulatory Compliance Request Payload
-        schema:
-          $ref: '#/definitions/CRRegulatoryComplianceAssessmentRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Regulatory Compliance Report
-          schema:
-            $ref: '#/definitions/CRRegulatoryComplianceAssessmentRetrieveOutputModel'
 definitions:
  SDRegulatoryComplianceActivateInputModel:
   type: object
@@ -931,75 +990,79 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRRegulatoryComplianceAssessmentInitiateInputModel:
+ CRRegulatoryComplianceEvaluateInputModel:
   type: object
   properties: 
-   regulatoryComplianceInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
    regulatoryComplianceServicingSessionReference:
     type: string
-    example: "RCSSR790851"
+    example: "RCSSR783181"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
+   regulatoryComplianceEvaluateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Evaluate service call input and output record
    regulatoryComplianceInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Regulatory Compliance instance (e.g. initialized, pending, active)
+      general-info: The status of the Regulatory Compliance instance (e.g. initialised, pending, active)
    regulatoryComplianceAssessmentInstanceRecord:
     type: object
     properties:
      regulatoryAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: RegulatoryComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of regulatory tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "740492"
+      example: "717674"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "714175"
+      example: "747285"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "766750"
+      example: "785218"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633
+        bian-reference: RegulatoryComplianceCheckInvolvement (as PartyRole).Party
         general-info: Reference to the customer assessed if appropriate
      regulatoryAuthorityReference:
       type: string
-      example: "781345"
+      example: "706762"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvementAsRegulatoryAuthority
         general-info: Indication of the authority pertaining to the applied regulation
      regulationReference:
       type: string
-      example: "746132"
+      example: "703365"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
+        bian-reference: Regulation
         general-info: Reference to the specific regulation
      documentReference:
       type: string
-      example: "794493"
+      example: "727939"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1010,43 +1073,44 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Work documentation, forms and schedules produced and referenced during the assessment
- CRRegulatoryComplianceAssessmentInitiateOutputModel:
+ CRRegulatoryComplianceEvaluateOutputModel:
   type: object
   properties: 
-   regulatoryComplianceInitiateActionReference:
-    type: string
-    example: "RCIAR714216"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   regulatoryComplianceInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
    regulatoryComplianceInstanceReference:
     type: string
-    example: "RCIR700945"
+    example: "RCIR765112"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Regulatory Compliance instance
+   regulatoryComplianceEvaluateActionReference:
+    type: string
+    example: "RCEAR799600"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Evaluate service call
+   regulatoryComplianceEvaluateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Evaluate service call input and output record
    regulatoryComplianceInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Regulatory Compliance instance (e.g. initialized, pending, active)
+      general-info: The status of the Regulatory Compliance instance (e.g. initialised, pending, active)
    regulatoryComplianceAssessmentInstanceRecord:
     type: object
     properties:
      regulatoryAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: RegulatoryComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of regulatory tests referenced in the assessment
      regulationDefinition:
       type: string
@@ -1080,7 +1144,7 @@ definitions:
         general-info: Guidelines and requirements for compliance
      documentReference:
       type: string
-      example: "794493"
+      example: "727939"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1097,19 +1161,19 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Outcome/result of the assessment, can include remedial actions
- CRRegulatoryComplianceAssessmentUpdateInputModel:
+ CRRegulatoryComplianceUpdateInputModel:
   type: object
   properties: 
    regulatoryComplianceServicingSessionReference:
     type: string
-    example: "RCSSR776430"
+    example: "RCSSR770637"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    regulatoryComplianceInstanceReference:
     type: string
-    example: "RCIR785449"
+    example: "RCIR770929"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1120,47 +1184,51 @@ definitions:
      regulatoryAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: RegulatoryComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of regulatory tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "721748"
+      example: "743934"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "779157"
+      example: "792401"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "704961"
+      example: "799250"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633
+        bian-reference: RegulatoryComplianceCheckInvolvement (as PartyRole).Party
         general-info: Reference to the customer assessed if appropriate
      regulatoryAuthorityReference:
       type: string
-      example: "759628"
+      example: "722053"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvementAsRegulatoryAuthority
         general-info: Indication of the authority pertaining to the applied regulation
      regulationReference:
       type: string
-      example: "752485"
+      example: "719351"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
+        bian-reference: Regulation
         general-info: Reference to the specific regulation
      documentReference:
       type: string
-      example: "796299"
+      example: "766827"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1183,7 +1251,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- CRRegulatoryComplianceAssessmentUpdateOutputModel:
+ CRRegulatoryComplianceUpdateOutputModel:
   type: object
   properties: 
    regulatoryComplianceAssessmentInstanceRecord:
@@ -1192,47 +1260,51 @@ definitions:
      regulatoryAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: RegulatoryComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of regulatory tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "721748"
+      example: "743934"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "779157"
+      example: "792401"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "704961"
+      example: "799250"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633
+        bian-reference: RegulatoryComplianceCheckInvolvement (as PartyRole).Party
         general-info: Reference to the customer assessed if appropriate
      regulatoryAuthorityReference:
       type: string
-      example: "759628"
+      example: "722053"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvementAsRegulatoryAuthority
         general-info: Indication of the authority pertaining to the applied regulation
      regulationReference:
       type: string
-      example: "752485"
+      example: "719351"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
+        bian-reference: Regulation
         general-info: Reference to the specific regulation
      documentReference:
       type: string
-      example: "796299"
+      example: "766827"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1245,7 +1317,7 @@ definitions:
         general-info: Work documentation, forms and schedules produced and referenced during the assessment
    regulatoryComplianceUpdateActionTaskReference:
     type: string
-    example: "RCUATR715656"
+    example: "RCUATR755989"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1262,19 +1334,19 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- CRRegulatoryComplianceAssessmentExchangeInputModel:
+ CRRegulatoryComplianceExchangeInputModel:
   type: object
   properties: 
    regulatoryComplianceServicingSessionReference:
     type: string
-    example: "RCSSR748631"
+    example: "RCSSR758222"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    regulatoryComplianceInstanceReference:
     type: string
-    example: "RCIR709885"
+    example: "RCIR710201"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1294,12 +1366,12 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The type of exchange (e.g. accept, reject, verify)
- CRRegulatoryComplianceAssessmentExchangeOutputModel:
+ CRRegulatoryComplianceExchangeOutputModel:
   type: object
   properties: 
    regulatoryComplianceExchangeActionTaskReference:
     type: string
-    example: "RCEATR741822"
+    example: "RCEATR746397"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1316,19 +1388,19 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the exchange action service response
- CRRegulatoryComplianceAssessmentRequestInputModel:
+ CRRegulatoryComplianceRequestInputModel:
   type: object
   properties: 
    regulatoryComplianceServicingSessionReference:
     type: string
-    example: "RCSSR797130"
+    example: "RCSSR757961"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    regulatoryComplianceInstanceReference:
     type: string
-    example: "RCIR778111"
+    example: "RCIR707536"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1339,47 +1411,51 @@ definitions:
      regulatoryAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: RegulatoryComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of regulatory tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "727836"
+      example: "770915"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "758680"
+      example: "731601"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "746113"
+      example: "743694"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633
+        bian-reference: RegulatoryComplianceCheckInvolvement (as PartyRole).Party
         general-info: Reference to the customer assessed if appropriate
      regulatoryAuthorityReference:
       type: string
-      example: "754352"
+      example: "712010"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvementAsRegulatoryAuthority
         general-info: Indication of the authority pertaining to the applied regulation
      regulationReference:
       type: string
-      example: "779063"
+      example: "704848"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
+        bian-reference: Regulation
         general-info: Reference to the specific regulation
      documentReference:
       type: string
-      example: "776796"
+      example: "780770"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1405,7 +1481,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: Request service record (e.g. rework function, refresh record, process workstep)
- CRRegulatoryComplianceAssessmentRequestOutputModel:
+ CRRegulatoryComplianceRequestOutputModel:
   type: object
   properties: 
    regulatoryComplianceAssessmentInstanceRecord:
@@ -1414,47 +1490,51 @@ definitions:
      regulatoryAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: RegulatoryComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of regulatory tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "727836"
+      example: "770915"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "758680"
+      example: "731601"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "746113"
+      example: "743694"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633
+        bian-reference: RegulatoryComplianceCheckInvolvement (as PartyRole).Party
         general-info: Reference to the customer assessed if appropriate
      regulatoryAuthorityReference:
       type: string
-      example: "754352"
+      example: "712010"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvementAsRegulatoryAuthority
         general-info: Indication of the authority pertaining to the applied regulation
      regulationReference:
       type: string
-      example: "779063"
+      example: "704848"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
+        bian-reference: Regulation
         general-info: Reference to the specific regulation
      documentReference:
       type: string
-      example: "776796"
+      example: "780770"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1473,7 +1553,7 @@ definitions:
         general-info: Outcome/result of the assessment, can include remedial actions
    regulatoryComplianceRequestActionTaskReference:
     type: string
-    example: "RCRATR789928"
+    example: "RCRATR770020"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1486,7 +1566,7 @@ definitions:
       general-info: The request service call consolidated processing record
    requestRecordReference:
     type: string
-    example: "RRR730166"
+    example: "RRR701829"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1497,7 +1577,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the request action service response
- CRRegulatoryComplianceAssessmentRetrieveInputModel:
+ CRRegulatoryComplianceRetrieveInputModel:
   type: object
   properties: 
    regulatoryComplianceRetrieveActionTaskRecord:
@@ -1517,7 +1597,7 @@ definitions:
     properties:
      regulatoryComplianceInstanceReportReference:
       type: string
-      example: "781723"
+      example: "783284"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1539,7 +1619,7 @@ definitions:
     properties:
      regulatoryComplianceInstanceAnalysisReference:
       type: string
-      example: "731051"
+      example: "764565"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1556,7 +1636,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the analysis (e.g. period, algorithm type)
- CRRegulatoryComplianceAssessmentRetrieveOutputModel:
+ CRRegulatoryComplianceRetrieveOutputModel:
   type: object
   properties: 
    regulatoryComplianceAssessmentInstanceRecord:
@@ -1565,43 +1645,47 @@ definitions:
      regulatoryAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: RegulatoryComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of regulatory tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "765996"
+      example: "762334"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "723843"
+      example: "789109"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "786851"
+      example: "752714"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FNqJt8TGEeChad0JzLk7QA_-1317971633
+        bian-reference: RegulatoryComplianceCheckInvolvement (as PartyRole).Party
         general-info: Reference to the customer assessed if appropriate
      regulatoryAuthorityReference:
       type: string
-      example: "741636"
+      example: "734429"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvementAsRegulatoryAuthority
         general-info: Indication of the authority pertaining to the applied regulation
      regulationReference:
       type: string
-      example: "752797"
+      example: "756237"
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
+        bian-reference: Regulation
         general-info: Reference to the specific regulation
      regulationDefinition:
       type: string
@@ -1635,7 +1719,7 @@ definitions:
         general-info: Guidelines and requirements for compliance
      documentReference:
       type: string
-      example: "790520"
+      example: "768857"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1654,7 +1738,7 @@ definitions:
         general-info: Outcome/result of the assessment, can include remedial actions
    regulatoryComplianceRetrieveActionTaskReference:
     type: string
-    example: "RCRATR754812"
+    example: "RCRATR711524"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

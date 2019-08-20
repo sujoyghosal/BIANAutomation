@@ -8,7 +8,7 @@ info:
     This service domain handles the bank-side processing of funds transfers, making the necessary bank and regulatory checks on the involved parties and applying their payment preferences where appropriate
 
     ## Example of Use:
-    A customer transaction results in the generation of a payment order to transfer funds to an account in another bank 
+    A customer transaction results in the generation of a payment order to transfer funds to an account in another bank
 
     ## Description:
     Payment Order handles the internal bank and compliance checks and processing of funds transfers prior to initiating the actual mechanics of transfer which is handled by the service domain Payment Execution. This includes watch-list and other regulatory checks and applying any counterparty specific limits and payment preferences. It may also oversee payment netting arrangements between the bank and other counterparties
@@ -123,7 +123,7 @@ paths:
       - initiate
       operationId: initiatePaymentOrderProcedure
       summary: Details of a new PaymentOrderProcedure instance
-      description: Initiate a payment order procedure
+      description: a payment order procedure
       produces:
       - application/json
       parameters:
@@ -149,7 +149,7 @@ paths:
       - update
       operationId: updatePaymentOrderProcedure
       summary: Update to any amendable fields of the PaymentOrderProcedure instance
-      description: Update details of a payment order instruction
+      description: details of a payment order instruction
       produces:
       - application/json
       parameters:
@@ -180,7 +180,7 @@ paths:
       - retrieve
       operationId: retrievePaymentOrder
       summary: Invoke a reporting action to obtain a Payment Order Procedure instance related report
-      description: Retrieve details about a payment order instruction
+      description: details about a payment order instruction
       produces:
       - application/json
       parameters:
@@ -204,13 +204,13 @@ paths:
           description: Successfully Retrieved Payment Order Procedure Instance
           schema:
             $ref: '#/definitions/CRPaymentOrderProcedureRetrieveOutputModel'
-  /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}:
+  /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}/orderconfirmation/{bq-reference-id}/:
     get:
       tags:
       - retrieve
-      operationId: retrievePaymentOrder
-      summary: Invoke a reporting action to obtain a Payment Order Procedure instance related report
-      description: Retrieve details about a payment order confirmation process
+      operationId: retrievePaymentOrderProcedureOrderConfirmation
+      summary: Invoke a reporting action to obtain a OrderConfirmation instance related report.
+      description: details about a payment order confirmation process .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
@@ -224,23 +224,28 @@ paths:
         description: Payment Order Procedure Instance Reference
         required: true
         type: string
+      - name: bq-reference-id
+        in: path
+        description: OrderConfirmation Instance Reference
+        required: true
+        type: string
       - in: query
         name: queryparams
         required: false
-        description: Query params from schema '#/definitions/CRPaymentOrderProcedureRetrieveInputModel'
+        description: Query params from schema '#/definitions/BQOrderConfirmationRetrieveInputModel'
         type: string
       responses:
         200:
-          description: Successfully Retrieved Payment Order Procedure Instance
+          description: Successfully  Retrieved OrderConfirmation Instance Record
           schema:
-            $ref: '#/definitions/CRPaymentOrderProcedureRetrieveOutputModel'
+            $ref: '#/definitions/BQOrderConfirmationRetrieveOutputModel'
   /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}/executioninitiation/{bq-reference-id}/control:
     put:
       tags:
       - control
       operationId: controlPaymentOrderProcedureExecutionInitiationUpdate
       summary: Request specific processing (e.g. suspend, skip, terminate)
-      description: Control the payment execution processing
+      description: the payment execution processing
       produces:
       - application/json
       parameters:
@@ -276,7 +281,7 @@ paths:
       - retrieve
       operationId: retrievePaymentOrderProcedureExecutionInitiation
       summary: Invoke a reporting action to obtain a ExecutionInitiation instance related report.
-      description: Retrieve details about the payment execution processing .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      description: details about the payment execution processing .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:

@@ -5,19 +5,13 @@ info:
  description: >
 
     ## Executive Summary:
-    This service domain handles the bank-side processing of funds transfers, making the necessary bank and 
-    regulatory checks on the involved parties and applying their payment preferences where appropriate
+    This service domain handles the bank-side processing of funds transfers, making the necessary bank and regulatory checks on the involved parties and applying their payment preferences where appropriate
 
     ## Example of Use:
-    A customer transaction results in the generation of a payment order to transfer funds to an account in
-    another bank 
+    A customer transaction results in the generation of a payment order to transfer funds to an account in another bank
 
     ## Description:
-    Payment Order handles the internal bank and compliance checks and processing of funds transfers prior to 
-    initiating the actual mechanics of transfer which is handled by the service domain Payment Execution. 
-    This includes watch-list and other regulatory checks and applying any counterparty specific limits and 
-    payment preferences. It may also oversee payment netting arrangements between the bank and other 
-    counterparties
+    Payment Order handles the internal bank and compliance checks and processing of funds transfers prior to initiating the actual mechanics of transfer which is handled by the service domain Payment Execution. This includes watch-list and other regulatory checks and applying any counterparty specific limits and payment preferences. It may also oversee payment netting arrangements between the bank and other counterparties
 
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-payment-order/1.0.0
@@ -129,7 +123,7 @@ paths:
       - initiate
       operationId: initiatePaymentOrderProcedure
       summary: Details of a new PaymentOrderProcedure instance
-      description: Initiate a payment order procedure
+      description: a payment order procedure
       produces:
       - application/json
       parameters:
@@ -155,7 +149,7 @@ paths:
       - update
       operationId: updatePaymentOrderProcedure
       summary: Update to any amendable fields of the PaymentOrderProcedure instance
-      description: Update details of a payment order instruction
+      description: details of a payment order instruction
       produces:
       - application/json
       parameters:
@@ -180,14 +174,13 @@ paths:
           description: Successfully Updated Payment Order Procedure Instance
           schema:
             $ref: '#/definitions/CRPaymentOrderProcedureUpdateOutputModel'
-  
   /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrievePaymentOrder
       summary: Invoke a reporting action to obtain a Payment Order Procedure instance related report
-      description: Retrieve details about a payment order confirmation process
+      description: details about a payment order instruction
       produces:
       - application/json
       parameters:
@@ -211,13 +204,48 @@ paths:
           description: Successfully Retrieved Payment Order Procedure Instance
           schema:
             $ref: '#/definitions/CRPaymentOrderProcedureRetrieveOutputModel'
-  /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}/executioninitiation/{bq-reference-id}/control:
+  /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}/orderconfirmations/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePaymentOrderProcedureOrderConfirmation
+      summary: Invoke a reporting action to obtain a OrderConfirmation instance related report.
+      description: details about a payment order confirmation process .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Payment Order Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Payment Order Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OrderConfirmation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOrderConfirmationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved OrderConfirmation Instance Record
+          schema:
+            $ref: '#/definitions/BQOrderConfirmationRetrieveOutputModel'
+  /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}/executioninitiations/{bq-reference-id}/control:
     put:
       tags:
       - control
       operationId: controlPaymentOrderProcedureExecutionInitiationUpdate
       summary: Request specific processing (e.g. suspend, skip, terminate)
-      description: Control the payment execution processing
+      description: the payment execution processing
       produces:
       - application/json
       parameters:
@@ -247,13 +275,13 @@ paths:
           description: Successful control of ExecutionInitiation Instance Record
           schema:
             $ref: '#/definitions/BQExecutionInitiationControlOutputModel'
-  /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}/executioninitiation/{bq-reference-id}/:
+  /payment-order/{sd-reference-id}/payment-order-procedure/{cr-reference-id}/executioninitiations/{bq-reference-id}/:
     get:
       tags:
       - retrieve
       operationId: retrievePaymentOrderProcedureExecutionInitiation
       summary: Invoke a reporting action to obtain a ExecutionInitiation instance related report.
-      description: Retrieve details about the payment execution processing .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      description: details about the payment execution processing .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
@@ -1011,7 +1039,7 @@ definitions:
   properties: 
    paymentOrderServicingSessionReference:
     type: string
-    example: "POSSR776648"
+    example: "POSSR798272"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1033,49 +1061,49 @@ definitions:
     properties:
      paymentTransactionInitiatorReference:
       type: string
-      example: "737677"
+      example: "732480"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the initiator of the transaction
      payerReference:
       type: string
-      example: "700270"
+      example: "748623"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer 
      payerBankReference:
       type: string
-      example: "749073"
+      example: "732644"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's bank
      payerProductInstanceReference:
       type: string
-      example: "719773"
+      example: "732228"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's account (the source of funds)
      payeeReference:
       type: string
-      example: "739563"
+      example: "700028"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The target for the payment
      payeeBankReference:
       type: string
-      example: "749391"
+      example: "787491"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payee's bank
      payeeProductInstanceReference:
       type: string
-      example: "733870"
+      example: "756196"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1139,14 +1167,14 @@ definitions:
   properties: 
    paymentOrderProcedureInstanceReference:
     type: string
-    example: "POPIR743201"
+    example: "POPIR733433"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Payment Order Procedure instance
    paymentOrderProcedureInitiateActionReference:
     type: string
-    example: "POPIAR757607"
+    example: "POPIAR723658"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1187,14 +1215,14 @@ definitions:
   properties: 
    paymentOrderServicingSessionReference:
     type: string
-    example: "POSSR707246"
+    example: "POSSR727466"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    paymentOrderProcedureInstanceReference:
     type: string
-    example: "POPIR749962"
+    example: "POPIR762042"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1204,49 +1232,49 @@ definitions:
     properties:
      paymentTransactionInitiatorReference:
       type: string
-      example: "798051"
+      example: "720158"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the initiator of the transaction
      payerReference:
       type: string
-      example: "738334"
+      example: "788873"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer 
      payerBankReference:
       type: string
-      example: "769347"
+      example: "745149"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's bank
      payerProductInstanceReference:
       type: string
-      example: "748147"
+      example: "714084"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's account (the source of funds)
      payeeReference:
       type: string
-      example: "782124"
+      example: "727934"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The target for the payment
      payeeBankReference:
       type: string
-      example: "726095"
+      example: "770260"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payee's bank
      payeeProductInstanceReference:
       type: string
-      example: "795462"
+      example: "754703"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1325,49 +1353,49 @@ definitions:
     properties:
      paymentTransactionInitiatorReference:
       type: string
-      example: "798051"
+      example: "720158"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the initiator of the transaction
      payerReference:
       type: string
-      example: "738334"
+      example: "788873"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer 
      payerBankReference:
       type: string
-      example: "769347"
+      example: "745149"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's bank
      payerProductInstanceReference:
       type: string
-      example: "748147"
+      example: "714084"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's account (the source of funds)
      payeeReference:
       type: string
-      example: "782124"
+      example: "727934"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The target for the payment
      payeeBankReference:
       type: string
-      example: "726095"
+      example: "770260"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payee's bank
      payeeProductInstanceReference:
       type: string
-      example: "795462"
+      example: "754703"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1428,7 +1456,7 @@ definitions:
         general-info: Requested settlement instructions, may be overridden by execution
    paymentOrderProcedureUpdateActionTaskReference:
     type: string
-    example: "POPUATR793822"
+    example: "POPUATR709110"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1465,7 +1493,7 @@ definitions:
     properties:
      paymentOrderProcedureInstanceReportReference:
       type: string
-      example: "748396"
+      example: "784424"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1487,7 +1515,7 @@ definitions:
     properties:
      paymentOrderProcedureInstanceAnalysisReference:
       type: string
-      example: "727529"
+      example: "723726"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1512,49 +1540,49 @@ definitions:
     properties:
      paymentTransactionInitiatorReference:
       type: string
-      example: "797291"
+      example: "750965"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the initiator of the transaction
      payerReference:
       type: string
-      example: "714018"
+      example: "732566"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer 
      payerBankReference:
       type: string
-      example: "789499"
+      example: "778453"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's bank
      payerProductInstanceReference:
       type: string
-      example: "790917"
+      example: "778698"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's account (the source of funds)
      payeeReference:
       type: string
-      example: "797654"
+      example: "793714"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The target for the payment
      payeeBankReference:
       type: string
-      example: "722191"
+      example: "722559"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payee's bank
      payeeProductInstanceReference:
       type: string
-      example: "784558"
+      example: "761387"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1615,7 +1643,7 @@ definitions:
         general-info: Requested settlement instructions, may be overridden by execution
    paymentOrderProcedureRetrieveActionTaskReference:
     type: string
-    example: "POPRATR714045"
+    example: "POPRATR723747"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1694,7 +1722,7 @@ definitions:
     properties:
      orderConfirmationInstanceReportReference:
       type: string
-      example: "724768"
+      example: "739913"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1704,7 +1732,7 @@ definitions:
     properties:
      orderConfirmationInstanceAnalysisReference:
       type: string
-      example: "758009"
+      example: "729478"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1717,49 +1745,49 @@ definitions:
     properties:
      paymentTransactionInitiatorReference:
       type: string
-      example: "755954"
+      example: "790749"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the initiator of the transaction
      payerReference:
       type: string
-      example: "768493"
+      example: "714056"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer 
      payerBankReference:
       type: string
-      example: "768990"
+      example: "706658"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's bank
      payerProductInstanceReference:
       type: string
-      example: "719047"
+      example: "749320"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's account (the source of funds)
      payeeReference:
       type: string
-      example: "738647"
+      example: "720115"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The target for the payment
      payeeBankReference:
       type: string
-      example: "755846"
+      example: "752846"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payee's bank
      payeeProductInstanceReference:
       type: string
-      example: "795857"
+      example: "775295"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1841,7 +1869,7 @@ definitions:
         general-info: Details of the overall confirmation checking process
    orderConfirmationRetrieveActionTaskReference:
     type: string
-    example: "OCRATR742836"
+    example: "OCRATR791360"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1917,14 +1945,14 @@ definitions:
   properties: 
    paymentOrderProcedureInstanceReference:
     type: string
-    example: "POPIR759312"
+    example: "POPIR735470"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Payment Order Procedure instance
    executionInitiationInstanceReference:
     type: string
-    example: "EIIR707492"
+    example: "EIIR760593"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1949,7 +1977,7 @@ definitions:
   properties: 
    executionInitiationControlActionTaskReference:
     type: string
-    example: "EICATR784029"
+    example: "EICATR798526"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1992,7 +2020,7 @@ definitions:
     properties:
      executionInitiationInstanceReportReference:
       type: string
-      example: "715907"
+      example: "786962"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2002,7 +2030,7 @@ definitions:
     properties:
      executionInitiationInstanceAnalysisReference:
       type: string
-      example: "709891"
+      example: "715370"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2015,49 +2043,49 @@ definitions:
     properties:
      paymentTransactionInitiatorReference:
       type: string
-      example: "723290"
+      example: "783968"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the initiator of the transaction
      payerReference:
       type: string
-      example: "770887"
+      example: "706592"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer 
      payerBankReference:
       type: string
-      example: "752833"
+      example: "707097"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's bank
      payerProductInstanceReference:
       type: string
-      example: "701302"
+      example: "793376"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payer's account (the source of funds)
      payeeReference:
       type: string
-      example: "742097"
+      example: "745520"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The target for the payment
      payeeBankReference:
       type: string
-      example: "757074"
+      example: "790725"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the payee's bank
      payeeProductInstanceReference:
       type: string
-      example: "782651"
+      example: "719391"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2121,7 +2149,7 @@ definitions:
     properties:
      paymentExecutionProcedureInstanceReference:
       type: string
-      example: "738562"
+      example: "785811"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2140,7 +2168,7 @@ definitions:
         general-info: Details of the execution initiation task
    executionInitiationRetrieveActionTaskReference:
     type: string
-    example: "EIRATR713010"
+    example: "EIRATR747699"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

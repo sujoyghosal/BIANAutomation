@@ -1,0 +1,531 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Issued Device Tracking'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles operational access to issued device tracking services. Services report on the status of devices such as cards, fobs, etc. that have been issued to customers. Service notifications include fraud warnings/alerts and device cancellation.
+
+    ## Example of Use:
+    A tracking service notifies the bank that one of its issued authentication devices has been detected in a fraudulent transaction. The bank suspends the device and initiates a fraud case to diagnose and resolve the situation
+
+    ## Description:
+    This service domain tracks and reports on the state (e.g. suspended, flagged for possible fraud, cancelled) for all issued devices. This covers credit/debit cards and can include other identification devices such as keychain fobs and virtual authentication devices such as electronic signatures, passwords and keys. It may use an external service provider to obtain notifications and is responsible for providing notifications to external services when the bank detects problems with its own issued devices
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-issued-device-tracking/1.0.0
+schemes:
+ - https
+paths:
+  /issued-device-tracking/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDIssuedDeviceTracking
+      summary: Activate  a SDIssuedDeviceTracking servicing session
+      description: Activate  a  SDIssuedDeviceTracking servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDIssuedDeviceTracking Request Payload
+        schema:
+          $ref: '#/definitions/SDIssuedDeviceTrackingActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDIssuedDeviceTrackingActivateOutputModel'
+  /issued-device-tracking/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDIssuedDeviceTracking
+      summary: Update an active SDIssuedDeviceTracking session configuration
+      description: Update an active SDIssuedDeviceTracking session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDIssuedDeviceTracking Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDIssuedDeviceTracking Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDIssuedDeviceTrackingConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDIssuedDeviceTrackingConfigureOutputModel'
+  /issued-device-tracking/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDIssuedDeviceTracking
+      summary: "Capturing feedback against the SDIssuedDeviceTracking service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDIssuedDeviceTracking service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDIssuedDeviceTracking Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDIssuedDeviceTracking Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDIssuedDeviceTrackingFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDIssuedDeviceTrackingFeedbackOutputModel'
+  /issued-device-tracking/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDIssuedDeviceTracking
+      summary: Analytical views maintained by the SDIssuedDeviceTracking service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDIssuedDeviceTracking service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDIssuedDeviceTracking Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDIssuedDeviceTracking Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDIssuedDeviceTrackingRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDIssuedDeviceTrackingRetrieveOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateIssuedDeviceTracking
+      summary: Details of a new IssuedDeviceTracking instance
+      description: Initiate tracking for an allocated issued device
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: IssuedDeviceTracking Request Payload
+        schema:
+          $ref: '#/definitions/CRIssuedDeviceTrackingInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new IssuedDeviceTracking instance
+          schema:
+            $ref: '#/definitions/CRIssuedDeviceTrackingInitiateOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateIssuedDeviceTracking
+      summary: Update to any amendable fields of the IssuedDeviceTracking instance
+      description: Update details of a tracked issued device
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Issued Device Tracking Request Payload
+        schema:
+          $ref: '#/definitions/CRIssuedDeviceTrackingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Issued Device Tracking Instance
+          schema:
+            $ref: '#/definitions/CRIssuedDeviceTrackingUpdateOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlIssuedDeviceTrackingUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control handling of a tracked allocated issued device (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Issued Device Tracking Request Payload
+        schema:
+          $ref: '#/definitions/CRIssuedDeviceTrackingControlInputModel'
+      responses:
+        200:
+          description: Successful control of Issued Device Tracking Instance
+          schema:
+            $ref: '#/definitions/CRIssuedDeviceTrackingControlOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveIssuedDeviceTracking
+      summary: Invoke a reporting action to obtain a Issued Device Tracking instance related report
+      description: Retrieve details about a tracked device
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRIssuedDeviceTrackingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Issued Device Tracking Instance
+          schema:
+            $ref: '#/definitions/CRIssuedDeviceTrackingRetrieveOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/internalnotification/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateIssuedDeviceTrackingInternalNotification
+      summary: Update to any amendable fields of the InternalNotification instance
+      description: Update captured internal status details for an issued device
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InternalNotification Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InternalNotification Request Payload
+        schema:
+          $ref: '#/definitions/BQInternalNotificationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated InternalNotification Instance
+          schema:
+            $ref: '#/definitions/BQInternalNotificationUpdateOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/internalnotification/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureIssuedDeviceTrackingInternalNotificationUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture status notification for an issued device
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InternalNotification Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InternalNotification request payload
+        schema:
+          $ref: '#/definitions/BQInternalNotificationCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of InternalNotification Instance Record
+          schema:
+            $ref: '#/definitions/BQInternalNotificationCaptureOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/internalnotification/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveIssuedDeviceTrackingInternalNotification
+      summary: Invoke a reporting action to obtain a InternalNotification instance related report.
+      description: Retrieve internal status notification details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InternalNotification Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInternalNotificationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved InternalNotification Instance Record
+          schema:
+            $ref: '#/definitions/BQInternalNotificationRetrieveOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/externalreport/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateIssuedDeviceTrackingExternalReport
+      summary: Update to any amendable fields of the ExternalReport instance
+      description: Update captured externally reported status details for an issued device
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ExternalReport Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ExternalReport Request Payload
+        schema:
+          $ref: '#/definitions/BQExternalReportUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated ExternalReport Instance
+          schema:
+            $ref: '#/definitions/BQExternalReportUpdateOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/externalreport/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureIssuedDeviceTrackingExternalReportUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture external notification status details for an issued device
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ExternalReport Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ExternalReport request payload
+        schema:
+          $ref: '#/definitions/BQExternalReportCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of ExternalReport Instance Record
+          schema:
+            $ref: '#/definitions/BQExternalReportCaptureOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/externalreport/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveIssuedDeviceTrackingExternalReport
+      summary: Invoke a reporting action to obtain a ExternalReport instance related report.
+      description: Retrieve external status notification details .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ExternalReport Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQExternalReportRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ExternalReport Instance Record
+          schema:
+            $ref: '#/definitions/BQExternalReportRetrieveOutputModel'
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveIssuedDeviceTrackingReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- IssuedDeviceTracking Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /issued-device-tracking/issued-device-tracking/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveIssuedDeviceTrackingBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'InternalNotification',  'ExternalReport', ]
+  /issued-device-tracking/{sd-reference-id}/issued-device-tracking/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveIssuedDeviceTrackingBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Issued Device Tracking Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Issued Device Tracking Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- ExternalReport
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ExternalReport Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ExternalReportID1, ExternalReportID2]

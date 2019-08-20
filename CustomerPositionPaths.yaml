@@ -1,0 +1,700 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Customer Position'
+ description: >
+
+    ## Executive Summary:
+    This service domain maintains a consolidated financial position for a customer, combining details from all products and services in use. The position can cover available funds, credit, collateral, tax exposure and other financial measures as necessary
+
+    ## Example of Use:
+    The banks maintains and analyses the consolidated position for a customer across all accounts products and services 
+
+    ## Description:
+    Individual products will maintain different financial views for the customer. This service domain consolidates financial details from all in-force products and services in order to derive a consolidated financial view which can include current (real-time) positions and projected/estimated values. The consolidated customer position can cover aspects such as cash flows/balances, credit and collateral positions and may derive actual and estimated/projected values
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-customer-position/1.0.0
+schemes:
+ - https
+paths:
+  /customer-position/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCustomerPosition
+      summary: Activate  a SDCustomerPosition servicing session
+      description: Activate  a  SDCustomerPosition servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerPosition Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerPositionActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCustomerPositionActivateOutputModel'
+  /customer-position/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCustomerPosition
+      summary: Update an active SDCustomerPosition session configuration
+      description: Update an active SDCustomerPosition session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerPosition Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerPosition Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerPositionConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCustomerPositionConfigureOutputModel'
+  /customer-position/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCustomerPosition
+      summary: "Capturing feedback against the SDCustomerPosition service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCustomerPosition service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerPosition Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerPosition Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerPositionFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCustomerPositionFeedbackOutputModel'
+  /customer-position/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCustomerPosition
+      summary: Analytical views maintained by the SDCustomerPosition service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCustomerPosition service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerPosition Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerPosition Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerPositionRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCustomerPositionRetrieveOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCustomerPositionState
+      summary: Details of a new CustomerPositionState instance
+      description: Initiation position monitoring for a customer
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CustomerPositionState Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerPositionStateInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CustomerPositionState instance
+          schema:
+            $ref: '#/definitions/CRCustomerPositionStateInitiateOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerPositionState
+      summary: Update to any amendable fields of the CustomerPositionState instance
+      description: Update the settings for customer position tracking
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Position State Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerPositionStateUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Customer Position State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerPositionStateUpdateOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCustomerPositionStateUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the customer position tracking (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Position State Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerPositionStateControlInputModel'
+      responses:
+        200:
+          description: Successful control of Customer Position State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerPositionStateControlOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCustomerPositionStateUpdate
+      summary: Invoke an automated execute action against the CustomerPositionState instance
+      description: Execute an automated task for position tracking (e.g. issue an alert)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Position State Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerPositionStateExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Customer Position State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerPositionStateExecuteOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerPositionStateUpdate
+      summary: Invoke a service request action against the CustomerPositionState instance
+      description: Request an action for customer position monitoring (e.g. review and refresh content)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Position State Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerPositionStateRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Customer Position State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerPositionStateRequestOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerPosition
+      summary: Invoke a reporting action to obtain a Customer Position State instance related report
+      description: Retrieve details about a customer position
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCustomerPositionStateRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Customer Position State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerPositionStateRetrieveOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/cashflow/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerPositionStateCashflowUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or verify the presented cash flow position 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Cashflow Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Cashflow request payload
+        schema:
+          $ref: '#/definitions/BQCashflowExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Cashflow Instance Record
+          schema:
+            $ref: '#/definitions/BQCashflowExchangeOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/cashflow/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerPositionStateCashflowUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture product transaction reports (push from fulfillment)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Cashflow Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Cashflow request payload
+        schema:
+          $ref: '#/definitions/BQCashflowCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Cashflow Instance Record
+          schema:
+            $ref: '#/definitions/BQCashflowCaptureOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/cashflow/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerPositionStateCashflow
+      summary: Invoke a reporting action to obtain a Cashflow instance related report.
+      description: retrieve details about a cash flow analysis as part of the customer position .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Cashflow Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQCashflowRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Cashflow Instance Record
+          schema:
+            $ref: '#/definitions/BQCashflowRetrieveOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/credit/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerPositionStateCreditUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or verify the presented credit position 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Credit Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Credit request payload
+        schema:
+          $ref: '#/definitions/BQCreditExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Credit Instance Record
+          schema:
+            $ref: '#/definitions/BQCreditExchangeOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/credit/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerPositionStateCreditUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture credit assessment reports (push from credit administration)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Credit Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Credit request payload
+        schema:
+          $ref: '#/definitions/BQCreditCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Credit Instance Record
+          schema:
+            $ref: '#/definitions/BQCreditCaptureOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/credit/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerPositionStateCredit
+      summary: Invoke a reporting action to obtain a Credit instance related report.
+      description: retrieve details about a credit analysis as part of the customer position .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Credit Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQCreditRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Credit Instance Record
+          schema:
+            $ref: '#/definitions/BQCreditRetrieveOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/collateral/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerPositionStateCollateralUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or verify the presented collateral position 
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Collateral Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Collateral request payload
+        schema:
+          $ref: '#/definitions/BQCollateralExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Collateral Instance Record
+          schema:
+            $ref: '#/definitions/BQCollateralExchangeOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/collateral/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerPositionStateCollateralUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture collateral allocation reports (push from collateral allocation management)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Collateral Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Collateral request payload
+        schema:
+          $ref: '#/definitions/BQCollateralCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Collateral Instance Record
+          schema:
+            $ref: '#/definitions/BQCollateralCaptureOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/collateral/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerPositionStateCollateral
+      summary: Invoke a reporting action to obtain a Collateral instance related report.
+      description: retrieve details about a collateral allocation as part of the customer position .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Collateral Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQCollateralRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Collateral Instance Record
+          schema:
+            $ref: '#/definitions/BQCollateralRetrieveOutputModel'
+  /customer-position/{sd-reference-id}/customer-position-state:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerPositionReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CustomerPosition Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /customer-position/customer-position-state/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerPositionBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Cashflow',  'Credit',  'Collateral', ]
+  /customer-position/{sd-reference-id}/customer-position-state/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerPositionBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Position Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Position State Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Collateral
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Collateral Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [CollateralID1, CollateralID2]

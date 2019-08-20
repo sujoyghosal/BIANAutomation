@@ -1,0 +1,710 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Fraud Models'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles the design and maintenance of a portfolio of fraud models used across all production activity to detect potential fraud on the part of customers, merchants and other involved parties
+
+    ## Example of Use:
+    A customer fraudulent card use' algorithm is updated to take account of additional transaction utilization data that is available
+
+    ## Description:
+    Analyze history of transactions and fraud cases to discern fraud patterns and develop Rule sets, Decision Trees, and Machine Learning/Predictive models to identify out of pattern transactions or events and their fraud risk score. Support the use of these models and rules in different production contexts and refine the models in response to new and changing patterns
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-fraud-models/1.0.0
+schemes:
+ - https
+paths:
+  /fraud-models/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDFraudModels
+      summary: Activate  a SDFraudModels servicing session
+      description: Activate  a  SDFraudModels servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDFraudModels Request Payload
+        schema:
+          $ref: '#/definitions/SDFraudModelsActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDFraudModelsActivateOutputModel'
+  /fraud-models/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDFraudModels
+      summary: Update an active SDFraudModels session configuration
+      description: Update an active SDFraudModels session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDFraudModels Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDFraudModels Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDFraudModelsConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDFraudModelsConfigureOutputModel'
+  /fraud-models/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDFraudModels
+      summary: "Capturing feedback against the SDFraudModels service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDFraudModels service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDFraudModels Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDFraudModels Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDFraudModelsFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDFraudModelsFeedbackOutputModel'
+  /fraud-models/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDFraudModels
+      summary: Analytical views maintained by the SDFraudModels service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDFraudModels service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDFraudModels Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDFraudModels Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDFraudModelsRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDFraudModelsRetrieveOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/creation:
+    post:
+      tags:
+      - create
+      operationId: createFraudModelSpecification
+      summary: Details of a new FraudModelSpecification instance
+      description: Create or register an imported fraud model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FraudModelSpecification Request Payload
+        schema:
+          $ref: '#/definitions/CRFraudModelSpecificationCreateInputModel'
+      responses:
+        201:
+          description: Successful creation of new FraudModelSpecification instance
+          schema:
+            $ref: '#/definitions/CRFraudModelSpecificationCreateOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeFraudModelSpecificationUpdate
+      summary: Invoke an automated execute action against the FraudModelSpecification instance
+      description: Automatically download a fraud model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Fraud Model Specification Request Payload
+        schema:
+          $ref: '#/definitions/CRFraudModelSpecificationExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Fraud Model Specification Instance
+          schema:
+            $ref: '#/definitions/CRFraudModelSpecificationExecuteOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestFraudModelSpecificationUpdate
+      summary: Invoke a service request action against the FraudModelSpecification instance
+      description: Request the use of a fraud model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Fraud Model Specification Request Payload
+        schema:
+          $ref: '#/definitions/CRFraudModelSpecificationRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Fraud Model Specification Instance
+          schema:
+            $ref: '#/definitions/CRFraudModelSpecificationRequestOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveFraudModels
+      summary: Invoke a reporting action to obtain a Fraud Model Specification instance related report
+      description: Retrieve details about a fraud model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRFraudModelSpecificationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Fraud Model Specification Instance
+          schema:
+            $ref: '#/definitions/CRFraudModelSpecificationRetrieveOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/functionalrequirements/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateFraudModelSpecificationFunctionalRequirements
+      summary: Update to any amendable fields of the FunctionalRequirements instance
+      description: Update the requirements or other properties of a model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FunctionalRequirements Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FunctionalRequirements Request Payload
+        schema:
+          $ref: '#/definitions/BQFunctionalRequirementsUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated FunctionalRequirements Instance
+          schema:
+            $ref: '#/definitions/BQFunctionalRequirementsUpdateOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/functionalrequirements/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeFraudModelSpecificationFunctionalRequirementsUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: accept or reject requirements for a fraud model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FunctionalRequirements Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FunctionalRequirements request payload
+        schema:
+          $ref: '#/definitions/BQFunctionalRequirementsExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of FunctionalRequirements Instance Record
+          schema:
+            $ref: '#/definitions/BQFunctionalRequirementsExchangeOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/functionalrequirements/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureFraudModelSpecificationFunctionalRequirementsUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture usage reports for a fraud model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FunctionalRequirements Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FunctionalRequirements request payload
+        schema:
+          $ref: '#/definitions/BQFunctionalRequirementsCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of FunctionalRequirements Instance Record
+          schema:
+            $ref: '#/definitions/BQFunctionalRequirementsCaptureOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/functionalrequirements/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestFraudModelSpecificationFunctionalRequirementsUpdate
+      summary: Invoke a service request action against the FunctionalRequirements instance
+      description: Request changes or improvements to a model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FunctionalRequirements Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FunctionalRequirements request payload
+        schema:
+          $ref: '#/definitions/BQFunctionalRequirementsRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of FunctionalRequirements Instance Record
+          schema:
+            $ref: '#/definitions/BQFunctionalRequirementsRequestOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/functionalrequirements/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveFraudModelSpecificationFunctionalRequirements
+      summary: Invoke a reporting action to obtain a FunctionalRequirements instance related report.
+      description: Retrieve details about the model specification and properties .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FunctionalRequirements Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQFunctionalRequirementsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved FunctionalRequirements Instance Record
+          schema:
+            $ref: '#/definitions/BQFunctionalRequirementsRetrieveOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/testing/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateFraudModelSpecificationTesting
+      summary: Update to any amendable fields of the Testing instance
+      description: Update user testing content
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Testing Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Testing Request Payload
+        schema:
+          $ref: '#/definitions/BQTestingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Testing Instance
+          schema:
+            $ref: '#/definitions/BQTestingUpdateOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/testing/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeFraudModelSpecificationTestingUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or reject testing results
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Testing Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Testing request payload
+        schema:
+          $ref: '#/definitions/BQTestingExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Testing Instance Record
+          schema:
+            $ref: '#/definitions/BQTestingExchangeOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/testing/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveFraudModelSpecificationTesting
+      summary: Invoke a reporting action to obtain a Testing instance related report.
+      description: Retrieve details and testing results .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Testing Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQTestingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Testing Instance Record
+          schema:
+            $ref: '#/definitions/BQTestingRetrieveOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/production/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeFraudModelSpecificationProductionUpdate
+      summary: Invoke an automated execute action against the Production instance
+      description: Get automated support for model deployment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Production Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Production request payload
+        schema:
+          $ref: '#/definitions/BQProductionExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Production Instance Record
+          schema:
+            $ref: '#/definitions/BQProductionExecuteOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/production/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestFraudModelSpecificationProductionUpdate
+      summary: Invoke a service request action against the Production instance
+      description: Request production support for a deployed model
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Production Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Production request payload
+        schema:
+          $ref: '#/definitions/BQProductionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Production Instance Record
+          schema:
+            $ref: '#/definitions/BQProductionRequestOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/production/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveFraudModelSpecificationProduction
+      summary: Invoke a reporting action to obtain a Production instance related report.
+      description: Retrieve details and documentation covering model production deployment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Production Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQProductionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Production Instance Record
+          schema:
+            $ref: '#/definitions/BQProductionRetrieveOutputModel'
+  /fraud-models/{sd-reference-id}/fraud-model-specification:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveFraudModelsReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- FraudModels Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /fraud-models/fraud-model-specification/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveFraudModelsBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'FunctionalRequirements',  'Testing',  'Production', ]
+  /fraud-models/{sd-reference-id}/fraud-model-specification/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveFraudModelsBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Fraud Models Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Fraud Model Specification Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Production
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Production Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ProductionID1, ProductionID2]

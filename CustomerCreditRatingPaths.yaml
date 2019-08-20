@@ -1,0 +1,592 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Customer Credit Rating'
+ description: >
+
+    ## Executive Summary:
+    This service domain maintains and administers the bank's credit assessment for customers based on consolidated internal data and optionally by referencing external credit agency reports
+
+    ## Example of Use:
+    A customer calls the contact center wishing to know what mortgage offers they are eligible for. The customer servicing representative (CSR) uses the customer's internal credit assessment as one input to reference the Product Directory to retrieve the details of available products and terms
+
+    ## Description:
+    This service domain handles the derivation and maintenance of each customer's credit rating for both consumer and corporate customers. The internal rating can integrate externally provided credit details from credit scoring agencies with internal transactional data and relationship assessments. The credit rating will be maintained based on internal rules, but it is possible that a service will be offered to support an unscheduled recalculation of the credit score
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-customer-credit-rating/1.0.0
+schemes:
+ - https
+paths:
+  /customer-credit-rating/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCustomerCreditRating
+      summary: Activate  a SDCustomerCreditRating servicing session
+      description: Activate  a  SDCustomerCreditRating servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerCreditRating Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerCreditRatingActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCustomerCreditRatingActivateOutputModel'
+  /customer-credit-rating/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCustomerCreditRating
+      summary: Update an active SDCustomerCreditRating session configuration
+      description: Update an active SDCustomerCreditRating session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerCreditRating Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerCreditRating Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerCreditRatingConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCustomerCreditRatingConfigureOutputModel'
+  /customer-credit-rating/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCustomerCreditRating
+      summary: "Capturing feedback against the SDCustomerCreditRating service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCustomerCreditRating service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerCreditRating Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerCreditRating Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerCreditRatingFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCustomerCreditRatingFeedbackOutputModel'
+  /customer-credit-rating/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCustomerCreditRating
+      summary: Analytical views maintained by the SDCustomerCreditRating service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCustomerCreditRating service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerCreditRating Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerCreditRating Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerCreditRatingRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCustomerCreditRatingRetrieveOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCustomerCreditRatingState
+      summary: Details of a new CustomerCreditRatingState instance
+      description: Initiate credit state monitoring for a customer
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CustomerCreditRatingState Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerCreditRatingStateInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CustomerCreditRatingState instance
+          schema:
+            $ref: '#/definitions/CRCustomerCreditRatingStateInitiateOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCustomerCreditRatingStateUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control credit state monitoring (e.g. high frequency update)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Credit Rating State Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerCreditRatingStateControlInputModel'
+      responses:
+        200:
+          description: Successful control of Customer Credit Rating State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerCreditRatingStateControlOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerCreditRatingStateUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, etc credit state monitoring content
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Credit Rating State Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerCreditRatingStateExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Customer Credit Rating State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerCreditRatingStateExchangeOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCustomerCreditRatingStateUpdate
+      summary: Invoke an automated execute action against the CustomerCreditRatingState instance
+      description: Execute an automated task for credit state (e.g. auto refresh)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Credit Rating State Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerCreditRatingStateExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Customer Credit Rating State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerCreditRatingStateExecuteOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerCreditRatingStateUpdate
+      summary: Invoke a service request action against the CustomerCreditRatingState instance
+      description: Request manual intervention for credit state (e.g. revise underlying assessment)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Credit Rating State Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerCreditRatingStateRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Customer Credit Rating State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerCreditRatingStateRequestOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerCreditRating
+      summary: Invoke a reporting action to obtain a Customer Credit Rating State instance related report
+      description: Retrieve details about credit state monitoring for a customer
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCustomerCreditRatingStateRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Customer Credit Rating State Instance
+          schema:
+            $ref: '#/definitions/CRCustomerCreditRatingStateRetrieveOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/alerts/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerCreditRatingStateAlertsUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture notification of a credit alert
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Alerts Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Alerts request payload
+        schema:
+          $ref: '#/definitions/BQAlertsCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Alerts Instance Record
+          schema:
+            $ref: '#/definitions/BQAlertsCaptureOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/alerts/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerCreditRatingStateAlerts
+      summary: Invoke a reporting action to obtain a Alerts instance related report.
+      description: Retrieve details about a credit alert .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Alerts Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAlertsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Alerts Instance Record
+          schema:
+            $ref: '#/definitions/BQAlertsRetrieveOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/internalreporting/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerCreditRatingStateInternalReportingUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture internal product reports to support credit analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InternalReporting Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InternalReporting request payload
+        schema:
+          $ref: '#/definitions/BQInternalReportingCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of InternalReporting Instance Record
+          schema:
+            $ref: '#/definitions/BQInternalReportingCaptureOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/internalreporting/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerCreditRatingStateInternalReporting
+      summary: Invoke a reporting action to obtain a InternalReporting instance related report.
+      description: Retrieve details about internal reporting to the credit monitoring activity .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InternalReporting Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInternalReportingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved InternalReporting Instance Record
+          schema:
+            $ref: '#/definitions/BQInternalReportingRetrieveOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/externalreporting/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerCreditRatingStateExternalReportingUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture external credit reports to support credit analysis and state
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ExternalReporting Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ExternalReporting request payload
+        schema:
+          $ref: '#/definitions/BQExternalReportingCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of ExternalReporting Instance Record
+          schema:
+            $ref: '#/definitions/BQExternalReportingCaptureOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/externalreporting/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerCreditRatingStateExternalReporting
+      summary: Invoke a reporting action to obtain a ExternalReporting instance related report.
+      description: Retrieve details about external reporting to the credit monitoring activity .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ExternalReporting Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQExternalReportingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ExternalReporting Instance Record
+          schema:
+            $ref: '#/definitions/BQExternalReportingRetrieveOutputModel'
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerCreditRatingReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CustomerCreditRating Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /customer-credit-rating/customer-credit-rating-state/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerCreditRatingBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Alerts',  'InternalReporting',  'ExternalReporting', ]
+  /customer-credit-rating/{sd-reference-id}/customer-credit-rating-state/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerCreditRatingBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Credit Rating Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Credit Rating State Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- ExternalReporting
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ExternalReporting Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ExternalReportingID1, ExternalReportingID2]

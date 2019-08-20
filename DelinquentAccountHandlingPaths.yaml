@@ -1,0 +1,730 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Delinquent Account Handling'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles delinquent accounts (typically for active credit/charge cards) for follow-up of payments due through periodic review and contacts. This process ends when the account is cancelled and is transferred to Collections
+
+    ## Example of Use:
+    When a Card Account is assessed to be at a high risk of default, such as a Charge Card Account with high out of pattern outstandings or a Credit Card Account with significant aged balances, attempts are made to elicit the payment of the outstanding amounts or to limit further increase in risk through optimal strategies for contacting the customer and inducing payment of the outstanding amount.
+
+    ## Description:
+    This service domain determines and executes strategies for eliciting payment from high risk accounts. These strategies may include communicating with the customer through text messages, emails or phone calls. The account may continue to maintain some facilities at this stage. Eventually it can be necessary to reduce the credit line or block the account to prevent further increase in risk, or to cancel theaccount and transfer it to Collections.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-delinquent-account-handling/1.0.0
+schemes:
+ - https
+paths:
+  /delinquent-account-handling/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDDelinquentAccountHandling
+      summary: Activate  a SDDelinquentAccountHandling servicing session
+      description: Activate  a  SDDelinquentAccountHandling servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDDelinquentAccountHandling Request Payload
+        schema:
+          $ref: '#/definitions/SDDelinquentAccountHandlingActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDDelinquentAccountHandlingActivateOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDDelinquentAccountHandling
+      summary: Update an active SDDelinquentAccountHandling session configuration
+      description: Update an active SDDelinquentAccountHandling session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDelinquentAccountHandling Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDDelinquentAccountHandling Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDDelinquentAccountHandlingConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDDelinquentAccountHandlingConfigureOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDDelinquentAccountHandling
+      summary: "Capturing feedback against the SDDelinquentAccountHandling service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDDelinquentAccountHandling service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDelinquentAccountHandling Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDDelinquentAccountHandling Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDDelinquentAccountHandlingFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDDelinquentAccountHandlingFeedbackOutputModel'
+  /delinquent-account-handling/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDDelinquentAccountHandling
+      summary: Analytical views maintained by the SDDelinquentAccountHandling service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDDelinquentAccountHandling service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDDelinquentAccountHandling Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDDelinquentAccountHandling Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDDelinquentAccountHandlingRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDDelinquentAccountHandlingRetrieveOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateDelinquentAccountProcedure
+      summary: Details of a new DelinquentAccountProcedure instance
+      description: Initiate delinquent account processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: DelinquentAccountProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRDelinquentAccountProcedureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new DelinquentAccountProcedure instance
+          schema:
+            $ref: '#/definitions/CRDelinquentAccountProcedureInitiateOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateDelinquentAccountProcedure
+      summary: Update to any amendable fields of the DelinquentAccountProcedure instance
+      description: Update details of delinquent account processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Delinquent Account Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRDelinquentAccountProcedureUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Delinquent Account Procedure Instance
+          schema:
+            $ref: '#/definitions/CRDelinquentAccountProcedureUpdateOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlDelinquentAccountProcedureUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control delinquent account process (e.g. escalate)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Delinquent Account Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRDelinquentAccountProcedureControlInputModel'
+      responses:
+        200:
+          description: Successful control of Delinquent Account Procedure Instance
+          schema:
+            $ref: '#/definitions/CRDelinquentAccountProcedureControlOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeDelinquentAccountProcedureUpdate
+      summary: Invoke an automated execute action against the DelinquentAccountProcedure instance
+      description: Execute an automated task against an active delinquent account process (e.g. upload transactions)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Delinquent Account Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRDelinquentAccountProcedureExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Delinquent Account Procedure Instance
+          schema:
+            $ref: '#/definitions/CRDelinquentAccountProcedureExecuteOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveDelinquentAccountHandling
+      summary: Invoke a reporting action to obtain a Delinquent Account Procedure instance related report
+      description: Retrieve details about a delinquent account procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRDelinquentAccountProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Delinquent Account Procedure Instance
+          schema:
+            $ref: '#/definitions/CRDelinquentAccountProcedureRetrieveOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/assessment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveDelinquentAccountProcedureAssessment
+      summary: Invoke a reporting action to obtain a Assessment instance related report.
+      description: Retrieve details about a delinquent account assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Assessment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAssessmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Assessment Instance Record
+          schema:
+            $ref: '#/definitions/BQAssessmentRetrieveOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/contact/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateDelinquentAccountProcedureContact
+      summary: Details of a new Contact instance
+      description: Initiate contact with the customer for a delinquent account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Delinquent Account Procedure Request Payload
+        schema:
+          $ref: '#/definitions/BQContactInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Delinquent Account Procedure instance
+          schema:
+            $ref: '#/definitions/BQContactInitiateOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/contact/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestDelinquentAccountProcedureContactUpdate
+      summary: Invoke a service request action against the Contact instance
+      description: Request contact processing for an active delinquent account procedure
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Contact Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Contact request payload
+        schema:
+          $ref: '#/definitions/BQContactRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Contact Instance Record
+          schema:
+            $ref: '#/definitions/BQContactRequestOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/contact/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveDelinquentAccountProcedureContact
+      summary: Invoke a reporting action to obtain a Contact instance related report.
+      description: Retrieve details about a contact .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Contact Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQContactRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Contact Instance Record
+          schema:
+            $ref: '#/definitions/BQContactRetrieveOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/payment/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateDelinquentAccountProcedurePayment
+      summary: Details of a new Payment instance
+      description: Initiate payment processing against the delinquent account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Delinquent Account Procedure Request Payload
+        schema:
+          $ref: '#/definitions/BQPaymentInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Delinquent Account Procedure instance
+          schema:
+            $ref: '#/definitions/BQPaymentInitiateOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/payment/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateDelinquentAccountProcedurePayment
+      summary: Update to any amendable fields of the Payment instance
+      description: Update a payment transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payment Request Payload
+        schema:
+          $ref: '#/definitions/BQPaymentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Payment Instance
+          schema:
+            $ref: '#/definitions/BQPaymentUpdateOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/payment/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeDelinquentAccountProcedurePaymentUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: accept, verify, etc. a payment transaction made against the account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payment request payload
+        schema:
+          $ref: '#/definitions/BQPaymentExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Payment Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentExchangeOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/payment/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveDelinquentAccountProcedurePayment
+      summary: Invoke a reporting action to obtain a Payment instance related report.
+      description: Retrieve details about a payment made against the delinquent account .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Payment Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentRetrieveOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/resolution/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateDelinquentAccountProcedureResolution
+      summary: Update to any amendable fields of the Resolution instance
+      description: Update a resolution plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Resolution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Resolution Request Payload
+        schema:
+          $ref: '#/definitions/BQResolutionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Resolution Instance
+          schema:
+            $ref: '#/definitions/BQResolutionUpdateOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/resolution/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeDelinquentAccountProcedureResolutionUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify a resolution plan
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Resolution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Resolution request payload
+        schema:
+          $ref: '#/definitions/BQResolutionExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Resolution Instance Record
+          schema:
+            $ref: '#/definitions/BQResolutionExchangeOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/resolution/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveDelinquentAccountProcedureResolution
+      summary: Invoke a reporting action to obtain a Resolution instance related report.
+      description: Retrieve details about a delinquent account recovery plan .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Resolution Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQResolutionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Resolution Instance Record
+          schema:
+            $ref: '#/definitions/BQResolutionRetrieveOutputModel'
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveDelinquentAccountHandlingReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- DelinquentAccountHandling Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /delinquent-account-handling/delinquent-account-procedure/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveDelinquentAccountHandlingBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Assessment',  'Contact',  'Payment',  'Resolution', ]
+  /delinquent-account-handling/{sd-reference-id}/delinquent-account-procedure/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveDelinquentAccountHandlingBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Delinquent Account Handling Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Delinquent Account Procedure Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Resolution
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Resolution Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ResolutionID1, ResolutionID2]

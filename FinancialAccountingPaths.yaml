@@ -1,0 +1,424 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Financial Accounting'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles financial booking of all business activity in a ledger/sub-ledger accounting structure/hierarchy according to the appropriate chart of accounts
+
+    ## Example of Use:
+    A business unit posts its financial transactions to the sub ledger at the end of the working day
+
+    ## Description:
+    This service domain handles the posting of business activity to the bank's financial accounts. These will typically be double entry ledgers and can include multiple levels of consolidation (sub-ledgers) The financial accounts conform to the bank's chart of accounts and appropriate GAP rules and are rolled up into the GL as part of the financial statements
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-financial-accounting/1.0.0
+schemes:
+ - https
+paths:
+  /financial-accounting/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDFinancialAccounting
+      summary: Activate  a SDFinancialAccounting servicing session
+      description: Activate  a  SDFinancialAccounting servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDFinancialAccounting Request Payload
+        schema:
+          $ref: '#/definitions/SDFinancialAccountingActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDFinancialAccountingActivateOutputModel'
+  /financial-accounting/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDFinancialAccounting
+      summary: Update an active SDFinancialAccounting session configuration
+      description: Update an active SDFinancialAccounting session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDFinancialAccounting Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDFinancialAccounting Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDFinancialAccountingConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDFinancialAccountingConfigureOutputModel'
+  /financial-accounting/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDFinancialAccounting
+      summary: "Capturing feedback against the SDFinancialAccounting service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDFinancialAccounting service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDFinancialAccounting Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDFinancialAccounting Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDFinancialAccountingFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDFinancialAccountingFeedbackOutputModel'
+  /financial-accounting/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDFinancialAccounting
+      summary: Analytical views maintained by the SDFinancialAccounting service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDFinancialAccounting service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDFinancialAccounting Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDFinancialAccounting Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDFinancialAccountingRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDFinancialAccountingRetrieveOutputModel'
+  /financial-accounting/{sd-reference-id}/financial-booking-log/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateFinancialBookingLog
+      summary: Details of a new FinancialBookingLog instance
+      description: Initiate a financial accounting log (account)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FinancialBookingLog Request Payload
+        schema:
+          $ref: '#/definitions/CRFinancialBookingLogInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new FinancialBookingLog instance
+          schema:
+            $ref: '#/definitions/CRFinancialBookingLogInitiateOutputModel'
+  /financial-accounting/{sd-reference-id}/financial-booking-log/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateFinancialBookingLog
+      summary: Update to any amendable fields of the FinancialBookingLog instance
+      description: Update details for an active financial account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Booking Log Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Financial Booking Log Request Payload
+        schema:
+          $ref: '#/definitions/CRFinancialBookingLogUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Financial Booking Log Instance
+          schema:
+            $ref: '#/definitions/CRFinancialBookingLogUpdateOutputModel'
+  /financial-accounting/{sd-reference-id}/financial-booking-log/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlFinancialBookingLogUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the processing of the log (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Booking Log Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Financial Booking Log Request Payload
+        schema:
+          $ref: '#/definitions/CRFinancialBookingLogControlInputModel'
+      responses:
+        200:
+          description: Successful control of Financial Booking Log Instance
+          schema:
+            $ref: '#/definitions/CRFinancialBookingLogControlOutputModel'
+  /financial-accounting/{sd-reference-id}/financial-booking-log/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveFinancialAccounting
+      summary: Invoke a reporting action to obtain a Financial Booking Log instance related report
+      description: Retrieve information about the log
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Booking Log Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRFinancialBookingLogRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Financial Booking Log Instance
+          schema:
+            $ref: '#/definitions/CRFinancialBookingLogRetrieveOutputModel'
+  /financial-accounting/{sd-reference-id}/financial-booking-log/{cr-reference-id}/ledgerposting/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateFinancialBookingLogLedgerPosting
+      summary: Update to any amendable fields of the LedgerPosting instance
+      description: Update details of a posting (repair)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Booking Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: LedgerPosting Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: LedgerPosting Request Payload
+        schema:
+          $ref: '#/definitions/BQLedgerPostingUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated LedgerPosting Instance
+          schema:
+            $ref: '#/definitions/BQLedgerPostingUpdateOutputModel'
+  /financial-accounting/{sd-reference-id}/financial-booking-log/{cr-reference-id}/ledgerposting/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureFinancialBookingLogLedgerPostingUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Post to the financial account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Booking Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: LedgerPosting Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: LedgerPosting request payload
+        schema:
+          $ref: '#/definitions/BQLedgerPostingCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of LedgerPosting Instance Record
+          schema:
+            $ref: '#/definitions/BQLedgerPostingCaptureOutputModel'
+  /financial-accounting/{sd-reference-id}/financial-booking-log/{cr-reference-id}/ledgerposting/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveFinancialBookingLogLedgerPosting
+      summary: Invoke a reporting action to obtain a LedgerPosting instance related report.
+      description: Retrieve details of postings from the account .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Booking Log Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: LedgerPosting Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQLedgerPostingRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved LedgerPosting Instance Record
+          schema:
+            $ref: '#/definitions/BQLedgerPostingRetrieveOutputModel'
+  /financial-accounting/{sd-reference-id}/financial-booking-log:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveFinancialAccountingReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- FinancialAccounting Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /financial-accounting/financial-booking-log/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveFinancialAccountingBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'LedgerPosting', ]
+  /financial-accounting/{sd-reference-id}/financial-booking-log/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveFinancialAccountingBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Financial Accounting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Booking Log Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- LedgerPosting
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- LedgerPosting Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [LedgerPostingID1, LedgerPostingID2]

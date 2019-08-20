@@ -3,6 +3,16 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Position Management'
  description: >
+
+    ## Executive Summary:
+    The Service Domain tracks the bank's consolidated financial positions for major customers and complex market conditions
+
+    ## Example of Use:
+    A major corporate or institutional customer's consolidated position is refenced when the corporate customer sufferes a major incident
+
+    ## Description:
+    Maintain on-line and near-time cross account complex positions. Includes consolidated currency, instrument, sector and counterparty views as appropriate
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-position-management/1.0.0
 schemes:
@@ -13,8 +23,8 @@ paths:
       tags:
       - activate
       operationId: activateSDPositionManagement
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDPositionManagement servicing session
+      description: Activate  a  SDPositionManagement servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +39,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDPositionManagementActivateOutputModel'
-  /position-management/configure:
+  /position-management/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDPositionManagement
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDPositionManagement session configuration
+      description: Update an active SDPositionManagement session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPositionManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +61,25 @@ paths:
         schema:
           $ref: '#/definitions/SDPositionManagementConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDPositionManagementConfigureOutputModel'
-  /position-management/feedback:
+  /position-management/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDPositionManagement
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDPositionManagement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDPositionManagement service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPositionManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +87,25 @@ paths:
         schema:
           $ref: '#/definitions/SDPositionManagementFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDPositionManagementFeedbackOutputModel'
-  /position-management/retrieve:
+  /position-management/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDPositionManagement
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDPositionManagement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDPositionManagement service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPositionManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,123 +117,178 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDPositionManagementRetrieveOutputModel'
-  /position-management/financial-position-state/initiation:
+  /position-management/{sd-reference-id}/financial-position-state/initiation:
     post:
       tags:
       - initiate
-      operationId: initiatePositionManagementMonitoring
-      summary: Details of a new Position Management instance
+      operationId: initiateFinancialPositionState
+      summary: Details of a new FinancialPositionState instance
       description: Initialize a monitored financial position
       produces:
       - application/json
       parameters:
-      - in: body
-        name: body
-        required: true
-        description: PositionManagement Request Payload
-        schema:
-          $ref: '#/definitions/CRPositionManagementInitiateInputModel'
-      responses:
-        201:
-          description: Successful Details of a new Position Management instance
-          schema:
-            $ref: '#/definitions/CRPositionManagementInitiateOutputModel'
-  /position-management/financial-position-state/{cr-reference-id}/update:
-    put:
-      tags:
-      - update
-      operationId: updatePositionManagementMonitoring
-      summary: Update to any amendable fields of the Position Management instance
-      description: Update the settings and notification arrangements for a position
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Position Management Instance Record
+        description: Position Management Servicing Session Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: PositionManagement Request Payload
+        description: FinancialPositionState Request Payload
         schema:
-          $ref: '#/definitions/CRPositionManagementUpdateInputModel'
+          $ref: '#/definitions/CRFinancialPositionStateInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new FinancialPositionState instance
+          schema:
+            $ref: '#/definitions/CRFinancialPositionStateInitiateOutputModel'
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateFinancialPositionState
+      summary: Update to any amendable fields of the FinancialPositionState instance
+      description: Update the settings and notification arrangements for a position
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Position State Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Financial Position State Request Payload
+        schema:
+          $ref: '#/definitions/CRFinancialPositionStateUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Position Management instance
+          description: Successfully Updated Financial Position State Instance
           schema:
-            $ref: '#/definitions/CRPositionManagementUpdateOutputModel'
-  /position-management/financial-position-state/{cr-reference-id}/control:
+            $ref: '#/definitions/CRFinancialPositionStateUpdateOutputModel'
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/control:
     put:
       tags:
       - control
-      operationId: controlPositionManagementMonitoringUpdate
+      operationId: controlFinancialPositionStateUpdate
       summary: Request specific processing (e.g. suspend, skip, terminate)
       description: Change the status/handling of a monitored position
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Position Management Instance Record
+        description: Financial Position State Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: PositionManagement Request Payload
+        description: Financial Position State Request Payload
         schema:
-          $ref: '#/definitions/CRPositionManagementControlInputModel'
+          $ref: '#/definitions/CRFinancialPositionStateControlInputModel'
       responses:
         200:
-          description: Successful Request specific processing (e.g. suspend, skip, terminate)
+          description: Successful control of Financial Position State Instance
           schema:
-            $ref: '#/definitions/CRPositionManagementControlOutputModel'
-  /position-management/financial-position-state/{cr-reference-id}/trialtransaction/initiation:
+            $ref: '#/definitions/CRFinancialPositionStateControlOutputModel'
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePositionManagement
+      summary: Invoke a reporting action to obtain a Financial Position State instance related report
+      description: Get details and the current value of a monitored position
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Position State Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRFinancialPositionStateRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Financial Position State Instance
+          schema:
+            $ref: '#/definitions/CRFinancialPositionStateRetrieveOutputModel'
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/trialtransaction/initiation:
     post:
       tags:
       - initiate
-      operationId: initiatePositionManagementTrialTransaction
-      summary: Details of a new Trial Transaction instance
+      operationId: initiateFinancialPositionStateTrialTransaction
+      summary: Details of a new TrialTransaction instance
       description: Initiate the evaluation impact of a trial transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Position Management Instance Record
+        description: Financial Position State Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: TrialTransaction Request Payload
+        description: Financial Position State Request Payload
         schema:
           $ref: '#/definitions/BQTrialTransactionInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Trial Transaction instance
+          description: Successful initiation of Financial Position State instance
           schema:
             $ref: '#/definitions/BQTrialTransactionInitiateOutputModel'
-  /position-management/financial-position-state/{cr-reference-id}/trialtransaction/{bq-reference-id}/update:
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/trialtransactions/{bq-reference-id}/update:
     put:
       tags:
       - update
-      operationId: updatePositionManagementTrialTransaction
-      summary: Update to any amendable fields of the Trial Transaction instance
+      operationId: updateFinancialPositionStateTrialTransaction
+      summary: Update to any amendable fields of the TrialTransaction instance
       description: Update details of a trial transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Position Management Instance Record
+        description: Financial Position State Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: TrialTransaction BQ Reference Id
+        description: TrialTransaction Instance Reference
         required: true
         type: string
       - in: body
@@ -219,53 +299,98 @@ paths:
           $ref: '#/definitions/BQTrialTransactionUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Trial Transaction instance
+          description: Successfully Updated TrialTransaction Instance
           schema:
             $ref: '#/definitions/BQTrialTransactionUpdateOutputModel'
-  /position-management/financial-position-state/{cr-reference-id}/transactionapplication/initiation:
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/trialtransactions/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveFinancialPositionStateTrialTransaction
+      summary: Invoke a reporting action to obtain a TrialTransaction instance related report.
+      description: Retrieve details about a trial transaction and its position impact .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: TrialTransaction Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQTrialTransactionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved TrialTransaction Instance Record
+          schema:
+            $ref: '#/definitions/BQTrialTransactionRetrieveOutputModel'
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/transactionapplication/initiation:
     post:
       tags:
       - initiate
-      operationId: initiatePositionManagementTransactionApplication
-      summary: Details of a new Transaction Application instance
+      operationId: initiateFinancialPositionStateTransactionApplication
+      summary: Details of a new TransactionApplication instance
       description: Initiate the registering of a transaction against the position
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Position Management Instance Record
+        description: Financial Position State Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: TransactionApplication Request Payload
+        description: Financial Position State Request Payload
         schema:
           $ref: '#/definitions/BQTransactionApplicationInitiateInputModel'
       responses:
         201:
-          description: Successful Details of a new Transaction Application instance
+          description: Successful initiation of Financial Position State instance
           schema:
             $ref: '#/definitions/BQTransactionApplicationInitiateOutputModel'
-  /position-management/financial-position-state/{cr-reference-id}/transactionapplication/{bq-reference-id}/update:
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/transactionapplications/{bq-reference-id}/update:
     put:
       tags:
       - update
-      operationId: updatePositionManagementTransactionApplication
-      summary: Update to any amendable fields of the Transaction Application instance
+      operationId: updateFinancialPositionStateTransactionApplication
+      summary: Update to any amendable fields of the TransactionApplication instance
       description: Update details of a registered transaction
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Position Management Instance Record
+        description: Financial Position State Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: TransactionApplication BQ Reference Id
+        description: TransactionApplication Instance Reference
         required: true
         type: string
       - in: body
@@ -276,10 +401,45 @@ paths:
           $ref: '#/definitions/BQTransactionApplicationUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Transaction Application instance
+          description: Successfully Updated TransactionApplication Instance
           schema:
             $ref: '#/definitions/BQTransactionApplicationUpdateOutputModel'
-  /position-management/financial-position-state:
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/transactionapplications/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveFinancialPositionStateTransactionApplication
+      summary: Invoke a reporting action to obtain a TransactionApplication instance related report.
+      description: Retrieve details about a registered transaction and its position impact .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Financial Position State Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: TransactionApplication Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQTransactionApplicationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved TransactionApplication Instance Record
+          schema:
+            $ref: '#/definitions/BQTransactionApplicationRetrieveOutputModel'
+  /position-management/{sd-reference-id}/financial-position-state:
     get:
       tags:
       - retrieve
@@ -288,6 +448,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- PositionManagement Instance Status='active'
@@ -317,7 +482,7 @@ paths:
             items:
               type: string
             example: [ 'TrialTransaction',  'TransactionApplication', ]
-  /position-management/financial-position-state/{cr-reference-id}/{behavior-qualifier}/:
+  /position-management/{sd-reference-id}/financial-position-state/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -326,9 +491,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Position Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Position Management Instance Record
+        description: Financial Position State Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -349,94 +519,6 @@ paths:
             items:
               type: string
             example: [TransactionApplicationID1, TransactionApplicationID2]
-  /position-management/financial-position-state/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePositionManagement
-      summary: Retrieve a Position Management Record
-      description: Retrieve a Position Management Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Position Management Instance Record
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Position Management Request Payload
-        schema:
-          $ref: '#/definitions/CRPositionManagementRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Position Management Report
-          schema:
-            $ref: '#/definitions/CRPositionManagementRetrieveOutputModel'
-  /position-management/financial-position-state/{cr-reference-id}/trialtransaction/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePositionManagementTrialTransaction
-      summary: Retrieve a Position Management TrialTransaction Record
-      description: Retrieve a Position Management TrialTransaction Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Position Management Instance Record
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: TrialTransaction BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Position Management TrialTransaction Request Payload
-        schema:
-          $ref: '#/definitions/BQTrialTransactionRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Position Management TrialTransaction Report
-          schema:
-            $ref: '#/definitions/BQTrialTransactionRetrieveOutputModel'
-  /position-management/financial-position-state/{cr-reference-id}/transactionapplication/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePositionManagementTransactionApplication
-      summary: Retrieve a Position Management TransactionApplication Record
-      description: Retrieve a Position Management TransactionApplication Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Position Management Instance Record
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: TransactionApplication BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Position Management TransactionApplication Request Payload
-        schema:
-          $ref: '#/definitions/BQTransactionApplicationRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Position Management TransactionApplication Report
-          schema:
-            $ref: '#/definitions/BQTransactionApplicationRetrieveOutputModel'
 definitions:
  SDPositionManagementActivateInputModel:
   type: object
@@ -1081,29 +1163,29 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRPositionManagementInitiateInputModel:
+ CRFinancialPositionStateInitiateInputModel:
   type: object
   properties: 
+   positionManagementServicingSessionReference:
+    type: string
+    example: "PMSSR789960"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
    financialPositionStateInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: TheInitiate service call input and output record
-   positionManagementServicingSessionReference:
-    type: string
-    example: "PMSSR781952"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
+      general-info: The Initiate service call input and output record
    financialPositionStateInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: The status of the Financial Position State instance (e.g. initialised, pending, active)
-   financialPositionStateInstanceRecord:
+   positionManagementInstanceRecord:
     type: object
     properties:
      positionType:
@@ -1114,7 +1196,7 @@ definitions:
         general-info: The type of position being monitored (e.g. consolidated customer exposure, geographic/sector exposure)
      positionCustomerReference:
       type: string
-      example: "736537"
+      example: "780633"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1145,7 +1227,7 @@ definitions:
         general-info: Thresholds limits associated with the position
      positionNotificationArrangementReference:
       type: string
-      example: "784729"
+      example: "787508"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1155,7 +1237,7 @@ definitions:
       properties:
        positionNotificationBusinessUnitReference:
         type: string
-        example: "781955"
+        example: "715253"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1166,36 +1248,36 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Details of the requirements/schedule for position notification
- CRPositionManagementInitiateOutputModel:
+ CRFinancialPositionStateInitiateOutputModel:
   type: object
   properties: 
-   financialPositionStateInitiateActionReference:
+   financialPositionStateInstanceReference:
     type: string
-    example: "FPSIAR761544"
+    example: "FPSIR730808"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to anInitiate service call
+      general-info: Reference to the Financial Position State instance
+   financialPositionStateInitiateActionReference:
+    type: string
+    example: "FPSIAR778838"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
    financialPositionStateInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: TheInitiate service call input and output record
-   financialPositionStateInstanceReference:
-    type: string
-    example: "FPSIR792641"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Financial Position State instance
+      general-info: The Initiate service call input and output record
    financialPositionStateInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: The status of the Financial Position State instance (e.g. initialised, pending, active)
-   financialPositionStateInstanceRecord:
+   positionManagementInstanceRecord:
     type: object
     properties:
      positionValue:
@@ -1204,36 +1286,33 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The current, historical and if applicable projected values of the monitored position
+     positionNotificationArrangementRecord:
+      type: object
+      properties:
        positionNotificationRecord:
         type: object
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
           general-info: The position notification record generated as required
- CRPositionManagementUpdateInputModel:
+ CRFinancialPositionStateUpdateInputModel:
   type: object
   properties: 
    positionManagementServicingSessionReference:
     type: string
-    example: "PMSSR741575"
+    example: "PMSSR727608"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    financialPositionStateInstanceReference:
     type: string
-    example: "FPSIR737604"
+    example: "FPSIR763255"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Financial Position State instance
-   financialPositionStateInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Financial Position State instance (e.g. initialised, pending, active)
-   financialPositionStateInstanceRecord:
+   positionManagementInstanceRecord:
     type: object
     properties:
      positionType:
@@ -1244,7 +1323,7 @@ definitions:
         general-info: The type of position being monitored (e.g. consolidated customer exposure, geographic/sector exposure)
      positionCustomerReference:
       type: string
-      example: "787304"
+      example: "723834"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1275,7 +1354,7 @@ definitions:
         general-info: Thresholds limits associated with the position
      positionNotificationArrangementReference:
       type: string
-      example: "737550"
+      example: "724725"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1285,7 +1364,7 @@ definitions:
       properties:
        positionNotificationBusinessUnitReference:
         type: string
-        example: "780186"
+        example: "731511"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1296,7 +1375,7 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Details of the requirements/schedule for position notification
-   positionManagementUpdateActionTaskRecord:
+   financialPositionStateUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1308,16 +1387,10 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- CRPositionManagementUpdateOutputModel:
+ CRFinancialPositionStateUpdateOutputModel:
   type: object
   properties: 
-   financialPositionStateInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Financial Position State instance (e.g. initialised, pending, active)
-   financialPositionStateInstanceRecord:
+   positionManagementInstanceRecord:
     type: object
     properties:
      positionType:
@@ -1328,7 +1401,7 @@ definitions:
         general-info: The type of position being monitored (e.g. consolidated customer exposure, geographic/sector exposure)
      positionCustomerReference:
       type: string
-      example: "787304"
+      example: "723834"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1359,7 +1432,7 @@ definitions:
         general-info: Thresholds limits associated with the position
      positionNotificationArrangementReference:
       type: string
-      example: "737550"
+      example: "724725"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1369,7 +1442,7 @@ definitions:
       properties:
        positionNotificationBusinessUnitReference:
         type: string
-        example: "780186"
+        example: "731511"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1380,14 +1453,14 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Details of the requirements/schedule for position notification
-   positionManagementUpdateActionTaskReference:
+   financialPositionStateUpdateActionTaskReference:
     type: string
-    example: "PMUATR754739"
+    example: "FPSUATR737484"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to an update service call
-   positionManagementUpdateActionTaskRecord:
+   financialPositionStateUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1399,30 +1472,30 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- CRPositionManagementControlInputModel:
+ CRFinancialPositionStateControlInputModel:
   type: object
   properties: 
    positionManagementServicingSessionReference:
     type: string
-    example: "PMSSR704429"
+    example: "PMSSR700795"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    financialPositionStateInstanceReference:
     type: string
-    example: "FPSIR712601"
+    example: "FPSIR756159"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Financial Position State instance
-   positionManagementControlActionTaskRecord:
+   financialPositionStateControlActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The processing control service call consolidated processing record
-   positionManagementControlActionRequest:
+   financialPositionStateControlActionRequest:
     type: object
     properties:
      controlActionType:
@@ -1431,103 +1504,91 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The type of processing action requested (e.g. suspend, skip, terminate)
- CRPositionManagementControlOutputModel:
+ CRFinancialPositionStateControlOutputModel:
   type: object
   properties: 
-   financialPositionStateInstanceStatus:
+   financialPositionStateControlActionTaskReference:
     type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Financial Position State instance (e.g. initialised, pending, active)
-   positionManagementControlActionTaskReference:
-    type: string
-    example: "PMCATR772742"
+    example: "FPSCATR731806"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Position Management instance control processing service call
-   positionManagementControlActionTaskRecord:
+      general-info: Reference to a Financial Position State instance control processing service call
+   financialPositionStateControlActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The processing control service call consolidated processing record
-   positionManagementControlActionResponse:
+   financialPositionStateControlActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the control action service response
- CRPositionManagementRetrieveInputModel:
+ CRFinancialPositionStateRetrieveInputModel:
   type: object
   properties: 
-   positionManagementRetrieveActionTaskRecord:
+   financialPositionStateRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   positionManagementRetrieveActionRequest:
+   financialPositionStateRetrieveActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service request (lists requested reports)
-   positionManagementInstanceReportRecord:
+   financialPositionStateInstanceReportRecord:
     type: object
     properties:
-     positionManagementInstanceReportReference:
+     financialPositionStateInstanceReportReference:
       type: string
-      example: "741376"
+      example: "798745"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance report
-     positionManagementInstanceReportType:
+     financialPositionStateInstanceReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
-     positionManagementInstanceReportParameters:
+     financialPositionStateInstanceReportParameters:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the report (e.g. period, content type)
-   positionManagementInstanceAnalysis:
+   financialPositionStateInstanceAnalysis:
     type: object
     properties:
-     positionManagementInstanceAnalysisReference:
+     financialPositionStateInstanceAnalysisReference:
       type: string
-      example: "719828"
+      example: "758731"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance analysis view
-     positionManagementInstanceAnalysisReportType:
+     financialPositionStateInstanceAnalysisReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
-     positionManagementInstanceAnalysisParameters:
+     financialPositionStateInstanceAnalysisParameters:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The selection parameters for the analysis (e.g. period, algorithm type)
- CRPositionManagementRetrieveOutputModel:
+ CRFinancialPositionStateRetrieveOutputModel:
   type: object
   properties: 
-   financialPositionStateInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Financial Position State instance (e.g. initialised, pending, active)
-   financialPositionStateInstanceRecord:
+   positionManagementInstanceRecord:
     type: object
     properties:
      positionType:
@@ -1538,7 +1599,7 @@ definitions:
         general-info: The type of position being monitored (e.g. consolidated customer exposure, geographic/sector exposure)
      positionCustomerReference:
       type: string
-      example: "727079"
+      example: "758148"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1575,7 +1636,7 @@ definitions:
         general-info: The current, historical and if applicable projected values of the monitored position
      positionNotificationArrangementReference:
       type: string
-      example: "710358"
+      example: "705885"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1585,7 +1646,7 @@ definitions:
       properties:
        positionNotificationBusinessUnitReference:
         type: string
-        example: "737144"
+        example: "754661"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1602,62 +1663,62 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
           general-info: The position notification record generated as required
-   positionManagementRetrieveActionTaskReference:
+   financialPositionStateRetrieveActionTaskReference:
     type: string
-    example: "PMRATR734996"
+    example: "FPSRATR797442"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Position Management instance retrieve service call
-   positionManagementRetrieveActionTaskRecord:
+      general-info: Reference to a Financial Position State instance retrieve service call
+   financialPositionStateRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   positionManagementRetrieveActionResponse:
+   financialPositionStateRetrieveActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
-   positionManagementInstanceReportRecord:
+   financialPositionStateInstanceReportRecord:
     type: object
     properties:
-     positionManagementInstanceReportData:
+     financialPositionStateInstanceReportData:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
-     positionManagementInstanceReportType:
+     financialPositionStateInstanceReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
-     positionManagementInstanceReport:
+     financialPositionStateInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
-   positionManagementInstanceAnalysis:
+   financialPositionStateInstanceAnalysis:
     type: object
     properties:
-     positionManagementInstanceAnalysisData:
+     financialPositionStateInstanceAnalysisData:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
-     positionManagementInstanceAnalysisReportType:
+     financialPositionStateInstanceAnalysisReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
-     positionManagementInstanceAnalysisReport:
+     financialPositionStateInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`
@@ -1666,25 +1727,100 @@ definitions:
  BQTrialTransactionInitiateInputModel:
   type: object
   properties: 
+   positionManagementInstanceRecord:
+    type: object
+    properties:
+     positionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of position being monitored (e.g. consolidated customer exposure, geographic/sector exposure)
+     positionCustomerReference:
+      type: string
+      example: "761063"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The customer or customer type associated with the position if applicable
+     positionSector:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sector or segment associated with the position if applicable
+     positionProductType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type or specific product associated with the position if applicable
+     positionDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the specification and purpose position monitoring (e.g. real-time limit, trend)
+     positionThresholdsLimits:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Thresholds limits associated with the position
+     positionValue:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The current, historical and if applicable projected values of the monitored position
+     positionNotificationArrangementReference:
+      type: string
+      example: "790133"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a notification source requesting updates on position changes
+     positionNotificationArrangementRecord:
+      type: object
+      properties:
+       positionNotificationBusinessUnitReference:
+        type: string
+        example: "763347"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the notified party
+       positionNotificationDetails:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the requirements/schedule for position notification
+       positionNotificationRecord:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The position notification record generated as required
+   financialPositionStateInstanceReference:
+    type: string
+    example: "FPSIR723573"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Financial Position State instance
    trialTransactionInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: TheInitiate service call input and output record
-   financialPositionStateInstanceReference:
-    type: string
-    example: "FPSIR725210"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Financial Position State instance
+      general-info: The Initiate service call input and output record
    trialTransactionInstanceRecord:
     type: object
     properties:
      trialTransactionReference:
       type: string
-      example: "762136"
+      example: "775642"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1721,19 +1857,101 @@ definitions:
  BQTrialTransactionInitiateOutputModel:
   type: object
   properties: 
+   positionManagementInstanceRecord:
+    type: object
+    properties:
+     positionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of position being monitored (e.g. consolidated customer exposure, geographic/sector exposure)
+     positionCustomerReference:
+      type: string
+      example: "761063"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The customer or customer type associated with the position if applicable
+     positionSector:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sector or segment associated with the position if applicable
+     positionProductType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type or specific product associated with the position if applicable
+     positionDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the specification and purpose position monitoring (e.g. real-time limit, trend)
+     positionThresholdsLimits:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Thresholds limits associated with the position
+     positionValue:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The current, historical and if applicable projected values of the monitored position
+     positionNotificationArrangementReference:
+      type: string
+      example: "790133"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a notification source requesting updates on position changes
+     positionNotificationArrangementRecord:
+      type: object
+      properties:
+       positionNotificationBusinessUnitReference:
+        type: string
+        example: "763347"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the notified party
+       positionNotificationDetails:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the requirements/schedule for position notification
+       positionNotificationRecord:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The position notification record generated as required
+   trialTransactionInstanceReference:
+    type: string
+    example: "TTIR797759"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Trial Transaction instance
+   trialTransactionInitiateActionReference:
+    type: string
+    example: "TTIAR758822"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
    trialTransactionInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: TheInitiate service call input and output record
-   trialTransactionInstanceReference:
-    type: string
-    example: "TTIR791272"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Trial Transaction instance
+      general-info: The Initiate service call input and output record
    trialTransactionInstanceStatus:
     type: string
     description: |
@@ -1743,7 +1961,7 @@ definitions:
    trialTransactionInstanceRecord:
     type: object
     properties:
-     transactionPositionImpactAssessment:
+     trailTransactionPositionImpactAssessment:
       type: string
       description: |
        `status: Not Mapped`
@@ -1754,14 +1972,14 @@ definitions:
   properties: 
    financialPositionStateInstanceReference:
     type: string
-    example: "FPSIR751841"
+    example: "FPSIR719894"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Financial Position State instance
    trialTransactionInstanceReference:
     type: string
-    example: "TTIR793557"
+    example: "TTIR762360"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1771,7 +1989,7 @@ definitions:
     properties:
      trialTransactionReference:
       type: string
-      example: "722435"
+      example: "708784"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1805,6 +2023,18 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The booking entity where the trial transaction would be made
+   trialTransactionUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   trialTransactionUpdateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
  BQTrialTransactionUpdateOutputModel:
   type: object
   properties: 
@@ -1813,7 +2043,7 @@ definitions:
     properties:
      trialTransactionReference:
       type: string
-      example: "722435"
+      example: "708784"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1847,6 +2077,25 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The booking entity where the trial transaction would be made
+   trialTransactionUpdateActionTaskReference:
+    type: string
+    example: "TTUATR792401"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   trialTransactionUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
  BQTrialTransactionRetrieveInputModel:
   type: object
   properties: 
@@ -1867,7 +2116,7 @@ definitions:
     properties:
      trialTransactionInstanceReportReference:
       type: string
-      example: "757984"
+      example: "772418"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1877,7 +2126,7 @@ definitions:
     properties:
      trialTransactionInstanceAnalysisReference:
       type: string
-      example: "737443"
+      example: "735042"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1890,7 +2139,7 @@ definitions:
     properties:
      trialTransactionReference:
       type: string
-      example: "783742"
+      example: "706165"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1924,7 +2173,7 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The booking entity where the trial transaction would be made
-     transactionPositionImpactAssessment:
+     trailTransactionPositionImpactAssessment:
       type: string
       description: |
        `status: Not Mapped`
@@ -1932,7 +2181,7 @@ definitions:
         general-info: The projected impact the trial transaction will have on the managed position
    trialTransactionRetrieveActionTaskReference:
     type: string
-    example: "TTRATR752971"
+    example: "TTRATR787057"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2006,25 +2255,100 @@ definitions:
  BQTransactionApplicationInitiateInputModel:
   type: object
   properties: 
+   positionManagementInstanceRecord:
+    type: object
+    properties:
+     positionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of position being monitored (e.g. consolidated customer exposure, geographic/sector exposure)
+     positionCustomerReference:
+      type: string
+      example: "720584"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The customer or customer type associated with the position if applicable
+     positionSector:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sector or segment associated with the position if applicable
+     positionProductType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type or specific product associated with the position if applicable
+     positionDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the specification and purpose position monitoring (e.g. real-time limit, trend)
+     positionThresholdsLimits:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Thresholds limits associated with the position
+     positionValue:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The current, historical and if applicable projected values of the monitored position
+     positionNotificationArrangementReference:
+      type: string
+      example: "738796"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a notification source requesting updates on position changes
+     positionNotificationArrangementRecord:
+      type: object
+      properties:
+       positionNotificationBusinessUnitReference:
+        type: string
+        example: "765278"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the notified party
+       positionNotificationDetails:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the requirements/schedule for position notification
+       positionNotificationRecord:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The position notification record generated as required
+   financialPositionStateInstanceReference:
+    type: string
+    example: "FPSIR794644"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Financial Position State instance
    transactionApplicationInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: TheInitiate service call input and output record
-   financialPositionStateInstanceReference:
-    type: string
-    example: "FPSIR769301"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Financial Position State instance
+      general-info: The Initiate service call input and output record
    transactionApplicationInstanceRecord:
     type: object
     properties:
      transactionReference:
       type: string
-      example: "777892"
+      example: "747520"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2061,19 +2385,101 @@ definitions:
  BQTransactionApplicationInitiateOutputModel:
   type: object
   properties: 
+   positionManagementInstanceRecord:
+    type: object
+    properties:
+     positionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of position being monitored (e.g. consolidated customer exposure, geographic/sector exposure)
+     positionCustomerReference:
+      type: string
+      example: "720584"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The customer or customer type associated with the position if applicable
+     positionSector:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sector or segment associated with the position if applicable
+     positionProductType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The product type or specific product associated with the position if applicable
+     positionDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the specification and purpose position monitoring (e.g. real-time limit, trend)
+     positionThresholdsLimits:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Thresholds limits associated with the position
+     positionValue:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The current, historical and if applicable projected values of the monitored position
+     positionNotificationArrangementReference:
+      type: string
+      example: "738796"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a notification source requesting updates on position changes
+     positionNotificationArrangementRecord:
+      type: object
+      properties:
+       positionNotificationBusinessUnitReference:
+        type: string
+        example: "765278"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the notified party
+       positionNotificationDetails:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the requirements/schedule for position notification
+       positionNotificationRecord:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The position notification record generated as required
+   transactionApplicationInstanceReference:
+    type: string
+    example: "TAIR724051"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Transaction Application instance
+   transactionApplicationInitiateActionReference:
+    type: string
+    example: "TAIAR786757"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
    transactionApplicationInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: TheInitiate service call input and output record
-   transactionApplicationInstanceReference:
-    type: string
-    example: "TAIR790901"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Transaction Application instance
+      general-info: The Initiate service call input and output record
    transactionApplicationInstanceStatus:
     type: string
     description: |
@@ -2094,14 +2500,14 @@ definitions:
   properties: 
    financialPositionStateInstanceReference:
     type: string
-    example: "FPSIR758867"
+    example: "FPSIR719114"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Financial Position State instance
    transactionApplicationInstanceReference:
     type: string
-    example: "TAIR771070"
+    example: "TAIR704643"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2111,7 +2517,7 @@ definitions:
     properties:
      transactionReference:
       type: string
-      example: "780561"
+      example: "707419"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2145,6 +2551,18 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The booking entity where the trial transaction would be made
+   transactionApplicationUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   transactionApplicationUpdateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
  BQTransactionApplicationUpdateOutputModel:
   type: object
   properties: 
@@ -2153,7 +2571,7 @@ definitions:
     properties:
      transactionReference:
       type: string
-      example: "780561"
+      example: "707419"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2187,6 +2605,25 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The booking entity where the trial transaction would be made
+   transactionApplicationUpdateActionTaskReference:
+    type: string
+    example: "TAUATR750207"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   transactionApplicationUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
  BQTransactionApplicationRetrieveInputModel:
   type: object
   properties: 
@@ -2207,7 +2644,7 @@ definitions:
     properties:
      transactionApplicationInstanceReportReference:
       type: string
-      example: "738069"
+      example: "725281"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2217,7 +2654,7 @@ definitions:
     properties:
      transactionApplicationInstanceAnalysisReference:
       type: string
-      example: "751879"
+      example: "748094"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2230,7 +2667,7 @@ definitions:
     properties:
      transactionReference:
       type: string
-      example: "747694"
+      example: "768299"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2272,7 +2709,7 @@ definitions:
         general-info: The projected impact the trial transaction will have on the managed position
    transactionApplicationRetrieveActionTaskReference:
     type: string
-    example: "TARATR755886"
+    example: "TARATR740186"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

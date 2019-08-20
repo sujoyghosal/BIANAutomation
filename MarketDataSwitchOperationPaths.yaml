@@ -1,0 +1,798 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Market Data Switch Operation'
+ description: >
+
+    ## Executive Summary:
+    This service domain operates the internal information distribution facility/switch in compliance with administered external subscription information feed service access rights. Note the content is retrieved by the Market Feed Operation service domain from the various external feed services. Internal information can also be published over the switch from various bank sources (such as bank rates provided by treasury).
+
+    ## Example of Use:
+    A bank trader request access to a market data feed at their dealing position during a trading session
+
+    ## Description:
+    This facility handles the real-time operation of the market information dissemination switch that is typically used to support trading and investment functions. It references the access entitlement to services for users maintained by the Market Data Switch Administration service domain (there can be complex rules governing access to various feeds). The dissemination mechanism/switch may support composite pages of data and interactive service requests. It may also support internally published information such as bank rates defined by the bank's treasury unit
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-market-data-switch-operation/1.0.0
+schemes:
+ - https
+paths:
+  /market-data-switch-operation/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDMarketDataSwitchOperation
+      summary: Activate  a SDMarketDataSwitchOperation servicing session
+      description: Activate  a  SDMarketDataSwitchOperation servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDMarketDataSwitchOperation Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketDataSwitchOperationActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDMarketDataSwitchOperationActivateOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDMarketDataSwitchOperation
+      summary: Update an active SDMarketDataSwitchOperation session configuration
+      description: Update an active SDMarketDataSwitchOperation session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketDataSwitchOperation Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketDataSwitchOperation Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketDataSwitchOperationConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDMarketDataSwitchOperationConfigureOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDMarketDataSwitchOperation
+      summary: "Capturing feedback against the SDMarketDataSwitchOperation service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDMarketDataSwitchOperation service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketDataSwitchOperation Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketDataSwitchOperation Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketDataSwitchOperationFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDMarketDataSwitchOperationFeedbackOutputModel'
+  /market-data-switch-operation/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDMarketDataSwitchOperation
+      summary: Analytical views maintained by the SDMarketDataSwitchOperation service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDMarketDataSwitchOperation service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDMarketDataSwitchOperation Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDMarketDataSwitchOperation Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDMarketDataSwitchOperationRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDMarketDataSwitchOperationRetrieveOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateInformationFeedSwitchoperatingSession
+      summary: Details of a new InformationFeedSwitchoperatingSession instance
+      description: Initiate a market data switch operating session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InformationFeedSwitchoperatingSession Request Payload
+        schema:
+          $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new InformationFeedSwitchoperatingSession instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionInitiateOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateInformationFeedSwitchoperatingSession
+      summary: Update to any amendable fields of the InformationFeedSwitchoperatingSession instance
+      description: Update details for the market data switch operating session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Information Feed Switch operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Information Feed Switch operating Session Instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionUpdateOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlInformationFeedSwitchoperatingSessionUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the operating session (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Information Feed Switch operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionControlInputModel'
+      responses:
+        200:
+          description: Successful control of Information Feed Switch operating Session Instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionControlOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeInformationFeedSwitchoperatingSessionUpdate
+      summary: Invoke an automated execute action against the InformationFeedSwitchoperatingSession instance
+      description: Execute an automated task in the session (e.g. refresh data)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Information Feed Switch operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Information Feed Switch operating Session Instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionExecuteOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestInformationFeedSwitchoperatingSessionUpdate
+      summary: Invoke a service request action against the InformationFeedSwitchoperatingSession instance
+      description: Request manual intervention in the session (e.g. change the service make-up)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Information Feed Switch operating Session Request Payload
+        schema:
+          $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Information Feed Switch operating Session Instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionRequestOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveMarketDataSwitchOperation
+      summary: Invoke a reporting action to obtain a Information Feed Switch operating Session instance related report
+      description: Retrieve details about the market data switch operating session
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRInformationFeedSwitchoperatingSessionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Information Feed Switch operating Session Instance
+          schema:
+            $ref: '#/definitions/CRInformationFeedSwitchoperatingSessionRetrieveOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/feedupload/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateInformationFeedSwitchoperatingSessionFeedUpload
+      summary: Update to any amendable fields of the FeedUpload instance
+      description: Update details for the feed upload
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FeedUpload Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FeedUpload Request Payload
+        schema:
+          $ref: '#/definitions/BQFeedUploadUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated FeedUpload Instance
+          schema:
+            $ref: '#/definitions/BQFeedUploadUpdateOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/feedupload/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeInformationFeedSwitchoperatingSessionFeedUploadUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, etc. the feed upload
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FeedUpload Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FeedUpload request payload
+        schema:
+          $ref: '#/definitions/BQFeedUploadExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of FeedUpload Instance Record
+          schema:
+            $ref: '#/definitions/BQFeedUploadExchangeOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/feedupload/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveInformationFeedSwitchoperatingSessionFeedUpload
+      summary: Invoke a reporting action to obtain a FeedUpload instance related report.
+      description: Retrieve details about the feed upload activity .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FeedUpload Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQFeedUploadRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved FeedUpload Instance Record
+          schema:
+            $ref: '#/definitions/BQFeedUploadRetrieveOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/internalpublication/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateInformationFeedSwitchoperatingSessionInternalPublication
+      summary: Details of a new InternalPublication instance
+      description: Initiate internal publication of information
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Information Feed Switch operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQInternalPublicationInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Information Feed Switch operating Session instance
+          schema:
+            $ref: '#/definitions/BQInternalPublicationInitiateOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/internalpublication/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateInformationFeedSwitchoperatingSessionInternalPublication
+      summary: Update to any amendable fields of the InternalPublication instance
+      description: Update details of internal publication
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InternalPublication Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InternalPublication Request Payload
+        schema:
+          $ref: '#/definitions/BQInternalPublicationUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated InternalPublication Instance
+          schema:
+            $ref: '#/definitions/BQInternalPublicationUpdateOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/internalpublication/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeInformationFeedSwitchoperatingSessionInternalPublicationUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, etc. the internal upload
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InternalPublication Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: InternalPublication request payload
+        schema:
+          $ref: '#/definitions/BQInternalPublicationExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of InternalPublication Instance Record
+          schema:
+            $ref: '#/definitions/BQInternalPublicationExchangeOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/internalpublication/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveInformationFeedSwitchoperatingSessionInternalPublication
+      summary: Invoke a reporting action to obtain a InternalPublication instance related report.
+      description: Retrieve details about the internal publication task .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: InternalPublication Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInternalPublicationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved InternalPublication Instance Record
+          schema:
+            $ref: '#/definitions/BQInternalPublicationRetrieveOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/distribution/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateInformationFeedSwitchoperatingSessionDistribution
+      summary: Details of a new Distribution instance
+      description: User subscription to the switch
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Information Feed Switch operating Session Request Payload
+        schema:
+          $ref: '#/definitions/BQDistributionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Information Feed Switch operating Session instance
+          schema:
+            $ref: '#/definitions/BQDistributionInitiateOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/distribution/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateInformationFeedSwitchoperatingSessionDistribution
+      summary: Update to any amendable fields of the Distribution instance
+      description: User subscription details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Distribution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Distribution Request Payload
+        schema:
+          $ref: '#/definitions/BQDistributionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Distribution Instance
+          schema:
+            $ref: '#/definitions/BQDistributionUpdateOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/distribution/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeInformationFeedSwitchoperatingSessionDistributionUpdate
+      summary: Invoke an automated execute action against the Distribution instance
+      description: Execute an automated action to the service (e.g. select content)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Distribution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Distribution request payload
+        schema:
+          $ref: '#/definitions/BQDistributionExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Distribution Instance Record
+          schema:
+            $ref: '#/definitions/BQDistributionExecuteOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/distribution/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestInformationFeedSwitchoperatingSessionDistributionUpdate
+      summary: Invoke a service request action against the Distribution instance
+      description: Request manual intervention for the service (e.g. request a usage profile change)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Distribution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Distribution request payload
+        schema:
+          $ref: '#/definitions/BQDistributionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Distribution Instance Record
+          schema:
+            $ref: '#/definitions/BQDistributionRequestOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/distribution/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveInformationFeedSwitchoperatingSessionDistribution
+      summary: Invoke a reporting action to obtain a Distribution instance related report.
+      description: Retrieve details about the user switch session .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Distribution Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQDistributionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Distribution Instance Record
+          schema:
+            $ref: '#/definitions/BQDistributionRetrieveOutputModel'
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketDataSwitchOperationReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- MarketDataSwitchOperation Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /market-data-switch-operation/information-feed-switch-operating-session/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketDataSwitchOperationBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'FeedUpload',  'InternalPublication',  'Distribution', ]
+  /market-data-switch-operation/{sd-reference-id}/information-feed-switch-operating-session/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveMarketDataSwitchOperationBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Market Data Switch Operation Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Information Feed Switch operating Session Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- Distribution
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- Distribution Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [DistributionID1, DistributionID2]
