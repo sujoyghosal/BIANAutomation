@@ -1,0 +1,1180 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Corporate Deposits'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles the fulfillment of instances of the corporate deposit product
+
+    ## Example of Use:
+    A corporate customer books a deposit to its Corporate Deposit account
+
+    ## Description:
+    This service domain handles the fulfillment of corporate deposit facilities (primarily demand) including the handling of interest payments and service fees. The corporate deposit facility is generally used as part of cash management to balance liquidity requirements and interest returns on excess funds
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-corporate-deposits/1.0.0
+schemes:
+ - https
+paths:
+  /corporate-deposits/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCorporateDeposits
+      summary: Activate  a SDCorporateDeposits servicing session
+      description: Activate  a  SDCorporateDeposits servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCorporateDeposits Request Payload
+        schema:
+          $ref: '#/definitions/SDCorporateDepositsActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCorporateDepositsActivateOutputModel'
+  /corporate-deposits/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCorporateDeposits
+      summary: Update an active SDCorporateDeposits session configuration
+      description: Update an active SDCorporateDeposits session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateDeposits Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorporateDeposits Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCorporateDepositsConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCorporateDepositsConfigureOutputModel'
+  /corporate-deposits/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCorporateDeposits
+      summary: "Capturing feedback against the SDCorporateDeposits service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCorporateDeposits service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateDeposits Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorporateDeposits Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCorporateDepositsFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCorporateDepositsFeedbackOutputModel'
+  /corporate-deposits/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCorporateDeposits
+      summary: Analytical views maintained by the SDCorporateDeposits service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCorporateDeposits service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCorporateDeposits Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCorporateDeposits Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDCorporateDepositsRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCorporateDepositsRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorporateDepositsFulfillmentArrangement
+      summary: Details of a new CorporateDepositsFulfillmentArrangement instance
+      description: Initiate A new corporate deposit account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CorporateDepositsFulfillmentArrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRCorporateDepositsFulfillmentArrangementInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CorporateDepositsFulfillmentArrangement instance
+          schema:
+            $ref: '#/definitions/CRCorporateDepositsFulfillmentArrangementInitiateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateDepositsFulfillmentArrangement
+      summary: Update to any amendable fields of the CorporateDepositsFulfillmentArrangement instance
+      description: Update properties of an active corporate deposit account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Deposits Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRCorporateDepositsFulfillmentArrangementUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Corporate Deposits Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCorporateDepositsFulfillmentArrangementUpdateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCorporateDepositsFulfillmentArrangementUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the processing of an active corporate deposit account (change processing status)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Deposits Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRCorporateDepositsFulfillmentArrangementControlInputModel'
+      responses:
+        200:
+          description: Successful control of Corporate Deposits Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCorporateDepositsFulfillmentArrangementControlOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateDeposits
+      summary: Invoke a reporting action to obtain a Corporate Deposits Fulfillment Arrangement instance related report
+      description: Retrieve information about a corporate deposit account - either standard canned reports or selected instance attribute values
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCorporateDepositsFulfillmentArrangementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Corporate Deposits Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRCorporateDepositsFulfillmentArrangementRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/interest/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateDepositsFulfillmentArrangementInterest
+      summary: Invoke a reporting action to obtain a Interest instance related report.
+      description: Retrieve details of an interest transaction applied internally to the account .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Interest Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQInterestRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Interest Instance Record
+          schema:
+            $ref: '#/definitions/BQInterestRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/servicefees/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorporateDepositsFulfillmentArrangementServiceFees
+      summary: Details of a new ServiceFees instance
+      description: Initiate service fees against an account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Deposits Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/BQServiceFeesInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Corporate Deposits Fulfillment Arrangement instance
+          schema:
+            $ref: '#/definitions/BQServiceFeesInitiateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/servicefees/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCorporateDepositsFulfillmentArrangementServiceFeesUpdate
+      summary: Invoke an automated execute action against the ServiceFees instance
+      description: Apply a service fee to the account
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ServiceFees Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ServiceFees request payload
+        schema:
+          $ref: '#/definitions/BQServiceFeesExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of ServiceFees Instance Record
+          schema:
+            $ref: '#/definitions/BQServiceFeesExecuteOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/servicefees/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateDepositsFulfillmentArrangementServiceFees
+      summary: Invoke a reporting action to obtain a ServiceFees instance related report.
+      description: Retrieve information about a service fee applied to the account .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ServiceFees Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQServiceFeesRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ServiceFees Instance Record
+          schema:
+            $ref: '#/definitions/BQServiceFeesRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/accountlien/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorporateDepositsFulfillmentArrangementAccountLien
+      summary: Details of a new AccountLien instance
+      description: Set up an account lien
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Deposits Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/BQAccountLienInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Corporate Deposits Fulfillment Arrangement instance
+          schema:
+            $ref: '#/definitions/BQAccountLienInitiateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateDepositsFulfillmentArrangementAccountLien
+      summary: Update to any amendable fields of the AccountLien instance
+      description: Update details of an existing account lien
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AccountLien Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: AccountLien Request Payload
+        schema:
+          $ref: '#/definitions/BQAccountLienUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated AccountLien Instance
+          schema:
+            $ref: '#/definitions/BQAccountLienUpdateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCorporateDepositsFulfillmentArrangementAccountLienUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Exchange (i.e. confirm, reject) details of an account lien
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AccountLien Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: AccountLien request payload
+        schema:
+          $ref: '#/definitions/BQAccountLienExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of AccountLien Instance Record
+          schema:
+            $ref: '#/definitions/BQAccountLienExchangeOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/accountlien/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateDepositsFulfillmentArrangementAccountLien
+      summary: Invoke a reporting action to obtain a AccountLien instance related report.
+      description: Retrieve details about an active account lien .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AccountLien Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAccountLienRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved AccountLien Instance Record
+          schema:
+            $ref: '#/definitions/BQAccountLienRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/accountsweep/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorporateDepositsFulfillmentArrangementAccountSweep
+      summary: Details of a new AccountSweep instance
+      description: Set up an account sweep
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Deposits Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/BQAccountSweepInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Corporate Deposits Fulfillment Arrangement instance
+          schema:
+            $ref: '#/definitions/BQAccountSweepInitiateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateDepositsFulfillmentArrangementAccountSweep
+      summary: Update to any amendable fields of the AccountSweep instance
+      description: Update details of an existing account sweep
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AccountSweep Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: AccountSweep Request Payload
+        schema:
+          $ref: '#/definitions/BQAccountSweepUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated AccountSweep Instance
+          schema:
+            $ref: '#/definitions/BQAccountSweepUpdateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCorporateDepositsFulfillmentArrangementAccountSweepUpdate
+      summary: Invoke an automated execute action against the AccountSweep instance
+      description: Trigger an account sweep transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AccountSweep Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: AccountSweep request payload
+        schema:
+          $ref: '#/definitions/BQAccountSweepExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of AccountSweep Instance Record
+          schema:
+            $ref: '#/definitions/BQAccountSweepExecuteOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/accountsweep/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateDepositsFulfillmentArrangementAccountSweep
+      summary: Invoke a reporting action to obtain a AccountSweep instance related report.
+      description: Retrieve details about an active sweep facility or specific sweep transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: AccountSweep Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAccountSweepRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved AccountSweep Instance Record
+          schema:
+            $ref: '#/definitions/BQAccountSweepRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorporateDepositsFulfillmentArrangementDepositsandWithdrawals
+      summary: Details of a new DepositsandWithdrawals instance
+      description: Initialize deposit or withdrawal transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Deposits Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/BQDepositsandWithdrawalsInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Corporate Deposits Fulfillment Arrangement instance
+          schema:
+            $ref: '#/definitions/BQDepositsandWithdrawalsInitiateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateDepositsFulfillmentArrangementDepositsandWithdrawals
+      summary: Update to any amendable fields of the DepositsandWithdrawals instance
+      description: Update/correct a deposit or withdrawal transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: DepositsandWithdrawals Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: DepositsandWithdrawals Request Payload
+        schema:
+          $ref: '#/definitions/BQDepositsandWithdrawalsUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated DepositsandWithdrawals Instance
+          schema:
+            $ref: '#/definitions/BQDepositsandWithdrawalsUpdateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCorporateDepositsFulfillmentArrangementDepositsandWithdrawalsUpdate
+      summary: Invoke an automated execute action against the DepositsandWithdrawals instance
+      description: Execute a deposit or withdrawal transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: DepositsandWithdrawals Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: DepositsandWithdrawals request payload
+        schema:
+          $ref: '#/definitions/BQDepositsandWithdrawalsExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of DepositsandWithdrawals Instance Record
+          schema:
+            $ref: '#/definitions/BQDepositsandWithdrawalsExecuteOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/depositsandwithdrawals/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateDepositsFulfillmentArrangementDepositsandWithdrawals
+      summary: Invoke a reporting action to obtain a DepositsandWithdrawals instance related report.
+      description: Retrieve details about a deposit or withdrawal transaction .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: DepositsandWithdrawals Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQDepositsandWithdrawalsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved DepositsandWithdrawals Instance Record
+          schema:
+            $ref: '#/definitions/BQDepositsandWithdrawalsRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/payments/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorporateDepositsFulfillmentArrangementPayments
+      summary: Details of a new Payments instance
+      description: Initialize a payment transaction (can be single or repeating)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Deposits Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/BQPaymentsInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Corporate Deposits Fulfillment Arrangement instance
+          schema:
+            $ref: '#/definitions/BQPaymentsInitiateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateDepositsFulfillmentArrangementPayments
+      summary: Update to any amendable fields of the Payments instance
+      description: Update a payment transaction configuration or specific transaction
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payments Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payments Request Payload
+        schema:
+          $ref: '#/definitions/BQPaymentsUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Payments Instance
+          schema:
+            $ref: '#/definitions/BQPaymentsUpdateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCorporateDepositsFulfillmentArrangementPaymentsUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Verify/approve a scheduled repeating payment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payments Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payments request payload
+        schema:
+          $ref: '#/definitions/BQPaymentsExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Payments Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentsExchangeOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCorporateDepositsFulfillmentArrangementPaymentsUpdate
+      summary: Invoke an automated execute action against the Payments instance
+      description: Trigger a payment for a repeating payment set up
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payments Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Payments request payload
+        schema:
+          $ref: '#/definitions/BQPaymentsExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Payments Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentsExecuteOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/payments/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateDepositsFulfillmentArrangementPayments
+      summary: Invoke a reporting action to obtain a Payments instance related report.
+      description: Retrieve details about a payment transaction or arrangement .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Payments Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPaymentsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Payments Instance Record
+          schema:
+            $ref: '#/definitions/BQPaymentsRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/issueddevice/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCorporateDepositsFulfillmentArrangementIssuedDevice
+      summary: Details of a new IssuedDevice instance
+      description: Initiate the provision of issued inventory for the account (include initial issuance)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Corporate Deposits Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/BQIssuedDeviceInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Corporate Deposits Fulfillment Arrangement instance
+          schema:
+            $ref: '#/definitions/BQIssuedDeviceInitiateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCorporateDepositsFulfillmentArrangementIssuedDevice
+      summary: Update to any amendable fields of the IssuedDevice instance
+      description: Update the issued inventory details and provisioning configuration or status
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: IssuedDevice Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: IssuedDevice Request Payload
+        schema:
+          $ref: '#/definitions/BQIssuedDeviceUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated IssuedDevice Instance
+          schema:
+            $ref: '#/definitions/BQIssuedDeviceUpdateOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCorporateDepositsFulfillmentArrangementIssuedDeviceUpdate
+      summary: Invoke a service request action against the IssuedDevice instance
+      description: Request changes or replacement device or inventory
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: IssuedDevice Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: IssuedDevice request payload
+        schema:
+          $ref: '#/definitions/BQIssuedDeviceRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of IssuedDevice Instance Record
+          schema:
+            $ref: '#/definitions/BQIssuedDeviceRequestOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/issueddevice/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCorporateDepositsFulfillmentArrangementIssuedDevice
+      summary: Invoke a reporting action to obtain a IssuedDevice instance related report.
+      description: Retrieve details about issued devices or inventory .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: IssuedDevice Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQIssuedDeviceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved IssuedDevice Instance Record
+          schema:
+            $ref: '#/definitions/BQIssuedDeviceRetrieveOutputModel'
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorporateDepositsReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CorporateDeposits Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /corporate-deposits/corporate-deposits-fulfillment-arrangement/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorporateDepositsBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Interest',  'ServiceFees',  'AccountLien',  'AccountSweep',  'DepositsandWithdrawals',  'Payments',  'IssuedDevice', ]
+  /corporate-deposits/{sd-reference-id}/corporate-deposits-fulfillment-arrangement/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCorporateDepositsBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Corporate Deposits Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Corporate Deposits Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- IssuedDevice
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- IssuedDevice Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [IssuedDeviceID1, IssuedDeviceID2]
