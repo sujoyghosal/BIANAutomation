@@ -1,0 +1,1690 @@
+swagger: '2.0'
+info:
+ version: '1.0.0'
+ title: 'Service Domain - Servicing Order'
+ description: >
+
+    ## Executive Summary:
+    This service domain handles the processing of a customer servicing request as a predefined procedure. A range of standard servicing requests can be supported. The process can include a check of permissions when the request is made by a third party/service provider
+
+    ## Example of Use:
+    A customer changes address and requests that all of their product and service arrangements are updated
+
+    ## Description:
+    The Servicing Order service domain handles the processing of a request that may impact multiple products and services and may involve processing cycles/steps and possibly have associated fees/charges. There can be several types of standard 'servicing order' defined for selection as appropriate. A servicing order can be initiated by a customer directly or may be requested on their behalf by an authorized third party service provider. If the request is made by a third party service provider on behalf of a customer the process can include a check that the associated permissions/mandates are in place
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-servicing-order/1.0.0
+schemes:
+ - https
+paths:
+  /servicing-order/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDServicingOrder
+      summary: Activate  a SDServicingOrder servicing session
+      description: Activate  a  SDServicingOrder servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDServicingOrder Request Payload
+        schema:
+          $ref: '#/definitions/SDServicingOrderActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDServicingOrderActivateOutputModel'
+  /servicing-order/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDServicingOrder
+      summary: Update an active SDServicingOrder session configuration
+      description: Update an active SDServicingOrder session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDServicingOrder Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDServicingOrder Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDServicingOrderConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDServicingOrderConfigureOutputModel'
+  /servicing-order/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDServicingOrder
+      summary: "Capturing feedback against the SDServicingOrder service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDServicingOrder service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDServicingOrder Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDServicingOrder Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDServicingOrderFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDServicingOrderFeedbackOutputModel'
+  /servicing-order/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDServicingOrder
+      summary: Analytical views maintained by the SDServicingOrder service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDServicingOrder service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDServicingOrder Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDServicingOrder Retrieve Request Payload
+        schema:
+          $ref: '#/definitions/SDServicingOrderRetrieveInputModel'
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDServicingOrderRetrieveOutputModel'
+  /servicing-order/{sd-reference-id}/servicing-order-procedure/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateServicingOrderProcedure
+      summary: Details of a new ServicingOrderProcedure instance
+      description: Initiate a servicing order (within a contact session)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ServicingOrderProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingOrderProcedureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new ServicingOrderProcedure instance
+          schema:
+            $ref: '#/definitions/CRServicingOrderProcedureInitiateOutputModel'
+  /servicing-order/{sd-reference-id}/servicing-order-procedure/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateServicingOrderProcedure
+      summary: Update to any amendable fields of the ServicingOrderProcedure instance
+      description: Update details of a servicing order
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Order Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing Order Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingOrderProcedureUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Servicing Order Procedure Instance
+          schema:
+            $ref: '#/definitions/CRServicingOrderProcedureUpdateOutputModel'
+  /servicing-order/{sd-reference-id}/servicing-order-procedure/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlServicingOrderProcedureUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the execution of the order (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Order Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing Order Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingOrderProcedureControlInputModel'
+      responses:
+        200:
+          description: Successful control of Servicing Order Procedure Instance
+          schema:
+            $ref: '#/definitions/CRServicingOrderProcedureControlOutputModel'
+  /servicing-order/{sd-reference-id}/servicing-order-procedure/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeServicingOrderProcedureUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, verify, etc. a servicing order action
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Order Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing Order Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingOrderProcedureExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Servicing Order Procedure Instance
+          schema:
+            $ref: '#/definitions/CRServicingOrderProcedureExchangeOutputModel'
+  /servicing-order/{sd-reference-id}/servicing-order-procedure/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeServicingOrderProcedureUpdate
+      summary: Invoke an automated execute action against the ServicingOrderProcedure instance
+      description: Execute an automated task in a servicing order (e.g. upload data)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Order Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing Order Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingOrderProcedureExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Servicing Order Procedure Instance
+          schema:
+            $ref: '#/definitions/CRServicingOrderProcedureExecuteOutputModel'
+  /servicing-order/{sd-reference-id}/servicing-order-procedure/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestServicingOrderProcedureUpdate
+      summary: Invoke a service request action against the ServicingOrderProcedure instance
+      description: Request manual intervention in a servicing order (e.g. engage a servicing agent)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Order Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Servicing Order Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRServicingOrderProcedureRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Servicing Order Procedure Instance
+          schema:
+            $ref: '#/definitions/CRServicingOrderProcedureRequestOutputModel'
+  /servicing-order/{sd-reference-id}/servicing-order-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveServicingOrder
+      summary: Invoke a reporting action to obtain a Servicing Order Procedure instance related report
+      description: Retrieve details about a servicing order
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Order Procedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRServicingOrderProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Servicing Order Procedure Instance
+          schema:
+            $ref: '#/definitions/CRServicingOrderProcedureRetrieveOutputModel'
+  /servicing-order/{sd-reference-id}/servicing-order-procedure:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveServicingOrderReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ServicingOrder Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /servicing-order/servicing-order-procedure/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveServicingOrderBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /servicing-order/{sd-reference-id}/servicing-order-procedure/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveServicingOrderBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Servicing Order Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Servicing Order Procedure Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ID1, ID2]
+definitions:
+ SDServicingOrderActivateInputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainCenterReference:
+    type: string
+    example: "SCR793499"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service center/operational unit
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR703914"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+ SDServicingOrderActivateOutputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskReference:
+    type: string
+    example: "SAATR758836"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service activation service call
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR783215"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServicingSessionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Consolidated information record for the servicing session
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "769192"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "791202"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "767210"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDServicingOrderConfigureInputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR764367"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR744740"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "710630"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+ SDServicingOrderConfigureOutputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskReference:
+    type: string
+    example: "SCATR765419"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service configuration service call
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDServicingOrderFeedbackInputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     serviceDomainServicingSessionReference:
+      type: string
+      example: "796678"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the active servicing session
+     controlRecordInstanceReference:
+      type: string
+      example: "724385"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance if appropriate
+     behaviorQualifierInstanceReference:
+      type: string
+      example: "789747"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the behavior qualifier instance if appropriate
+     feedbackRecordType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The layout/type of the feedback provided
+     feedbackRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The content of the feedback in any suitable format and media
+ SDServicingOrderFeedbackOutputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskReference:
+    type: string
+    example: "SFATR765157"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a feedback service call
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     feedbackRecordDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date/time the feedback submitted for consideration
+     feedbackRecordStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of processing the feedback e.g. received, considered, responded to
+     employeeBusinessUnitReference:
+      type: string
+      example: "769031"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to business unit/employee responsible for handling feedback
+ SDServicingOrderRetrieveInputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+ SDServicingOrderRetrieveOutputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskReference:
+    type: string
+    example: "SRATR795161"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a retrieve service call
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+       activityAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the activity analysis that can be on-going, periodic and actual and projected
+       activityAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of activity analysis report available
+       activityAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The activity analysis report in any suitable form including selection filters where appropriate
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+       performanceAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the performance analysis that can be on-going or periodic
+       performanceAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of performance analysis report available
+       performanceAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The performance analysis report in any suitable form including selection filters where appropriate
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+       controlRecordPortfolioAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the portfolio analysis that can be on-going, periodic and actual and projected (can be unstructured data)
+       controlRecordPortfolioAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of external portfolio analysis report available
+       controlRecordAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The external analysis report in any suitable form including selection filters where appropriate
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Refers to the different types of services offered
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+       serviceDomainServiceDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the offered service 
+       serviceDomainServicePoliciesandGuidelines:
+        type: object
+        properties:
+         serviceDomainServiceEligibility:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Policies and rules governing access to the offered service, includes eligibility and qualifications
+         serviceDomainServiceIntendedUses:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Guidelines covering allowed, intended use of the service
+         serviceDomainServicePricingandTerms:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Terms, prices, penalties associated with use of the service
+       serviceDomainServiceSchedule:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Schedule defining when the accessed service is available
+ CRServicingOrderProcedureInitiateInputModel:
+  type: object
+  properties: 
+   servicingOrderServicingSessionReference:
+    type: string
+    example: "SOSSR706271"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   servicingOrderProcedureInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   servicingOrderProcedureInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Servicing Order Procedure instance (e.g. initialised, pending, active)
+   servicingOrderProcedureInstanceRecord:
+    type: object
+    properties:
+     thirdPartyReference:
+      type: string
+      example: "772917"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a third party service provider that handles some aspect of customer servicing access with the bank
+     thirdPartyServicingMandateReference:
+      type: string
+      example: "750288"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a third party servicing mandate - used when a third party is requesting the service order
+     thirdPartyServicingMandate:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The servicing mandate for a third party defines the customers and service access allowed
+     customerReference:
+      type: string
+      example: "762141"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The customer requesting the servicing order directly or the customer that is being serviced indirectly by the third party
+     customerEligibilityAssessmentInstanceReference:
+      type: string
+      example: "754563"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer's active services and products record
+     customerEligibilityAssessmentInstanceRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The active products and services record includes an indication of the services that can be access via a third party servicing order with the appropriate mandate in place
+     servicingOrderType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of servicing order being processed (e.g. change of address, change of employment‚Ä¶)
+     servicingOrderTaskRecord:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date and time that the servicing order is processed
+       employeeBusinessUnitReference:
+        type: string
+        example: "749717"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Employees involved in the servicing order
+ CRServicingOrderProcedureInitiateOutputModel:
+  type: object
+  properties: 
+   servicingOrderProcedureInstanceReference:
+    type: string
+    example: "SOPIR790090"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing Order Procedure instance
+   servicingOrderProcedureInitiateActionReference:
+    type: string
+    example: "SOPIAR703539"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   servicingOrderProcedureInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   servicingOrderProcedureInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Servicing Order Procedure instance (e.g. initialised, pending, active)
+   servicingOrderProcedureInstanceRecord:
+    type: object
+    properties:
+     servicingOrderTaskRecord:
+      type: object
+      properties:
+       servicingOrderDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines the processing tasks and their sequencing followed by the servicing order
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date and time that the servicing order is processed
+       servicingOrderWorkProduct:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       servicingOrderWorkTaskResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The outcome of the servicing order
+ CRServicingOrderProcedureUpdateInputModel:
+  type: object
+  properties: 
+   servicingOrderServicingSessionReference:
+    type: string
+    example: "SOSSR740953"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   servicingOrderProcedureInstanceReference:
+    type: string
+    example: "SOPIR725229"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing Order Procedure instance
+   servicingOrderProcedureUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ CRServicingOrderProcedureUpdateOutputModel:
+  type: object
+  properties: 
+   servicingOrderProcedureUpdateActionTaskReference:
+    type: string
+    example: "SOPUATR721384"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   servicingOrderProcedureUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ CRServicingOrderProcedureControlInputModel:
+  type: object
+  properties: 
+   servicingOrderServicingSessionReference:
+    type: string
+    example: "SOSSR726113"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   servicingOrderProcedureInstanceReference:
+    type: string
+    example: "SOPIR714756"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing Order Procedure instance
+   servicingOrderProcedureControlActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The processing control service call consolidated processing record
+   servicingOrderProcedureControlActionRequest:
+    type: object
+    properties:
+     controlActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of processing action requested (e.g. suspend, skip, terminate)
+ CRServicingOrderProcedureControlOutputModel:
+  type: object
+  properties: 
+   servicingOrderProcedureControlActionTaskReference:
+    type: string
+    example: "SOPCATR751258"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Servicing Order Procedure instance control processing service call
+   servicingOrderProcedureControlActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The processing control service call consolidated processing record
+   servicingOrderProcedureControlActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the control action service response
+ CRServicingOrderProcedureExchangeInputModel:
+  type: object
+  properties: 
+   servicingOrderServicingSessionReference:
+    type: string
+    example: "SOSSR755600"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   servicingOrderProcedureInstanceReference:
+    type: string
+    example: "SOPIR769361"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing Order Procedure instance
+   servicingOrderProcedureExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   servicingOrderProcedureExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ CRServicingOrderProcedureExchangeOutputModel:
+  type: object
+  properties: 
+   servicingOrderProcedureExchangeActionTaskReference:
+    type: string
+    example: "SOPEATR762427"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Servicing Order Procedure instance exchange service call
+   servicingOrderProcedureExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   servicingOrderProcedureExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+ CRServicingOrderProcedureExecuteInputModel:
+  type: object
+  properties: 
+   servicingOrderServicingSessionReference:
+    type: string
+    example: "SOSSR759116"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   servicingOrderProcedureInstanceReference:
+    type: string
+    example: "SOPIR793949"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing Order Procedure instance
+   servicingOrderProcedureExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   executeRecordType:
+    type: object
+    properties:
+     executeInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
+ CRServicingOrderProcedureExecuteOutputModel:
+  type: object
+  properties: 
+   servicingOrderProcedureExecuteActionTaskReference:
+    type: string
+    example: "SOPEATR779713"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Servicing Order Procedure instance execute service call
+   servicingOrderProcedureExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   executeRecordReference:
+    type: string
+    example: "ERR741092"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the execute transaction/record
+   executeResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the execute action service response
+ CRServicingOrderProcedureRequestInputModel:
+  type: object
+  properties: 
+   servicingOrderServicingSessionReference:
+    type: string
+    example: "SOSSR745550"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   servicingOrderProcedureInstanceReference:
+    type: string
+    example: "SOPIR797576"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Servicing Order Procedure instance
+   servicingOrderProcedureRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordType:
+    type: object
+    properties:
+     requestInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Request service record (e.g. rework function, refresh record, process workstep)
+ CRServicingOrderProcedureRequestOutputModel:
+  type: object
+  properties: 
+   servicingOrderProcedureRequestActionTaskReference:
+    type: string
+    example: "SOPRATR720041"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Servicing Order Procedure instance request service call
+   servicingOrderProcedureRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordReference:
+    type: string
+    example: "RRR764242"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ CRServicingOrderProcedureRetrieveInputModel:
+  type: object
+  properties: 
+   servicingOrderProcedureRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   servicingOrderProcedureRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   servicingOrderProcedureInstanceReportRecord:
+    type: object
+    properties:
+     servicingOrderProcedureInstanceReportReference:
+      type: string
+      example: "720570"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+     servicingOrderProcedureInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     servicingOrderProcedureInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+   servicingOrderProcedureInstanceAnalysis:
+    type: object
+    properties:
+     servicingOrderProcedureInstanceAnalysisReference:
+      type: string
+      example: "793225"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+     servicingOrderProcedureInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     servicingOrderProcedureInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+ CRServicingOrderProcedureRetrieveOutputModel:
+  type: object
+  properties: 
+   servicingOrderProcedureInstanceRecord:
+    type: object
+    properties:
+     thirdPartyReference:
+      type: string
+      example: "770840"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a third party service provider that handles some aspect of customer servicing access with the bank
+     thirdPartyServicingMandateReference:
+      type: string
+      example: "715722"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a third party servicing mandate - used when a third party is requesting the service order
+     thirdPartyServicingMandate:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The servicing mandate for a third party defines the customers and service access allowed
+     customerReference:
+      type: string
+      example: "711640"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The customer requesting the servicing order directly or the customer that is being serviced indirectly by the third party
+     customerEligibilityAssessmentInstanceReference:
+      type: string
+      example: "780699"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer's active services and products record
+     customerEligibilityAssessmentInstanceRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The active products and services record includes an indication of the services that can be access via a third party servicing order with the appropriate mandate in place
+     servicingOrderType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of servicing order being processed (e.g. change of address, change of employment‚Ä¶)
+     servicingOrderTaskRecord:
+      type: object
+      properties:
+       servicingOrderDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines the processing tasks and their sequencing followed by the servicing order
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date and time that the servicing order is processed
+       employeeBusinessUnitReference:
+        type: string
+        example: "745111"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Employees involved in the servicing order
+       servicingOrderWorkProduct:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       servicingOrderWorkTaskResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The outcome of the servicing order
+   servicingOrderProcedureRetrieveActionTaskReference:
+    type: string
+    example: "SOPRATR732167"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Servicing Order Procedure instance retrieve service call
+   servicingOrderProcedureRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   servicingOrderProcedureRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   servicingOrderProcedureInstanceReportRecord:
+    type: object
+    properties:
+     servicingOrderProcedureInstanceReportData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     servicingOrderProcedureInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     servicingOrderProcedureInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   servicingOrderProcedureInstanceAnalysis:
+    type: object
+    properties:
+     servicingOrderProcedureInstanceAnalysisData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     servicingOrderProcedureInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     servicingOrderProcedureInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
