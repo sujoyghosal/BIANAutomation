@@ -10,7 +10,7 @@ info:
 
     ## Example of Use:
 
-    A pattern of possible fraud is highlighted in transaction records that is researched and evidence of fraud discovered. Prosecution/resolution activity is initiated
+    Example of use:A pattern of possible fraud is highlighted in transaction records that is researched and evidence of fraud discovered. Prosecution/resolution activity is initiated
 
     ## Description:
 
@@ -273,11 +273,11 @@ paths:
           description: Successfully  Retrieved CaseAnalysis Instance Record
           schema:
             $ref: '#/definitions/BQCaseAnalysisRetrieveOutputModel'
-  /fraud-resolution/{sd-reference-id}/fraud-resolution/{cr-reference-id}/caseanalysis/{bq-reference-id}/exchange:
+  /fraud-resolution/{sd-reference-id}/fraud-resolution/{cr-reference-id}/casedetermination/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
-      operationId: exchangeFraudResolutionCaseAnalysisUpdate
+      operationId: exchangeFraudResolutionCaseDeterminationUpdate
       summary: Handle an external exchange (e.g. accept, reject, verify)
       description: Accept or reject proposed determination
       produces:
@@ -295,21 +295,21 @@ paths:
         type: string
       - name: bq-reference-id
         in: path
-        description: CaseAnalysis Instance Reference
+        description: CaseDetermination Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: CaseAnalysis request payload
+        description: CaseDetermination request payload
         schema:
-          $ref: '#/definitions/BQCaseAnalysisExchangeInputModel'
+          $ref: '#/definitions/BQCaseDeterminationExchangeInputModel'
       responses:
         200:
-          description: Successful exchange of CaseAnalysis Instance Record
+          description: Successful exchange of CaseDetermination Instance Record
           schema:
-            $ref: '#/definitions/BQCaseAnalysisExchangeOutputModel'
-  /fraud-resolution/{sd-reference-id}/fraud-resolution/{cr-reference-id}/casedeterminations/{bq-reference-id}/:
+            $ref: '#/definitions/BQCaseDeterminationExchangeOutputModel'
+  /fraud-resolution/{sd-reference-id}/fraud-resolution/{cr-reference-id}/casedetermination/{bq-reference-id}/:
     get:
       tags:
       - retrieve
@@ -344,7 +344,7 @@ paths:
           description: Successfully  Retrieved CaseDetermination Instance Record
           schema:
             $ref: '#/definitions/BQCaseDeterminationRetrieveOutputModel'
-  /fraud-resolution/{sd-reference-id}/fraud-resolution/{cr-reference-id}/caseresolutions/{bq-reference-id}/requisition:
+  /fraud-resolution/{sd-reference-id}/fraud-resolution/{cr-reference-id}/caseresolution/{bq-reference-id}/requisition:
     put:
       tags:
       - request
@@ -380,7 +380,7 @@ paths:
           description: Successful requisition of CaseResolution Instance Record
           schema:
             $ref: '#/definitions/BQCaseResolutionRequestOutputModel'
-  /fraud-resolution/{sd-reference-id}/fraud-resolution/{cr-reference-id}/caseresolutions/{bq-reference-id}/:
+  /fraud-resolution/{sd-reference-id}/fraud-resolution/{cr-reference-id}/caseresolution/{bq-reference-id}/:
     get:
       tags:
       - retrieve
@@ -1144,7 +1144,7 @@ definitions:
   properties: 
    fraudResolutionServicingSessionReference:
     type: string
-    example: "FRSSR720015"
+    example: "FRSSR738174"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1172,35 +1172,42 @@ definitions:
         general-info: Type of case (e.g. disputed charge, merchant fraud, stolen/fake device)
      productInstanceReference:
       type: string
-      example: "713610"
+      example: "796831"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product/service associated with case
      customerReference:
       type: string
-      example: "794428"
+      example: "705771"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with case if applicable
      merchantReference:
       type: string
-      example: "788510"
+      example: "705237"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the merchant associated with case if applicable
+     interstedPartyReference:
+      type: string
+      example: "756156"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to any other interested parties (such as intermediaries)
      contactReference:
       type: string
-      example: "797540"
+      example: "798867"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Customer contact reference if the case was raised during a customer contact
      transactionReference:
       type: string
-      example: "711033"
+      example: "708248"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1226,7 +1233,7 @@ definitions:
         general-info: Specific dates and ties of significance to the case
      employeeBusinessUnitReference:
       type: string
-      example: "742094"
+      example: "779139"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1254,14 +1261,14 @@ definitions:
   properties: 
    fraudResolutionInstanceReference:
     type: string
-    example: "FRIR739603"
+    example: "FRIR778708"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Fraud Resolution instance
    fraudResolutionInitiateActionReference:
     type: string
-    example: "FRIAR741696"
+    example: "FRIAR785110"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1310,14 +1317,14 @@ definitions:
   properties: 
    fraudResolutionServicingSessionReference:
     type: string
-    example: "FRSSR706816"
+    example: "FRSSR795936"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    fraudResolutionInstanceReference:
     type: string
-    example: "FRIR775706"
+    example: "FRIR792562"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1333,35 +1340,42 @@ definitions:
         general-info: Type of case (e.g. disputed charge, merchant fraud, stolen/fake device)
      productInstanceReference:
       type: string
-      example: "744156"
+      example: "726937"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product/service associated with case
      customerReference:
       type: string
-      example: "771205"
+      example: "752767"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with case if applicable
      merchantReference:
       type: string
-      example: "723611"
+      example: "770128"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the merchant associated with case if applicable
+     interstedPartyReference:
+      type: string
+      example: "745247"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to any other interested parties (such as intermediaries)
      contactReference:
       type: string
-      example: "730150"
+      example: "760939"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Customer contact reference if the case was raised during a customer contact
      transactionReference:
       type: string
-      example: "785500"
+      example: "767985"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1387,7 +1401,7 @@ definitions:
         general-info: Specific dates and ties of significance to the case
      employeeBusinessUnitReference:
       type: string
-      example: "715525"
+      example: "781741"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1436,35 +1450,42 @@ definitions:
         general-info: Type of case (e.g. disputed charge, merchant fraud, stolen/fake device)
      productInstanceReference:
       type: string
-      example: "744156"
+      example: "726937"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product/service associated with case
      customerReference:
       type: string
-      example: "771205"
+      example: "752767"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with case if applicable
      merchantReference:
       type: string
-      example: "723611"
+      example: "770128"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the merchant associated with case if applicable
+     interstedPartyReference:
+      type: string
+      example: "745247"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to any other interested parties (such as intermediaries)
      contactReference:
       type: string
-      example: "730150"
+      example: "760939"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Customer contact reference if the case was raised during a customer contact
      transactionReference:
       type: string
-      example: "785500"
+      example: "767985"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1490,7 +1511,7 @@ definitions:
         general-info: Specific dates and ties of significance to the case
      employeeBusinessUnitReference:
       type: string
-      example: "715525"
+      example: "781741"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1515,7 +1536,7 @@ definitions:
         general-info: The processing status for the case
    fraudResolutionUpdateActionTaskReference:
     type: string
-    example: "FRUATR742695"
+    example: "FRUATR770852"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1537,14 +1558,14 @@ definitions:
   properties: 
    fraudResolutionServicingSessionReference:
     type: string
-    example: "FRSSR758935"
+    example: "FRSSR753582"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    fraudResolutionInstanceReference:
     type: string
-    example: "FRIR784809"
+    example: "FRIR761399"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1569,7 +1590,7 @@ definitions:
   properties: 
    fraudResolutionExchangeActionTaskReference:
     type: string
-    example: "FREATR766158"
+    example: "FREATR738478"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1606,7 +1627,7 @@ definitions:
     properties:
      fraudResolutionInstanceReportReference:
       type: string
-      example: "708380"
+      example: "745105"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1628,7 +1649,7 @@ definitions:
     properties:
      fraudResolutionInstanceAnalysisReference:
       type: string
-      example: "734186"
+      example: "797142"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1659,35 +1680,42 @@ definitions:
         general-info: Type of case (e.g. disputed charge, merchant fraud, stolen/fake device)
      productInstanceReference:
       type: string
-      example: "741392"
+      example: "721144"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product/service associated with case
      customerReference:
       type: string
-      example: "723590"
+      example: "732671"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with case if applicable
      merchantReference:
       type: string
-      example: "721616"
+      example: "787060"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the merchant associated with case if applicable
+     interstedPartyReference:
+      type: string
+      example: "777977"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to any other interested parties (such as intermediaries)
      contactReference:
       type: string
-      example: "770685"
+      example: "717224"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Customer contact reference if the case was raised during a customer contact
      transactionReference:
       type: string
-      example: "781383"
+      example: "765603"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1713,7 +1741,7 @@ definitions:
         general-info: Specific dates and ties of significance to the case
      employeeBusinessUnitReference:
       type: string
-      example: "776729"
+      example: "763603"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1738,7 +1766,7 @@ definitions:
         general-info: The processing status for the case
    fraudResolutionRetrieveActionTaskReference:
     type: string
-    example: "FRRATR795238"
+    example: "FRRATR719864"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1800,20 +1828,6 @@ definitions:
  BQCaseAnalysisRetrieveInputModel:
   type: object
   properties: 
-   fraudResolutionInstanceReference:
-    type: string
-    example: "FRIR747662"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Fraud Resolution instance
-   caseAnalysisInstanceReference:
-    type: string
-    example: "CAIR702447"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Case Analysis instance
    caseAnalysisRetrieveActionTaskRecord:
     type: object
     description: |
@@ -1831,7 +1845,7 @@ definitions:
     properties:
      caseAnalysisInstanceReportReference:
       type: string
-      example: "799534"
+      example: "759427"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1841,7 +1855,7 @@ definitions:
     properties:
      caseAnalysisInstanceAnalysisReference:
       type: string
-      example: "732056"
+      example: "796311"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1860,35 +1874,42 @@ definitions:
         general-info: Type of case (e.g. disputed charge, merchant fraud, stolen/fake device)
      productInstanceReference:
       type: string
-      example: "798109"
+      example: "712259"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product/service associated with case
      customerReference:
       type: string
-      example: "771218"
+      example: "791603"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with case if applicable
      merchantReference:
       type: string
-      example: "706121"
+      example: "791970"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the merchant associated with case if applicable
+     interstedPartyReference:
+      type: string
+      example: "734768"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to any other interested parties (such as intermediaries)
      contactReference:
       type: string
-      example: "734965"
+      example: "742197"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Customer contact reference if the case was raised during a customer contact
      transactionReference:
       type: string
-      example: "705352"
+      example: "763561"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1914,7 +1935,7 @@ definitions:
         general-info: Specific dates and ties of significance to the case
      employeeBusinessUnitReference:
       type: string
-      example: "773504"
+      example: "719678"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1948,7 +1969,7 @@ definitions:
         general-info: The result of the case analysis
    caseAnalysisRetrieveActionTaskReference:
     type: string
-    example: "CARATR733434"
+    example: "CARATR736198"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2019,16 +2040,30 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQCaseAnalysisExchangeInputModel:
+ BQCaseDeterminationExchangeInputModel:
   type: object
   properties: 
-   caseAnalysisExchangeActionTaskRecord:
+   fraudResolutionInstanceReference:
+    type: string
+    example: "FRIR701061"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Fraud Resolution instance
+   caseDeterminationInstanceReference:
+    type: string
+    example: "CDIR779637"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Case Determination instance
+   caseDeterminationExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
-   caseAnalysisExchangeActionRequest:
+   caseDeterminationExchangeActionRequest:
     type: object
     properties:
      exchangeActionType:
@@ -2037,34 +2072,34 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The type of exchange (e.g. accept, reject, verify)
- BQCaseAnalysisExchangeOutputModel:
+ BQCaseDeterminationExchangeOutputModel:
   type: object
   properties: 
-   caseAnalysisExchangeActionTaskReference:
+   caseDeterminationExchangeActionTaskReference:
     type: string
-    example: "CAEATR735493"
+    example: "CDEATR734243"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Case Analysis instance exchange service call
-   caseAnalysisExchangeActionTaskRecord:
+      general-info: Reference to a Case Determination instance exchange service call
+   caseDeterminationExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
-   caseAnalysisExchangeActionResponse:
+   caseDeterminationExchangeActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the exchange action service response
-   caseAnalysisInstanceStatus:
+   caseDeterminationInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Case Analysis instance (e.g. accepted, rejected, verified)
+      general-info: The status of the Case Determination instance (e.g. accepted, rejected, verified)
  BQCaseDeterminationRetrieveInputModel:
   type: object
   properties: 
@@ -2085,7 +2120,7 @@ definitions:
     properties:
      caseDeterminationInstanceReportReference:
       type: string
-      example: "731142"
+      example: "743832"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2095,7 +2130,7 @@ definitions:
     properties:
      caseDeterminationInstanceAnalysisReference:
       type: string
-      example: "731804"
+      example: "720176"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2114,35 +2149,42 @@ definitions:
         general-info: Type of case (e.g. disputed charge, merchant fraud, stolen/fake device)
      productInstanceReference:
       type: string
-      example: "712902"
+      example: "717007"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product/service associated with case
      customerReference:
       type: string
-      example: "750883"
+      example: "768744"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with case if applicable
      merchantReference:
       type: string
-      example: "710326"
+      example: "770797"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the merchant associated with case if applicable
+     interstedPartyReference:
+      type: string
+      example: "731134"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to any other interested parties (such as intermediaries)
      contactReference:
       type: string
-      example: "704903"
+      example: "738152"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Customer contact reference if the case was raised during a customer contact
      transactionReference:
       type: string
-      example: "747394"
+      example: "789676"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2168,7 +2210,7 @@ definitions:
         general-info: Specific dates and ties of significance to the case
      employeeBusinessUnitReference:
       type: string
-      example: "730677"
+      example: "739881"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2205,7 +2247,7 @@ definitions:
     properties:
      customerAgreementReference:
       type: string
-      example: "757387"
+      example: "747951"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2218,7 +2260,7 @@ definitions:
         general-info: Customer agreement accessed to determine constraints on resolution approach
      merchantAgreementReference:
       type: string
-      example: "707888"
+      example: "767561"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2229,6 +2271,19 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Merchant agreement accessed to determine constraints on resolution approach
+     interestedPartyAgreementReference:
+      type: string
+      example: "790811"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the interested party's agreement
+     interestedPartyAgreement:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Interested party agreement accessed to determine constraints on resolution approach
      fraudCaseDeterminationRecord:
       type: object
       description: |
@@ -2237,7 +2292,7 @@ definitions:
         general-info: Record of rules and guidelines applied to determine fraud case resolution
    caseDeterminationRetrieveActionTaskReference:
     type: string
-    example: "CDRATR772234"
+    example: "CDRATR725114"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2322,35 +2377,42 @@ definitions:
         general-info: Type of case (e.g. disputed charge, merchant fraud, stolen/fake device)
      productInstanceReference:
       type: string
-      example: "791747"
+      example: "719281"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product/service associated with case
      customerReference:
       type: string
-      example: "741618"
+      example: "791938"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with case if applicable
      merchantReference:
       type: string
-      example: "794300"
+      example: "744642"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the merchant associated with case if applicable
+     interstedPartyReference:
+      type: string
+      example: "756694"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to any other interested parties (such as intermediaries)
      contactReference:
       type: string
-      example: "786163"
+      example: "723538"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Customer contact reference if the case was raised during a customer contact
      transactionReference:
       type: string
-      example: "789056"
+      example: "772369"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2376,7 +2438,7 @@ definitions:
         general-info: Specific dates and ties of significance to the case
      employeeBusinessUnitReference:
       type: string
-      example: "710221"
+      example: "725802"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2401,14 +2463,14 @@ definitions:
         general-info: The processing status for the case
    fraudResolutionInstanceReference:
     type: string
-    example: "FRIR727500"
+    example: "FRIR739141"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Fraud Resolution instance
    caseResolutionInstanceReference:
     type: string
-    example: "CRIR761882"
+    example: "CRIR789423"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2424,28 +2486,42 @@ definitions:
         general-info: Record sets out, defines and assigns resolution tasks
      employeeBusinessUnitReference:
       type: string
-      example: "785260"
+      example: "748361"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Employee and or business unit responsible for the resolution
      correspondenceReference:
       type: string
-      example: "716214"
+      example: "773254"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to all correspondence (e.g. confirmation messages sent to involved parties, includes internal and external legal/law enforcement authorities)
-     documentReference:
+     adjustmentChargebackReference:
       type: string
-      example: "785688"
+      example: "726645"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to legal documents catalogued during the case
+        general-info: Reference to any associated adjustment or chargeback transaction initiated by the resolution
+     consortiaReportingInstanceReference:
+      type: string
+      example: "734637"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the consortia notification transaction for fraud resultion activity
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "786446"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for associated documents
      paymentOrderReference:
       type: string
-      example: "701503"
+      example: "710916"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2470,7 +2546,7 @@ definitions:
   properties: 
    caseResolutionRequestActionTaskReference:
     type: string
-    example: "CRRATR724998"
+    example: "CRRATR788108"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2483,7 +2559,7 @@ definitions:
       general-info: The request service call consolidated processing record
    caseResolutionRequestRecordReference:
     type: string
-    example: "CRRRR751955"
+    example: "CRRRR727249"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2514,7 +2590,7 @@ definitions:
     properties:
      caseResolutionInstanceReportReference:
       type: string
-      example: "791031"
+      example: "774384"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2524,7 +2600,7 @@ definitions:
     properties:
      caseResolutionInstanceAnalysisReference:
       type: string
-      example: "708187"
+      example: "792306"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2543,35 +2619,42 @@ definitions:
         general-info: Type of case (e.g. disputed charge, merchant fraud, stolen/fake device)
      productInstanceReference:
       type: string
-      example: "732749"
+      example: "767886"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the product/service associated with case
      customerReference:
       type: string
-      example: "791309"
+      example: "713298"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer associated with case if applicable
      merchantReference:
       type: string
-      example: "703560"
+      example: "751254"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the merchant associated with case if applicable
+     interstedPartyReference:
+      type: string
+      example: "779127"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to any other interested parties (such as intermediaries)
      contactReference:
       type: string
-      example: "780775"
+      example: "798346"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Customer contact reference if the case was raised during a customer contact
      transactionReference:
       type: string
-      example: "733203"
+      example: "733024"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2597,7 +2680,7 @@ definitions:
         general-info: Specific dates and ties of significance to the case
      employeeBusinessUnitReference:
       type: string
-      example: "714948"
+      example: "725725"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2649,35 +2732,49 @@ definitions:
         general-info: Record sets out, defines and assigns resolution tasks
      employeeBusinessUnitReference:
       type: string
-      example: "730231"
+      example: "764307"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Employee and or business unit responsible for the resolution
      correspondenceReference:
       type: string
-      example: "727814"
+      example: "798259"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to all correspondence (e.g. confirmation messages sent to involved parties, includes internal and external legal/law enforcement authorities)
-     documentReference:
+     adjustmentChargebackReference:
       type: string
-      example: "743417"
+      example: "735863"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to legal documents catalogued during the case
+        general-info: Reference to any associated adjustment or chargeback transaction initiated by the resolution
+     consortiaReportingInstanceReference:
+      type: string
+      example: "711005"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the consortia notification transaction for fraud resultion activity
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "730471"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for associated documents
      paymentOrderReference:
       type: string
-      example: "713675"
+      example: "747183"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to any financial adjustments that are made during the case
    caseResolutionRetrieveActionTaskReference:
     type: string
-    example: "CRRATR718104"
+    example: "CRRATR720676"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

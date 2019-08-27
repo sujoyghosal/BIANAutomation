@@ -269,7 +269,7 @@ paths:
           description: Successfully Retrieved Fraud Diagnosis Analysis Instance
           schema:
             $ref: '#/definitions/CRFraudDiagnosisAnalysisRetrieveOutputModel'
-  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/customerbehaviors/{bq-reference-id}/:
+  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/customerbehavior/{bq-reference-id}/:
     get:
       tags:
       - retrieve
@@ -304,7 +304,7 @@ paths:
           description: Successfully  Retrieved CustomerBehavior Instance Record
           schema:
             $ref: '#/definitions/BQCustomerBehaviorRetrieveOutputModel'
-  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/economicmodels/{bq-reference-id}/:
+  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/economicmodel/{bq-reference-id}/:
     get:
       tags:
       - retrieve
@@ -339,44 +339,13 @@ paths:
           description: Successfully  Retrieved EconomicModel Instance Record
           schema:
             $ref: '#/definitions/BQEconomicModelRetrieveOutputModel'
-  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/economicmodel/evaluation:
-    post:
-      tags:
-      - evaluate
-      operationId: evaluateFraudDiagnosisAnalysisEconomicModel
-      summary: Details of a new EconomicModel instance
-      description: Start a fraud diagnosis evaluation review by an analyst
-      produces:
-      - application/json
-      parameters:
-      - name: sd-reference-id
-        in: path
-        description: Fraud Diagnosis Servicing Session Reference
-        required: true
-        type: string
-      - name: cr-reference-id
-        in: path
-        description: Fraud Diagnosis Analysis Instance Reference
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Fraud Diagnosis Analysis Request Payload
-        schema:
-          $ref: '#/definitions/BQEconomicModelEvaluateInputModel'
-      responses:
-        201:
-          description: Successful evaluation of Fraud Diagnosis Analysis instance
-          schema:
-            $ref: '#/definitions/BQEconomicModelEvaluateOutputModel'
-  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/analystreviews/{bq-reference-id}/requisition:
+  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/analystreview/{bq-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestFraudDiagnosisAnalysisAnalystReviewUpdate
       summary: Invoke a service request action against the AnalystReview instance
-      description: Request access to an annalist for an active diagnosis
+      description: Request access to an analist for an active diagnosis
       produces:
       - application/json
       parameters:
@@ -406,7 +375,7 @@ paths:
           description: Successful requisition of AnalystReview Instance Record
           schema:
             $ref: '#/definitions/BQAnalystReviewRequestOutputModel'
-  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/analystreviews/{bq-reference-id}/:
+  /fraud-diagnosis/{sd-reference-id}/fraud-diagnosis-analysis/{cr-reference-id}/analystreview/{bq-reference-id}/:
     get:
       tags:
       - retrieve
@@ -1170,7 +1139,7 @@ definitions:
   properties: 
    fraudDiagnosisServicingSessionReference:
     type: string
-    example: "FDSSR757241"
+    example: "FDSSR782342"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1192,7 +1161,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "728683"
+      example: "766682"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1217,7 +1186,7 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "732007"
+      example: "796583"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1227,14 +1196,14 @@ definitions:
   properties: 
    fraudDiagnosisAnalysisInstanceReference:
     type: string
-    example: "FDAIR725670"
+    example: "FDAIR754901"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Fraud Diagnosis Analysis instance
    fraudDiagnosisAnalysisEvaluateActionReference:
     type: string
-    example: "FDAEAR756387"
+    example: "FDAEAR782745"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1265,20 +1234,26 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
  CRFraudDiagnosisAnalysisUpdateInputModel:
   type: object
   properties: 
    fraudDiagnosisServicingSessionReference:
     type: string
-    example: "FDSSR712972"
+    example: "FDSSR753618"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    fraudDiagnosisAnalysisInstanceReference:
     type: string
-    example: "FDAIR775977"
+    example: "FDAIR724279"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1288,7 +1263,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "731494"
+      example: "716357"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1313,7 +1288,7 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "778287"
+      example: "751454"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1338,7 +1313,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "731494"
+      example: "716357"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1363,14 +1338,14 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "778287"
+      example: "751454"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the one or more production transactions isolated by the fraud evaluation tests identified by Fraud Evaluation
    fraudDiagnosisAnalysisUpdateActionTaskReference:
     type: string
-    example: "FDAUATR754854"
+    example: "FDAUATR707205"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1392,14 +1367,14 @@ definitions:
   properties: 
    fraudDiagnosisServicingSessionReference:
     type: string
-    example: "FDSSR769829"
+    example: "FDSSR767705"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    fraudDiagnosisAnalysisInstanceReference:
     type: string
-    example: "FDAIR786503"
+    example: "FDAIR794392"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1409,7 +1384,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "744723"
+      example: "735941"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1434,7 +1409,7 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "740500"
+      example: "714230"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1471,10 +1446,16 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
    fraudDiagnosisAnalysisExecuteActionTaskReference:
     type: string
-    example: "FDAEATR792528"
+    example: "FDAEATR745729"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1487,7 +1468,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    executeRecordReference:
     type: string
-    example: "ERR780183"
+    example: "ERR701759"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1503,14 +1484,14 @@ definitions:
   properties: 
    fraudDiagnosisServicingSessionReference:
     type: string
-    example: "FDSSR781605"
+    example: "FDSSR746050"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    fraudDiagnosisAnalysisInstanceReference:
     type: string
-    example: "FDAIR784558"
+    example: "FDAIR741651"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1520,7 +1501,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "771531"
+      example: "786269"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1545,7 +1526,7 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "706064"
+      example: "742412"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1582,10 +1563,16 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
    fraudDiagnosisAnalysisRequestActionTaskReference:
     type: string
-    example: "FDARATR707828"
+    example: "FDARATR713117"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1598,7 +1585,7 @@ definitions:
       general-info: The request service call consolidated processing record
    requestRecordReference:
     type: string
-    example: "RRR764651"
+    example: "RRR782237"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1629,7 +1616,7 @@ definitions:
     properties:
      fraudDiagnosisAnalysisInstanceReportReference:
       type: string
-      example: "774587"
+      example: "701481"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1651,7 +1638,7 @@ definitions:
     properties:
      fraudDiagnosisAnalysisInstanceAnalysisReference:
       type: string
-      example: "711373"
+      example: "759698"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1676,7 +1663,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "790664"
+      example: "740190"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1701,7 +1688,7 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "758640"
+      example: "782783"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1711,10 +1698,16 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
    fraudDiagnosisAnalysisRetrieveActionTaskReference:
     type: string
-    example: "FDARATR735755"
+    example: "FDARATR795987"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1793,7 +1786,7 @@ definitions:
     properties:
      customerBehaviorInstanceReportReference:
       type: string
-      example: "700577"
+      example: "799055"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1803,7 +1796,7 @@ definitions:
     properties:
      customerBehaviorInstanceAnalysisReference:
       type: string
-      example: "790707"
+      example: "784156"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1816,7 +1809,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "780187"
+      example: "751518"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1841,7 +1834,7 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "757010"
+      example: "732717"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1851,7 +1844,13 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
    outOfPatternInstanceRecord:
     type: object
     properties:
@@ -1869,7 +1868,7 @@ definitions:
         general-info: Work documentation, forms and schedules produced and referenced during the analysis (for future reference)
    customerBehaviorRetrieveActionTaskReference:
     type: string
-    example: "CBRATR787923"
+    example: "CBRATR798043"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1943,20 +1942,6 @@ definitions:
  BQEconomicModelRetrieveInputModel:
   type: object
   properties: 
-   fraudDiagnosisAnalysisInstanceReference:
-    type: string
-    example: "FDAIR787947"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Fraud Diagnosis Analysis instance
-   economicModelInstanceReference:
-    type: string
-    example: "EMIR740034"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Economic Model instance
    economicModelRetrieveActionTaskRecord:
     type: object
     description: |
@@ -1974,7 +1959,7 @@ definitions:
     properties:
      economicModelInstanceReportReference:
       type: string
-      example: "738105"
+      example: "788395"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1984,7 +1969,7 @@ definitions:
     properties:
      economicModelInstanceAnalysisReference:
       type: string
-      example: "708123"
+      example: "748413"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1997,7 +1982,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "784444"
+      example: "713339"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2022,7 +2007,7 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "775559"
+      example: "710907"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2032,7 +2017,13 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
    economicModelInstanceRecord:
     type: object
     properties:
@@ -2050,7 +2041,7 @@ definitions:
         general-info: Work documentation, forms and schedules produced and referenced during the analysis (for future reference)
    economicModelRetrieveActionTaskReference:
     type: string
-    example: "EMRATR700471"
+    example: "EMRATR703476"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2121,175 +2112,80 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQEconomicModelEvaluateInputModel:
-  type: object
-  properties: 
-   fraudDiagnosisAnalysisInstanceRecord:
-    type: object
-    properties:
-     productProductionSessionReference:
-      type: string
-      example: "785336"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the product fulfillment production session for which fraud diagnosis is performed
-     fraudDiagnosisEvaluationProfile:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the types of fraud diagnosis algorithms and tests are applied
-     fraudDiagnosisTransactionConsolidationRecord:
-      type: object
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: The production transaction details that are submitted for fraud diagnosis
-     fraudEvaluationProductionAnomalyRecord:
-      type: object
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
-     fraudEvaluationProductionAnomalyProductionTransactionReference:
-      type: string
-      example: "734677"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the one or more production transactions isolated by the fraud evaluation tests identified by Fraud Evaluation
-     fraudDiagnosisDetermination:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
-   economicModelInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   analystReviewInstanceRecord:
-    type: object
-    properties:
-     customerReference:
-      type: string
-      example: "710474"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer, extracted from the financial transaction details, used to access customer details
- BQEconomicModelEvaluateOutputModel:
-  type: object
-  properties: 
-   fraudDiagnosisAnalysisInstanceRecord:
-    type: object
-    properties:
-     productProductionSessionReference:
-      type: string
-      example: "785336"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the product fulfillment production session for which fraud diagnosis is performed
-     fraudDiagnosisEvaluationProfile:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the types of fraud diagnosis algorithms and tests are applied
-     fraudDiagnosisTransactionConsolidationRecord:
-      type: object
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: The production transaction details that are submitted for fraud diagnosis
-     fraudEvaluationProductionAnomalyRecord:
-      type: object
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
-     fraudEvaluationProductionAnomalyProductionTransactionReference:
-      type: string
-      example: "734677"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the one or more production transactions isolated by the fraud evaluation tests identified by Fraud Evaluation
-     fraudDiagnosisDetermination:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
-   economicModelInitiateActionReference:
-    type: string
-    example: "EMIAR768833"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   economicModelInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   economicModelInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Economic Model instance (e.g. initialised, pending, active)
-   analystReviewInstanceRecord:
-    type: object
-    properties:
-     customerReference:
-      type: string
-      example: "710474"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer, extracted from the financial transaction details, used to access customer details
-     outboundContactReference:
-      type: string
-      example: "722313"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to an outbound contact established with the customer
-     analystReviewAnalysisResult:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The result of the economic model, including the recommended response
-     analystReviewWorkProduct:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Work documentation, forms and schedules produced and referenced during the analysis (for future reference)
  BQAnalystReviewRequestInputModel:
   type: object
   properties: 
+   fraudDiagnosisAnalysisInstanceRecord:
+    type: object
+    properties:
+     productProductionSessionReference:
+      type: string
+      example: "737273"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product fulfillment production session for which fraud diagnosis is performed
+     fraudDiagnosisEvaluationProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of fraud diagnosis algorithms and tests are applied
+     fraudDiagnosisTransactionConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The production transaction details that are submitted for fraud diagnosis
+     fraudEvaluationProductionAnomalyRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
+     fraudEvaluationProductionAnomalyProductionTransactionReference:
+      type: string
+      example: "766724"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the one or more production transactions isolated by the fraud evaluation tests identified by Fraud Evaluation
+     fraudDiagnosisDetermination:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
    fraudDiagnosisAnalysisInstanceReference:
     type: string
-    example: "FDAIR723415"
+    example: "FDAIR780006"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Fraud Diagnosis Analysis instance
    analystReviewInstanceReference:
     type: string
-    example: "ARIR793817"
+    example: "ARIR776062"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Analyst Review instance
+   analystReviewInstanceRecord:
+    type: object
+    properties:
+     customerReference:
+      type: string
+      example: "788636"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer, extracted from the financial transaction details, used to access customer details
    analystReviewRequestActionTaskRecord:
     type: object
     description: |
@@ -2313,7 +2209,7 @@ definitions:
     properties:
      productProductionSessionReference:
       type: string
-      example: "786479"
+      example: "737273"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2338,7 +2234,7 @@ definitions:
         general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
      fraudEvaluationProductionAnomalyProductionTransactionReference:
       type: string
-      example: "783452"
+      example: "766724"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2348,7 +2244,159 @@ definitions:
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details the conclusion of the analysis and determination (e.g. accept or reject the transaction, flag account for fraud)
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
+   analystReviewInstanceRecord:
+    type: object
+    properties:
+     customerReference:
+      type: string
+      example: "788636"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer, extracted from the financial transaction details, used to access customer details
+     outboundContactReference:
+      type: string
+      example: "707764"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to an outbound contact established with the customer
+     analystReviewAnalysisResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result of the economic model, including the recommended response
+     analystReviewWorkProduct:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Work documentation, forms and schedules produced and referenced during the analysis (for future reference)
+     analystReviewRecommendedAction:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The recommended action resulting from the analysts review
+   analystReviewRequestActionTaskReference:
+    type: string
+    example: "ARRATR722067"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Analyst Review instance request service call
+   analystReviewRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   analystReviewRequestRecordReference:
+    type: string
+    example: "ARRRR781810"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Analyst Review service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ BQAnalystReviewRetrieveInputModel:
+  type: object
+  properties: 
+   analystReviewRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   analystReviewRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   analystReviewInstanceReport:
+    type: object
+    properties:
+     analystReviewInstanceReportReference:
+      type: string
+      example: "762586"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   analystReviewInstanceAnalysis:
+    type: object
+    properties:
+     analystReviewInstanceAnalysisReference:
+      type: string
+      example: "794812"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQAnalystReviewRetrieveOutputModel:
+  type: object
+  properties: 
+   fraudDiagnosisAnalysisInstanceRecord:
+    type: object
+    properties:
+     productProductionSessionReference:
+      type: string
+      example: "754324"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product fulfillment production session for which fraud diagnosis is performed
+     fraudDiagnosisEvaluationProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of fraud diagnosis algorithms and tests are applied
+     fraudDiagnosisTransactionConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The production transaction details that are submitted for fraud diagnosis
+     fraudEvaluationProductionAnomalyRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Details of detected out of pattern production activity that could be fraud highlighted by Fraud Evaluation
+     fraudEvaluationProductionAnomalyProductionTransactionReference:
+      type: string
+      example: "771604"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the one or more production transactions isolated by the fraud evaluation tests identified by Fraud Evaluation
+     fraudDiagnosisDetermination:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the conclusion of the analysis and determination (e.g. diagnosis of likely fraud)
+     fraudDiagnosisRecommendation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the recommended action in response to the analysis (e.g. accept or reject the transaction, flag account for fraud)
    outOfPatternInstanceRecord:
     type: object
     properties:
@@ -2384,14 +2432,14 @@ definitions:
     properties:
      customerReference:
       type: string
-      example: "762471"
+      example: "743897"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer, extracted from the financial transaction details, used to access customer details
      outboundContactReference:
       type: string
-      example: "797207"
+      example: "704545"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2408,73 +2456,15 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Work documentation, forms and schedules produced and referenced during the analysis (for future reference)
-   analystReviewRequestActionTaskReference:
-    type: string
-    example: "ARRATR762927"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Analyst Review instance request service call
-   analystReviewRequestActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The request service call consolidated processing record
-   analystReviewRequestRecordReference:
-    type: string
-    example: "ARRRR720410"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Analyst Review service request record
-   requestResponseRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: Details of the request action service response
- BQAnalystReviewRetrieveInputModel:
-  type: object
-  properties: 
-   analystReviewRetrieveActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The retrieve service call consolidated processing record
-   analystReviewRetrieveActionRequest:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of the retrieve action service request (lists requested reports)
-   analystReviewInstanceReport:
-    type: object
-    properties:
-     analystReviewInstanceReportReference:
+     analystReviewRecommendedAction:
       type: string
-      example: "775935"
       description: |
        `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the control record instance report
-   analystReviewInstanceAnalysis:
-    type: object
-    properties:
-     analystReviewInstanceAnalysisReference:
-      type: string
-      example: "790973"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the control record instance analysis view
- BQAnalystReviewRetrieveOutputModel:
-  type: object
-  properties: 
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The recommended action resulting from the analysts review
    analystReviewRetrieveActionTaskReference:
     type: string
-    example: "ARRATR774993"
+    example: "ARRATR711722"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier

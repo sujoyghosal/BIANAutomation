@@ -1,4 +1,4 @@
-CR Fraud Resolution Instance Record|Fraud Resolution||||||CR Fraud Resolution Initiate|CR Fraud Resolution Update|CR Fraud Resolution Exchange|CR Fraud Resolution Retrieve|BQ Case Analysis Retrieve|BQ Case Analysis Exchange|BQ Case Determination Retrieve|BQ Case Resolution Request|BQ Case Resolution Retrieve|
+CR Fraud Resolution Instance Record|Fraud Resolution||||||CR Fraud Resolution Initiate|CR Fraud Resolution Update|CR Fraud Resolution Exchange|CR Fraud Resolution Retrieve|BQ Case Analysis Retrieve|BQ Case Determination Exchange|BQ Case Determination Retrieve|BQ Case Resolution Request|BQ Case Resolution Retrieve|
 Mandatory||Fraud Resolution Servicing Session Reference||||Reference to the active servicing session|I|I|I
 Mandatory||Fraud Resolution Instance Reference||||Reference to the Fraud Resolution instance|O|I|I
 Initiate||Fraud Resolution Initiate Action Reference||||Reference to an Initiate service call|O
@@ -9,6 +9,7 @@ Initiate||Fraud Resolution Instance Status||||The status of the Fraud Resolution
 |||Product Instance Reference|||Reference to the product/service associated with case|I|IO||O|O||O|I|O
 |||Customer Reference|||Reference to the customer associated with case if applicable|I|IO||O|O||O|I|O
 |||Merchant Reference|||Reference to the merchant associated with case if applicable|I|IO||O|O||O|I|O
+|||Intersted Party Reference|||Reference to any other interested parties (such as intermediaries)|I|IO||O|O||O|I|O
 |||Contact Reference|||Customer contact reference if the case was raised during a customer contact|I|IO||O|O||O|I|O
 |||Transaction Reference |||Reference to one or more product transactions associated with the case|I|IO||O|O||O|I|O
 |||Transaction Record|||Record contains all details of the transaction (not itemized)|I|IO||O|O||O|I|O
@@ -44,8 +45,8 @@ RETRIEVE|||Fraud Resolution Instance Analysis Report Type|||The type of external
 RETRIEVE|||Fraud Resolution Instance Analysis Parameters|||The selection parameters for the analysis (e.g. period, algorithm type)||||I
 RETRIEVE|||Fraud Resolution Instance Analysis Report|||The external analysis report in any suitable form including selection filters where appropriate||||O
 BQ Case Analysis Instance Record|Case Analysis||||||
-Mandatory||Fraud Resolution Instance Reference||||Reference to the parent Fraud Resolution instance|||||I
-Mandatory||Case Analysis Instance Reference||||Reference to the Case Analysis instance|||||I
+Mandatory||Fraud Resolution Instance Reference||||Reference to the parent Fraud Resolution instance||||
+Mandatory||Case Analysis Instance Reference||||Reference to the Case Analysis instance||||
 ||Case Analysis Instance Record|##|||Handles the analysis of all collected information and captures the root cause|||||O||O||O
 |||Fraud Case Root Cause|||The result of the case analysis|||||O||O||O
 Retrieve||Case Analysis Retrieve Action Task Reference||||Reference to a Case Analysis instance retrieve service call|||||O
@@ -64,21 +65,23 @@ Retrieve|||Case Analysis Instance Analysis Record|||The inputs and results of th
 Retrieve|||Case Analysis Instance Analysis Report Type|||The type of external performance analysis report available|||||O
 Retrieve|||Case Analysis Instance Analysis Parameters|||The selection parameters for the analysis (e.g. period, algorithm type)|||||O
 Retrieve|||Case Analysis Instance Analysis Report|||The external analysis report in any suitable form including selection filters where appropriate|||||O
-Exchange||Case Analysis Exchange Action Task Reference||||Reference to a Case Analysis instance exchange service call||||||O
-Exchange||Case Analysis Exchange Action Task Record||||The exchange service call consolidated processing record||||||I/O
-Exchange||Case Analysis Exchange Action Request|##|||Details of the exchange action service request||||||I
-Exchange|||Exchange Action Type|||The type of exchange (e.g. accept, reject, verify)||||||I
-Exchange||Case Analysis Exchange Action Response||||Details of the exchange action service response||||||O
-Exchange||Case Analysis Instance Status||||The status of the Case Analysis instance (e.g. accepted, rejected, verified)||||||O
 BQ Case Determination Instance Record|Case Determination||||||
-Mandatory||Fraud Resolution Instance Reference||||Reference to the parent Fraud Resolution instance||||||
-Mandatory||Case Determination Instance Reference||||Reference to the Case Determination instance||||||
+Mandatory||Fraud Resolution Instance Reference||||Reference to the parent Fraud Resolution instance||||||I
+Mandatory||Case Determination Instance Reference||||Reference to the Case Determination instance||||||I
 ||Case Determination Instance Record|##|||The determination of the appropriate response to the case|||||||O||O
 |||Customer Agreement Reference|||Reference to the involved customer's agreement|||||||O||
 |||Customer Agreement|||Customer agreement accessed to determine constraints on resolution approach|||||||O||
 |||Merchant Agreement Reference|||Reference to the involved merchant's agreement|||||||O||
 |||Merchant Agreement|||Merchant agreement accessed to determine constraints on resolution approach|||||||O||
+|||Interested Party Agreement Reference|||Reference to the interested party's agreement|||||||O||
+|||Interested Party Agreement|||Interested party agreement accessed to determine constraints on resolution approach|||||||O||
 |||Fraud Case Determination Record|||Record of rules and guidelines applied to determine fraud case resolution|||||||O||O
+Exchange||Case Determination Exchange Action Task Reference||||Reference to a Case Determination instance exchange service call||||||O
+Exchange||Case Determination Exchange Action Task Record||||The exchange service call consolidated processing record||||||I/O
+Exchange||Case Determination Exchange Action Request|##|||Details of the exchange action service request||||||I
+Exchange|||Exchange Action Type|||The type of exchange (e.g. accept, reject, verify)||||||I
+Exchange||Case Determination Exchange Action Response||||Details of the exchange action service response||||||O
+Exchange||Case Determination Instance Status||||The status of the Case Determination instance (e.g. accepted, rejected, verified)||||||O
 Retrieve||Case Determination Retrieve Action Task Reference||||Reference to a Case Determination instance retrieve service call|||||||O
 Retrieve||Case Determination Retrieve Action Task Record||||The retrieve service call consolidated processing record|||||||I/O
 Retrieve||Case Determination Retrieve Action Request||||Details of the retrieve action service request (lists requested reports)|||||||I
@@ -102,7 +105,9 @@ Mandatory||Case Resolution Instance Reference||||Reference to the Case Resolutio
 |||Fraud Case Resolution Record |||Record sets out, defines and assigns resolution tasks||||||||I|O
 |||Employee/Business Unit Reference |||Employee and or business unit responsible for the resolution||||||||I|O
 |||Correspondence Reference|||Reference to all correspondence (e.g. confirmation messages sent to involved parties, includes internal and external legal/law enforcement authorities)||||||||I|O
-|||Document Reference |||Reference to legal documents catalogued during the case||||||||I|O
+|||Adjustment/Chargeback Reference|||Reference to any associated adjustment or chargeback transaction initiated by the resolution||||||||I|O
+|||Consortia Reporting Instance Reference|||Reference to the consortia notification transaction for fraud resultion activity||||||||I|O
+|||Document Directory Entry Instance Reference|||The document reference for associated documents||||||||I|O
 |||Payment Order Reference|||Reference to any financial adjustments that are made during the case||||||||I|O
 Request||Case Resolution Request Action Task Reference||||Reference to a Case Resolution instance request service call||||||||O
 Request||Case Resolution Request Action Task Record||||The request service call consolidated processing record||||||||I/O
