@@ -3,6 +3,22 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Guideline Compliance'
  description: >
+
+    ## Executive Summary:
+
+
+    This service domain develops and applies a portfolio of guideline compliance tests to confirm adherence to bank and regulator imposed internal procedures. Tests may be made on complete transaction data or a meaningful samples as appropriate to mitigate exposure to non-compliant behaviors. Compliance checks may be in response to a schedule, a specific request as part of normal processing or may be initiated randomly as an oversight activity
+
+    ## Example of Use:
+
+
+    A loan origination process is submitted for guideline compliance checks prior to completing the origination/loan closure process
+
+    ## Description:
+
+      
+    This service center administers the activity of a specialists tasked with testing and confirming guideline compliance. Compliance tests may include document reviews, more detailed transaction analysis and may involve interactions with the unit under test to obtain additional detail/explanation. Guideline compliance is typically focused on larger value investment and loan activities, confirming transactions are executed in alignment with management guidelines and prudential policies.
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-guideline-compliance/1.0.0
 schemes:
@@ -13,8 +29,8 @@ paths:
       tags:
       - activate
       operationId: activateSDGuidelineCompliance
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDGuidelineCompliance servicing session
+      description: Activate  a  SDGuidelineCompliance servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +45,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDGuidelineComplianceActivateOutputModel'
-  /guideline-compliance/configure:
+  /guideline-compliance/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDGuidelineCompliance
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDGuidelineCompliance session configuration
+      description: Update an active SDGuidelineCompliance session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDGuidelineCompliance Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +67,25 @@ paths:
         schema:
           $ref: '#/definitions/SDGuidelineComplianceConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDGuidelineComplianceConfigureOutputModel'
-  /guideline-compliance/feedback:
+  /guideline-compliance/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDGuidelineCompliance
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDGuidelineCompliance service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDGuidelineCompliance service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDGuidelineCompliance Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +93,25 @@ paths:
         schema:
           $ref: '#/definitions/SDGuidelineComplianceFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDGuidelineComplianceFeedbackOutputModel'
-  /guideline-compliance/retrieve:
+  /guideline-compliance/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDGuidelineCompliance
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDGuidelineCompliance service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDGuidelineCompliance service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDGuidelineCompliance Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,40 +123,19 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDGuidelineComplianceRetrieveOutputModel'
-  /guideline-compliance/guideline-compliance-assessment/initiation:
+  /guideline-compliance/{sd-reference-id}/guideline-compliance-assessment/evaluation:
     post:
       tags:
-      - initiate
-      operationId: initiateGuidelineComplianceAssessment
-      summary: Initiate/set-up a new Guideline Compliance Assessment
+      - evaluate
+      operationId: evaluateGuidelineComplianceAssessment
+      summary: Details of a new GuidelineComplianceAssessment instance
       description: Start a guideline compliance evaluation assessment
       produces:
       - application/json
       parameters:
-      - in: body
-        name: body
-        required: true
-        description: GuidelineComplianceAssessment Request Payload
-        schema:
-          $ref: '#/definitions/CRGuidelineComplianceAssessmentInitiateInputModel'
-      responses:
-        201:
-          description: Successful Initiate/set-up a new Guideline Compliance Assessment
-          schema:
-            $ref: '#/definitions/CRGuidelineComplianceAssessmentInitiateOutputModel'
-  /guideline-compliance/guideline-compliance-assessment/{cr-reference-id}/update:
-    put:
-      tags:
-      - update
-      operationId: updateGuidelineComplianceAssessment
-      summary: Update reference details of an active Guideline Compliance Assessment
-      description: Update submitted details or content for an on-going guideline compliance assessment
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Guideline Compliance Assessment Instance Record|
+        description: Guideline Compliance Servicing Session Reference
         required: true
         type: string
       - in: body
@@ -133,13 +143,44 @@ paths:
         required: true
         description: GuidelineComplianceAssessment Request Payload
         schema:
+          $ref: '#/definitions/CRGuidelineComplianceAssessmentEvaluateInputModel'
+      responses:
+        201:
+          description: Successful evaluation of new GuidelineComplianceAssessment instance
+          schema:
+            $ref: '#/definitions/CRGuidelineComplianceAssessmentEvaluateOutputModel'
+  /guideline-compliance/{sd-reference-id}/guideline-compliance-assessment/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateGuidelineComplianceAssessment
+      summary: Update to any amendable fields of the GuidelineComplianceAssessment instance
+      description: Update submitted details or content for an on-going guideline compliance assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Guideline Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Guideline Compliance Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Guideline Compliance Assessment Request Payload
+        schema:
           $ref: '#/definitions/CRGuidelineComplianceAssessmentUpdateInputModel'
       responses:
         200:
-          description: Successful Update reference details of an active Guideline Compliance Assessment
+          description: Successfully Updated Guideline Compliance Assessment Instance
           schema:
             $ref: '#/definitions/CRGuidelineComplianceAssessmentUpdateOutputModel'
-  /guideline-compliance/guideline-compliance-assessment/{cr-reference-id}/exchange:
+  /guideline-compliance/{sd-reference-id}/guideline-compliance-assessment/{cr-reference-id}/exchange:
     put:
       tags:
       - exchange
@@ -149,49 +190,89 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Guideline Compliance Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Guideline Compliance Assessment Instance Record|
+        description: Guideline Compliance Assessment Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: GuidelineComplianceAssessment Request Payload
+        description: Guideline Compliance Assessment Request Payload
         schema:
           $ref: '#/definitions/CRGuidelineComplianceAssessmentExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Guideline Compliance Assessment Instance
           schema:
             $ref: '#/definitions/CRGuidelineComplianceAssessmentExchangeOutputModel'
-  /guideline-compliance/guideline-compliance-assessment/{cr-reference-id}/requisition:
+  /guideline-compliance/{sd-reference-id}/guideline-compliance-assessment/{cr-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestGuidelineComplianceAssessmentUpdate
-      summary: Invoke a service request action against the Guideline Compliance Assessment instance
+      summary: Invoke a service request action against the GuidelineComplianceAssessment instance
       description: Request a review or adjudication for a guideline assessment
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Guideline Compliance Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Guideline Compliance Assessment Instance Record|
+        description: Guideline Compliance Assessment Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: GuidelineComplianceAssessment Request Payload
+        description: Guideline Compliance Assessment Request Payload
         schema:
           $ref: '#/definitions/CRGuidelineComplianceAssessmentRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Guideline Compliance Assessment instance
+          description: Successful requisition of Guideline Compliance Assessment Instance
           schema:
             $ref: '#/definitions/CRGuidelineComplianceAssessmentRequestOutputModel'
-  /guideline-compliance/guideline-compliance-assessment:
+  /guideline-compliance/{sd-reference-id}/guideline-compliance-assessment/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveGuidelineCompliance
+      summary: Invoke a reporting action to obtain a Guideline Compliance Assessment instance related report
+      description: Retrieve details and content from an active guideline compliance assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Guideline Compliance Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Guideline Compliance Assessment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRGuidelineComplianceAssessmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Guideline Compliance Assessment Instance
+          schema:
+            $ref: '#/definitions/CRGuidelineComplianceAssessmentRetrieveOutputModel'
+  /guideline-compliance/{sd-reference-id}/guideline-compliance-assessment:
     get:
       tags:
       - retrieve
@@ -200,6 +281,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Guideline Compliance Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- GuidelineCompliance Instance Status='active'
@@ -229,7 +315,7 @@ paths:
             items:
               type: string
             example: []
-  /guideline-compliance/guideline-compliance-assessment/{cr-reference-id}/{behavior-qualifier}/:
+  /guideline-compliance/{sd-reference-id}/guideline-compliance-assessment/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -238,9 +324,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Guideline Compliance Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Guideline Compliance Assessment Instance Record|
+        description: Guideline Compliance Assessment Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -261,32 +352,6 @@ paths:
             items:
               type: string
             example: [ID1, ID2]
-  /guideline-compliance/guideline-compliance-assessment/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrieveGuidelineCompliance
-      summary: Retrieve a Guideline Compliance Record
-      description: Retrieve a Guideline Compliance Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Guideline Compliance Assessment Instance Record|
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Guideline Compliance Request Payload
-        schema:
-          $ref: '#/definitions/CRGuidelineComplianceAssessmentRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Guideline Compliance Report
-          schema:
-            $ref: '#/definitions/CRGuidelineComplianceAssessmentRetrieveOutputModel'
 definitions:
  SDGuidelineComplianceActivateInputModel:
   type: object
@@ -931,22 +996,22 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRGuidelineComplianceAssessmentInitiateInputModel:
+ CRGuidelineComplianceAssessmentEvaluateInputModel:
   type: object
   properties: 
-   guidelineComplianceAssessmentInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
    guidelineComplianceServicingSessionReference:
     type: string
-    example: "GCSSR701182"
+    example: "GCSSR718905"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
+   guidelineComplianceAssessmentEvaluateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Evaluate service call input and output record
    guidelineComplianceAssessmentInstanceStatus:
     type: string
     description: |
@@ -955,40 +1020,38 @@ definitions:
       general-info: The status of the Guideline Compliance Assessment instance (e.g. initialised, pending, active)
    guidelineComplianceAssessmentInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The working materials and result of an internal guideline compliance assessment
+    properties:
      guidelineComplianceAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: GuidelineComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of guideline compliance tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "738051"
+      example: "799656"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "791482"
+      example: "797856"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "751314"
+      example: "771359"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer assessed if appropriate
      documentReference:
       type: string
-      example: "700110"
+      example: "754074"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -999,29 +1062,29 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Work documentation, forms and schedules produced and referenced during the assessment
- CRGuidelineComplianceAssessmentInitiateOutputModel:
+ CRGuidelineComplianceAssessmentEvaluateOutputModel:
   type: object
   properties: 
-   guidelineComplianceAssessmentInitiateActionReference:
-    type: string
-    example: "GCAIAR706842"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   guidelineComplianceAssessmentInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
    guidelineComplianceAssessmentInstanceReference:
     type: string
-    example: "GCAIR797645"
+    example: "GCAIR784384"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Guideline Compliance Assessment instance
+   guidelineComplianceAssessmentEvaluateActionReference:
+    type: string
+    example: "GCAEAR726324"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Evaluate service call
+   guidelineComplianceAssessmentEvaluateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Evaluate service call input and output record
    guidelineComplianceAssessmentInstanceStatus:
     type: string
     description: |
@@ -1030,13 +1093,10 @@ definitions:
       general-info: The status of the Guideline Compliance Assessment instance (e.g. initialised, pending, active)
    guidelineComplianceAssessmentInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The working materials and result of an internal guideline compliance assessment
+    properties:
      documentReference:
       type: string
-      example: "700110"
+      example: "754074"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1058,54 +1118,52 @@ definitions:
   properties: 
    guidelineComplianceServicingSessionReference:
     type: string
-    example: "GCSSR754077"
+    example: "GCSSR746663"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    guidelineComplianceAssessmentInstanceReference:
     type: string
-    example: "GCAIR749241"
+    example: "GCAIR731593"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Guideline Compliance Assessment instance
    guidelineComplianceAssessmentInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The working materials and result of an internal guideline compliance assessment
+    properties:
      guidelineComplianceAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: GuidelineComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of guideline compliance tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "737452"
+      example: "716114"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "789563"
+      example: "724929"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "757433"
+      example: "773994"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer assessed if appropriate
      documentReference:
       type: string
-      example: "767041"
+      example: "736024"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1133,40 +1191,38 @@ definitions:
   properties: 
    guidelineComplianceAssessmentInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The working materials and result of an internal guideline compliance assessment
+    properties:
      guidelineComplianceAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: GuidelineComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of guideline compliance tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "737452"
+      example: "716114"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "789563"
+      example: "724929"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "757433"
+      example: "773994"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer assessed if appropriate
      documentReference:
       type: string
-      example: "767041"
+      example: "736024"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1179,7 +1235,7 @@ definitions:
         general-info: Work documentation, forms and schedules produced and referenced during the assessment
    guidelineComplianceAssessmentUpdateActionTaskReference:
     type: string
-    example: "GCAUATR768884"
+    example: "GCAUATR772367"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1201,14 +1257,14 @@ definitions:
   properties: 
    guidelineComplianceServicingSessionReference:
     type: string
-    example: "GCSSR743543"
+    example: "GCSSR753021"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    guidelineComplianceAssessmentInstanceReference:
     type: string
-    example: "GCAIR717345"
+    example: "GCAIR799336"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1220,11 +1276,8 @@ definitions:
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
    guidelineComplianceAssessmentExchangeActionRequest:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of the exchange action service request
+    type: object
+    properties:
      exchangeActionType:
       type: string
       description: |
@@ -1236,7 +1289,7 @@ definitions:
   properties: 
    guidelineComplianceAssessmentExchangeActionTaskReference:
     type: string
-    example: "GCAEATR780776"
+    example: "GCAEATR759989"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1258,54 +1311,52 @@ definitions:
   properties: 
    guidelineComplianceServicingSessionReference:
     type: string
-    example: "GCSSR799487"
+    example: "GCSSR703876"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    guidelineComplianceAssessmentInstanceReference:
     type: string
-    example: "GCAIR775689"
+    example: "GCAIR795101"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Guideline Compliance Assessment instance
    guidelineComplianceAssessmentInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The working materials and result of an internal guideline compliance assessment
+    properties:
      guidelineComplianceAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: GuidelineComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of guideline compliance tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "780833"
+      example: "789899"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "780996"
+      example: "708121"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "768753"
+      example: "750433"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer assessed if appropriate
      documentReference:
       type: string
-      example: "780303"
+      example: "767201"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1336,40 +1387,38 @@ definitions:
   properties: 
    guidelineComplianceAssessmentInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The working materials and result of an internal guideline compliance assessment
+    properties:
      guidelineComplianceAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: GuidelineComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of guideline compliance tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "780833"
+      example: "789899"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "780996"
+      example: "708121"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "768753"
+      example: "750433"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer assessed if appropriate
      documentReference:
       type: string
-      example: "780303"
+      example: "767201"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1388,7 +1437,7 @@ definitions:
         general-info: Outcome/result of the assessment, can include remedial actions
    guidelineComplianceAssessmentRequestActionTaskReference:
     type: string
-    example: "GCARATR741363"
+    example: "GCARATR748571"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1401,7 +1450,7 @@ definitions:
       general-info: The request service call consolidated processing record
    requestRecordReference:
     type: string
-    example: "RRR709163"
+    example: "RRR757512"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1432,7 +1481,7 @@ definitions:
     properties:
      guidelineComplianceAssessmentInstanceReportReference:
       type: string
-      example: "770954"
+      example: "737973"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1454,7 +1503,7 @@ definitions:
     properties:
      guidelineComplianceAssessmentInstanceAnalysisReference:
       type: string
-      example: "799663"
+      example: "767755"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1476,40 +1525,38 @@ definitions:
   properties: 
    guidelineComplianceAssessmentInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The working materials and result of an internal guideline compliance assessment
+    properties:
      guidelineComplianceAssessmentType:
       type: string
       description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_K1lxwG7NEeO82qXU9yOWsg/elements/_ddIbAG7VEeO82qXU9yOWsg
+        bian-reference: GuidelineComplianceCheck (as Assessment).AssessmentType
         general-info: The type and make-up of guideline compliance tests referenced in the assessment
      businessUnitReference:
       type: string
-      example: "775868"
+      example: "791024"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The business function or unit assessed for compliance if appropriate
      productServiceReference:
       type: string
-      example: "702645"
+      example: "752214"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: The associated product/service being assessed if appropriate
      customerReference:
       type: string
-      example: "738040"
+      example: "747850"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the customer assessed if appropriate
      documentReference:
       type: string
-      example: "723504"
+      example: "758954"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1528,7 +1575,7 @@ definitions:
         general-info: Outcome/result of the assessment, can include remedial actions
    guidelineComplianceAssessmentRetrieveActionTaskReference:
     type: string
-    example: "GCARATR776349"
+    example: "GCARATR748053"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
