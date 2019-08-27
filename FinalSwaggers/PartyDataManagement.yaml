@@ -3,6 +3,19 @@ info:
  version: '1.0.0'
  title: 'Service Domain - Party Data Management'
  description: >
+
+    ## Executive Summary:
+
+    This service domain maintains details of the legal entity structure of the party including dependents and associations for individuals and ownership/subsidiary structures for corporations. Some financial indicators and product coverage/activity details can be included where this defines the nature of the legal entity relationship in particular for corporate entities
+
+    ## Example of Use:
+
+    Party legal entity details are checked for the financial booking of a major loan
+
+    ## Description:
+
+    Maintain the legal entity structure including ownership, subsidiaries and partnership details
+
 host: virtserver.swaggerhub.com
 basePath: /BIAN/sd-party-data-management/1.0.0
 schemes:
@@ -13,8 +26,8 @@ paths:
       tags:
       - activate
       operationId: activateSDPartyDataManagement
-      summary: Reference to a service activation service call
-      description: Reference to a service activation service call
+      summary: Activate  a SDPartyDataManagement servicing session
+      description: Activate  a  SDPartyDataManagement servicing session
       produces:
       - application/json
       parameters:
@@ -29,16 +42,21 @@ paths:
           description: Successful Service Activation
           schema:
             $ref: '#/definitions/SDPartyDataManagementActivateOutputModel'
-  /party-data-management/configure:
+  /party-data-management/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
       operationId: configureSDPartyDataManagement
-      summary: Reference to a service configuration service call
-      description: Reference to a service configuration service call
+      summary: Update an active SDPartyDataManagement session configuration
+      description: Update an active SDPartyDataManagement session configuration
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPartyDataManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -46,20 +64,25 @@ paths:
         schema:
           $ref: '#/definitions/SDPartyDataManagementConfigureInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Configuration
           schema:
             $ref: '#/definitions/SDPartyDataManagementConfigureOutputModel'
-  /party-data-management/feedback:
+  /party-data-management/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
       operationId: feedbackSDPartyDataManagement
-      summary: Reference to a feedback service call
-      description: Reference to a feedback service call
+      summary: "Capturing feedback against the SDPartyDataManagement service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDPartyDataManagement service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPartyDataManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -67,20 +90,25 @@ paths:
         schema:
           $ref: '#/definitions/SDPartyDataManagementFeedbackInputModel'
       responses:
-        201:
+        200:
           description: Successful Service Feedback
           schema:
             $ref: '#/definitions/SDPartyDataManagementFeedbackOutputModel'
-  /party-data-management/retrieve:
+  /party-data-management/{sd-reference-id}:
     get:
       tags:
       - retrieve
       operationId: retrieveSDPartyDataManagement
-      summary: Reference to a retrieve service call
-      description: Reference to a retrieve service call
+      summary: Analytical views maintained by the SDPartyDataManagement service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDPartyDataManagement service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDPartyDataManagement Servicing Session Reference
+        type: string
       - in: body
         name: body
         required: true
@@ -92,40 +120,19 @@ paths:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDPartyDataManagementRetrieveOutputModel'
-  /party-data-management/party-directory-entry/initiation:
+  /party-data-management/{sd-reference-id}/party-directory-entry/registration:
     post:
       tags:
-      - initiate
-      operationId: initiatePartyDirectoryEntry
-      summary: Details of a new Party Directory Entry Instance instance
+      - register
+      operationId: registerPartyDirectoryEntry
+      summary: Details of a new PartyDirectoryEntry instance
       description: Register a new legal entity in the catalog
       produces:
       - application/json
       parameters:
-      - in: body
-        name: body
-        required: true
-        description: PartyDirectoryEntry Request Payload
-        schema:
-          $ref: '#/definitions/CRPartyDirectoryEntryInitiateInputModel'
-      responses:
-        201:
-          description: Successful Details of a new Party Directory Entry Instance instance
-          schema:
-            $ref: '#/definitions/CRPartyDirectoryEntryInitiateOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/update:
-    put:
-      tags:
-      - update
-      operationId: updatePartyDirectoryEntry
-      summary: Update to any amendable fields of the Party Directory Entry Instance instance
-      description:  Update details about the legal entity directory entry
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
+      - name: sd-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Data Management Servicing Session Reference
         required: true
         type: string
       - in: body
@@ -133,108 +140,189 @@ paths:
         required: true
         description: PartyDirectoryEntry Request Payload
         schema:
+          $ref: '#/definitions/CRPartyDirectoryEntryRegisterInputModel'
+      responses:
+        201:
+          description: Successful registration of new PartyDirectoryEntry instance
+          schema:
+            $ref: '#/definitions/CRPartyDirectoryEntryRegisterOutputModel'
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updatePartyDirectoryEntry
+      summary: Update to any amendable fields of the PartyDirectoryEntry instance
+      description: Update details about the legal entity directory entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Party Directory Entry Request Payload
+        schema:
           $ref: '#/definitions/CRPartyDirectoryEntryUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Party Directory Entry Instance instance
+          description: Successfully Updated Party Directory Entry Instance
           schema:
             $ref: '#/definitions/CRPartyDirectoryEntryUpdateOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/control:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/control:
     put:
       tags:
       - control
       operationId: controlPartyDirectoryEntryUpdate
       summary: Request specific processing (e.g. suspend, skip, terminate)
-      description:  Control the handling of an entity entry (e.g. terminate)
+      description: Control the handling of an entity entry (e.g. terminate)
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: PartyDirectoryEntry Request Payload
+        description: Party Directory Entry Request Payload
         schema:
           $ref: '#/definitions/CRPartyDirectoryEntryControlInputModel'
       responses:
         200:
-          description: Successful Request specific processing (e.g. suspend, skip, terminate)
+          description: Successful control of Party Directory Entry Instance
           schema:
             $ref: '#/definitions/CRPartyDirectoryEntryControlOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/exchange:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/exchange:
     put:
       tags:
       - exchange
       operationId: exchangePartyDirectoryEntryUpdate
       summary: Handle an external exchange (e.g. accept, reject, verify)
-      description:  Accept, verify, reject etc. details of a legal entity directory entry
+      description: Accept, verify, reject etc. details of a legal entity directory entry
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: PartyDirectoryEntry Request Payload
+        description: Party Directory Entry Request Payload
         schema:
           $ref: '#/definitions/CRPartyDirectoryEntryExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Party Directory Entry Instance
           schema:
             $ref: '#/definitions/CRPartyDirectoryEntryExchangeOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/requisition:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestPartyDirectoryEntryUpdate
-      summary: Invoke a service request action against the Party Directory Entry Instance instance
-      description:  Request manual intervention with an entry (e.g. refresh content)
+      summary: Invoke a service request action against the PartyDirectoryEntry instance
+      description: Request manual intervention with an entry (e.g. refresh content)
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: PartyDirectoryEntry Request Payload
+        description: Party Directory Entry Request Payload
         schema:
           $ref: '#/definitions/CRPartyDirectoryEntryRequestInputModel'
       responses:
         200:
-          description: Successful Invoke a service request action against the Party Directory Entry Instance instance
+          description: Successful requisition of Party Directory Entry Instance
           schema:
             $ref: '#/definitions/CRPartyDirectoryEntryRequestOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/references/{bq-reference-id}/update:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyDataManagement
+      summary: Invoke a reporting action to obtain a Party Directory Entry instance related report
+      description: Retrieve details about a legal entity directory entry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Directory Entry Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRPartyDirectoryEntryRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Party Directory Entry Instance
+          schema:
+            $ref: '#/definitions/CRPartyDirectoryEntryRetrieveOutputModel'
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/reference/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updatePartyDirectoryEntryReference
       summary: Update to any amendable fields of the Reference instance
-      description:  Update details about a reference entry for the legal entity
+      description: Update details about a reference entry for the legal entity
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Reference BQ Reference Id
+        description: Reference Instance Reference
         required: true
         type: string
       - in: body
@@ -245,27 +333,32 @@ paths:
           $ref: '#/definitions/BQReferenceUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Reference instance
+          description: Successfully Updated Reference Instance
           schema:
             $ref: '#/definitions/BQReferenceUpdateOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/references/{bq-reference-id}/exchange:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/reference/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
       operationId: exchangePartyDirectoryEntryReferenceUpdate
       summary: Handle an external exchange (e.g. accept, reject, verify)
-      description:  Accept, verify, reject a directory entry
+      description: Accept, verify, reject a directory entry
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Reference BQ Reference Id
+        description: Reference Instance Reference
         required: true
         type: string
       - in: body
@@ -276,27 +369,32 @@ paths:
           $ref: '#/definitions/BQReferenceExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Reference Instance Record
           schema:
             $ref: '#/definitions/BQReferenceExchangeOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/references/{bq-reference-id}/execution:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/reference/{bq-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executePartyDirectoryEntryReferenceUpdate
       summary: Invoke an automated execute action against the Reference instance
-      description:  Execute an automated action against an entry (e.g. notify status update)
+      description: Execute an automated action against an entry (e.g. notify status update)
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Reference BQ Reference Id
+        description: Reference Instance Reference
         required: true
         type: string
       - in: body
@@ -307,27 +405,67 @@ paths:
           $ref: '#/definitions/BQReferenceExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Reference instance
+          description: Successful execution of Reference Instance Record
           schema:
             $ref: '#/definitions/BQReferenceExecuteOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/profiles/{bq-reference-id}/update:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/reference/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyDirectoryEntryReference
+      summary: Invoke a reporting action to obtain a Reference instance related report.
+      description: Retrieve details about reference entries in the directory record .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Reference Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQReferenceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Reference Instance Record
+          schema:
+            $ref: '#/definitions/BQReferenceRetrieveOutputModel'
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/profile/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updatePartyDirectoryEntryProfile
       summary: Update to any amendable fields of the Profile instance
-      description:  Update details about a profile entry for the legal entity
+      description: Update details about a profile entry for the legal entity
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Profile BQ Reference Id
+        description: Profile Instance Reference
         required: true
         type: string
       - in: body
@@ -338,27 +476,32 @@ paths:
           $ref: '#/definitions/BQProfileUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Profile instance
+          description: Successfully Updated Profile Instance
           schema:
             $ref: '#/definitions/BQProfileUpdateOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/profiles/{bq-reference-id}/exchange:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/profile/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
       operationId: exchangePartyDirectoryEntryProfileUpdate
       summary: Handle an external exchange (e.g. accept, reject, verify)
-      description:  Accept, verify, reject a directory entry
+      description: Accept, verify, reject a directory entry
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Profile BQ Reference Id
+        description: Profile Instance Reference
         required: true
         type: string
       - in: body
@@ -369,27 +512,32 @@ paths:
           $ref: '#/definitions/BQProfileExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Profile Instance Record
           schema:
             $ref: '#/definitions/BQProfileExchangeOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/profiles/{bq-reference-id}/execution:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/profile/{bq-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executePartyDirectoryEntryProfileUpdate
       summary: Invoke an automated execute action against the Profile instance
-      description:  Execute an automated action against an entry (e.g. notify status update)
+      description: Execute an automated action against an entry (e.g. notify status update)
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Profile BQ Reference Id
+        description: Profile Instance Reference
         required: true
         type: string
       - in: body
@@ -400,27 +548,67 @@ paths:
           $ref: '#/definitions/BQProfileExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Profile instance
+          description: Successful execution of Profile Instance Record
           schema:
             $ref: '#/definitions/BQProfileExecuteOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/associations/{bq-reference-id}/update:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/profile/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyDirectoryEntryProfile
+      summary: Invoke a reporting action to obtain a Profile instance related report.
+      description: Retrieve details about profile entries in the directory record .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Profile Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQProfileRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Profile Instance Record
+          schema:
+            $ref: '#/definitions/BQProfileRetrieveOutputModel'
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/associations/{bq-reference-id}/update:
     put:
       tags:
       - update
       operationId: updatePartyDirectoryEntryAssociations
       summary: Update to any amendable fields of the Associations instance
-      description:  Update details about an association entry for the legal entity
+      description: Update details about an association entry for the legal entity
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Associations BQ Reference Id
+        description: Associations Instance Reference
         required: true
         type: string
       - in: body
@@ -431,27 +619,32 @@ paths:
           $ref: '#/definitions/BQAssociationsUpdateInputModel'
       responses:
         200:
-          description: Successful Update to any amendable fields of the Associations instance
+          description: Successfully Updated Associations Instance
           schema:
             $ref: '#/definitions/BQAssociationsUpdateOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/associations/{bq-reference-id}/exchange:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/associations/{bq-reference-id}/exchange:
     put:
       tags:
       - exchange
       operationId: exchangePartyDirectoryEntryAssociationsUpdate
       summary: Handle an external exchange (e.g. accept, reject, verify)
-      description:  Accept, verify, reject a directory entry
+      description: Accept, verify, reject a directory entry
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Associations BQ Reference Id
+        description: Associations Instance Reference
         required: true
         type: string
       - in: body
@@ -462,27 +655,32 @@ paths:
           $ref: '#/definitions/BQAssociationsExchangeInputModel'
       responses:
         200:
-          description: Successful Handle an external exchange (e.g. accept, reject, verify)
+          description: Successful exchange of Associations Instance Record
           schema:
             $ref: '#/definitions/BQAssociationsExchangeOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/associations/{bq-reference-id}/execution:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/associations/{bq-reference-id}/execution:
     put:
       tags:
       - execute
       operationId: executePartyDirectoryEntryAssociationsUpdate
       summary: Invoke an automated execute action against the Associations instance
-      description:  Execute an automated action against an entry (e.g. notify status update)
+      description: Execute an automated action against an entry (e.g. notify status update)
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name: bq-reference-id
         in: path
-        description: Associations BQ Reference Id
+        description: Associations Instance Reference
         required: true
         type: string
       - in: body
@@ -493,10 +691,45 @@ paths:
           $ref: '#/definitions/BQAssociationsExecuteInputModel'
       responses:
         200:
-          description: Successful Invoke an automated execute action against the Associations instance
+          description: Successful execution of Associations Instance Record
           schema:
             $ref: '#/definitions/BQAssociationsExecuteOutputModel'
-  /party-data-management/party-directory-entry:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/associations/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrievePartyDirectoryEntryAssociations
+      summary: Invoke a reporting action to obtain a Associations instance related report.
+      description: Retrieve details about association entries in the directory record .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Party Directory Entry Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Associations Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAssociationsRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Associations Instance Record
+          schema:
+            $ref: '#/definitions/BQAssociationsRetrieveOutputModel'
+  /party-data-management/{sd-reference-id}/party-directory-entry:
     get:
       tags:
       - retrieve
@@ -505,6 +738,11 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name : collection-filter
         in: query
         description: Filter to refine the result set. ex- PartyDataManagement Instance Status='active'
@@ -534,7 +772,7 @@ paths:
             items:
               type: string
             example: [ 'Reference',  'Profile',  'Associations', ]
-  /party-data-management/party-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
+  /party-data-management/{sd-reference-id}/party-directory-entry/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
@@ -543,9 +781,14 @@ paths:
       produces:
       - application/json
       parameters:
+      - name: sd-reference-id
+        in: path
+        description: Party Data Management Servicing Session Reference
+        required: true
+        type: string
       - name: cr-reference-id
         in: path
-        description: Party Directory Entry Instance
+        description: Party Directory Entry Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
@@ -566,125 +809,6 @@ paths:
             items:
               type: string
             example: [AssociationsID1, AssociationsID2]
-  /party-data-management/party-directory-entry/{cr-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePartyDataManagement
-      summary: Retrieve a Party Data Management Record
-      description: Retrieve a Party Data Management Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Party Directory Entry Instance
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Party Data Management Request Payload
-        schema:
-          $ref: '#/definitions/CRPartyDirectoryEntryRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Party Data Management Report
-          schema:
-            $ref: '#/definitions/CRPartyDirectoryEntryRetrieveOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/references/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePartyDataManagementReference
-      summary: Retrieve a Party Data Management Reference Record
-      description: Retrieve a Party Data Management Reference Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Party Directory Entry Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Reference BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Party Data Management Reference Request Payload
-        schema:
-          $ref: '#/definitions/BQReferenceRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Party Data Management Reference Report
-          schema:
-            $ref: '#/definitions/BQReferenceRetrieveOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/profiles/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePartyDataManagementProfile
-      summary: Retrieve a Party Data Management Profile Record
-      description: Retrieve a Party Data Management Profile Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Party Directory Entry Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Profile BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Party Data Management Profile Request Payload
-        schema:
-          $ref: '#/definitions/BQProfileRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Party Data Management Profile Report
-          schema:
-            $ref: '#/definitions/BQProfileRetrieveOutputModel'
-  /party-data-management/party-directory-entry/{cr-reference-id}/associations/{bq-reference-id}:
-    get:
-      tags:
-      - retrieve
-      operationId: retrievePartyDataManagementAssociations
-      summary: Retrieve a Party Data Management Associations Record
-      description: Retrieve a Party Data Management Associations Record
-      produces:
-      - application/json
-      parameters:
-      - name: cr-reference-id
-        in: path
-        description: Party Directory Entry Instance
-        required: true
-        type: string
-      - name: bq-reference-id
-        in: path
-        description: Associations BQ Reference Id
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Party Data Management Associations Request Payload
-        schema:
-          $ref: '#/definitions/BQAssociationsRetrieveInputModel'
-      responses:
-        200:
-          description: Successfully Retrieved Party Data Management Associations Report
-          schema:
-            $ref: '#/definitions/BQAssociationsRetrieveOutputModel'
 definitions:
  SDPartyDataManagementActivateInputModel:
   type: object
@@ -1329,22 +1453,22 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRPartyDirectoryEntryInitiateInputModel:
+ CRPartyDirectoryEntryRegisterInputModel:
   type: object
   properties: 
-   partyDirectoryEntryInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
    partyDataManagementServicingSessionReference:
     type: string
-    example: "PDMSSR726778"
+    example: "PDMSSR767063"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
+   partyDirectoryEntryRegisterActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Register service call input and output record
    partyDirectoryEntryInstanceStatus:
     type: string
     description: |
@@ -1356,14 +1480,14 @@ definitions:
     properties:
      legalEntityReference:
       type: string
-      example: "797157"
+      example: "721124"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the legal entity that is the subject of the entry
      customerReference:
       type: string
-      example: "721131"
+      example: "780391"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1378,29 +1502,29 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
           general-info: Value of the date type
- CRPartyDirectoryEntryInitiateOutputModel:
+ CRPartyDirectoryEntryRegisterOutputModel:
   type: object
   properties: 
-   partyDirectoryEntryInitiateActionReference:
-    type: string
-    example: "PDEIAR718549"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   partyDirectoryEntryInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR772241"
+    example: "PDEIR797855"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Party Directory Entry instance
+   partyDirectoryEntryRegisterActionReference:
+    type: string
+    example: "PDERAR784991"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Register service call
+   partyDirectoryEntryRegisterActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Register service call input and output record
    partyDirectoryEntryInstanceStatus:
     type: string
     description: |
@@ -1425,14 +1549,14 @@ definitions:
   properties: 
    partyDataManagementServicingSessionReference:
     type: string
-    example: "PDMSSR760142"
+    example: "PDMSSR765566"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR795121"
+    example: "PDEIR716038"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1442,14 +1566,14 @@ definitions:
     properties:
      legalEntityReference:
       type: string
-      example: "731447"
+      example: "777973"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the legal entity that is the subject of the entry
      customerReference:
       type: string
-      example: "768162"
+      example: "732631"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1484,14 +1608,14 @@ definitions:
     properties:
      legalEntityReference:
       type: string
-      example: "731447"
+      example: "777973"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the legal entity that is the subject of the entry
      customerReference:
       type: string
-      example: "768162"
+      example: "732631"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1508,7 +1632,7 @@ definitions:
           general-info: Value of the date type
    partyDirectoryEntryUpdateActionTaskReference:
     type: string
-    example: "PDEUATR704654"
+    example: "PDEUATR713352"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1530,14 +1654,14 @@ definitions:
   properties: 
    partyDataManagementServicingSessionReference:
     type: string
-    example: "PDMSSR729974"
+    example: "PDMSSR776122"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR714385"
+    example: "PDEIR763993"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1562,7 +1686,7 @@ definitions:
   properties: 
    partyDirectoryEntryControlActionTaskReference:
     type: string
-    example: "PDECATR789978"
+    example: "PDECATR721870"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1584,14 +1708,14 @@ definitions:
   properties: 
    partyDataManagementServicingSessionReference:
     type: string
-    example: "PDMSSR702417"
+    example: "PDMSSR737552"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR736093"
+    example: "PDEIR795184"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1616,7 +1740,7 @@ definitions:
   properties: 
    partyDirectoryEntryExchangeActionTaskReference:
     type: string
-    example: "PDEEATR726251"
+    example: "PDEEATR748421"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1638,14 +1762,14 @@ definitions:
   properties: 
    partyDataManagementServicingSessionReference:
     type: string
-    example: "PDMSSR717670"
+    example: "PDMSSR759686"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR761739"
+    example: "PDEIR755570"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1696,7 +1820,7 @@ definitions:
           general-info: Value of the date type
    partyDirectoryEntryRequestActionTaskReference:
     type: string
-    example: "PDERATR744639"
+    example: "PDERATR743870"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1709,7 +1833,7 @@ definitions:
       general-info: The request service call consolidated processing record
    requestRecordReference:
     type: string
-    example: "RRR735693"
+    example: "RRR751845"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1740,7 +1864,7 @@ definitions:
     properties:
      partyDirectoryEntryInstanceReportReference:
       type: string
-      example: "749223"
+      example: "749613"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1762,7 +1886,7 @@ definitions:
     properties:
      partyDirectoryEntryInstanceAnalysisReference:
       type: string
-      example: "769557"
+      example: "790094"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1787,14 +1911,14 @@ definitions:
     properties:
      legalEntityReference:
       type: string
-      example: "788779"
+      example: "798606"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the legal entity that is the subject of the entry
      customerReference:
       type: string
-      example: "704386"
+      example: "789986"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1811,7 +1935,7 @@ definitions:
           general-info: Value of the date type
    partyDirectoryEntryRetrieveActionTaskReference:
     type: string
-    example: "PDERATR724688"
+    example: "PDERATR714046"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1876,6 +2000,20 @@ definitions:
    partyDirectoryEntryInstanceRecord:
     type: object
     properties:
+     legalEntityReference:
+      type: string
+      example: "705722"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the legal entity that is the subject of the entry
+     customerReference:
+      type: string
+      example: "745822"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer (one or more linked by role to the legal entity)
      dateType:
       type: object
       properties:
@@ -1888,14 +2026,14 @@ definitions:
           general-info: Value of the date type
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR793884"
+    example: "PDEIR704356"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Party Directory Entry instance
    referenceInstanceReference:
     type: string
-    example: "RIR734756"
+    example: "RIR758269"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1959,7 +2097,7 @@ definitions:
         general-info: The primary, and additional regulators as appropriate
      taxReference:
       type: string
-      example: "791861"
+      example: "713280"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1994,359 +2132,16 @@ definitions:
    partyDirectoryEntryInstanceRecord:
     type: object
     properties:
-     dateType:
-      type: object
-      properties:
-       date:
-        type: string
-        example: "09-22-2018"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-          general-info: Value of the date type
-   referenceInstanceRecord:
-    type: object
-    properties:
-     legalEntityOfficialName:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The registered name of the entity
-     legalEntityType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of legal entity (e.g. individual, Inc, Plc)
-     sectorsofOperation:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The sectors of operation (e.g. finance, Asia)
-     registeredAddress:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The registered address for the legal entity
-     headquartersLocation:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The location of the head office (and regional offices if appropriate)
-     dateofIncorporation:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The date of incorporation (or dates when subsidiaries involved)
-     jurisdictionofIncorporation:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The jurisdiction governing the company
-     registrationAuthority:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The associated legal or registration authority
-     primaryRegulator:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The primary, and additional regulators as appropriate
-     taxReference:
-      type: string
-      example: "791861"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference identifier linking the entity to appropriate tax authority
-     contactRole:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The bank's contact role or roles established to maintain the relationship with the bank (e.g. CEO)
-     contactAddressDetails:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The address of the bank's contact's within the entity
-   referenceUpdateActionTaskReference:
-    type: string
-    example: "RUATR765791"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an update service call
-   referenceUpdateActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The update service call consolidated processing record
-   updateResponseRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: Details of the Update action service response
- BQReferenceExchangeInputModel:
-  type: object
-  properties: 
-   partyDirectoryEntryInstanceReference:
-    type: string
-    example: "PDEIR794467"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Party Directory Entry instance
-   referenceInstanceReference:
-    type: string
-    example: "RIR778275"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Reference instance
-   referenceExchangeActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The exchange service call consolidated processing record
-   referenceExchangeActionRequest:
-    type: object
-    properties:
-     exchangeActionType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of exchange (e.g. accept, reject, verify)
- BQReferenceExchangeOutputModel:
-  type: object
-  properties: 
-   referenceExchangeActionTaskReference:
-    type: string
-    example: "REATR743310"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Reference instance exchange service call
-   referenceExchangeActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The exchange service call consolidated processing record
-   referenceExchangeActionResponse:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of the exchange action service response
-   referenceInstanceStatus:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Reference instance (e.g. accepted, rejected, verified)
- BQReferenceExecuteInputModel:
-  type: object
-  properties: 
-   partyDirectoryEntryInstanceReference:
-    type: string
-    example: "PDEIR781890"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Party Directory Entry instance
-   referenceInstanceReference:
-    type: string
-    example: "RIR736969"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Reference instance
-   referenceInstanceRecord:
-    type: object
-    properties:
-     legalEntityOfficialName:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The registered name of the entity
-     legalEntityType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of legal entity (e.g. individual, Inc, Plc)
-     sectorsofOperation:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The sectors of operation (e.g. finance, Asia)
-     registeredAddress:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The registered address for the legal entity
-     headquartersLocation:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The location of the head office (and regional offices if appropriate)
-     dateofIncorporation:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The date of incorporation (or dates when subsidiaries involved)
-     jurisdictionofIncorporation:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The jurisdiction governing the company
-     registrationAuthority:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The associated legal or registration authority
-     primaryRegulator:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The primary, and additional regulators as appropriate
-     taxReference:
-      type: string
-      example: "781896"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference identifier linking the entity to appropriate tax authority
-     contactRole:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The bank's contact role or roles established to maintain the relationship with the bank (e.g. CEO)
-     contactAddressDetails:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The address of the bank's contact's within the entity
-   referenceExecuteActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The execute service call consolidated processing record
-   executeRecordType:
-    type: object
-    properties:
-     executeInputRecord:
-      type: object
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
- BQReferenceExecuteOutputModel:
-  type: object
-  properties: 
-   referenceExecuteActionTaskReference:
-    type: string
-    example: "REATR730257"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Reference instance execute service call
-   referenceExecuteActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The execute service call consolidated processing record
-   referenceExecuteRecordReference:
-    type: string
-    example: "RERR748426"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Reference execute transaction/record
-   executeResponseRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: Details of the execute action service response
- BQReferenceRetrieveInputModel:
-  type: object
-  properties: 
-   referenceRetrieveActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The retrieve service call consolidated processing record
-   referenceRetrieveActionRequest:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of the retrieve action service request (lists requested reports)
-   referenceInstanceReport:
-    type: object
-    properties:
-     referenceInstanceReportReference:
-      type: string
-      example: "790298"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the control record instance report
-   referenceInstanceAnalysis:
-    type: object
-    properties:
-     referenceInstanceAnalysisReference:
-      type: string
-      example: "785845"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the control record instance analysis view
- BQReferenceRetrieveOutputModel:
-  type: object
-  properties: 
-   partyDirectoryEntryInstanceRecord:
-    type: object
-    properties:
      legalEntityReference:
       type: string
-      example: "758367"
+      example: "705722"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the legal entity that is the subject of the entry
      customerReference:
       type: string
-      example: "716279"
+      example: "745822"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2420,7 +2215,364 @@ definitions:
         general-info: The primary, and additional regulators as appropriate
      taxReference:
       type: string
-      example: "792855"
+      example: "713280"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference identifier linking the entity to appropriate tax authority
+     contactRole:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The bank's contact role or roles established to maintain the relationship with the bank (e.g. CEO)
+     contactAddressDetails:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The address of the bank's contact's within the entity
+   referenceUpdateActionTaskReference:
+    type: string
+    example: "RUATR755918"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   referenceUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ BQReferenceExchangeInputModel:
+  type: object
+  properties: 
+   partyDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR710375"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Party Directory Entry instance
+   referenceInstanceReference:
+    type: string
+    example: "RIR736659"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Reference instance
+   referenceExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   referenceExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQReferenceExchangeOutputModel:
+  type: object
+  properties: 
+   referenceExchangeActionTaskReference:
+    type: string
+    example: "REATR727090"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Reference instance exchange service call
+   referenceExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   referenceExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   referenceInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Reference instance (e.g. accepted, rejected, verified)
+ BQReferenceExecuteInputModel:
+  type: object
+  properties: 
+   partyDirectoryEntryInstanceReference:
+    type: string
+    example: "PDEIR737596"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Party Directory Entry instance
+   referenceInstanceReference:
+    type: string
+    example: "RIR782517"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Reference instance
+   referenceInstanceRecord:
+    type: object
+    properties:
+     legalEntityOfficialName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The registered name of the entity
+     legalEntityType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of legal entity (e.g. individual, Inc, Plc)
+     sectorsofOperation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sectors of operation (e.g. finance, Asia)
+     registeredAddress:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The registered address for the legal entity
+     headquartersLocation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The location of the head office (and regional offices if appropriate)
+     dateofIncorporation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The date of incorporation (or dates when subsidiaries involved)
+     jurisdictionofIncorporation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The jurisdiction governing the company
+     registrationAuthority:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The associated legal or registration authority
+     primaryRegulator:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The primary, and additional regulators as appropriate
+     taxReference:
+      type: string
+      example: "718756"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference identifier linking the entity to appropriate tax authority
+     contactRole:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The bank's contact role or roles established to maintain the relationship with the bank (e.g. CEO)
+     contactAddressDetails:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The address of the bank's contact's within the entity
+   referenceExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   executeRecordType:
+    type: object
+    properties:
+     executeInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
+ BQReferenceExecuteOutputModel:
+  type: object
+  properties: 
+   referenceExecuteActionTaskReference:
+    type: string
+    example: "REATR726056"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Reference instance execute service call
+   referenceExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   referenceExecuteRecordReference:
+    type: string
+    example: "RERR756487"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Reference execute transaction/record
+   executeResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the execute action service response
+ BQReferenceRetrieveInputModel:
+  type: object
+  properties: 
+   referenceRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   referenceRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   referenceInstanceReport:
+    type: object
+    properties:
+     referenceInstanceReportReference:
+      type: string
+      example: "704628"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   referenceInstanceAnalysis:
+    type: object
+    properties:
+     referenceInstanceAnalysisReference:
+      type: string
+      example: "763447"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQReferenceRetrieveOutputModel:
+  type: object
+  properties: 
+   partyDirectoryEntryInstanceRecord:
+    type: object
+    properties:
+     legalEntityReference:
+      type: string
+      example: "701861"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the legal entity that is the subject of the entry
+     customerReference:
+      type: string
+      example: "779421"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer (one or more linked by role to the legal entity)
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   referenceInstanceRecord:
+    type: object
+    properties:
+     legalEntityOfficialName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The registered name of the entity
+     legalEntityType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of legal entity (e.g. individual, Inc, Plc)
+     sectorsofOperation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sectors of operation (e.g. finance, Asia)
+     registeredAddress:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The registered address for the legal entity
+     headquartersLocation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The location of the head office (and regional offices if appropriate)
+     dateofIncorporation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The date of incorporation (or dates when subsidiaries involved)
+     jurisdictionofIncorporation:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The jurisdiction governing the company
+     registrationAuthority:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The associated legal or registration authority
+     primaryRegulator:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The primary, and additional regulators as appropriate
+     taxReference:
+      type: string
+      example: "719260"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2439,7 +2591,7 @@ definitions:
         general-info: The address of the bank's contact's within the entity
    referenceRetrieveActionTaskReference:
     type: string
-    example: "RRATR701081"
+    example: "RRATR703988"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2516,6 +2668,20 @@ definitions:
    partyDirectoryEntryInstanceRecord:
     type: object
     properties:
+     legalEntityReference:
+      type: string
+      example: "731963"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the legal entity that is the subject of the entry
+     customerReference:
+      type: string
+      example: "720953"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer (one or more linked by role to the legal entity)
      dateType:
       type: object
       properties:
@@ -2528,14 +2694,14 @@ definitions:
           general-info: Value of the date type
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR744372"
+    example: "PDEIR781814"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Party Directory Entry instance
    profileInstanceReference:
     type: string
-    example: "PIR704397"
+    example: "PIR727061"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2597,6 +2763,20 @@ definitions:
    partyDirectoryEntryInstanceRecord:
     type: object
     properties:
+     legalEntityReference:
+      type: string
+      example: "731963"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the legal entity that is the subject of the entry
+     customerReference:
+      type: string
+      example: "720953"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer (one or more linked by role to the legal entity)
      dateType:
       type: object
       properties:
@@ -2648,7 +2828,7 @@ definitions:
         general-info: Description of revenues, production volumes and staff turnover a summary description)
    profileUpdateActionTaskReference:
     type: string
-    example: "PUATR757021"
+    example: "PUATR770390"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2670,14 +2850,14 @@ definitions:
   properties: 
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR741838"
+    example: "PDEIR739491"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Party Directory Entry instance
    profileInstanceReference:
     type: string
-    example: "PIR725471"
+    example: "PIR712866"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2702,7 +2882,7 @@ definitions:
   properties: 
    profileExchangeActionTaskReference:
     type: string
-    example: "PEATR755567"
+    example: "PEATR746778"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2730,14 +2910,14 @@ definitions:
   properties: 
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR716227"
+    example: "PDEIR708191"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Party Directory Entry instance
    profileInstanceReference:
     type: string
-    example: "PIR727737"
+    example: "PIR745526"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2801,7 +2981,7 @@ definitions:
   properties: 
    profileExecuteActionTaskReference:
     type: string
-    example: "PEATR738697"
+    example: "PEATR779950"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2814,7 +2994,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    profileExecuteRecordReference:
     type: string
-    example: "PERR743552"
+    example: "PERR729889"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2845,7 +3025,7 @@ definitions:
     properties:
      profileInstanceReportReference:
       type: string
-      example: "794378"
+      example: "736243"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2855,7 +3035,7 @@ definitions:
     properties:
      profileInstanceAnalysisReference:
       type: string
-      example: "772393"
+      example: "785749"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2868,14 +3048,14 @@ definitions:
     properties:
      legalEntityReference:
       type: string
-      example: "738918"
+      example: "768738"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the legal entity that is the subject of the entry
      customerReference:
       type: string
-      example: "788137"
+      example: "793552"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2931,7 +3111,7 @@ definitions:
         general-info: Description of revenues, production volumes and staff turnover a summary description)
    profileRetrieveActionTaskReference:
     type: string
-    example: "PRATR713689"
+    example: "PRATR776144"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3008,6 +3188,20 @@ definitions:
    partyDirectoryEntryInstanceRecord:
     type: object
     properties:
+     legalEntityReference:
+      type: string
+      example: "702929"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the legal entity that is the subject of the entry
+     customerReference:
+      type: string
+      example: "791575"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer (one or more linked by role to the legal entity)
      dateType:
       type: object
       properties:
@@ -3020,14 +3214,14 @@ definitions:
           general-info: Value of the date type
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR737856"
+    example: "PDEIR725898"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Party Directory Entry instance
    associationsInstanceReference:
     type: string
-    example: "AIR764163"
+    example: "AIR747295"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3037,7 +3231,7 @@ definitions:
     properties:
      legalEntityAssociationReference:
       type: string
-      example: "754767"
+      example: "742550"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3056,14 +3250,14 @@ definitions:
         general-info: Description of the association and applicable obligations (e.g. shareholder, director, guardian, guarantor)
      parentLegalEntityReference:
       type: string
-      example: "759962"
+      example: "764661"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference the parent entity if applicable 
      subsidiaryLegalEntityReference:
       type: string
-      example: "797071"
+      example: "764858"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3092,6 +3286,20 @@ definitions:
    partyDirectoryEntryInstanceRecord:
     type: object
     properties:
+     legalEntityReference:
+      type: string
+      example: "702929"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the legal entity that is the subject of the entry
+     customerReference:
+      type: string
+      example: "791575"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer (one or more linked by role to the legal entity)
      dateType:
       type: object
       properties:
@@ -3107,7 +3315,7 @@ definitions:
     properties:
      legalEntityAssociationReference:
       type: string
-      example: "754767"
+      example: "742550"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3126,14 +3334,14 @@ definitions:
         general-info: Description of the association and applicable obligations (e.g. shareholder, director, guardian, guarantor)
      parentLegalEntityReference:
       type: string
-      example: "759962"
+      example: "764661"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference the parent entity if applicable 
      subsidiaryLegalEntityReference:
       type: string
-      example: "797071"
+      example: "764858"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3146,7 +3354,7 @@ definitions:
         general-info: List of major shareholders and shareholdings of significance
    associationsUpdateActionTaskReference:
     type: string
-    example: "AUATR792209"
+    example: "AUATR797720"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3168,14 +3376,14 @@ definitions:
   properties: 
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR707169"
+    example: "PDEIR737913"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Party Directory Entry instance
    associationsInstanceReference:
     type: string
-    example: "AIR705851"
+    example: "AIR734199"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3200,7 +3408,7 @@ definitions:
   properties: 
    associationsExchangeActionTaskReference:
     type: string
-    example: "AEATR759389"
+    example: "AEATR756820"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3228,14 +3436,14 @@ definitions:
   properties: 
    partyDirectoryEntryInstanceReference:
     type: string
-    example: "PDEIR785744"
+    example: "PDEIR701356"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Party Directory Entry instance
    associationsInstanceReference:
     type: string
-    example: "AIR776037"
+    example: "AIR797649"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3245,7 +3453,7 @@ definitions:
     properties:
      legalEntityAssociationReference:
       type: string
-      example: "784439"
+      example: "757518"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3264,14 +3472,14 @@ definitions:
         general-info: Description of the association and applicable obligations (e.g. shareholder, director, guardian, guarantor)
      parentLegalEntityReference:
       type: string
-      example: "767689"
+      example: "747549"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference the parent entity if applicable 
      subsidiaryLegalEntityReference:
       type: string
-      example: "705253"
+      example: "710795"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3302,7 +3510,7 @@ definitions:
   properties: 
    associationsExecuteActionTaskReference:
     type: string
-    example: "AEATR721575"
+    example: "AEATR714555"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3315,7 +3523,7 @@ definitions:
       general-info: The execute service call consolidated processing record
    associationsExecuteRecordReference:
     type: string
-    example: "AERR738088"
+    example: "AERR746178"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3346,7 +3554,7 @@ definitions:
     properties:
      associationsInstanceReportReference:
       type: string
-      example: "723240"
+      example: "794862"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3356,7 +3564,7 @@ definitions:
     properties:
      associationsInstanceAnalysisReference:
       type: string
-      example: "723854"
+      example: "778576"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3369,14 +3577,14 @@ definitions:
     properties:
      legalEntityReference:
       type: string
-      example: "776491"
+      example: "713475"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the legal entity that is the subject of the entry
      customerReference:
       type: string
-      example: "787418"
+      example: "791734"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3396,7 +3604,7 @@ definitions:
     properties:
      legalEntityAssociationReference:
       type: string
-      example: "704796"
+      example: "728481"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3415,14 +3623,14 @@ definitions:
         general-info: Description of the association and applicable obligations (e.g. shareholder, director, guardian, guarantor)
      parentLegalEntityReference:
       type: string
-      example: "726994"
+      example: "765223"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference the parent entity if applicable 
      subsidiaryLegalEntityReference:
       type: string
-      example: "707495"
+      example: "789461"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -3435,7 +3643,7 @@ definitions:
         general-info: List of major shareholders and shareholdings of significance
    associationsRetrieveActionTaskReference:
     type: string
-    example: "ARATR712934"
+    example: "ARATR714851"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
