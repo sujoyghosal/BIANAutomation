@@ -109,50 +109,23 @@ paths:
         required: true
         description: SDRegulatoryReporting Servicing Session Reference
         type: string
-      - in: body
-        name: body
-        required: true
-        description: SDRegulatoryReporting Retrieve Request Payload
-        schema:
-          $ref: '#/definitions/SDRegulatoryReportingRetrieveInputModel'
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/SDRegulatoryReportingRetrieveInputModel'
+        type: string
       responses:
         200:
           description: Successful Service Retrieve
           schema:
             $ref: '#/definitions/SDRegulatoryReportingRetrieveOutputModel'
-  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/initiation:
-    post:
-      tags:
-      - initiate
-      operationId: initiateRegulatoryComplianceAdministrativePlan
-      summary: Details of a new RegulatoryComplianceAdministrativePlan instance
-      description: Start the IP service feed
-      produces:
-      - application/json
-      parameters:
-      - name: sd-reference-id
-        in: path
-        description: Regulatory Reporting Servicing Session Reference
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: RegulatoryComplianceAdministrativePlan Request Payload
-        schema:
-          $ref: '#/definitions/CRRegulatoryComplianceAdministrativePlanInitiateInputModel'
-      responses:
-        201:
-          description: Successful initiation of new RegulatoryComplianceAdministrativePlan instance
-          schema:
-            $ref: '#/definitions/CRRegulatoryComplianceAdministrativePlanInitiateOutputModel'
-  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/control:
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/update:
     put:
       tags:
-      - control
-      operationId: controlRegulatoryComplianceAdministrativePlanUpdate
-      summary: Request specific processing (e.g. suspend, skip, terminate)
-      description: Reconfigure the existing feed make-up
+      - update
+      operationId: updateRegulatoryComplianceAdministrativePlan
+      summary: Update to any amendable fields of the RegulatoryComplianceAdministrativePlan instance
+      description: Update the regulatory reporting set up or schedule
       produces:
       - application/json
       parameters:
@@ -171,19 +144,19 @@ paths:
         required: true
         description: Regulatory Compliance Administrative Plan Request Payload
         schema:
-          $ref: '#/definitions/CRRegulatoryComplianceAdministrativePlanControlInputModel'
+          $ref: '#/definitions/CRRegulatoryComplianceAdministrativePlanUpdateInputModel'
       responses:
         200:
-          description: Successful control of Regulatory Compliance Administrative Plan Instance
+          description: Successfully Updated Regulatory Compliance Administrative Plan Instance
           schema:
-            $ref: '#/definitions/CRRegulatoryComplianceAdministrativePlanControlOutputModel'
+            $ref: '#/definitions/CRRegulatoryComplianceAdministrativePlanUpdateOutputModel'
   /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/requisition:
     put:
       tags:
       - request
       operationId: requestRegulatoryComplianceAdministrativePlanUpdate
       summary: Invoke a service request action against the RegulatoryComplianceAdministrativePlan instance
-      description: Request/change delivery of an allowed service feed (note service agreement/pricing handled elsewhere)
+      description: Request an override to the regular reporting schedule (e.g. request ad hoc report)
       produces:
       - application/json
       parameters:
@@ -214,7 +187,7 @@ paths:
       - retrieve
       operationId: retrieveRegulatoryReporting
       summary: Invoke a reporting action to obtain a Regulatory Compliance Administrative Plan instance related report
-      description: Read details/reports about the IP service feed
+      description: Retrieve any details of the regulatory reporting administration
       produces:
       - application/json
       parameters:
@@ -238,13 +211,13 @@ paths:
           description: Successfully Retrieved Regulatory Compliance Administrative Plan Instance
           schema:
             $ref: '#/definitions/CRRegulatoryComplianceAdministrativePlanRetrieveOutputModel'
-  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/serviceselections/{bq-reference-id}/requisition:
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/consolidation/{bq-reference-id}/capture:
     put:
       tags:
-      - request
-      operationId: requestRegulatoryComplianceAdministrativePlanServiceSelectionUpdate
-      summary: Invoke a service request action against the ServiceSelection instance
-      description: Request changes to the feed service make-up
+      - capture
+      operationId: captureRegulatoryComplianceAdministrativePlanConsolidationUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Provide transaction records as required to support regulatory reporting
       produces:
       - application/json
       parameters:
@@ -260,27 +233,27 @@ paths:
         type: string
       - name: bq-reference-id
         in: path
-        description: ServiceSelection Instance Reference
+        description: Consolidation Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: ServiceSelection request payload
+        description: Consolidation request payload
         schema:
-          $ref: '#/definitions/BQServiceSelectionRequestInputModel'
+          $ref: '#/definitions/BQConsolidationCaptureInputModel'
       responses:
         200:
-          description: Successful requisition of ServiceSelection Instance Record
+          description: Successful capture of Consolidation Instance Record
           schema:
-            $ref: '#/definitions/BQServiceSelectionRequestOutputModel'
-  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/informationimports/{bq-reference-id}/execution:
-    put:
+            $ref: '#/definitions/BQConsolidationCaptureOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/consolidation/{bq-reference-id}/:
+    get:
       tags:
-      - execute
-      operationId: executeRegulatoryComplianceAdministrativePlanInformationImportUpdate
-      summary: Invoke an automated execute action against the InformationImport instance
-      description: Execute an information service import instruction
+      - retrieve
+      operationId: retrieveRegulatoryComplianceAdministrativePlanConsolidation
+      summary: Invoke a reporting action to obtain a Consolidation instance related report.
+      description: Retrieve consolidated information for review .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
       produces:
       - application/json
       parameters:
@@ -296,27 +269,26 @@ paths:
         type: string
       - name: bq-reference-id
         in: path
-        description: InformationImport Instance Reference
+        description: Consolidation Instance Reference
         required: true
         type: string
-      - in: body
-        name: body
-        required: true
-        description: InformationImport request payload
-        schema:
-          $ref: '#/definitions/BQInformationImportExecuteInputModel'
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQConsolidationRetrieveInputModel'
+        type: string
       responses:
         200:
-          description: Successful execution of InformationImport Instance Record
+          description: Successfully  Retrieved Consolidation Instance Record
           schema:
-            $ref: '#/definitions/BQInformationImportExecuteOutputModel'
-  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/informationexports/{bq-reference-id}/update:
+            $ref: '#/definitions/BQConsolidationRetrieveOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/consolidation/{bq-reference-id}/update:
     put:
       tags:
       - update
-      operationId: updateRegulatoryComplianceAdministrativePlanInformationExport
-      summary: Update to any amendable fields of the InformationExport instance
-      description: Update/correct an information service exported message
+      operationId: updateRegulatoryComplianceAdministrativePlanConsolidation
+      summary: Update to any amendable fields of the Consolidation instance
+      description: Update or augment consolidated information to support report generation
       produces:
       - application/json
       parameters:
@@ -332,27 +304,27 @@ paths:
         type: string
       - name: bq-reference-id
         in: path
-        description: InformationExport Instance Reference
+        description: Consolidation Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: InformationExport Request Payload
+        description: Consolidation Request Payload
         schema:
-          $ref: '#/definitions/BQInformationExportUpdateInputModel'
+          $ref: '#/definitions/BQConsolidationUpdateInputModel'
       responses:
         200:
-          description: Successfully Updated InformationExport Instance
+          description: Successfully Updated Consolidation Instance
           schema:
-            $ref: '#/definitions/BQInformationExportUpdateOutputModel'
-  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/informationexports/{bq-reference-id}/execution:
+            $ref: '#/definitions/BQConsolidationUpdateOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/authoring/{bq-reference-id}/exchange:
     put:
       tags:
-      - execute
-      operationId: executeRegulatoryComplianceAdministrativePlanInformationExportUpdate
-      summary: Invoke an automated execute action against the InformationExport instance
-      description: Execute an information service export instruction
+      - exchange
+      operationId: exchangeRegulatoryComplianceAdministrativePlanAuthoringUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or reject a regulatory report prior to submission
       produces:
       - application/json
       parameters:
@@ -368,20 +340,229 @@ paths:
         type: string
       - name: bq-reference-id
         in: path
-        description: InformationExport Instance Reference
+        description: Authoring Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: InformationExport request payload
+        description: Authoring request payload
         schema:
-          $ref: '#/definitions/BQInformationExportExecuteInputModel'
+          $ref: '#/definitions/BQAuthoringExchangeInputModel'
       responses:
         200:
-          description: Successful execution of InformationExport Instance Record
+          description: Successful exchange of Authoring Instance Record
           schema:
-            $ref: '#/definitions/BQInformationExportExecuteOutputModel'
+            $ref: '#/definitions/BQAuthoringExchangeOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/authoring/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveRegulatoryComplianceAdministrativePlanAuthoring
+      summary: Invoke a reporting action to obtain a Authoring instance related report.
+      description: Retrieve regulatory reporting detail and reports for review .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Reporting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Authoring Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQAuthoringRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Authoring Instance Record
+          schema:
+            $ref: '#/definitions/BQAuthoringRetrieveOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/enquiries/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateRegulatoryComplianceAdministrativePlanEnquiries
+      summary: Details of a new Enquiries instance
+      description: Initiate the handling of a regulatory reporting enquiry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Reporting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Administrative Plan Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Regulatory Compliance Administrative Plan Request Payload
+        schema:
+          $ref: '#/definitions/BQEnquiriesInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Regulatory Compliance Administrative Plan instance
+          schema:
+            $ref: '#/definitions/BQEnquiriesInitiateOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/enquiries/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateRegulatoryComplianceAdministrativePlanEnquiries
+      summary: Update to any amendable fields of the Enquiries instance
+      description: Update or augment consolidated information to support enquiry handling
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Reporting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Enquiries Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Enquiries Request Payload
+        schema:
+          $ref: '#/definitions/BQEnquiriesUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Enquiries Instance
+          schema:
+            $ref: '#/definitions/BQEnquiriesUpdateOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/enquiries/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeRegulatoryComplianceAdministrativePlanEnquiriesUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept or reject a regulatory enquiry response prior to submission
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Reporting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Enquiries Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Enquiries request payload
+        schema:
+          $ref: '#/definitions/BQEnquiriesExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Enquiries Instance Record
+          schema:
+            $ref: '#/definitions/BQEnquiriesExchangeOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/enquiries/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureRegulatoryComplianceAdministrativePlanEnquiriesUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Provide transaction records as required to support regulatory enquiry
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Reporting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Enquiries Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Enquiries request payload
+        schema:
+          $ref: '#/definitions/BQEnquiriesCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Enquiries Instance Record
+          schema:
+            $ref: '#/definitions/BQEnquiriesCaptureOutputModel'
+  /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan/{cr-reference-id}/enquiries/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveRegulatoryComplianceAdministrativePlanEnquiries
+      summary: Invoke a reporting action to obtain a Enquiries instance related report.
+      description: Retrieve regulatory enquiry detail and response for review .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Regulatory Reporting Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Regulatory Compliance Administrative Plan Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Enquiries Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQEnquiriesRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Enquiries Instance Record
+          schema:
+            $ref: '#/definitions/BQEnquiriesRetrieveOutputModel'
   /regulatory-reporting/{sd-reference-id}/regulatory-compliance-administrative-plan:
     get:
       tags:
@@ -1106,34 +1287,29 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRRegulatoryComplianceAdministrativePlanInitiateInputModel:
+ CRRegulatoryComplianceAdministrativePlanUpdateInputModel:
   type: object
   properties: 
    regulatoryReportingServicingSessionReference:
     type: string
-    example: "RRSSR732521"
+    example: "RRSSR748296"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
-   regulatoryComplianceAdministrativePlanInitiateActionRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   regulatoryComplianceAdministrativePlanInstanceStatus:
+   regulatoryComplianceAdministrativePlanInstanceReference:
     type: string
+    example: "RCAPIR783622"
     description: |
      `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Regulatory Compliance Administrative Plan instance (e.g. initialised, pending, active)
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Regulatory Compliance Administrative Plan instance
    regulatoryComplianceAdministrativePlanInstanceRecord:
     type: object
     properties:
      regulatoryAuthorityReference:
       type: string
-      example: "735566"
+      example: "748636"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
@@ -1144,7 +1320,7 @@ definitions:
       properties:
        regulationReference:
         type: string
-        example: "712612"
+        example: "752796"
         description: |
          `status: Registered`
           iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
@@ -1157,41 +1333,27 @@ definitions:
           iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700/elements/_FDh9UMTGEeChad0JzLk7QA_-463914375
           bian-reference: RegulatoryReport (as Report).ReportType
           general-info: The types of report, included in the reporting schedule
- CRRegulatoryComplianceAdministrativePlanInitiateOutputModel:
-  type: object
-  properties: 
-   regulatoryComplianceAdministrativePlanInstanceReference:
-    type: string
-    example: "RCAPIR701854"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Regulatory Compliance Administrative Plan instance
-   regulatoryComplianceAdministrativePlanInitiateActionReference:
-    type: string
-    example: "RCAPIAR771557"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Initiate service call
-   regulatoryComplianceAdministrativePlanInitiateActionRecord:
+   regulatoryComplianceAdministrativePlanUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Initiate service call input and output record
-   regulatoryComplianceAdministrativePlanInstanceStatus:
+      general-info: The update service call consolidated processing record
+   updateActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Regulatory Compliance Administrative Plan instance (e.g. initialised, pending, active)
+      general-info: Details of the update action service request
+ CRRegulatoryComplianceAdministrativePlanUpdateOutputModel:
+  type: object
+  properties: 
    regulatoryComplianceAdministrativePlanInstanceRecord:
     type: object
     properties:
      regulatoryAuthorityReference:
       type: string
-      example: "735566"
+      example: "748636"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
@@ -1202,7 +1364,7 @@ definitions:
       properties:
        regulationReference:
         type: string
-        example: "712612"
+        example: "752796"
         description: |
          `status: Registered`
           iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
@@ -1215,98 +1377,63 @@ definitions:
           iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700/elements/_FDh9UMTGEeChad0JzLk7QA_-463914375
           bian-reference: RegulatoryReport (as Report).ReportType
           general-info: The types of report, included in the reporting schedule
- CRRegulatoryComplianceAdministrativePlanControlInputModel:
-  type: object
-  properties: 
-   regulatoryReportingServicingSessionReference:
+   regulatoryComplianceAdministrativePlanUpdateActionTaskReference:
     type: string
-    example: "RRSSR718844"
+    example: "RCAPUATR774698"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
-   regulatoryComplianceAdministrativePlanInstanceReference:
-    type: string
-    example: "RCAPIR763639"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Regulatory Compliance Administrative Plan instance
-   regulatoryComplianceAdministrativePlanInstanceRecord:
-    type: object
-    properties:
-     regulatoryReportingSchedule:
-      type: object
-      properties:
-       regulationReference:
-        type: string
-        example: "701580"
-        description: |
-         `status: Registered`
-          iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
-          bian-reference: Regulation
-          general-info: Reference to the regulation for which content is being collected
-       regulatoryReportType:
-        type: string
-        description: |
-         `status: Registered`
-          iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700/elements/_FDh9UMTGEeChad0JzLk7QA_-463914375
-          bian-reference: RegulatoryReport (as Report).ReportType
-          general-info: The types of report, included in the reporting schedule
-   regulatoryComplianceAdministrativePlanControlActionTaskRecord:
+      general-info: Reference to an update service call
+   regulatoryComplianceAdministrativePlanUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The processing control service call consolidated processing record
-   regulatoryComplianceAdministrativePlanControlActionRequest:
-    type: object
-    properties:
-     controlActionType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of processing action requested (e.g. suspend, skip, terminate)
- CRRegulatoryComplianceAdministrativePlanControlOutputModel:
-  type: object
-  properties: 
-   regulatoryComplianceAdministrativePlanControlActionTaskReference:
-    type: string
-    example: "RCAPCATR763325"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Regulatory Compliance Administrative Plan instance control processing service call
-   regulatoryComplianceAdministrativePlanControlActionTaskRecord:
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The processing control service call consolidated processing record
-   regulatoryComplianceAdministrativePlanControlActionResponse:
-    type: string
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Details of the control action service response
+      general-info: Details of the Update action service response
  CRRegulatoryComplianceAdministrativePlanRequestInputModel:
   type: object
   properties: 
    regulatoryReportingServicingSessionReference:
     type: string
-    example: "RRSSR770625"
+    example: "RRSSR772876"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
    regulatoryComplianceAdministrativePlanInstanceReference:
     type: string
-    example: "RCAPIR788561"
+    example: "RCAPIR777641"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the Regulatory Compliance Administrative Plan instance
+   regulatoryComplianceAdministrativePlanInstanceRecord:
+    type: object
+    properties:
+     regulatoryReportingSchedule:
+      type: object
+      properties:
+       regulationReference:
+        type: string
+        example: "784628"
+        description: |
+         `status: Registered`
+          iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
+          bian-reference: Regulation
+          general-info: Reference to the regulation for which content is being collected
+       regulatoryReportType:
+        type: string
+        description: |
+         `status: Registered`
+          iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700/elements/_FDh9UMTGEeChad0JzLk7QA_-463914375
+          bian-reference: RegulatoryReport (as Report).ReportType
+          general-info: The types of report, included in the reporting schedule
    regulatoryComplianceAdministrativePlanRequestActionTaskRecord:
     type: object
     description: |
@@ -1325,38 +1452,9 @@ definitions:
  CRRegulatoryComplianceAdministrativePlanRequestOutputModel:
   type: object
   properties: 
-   regulatoryComplianceAdministrativePlanInstanceRecord:
-    type: object
-    properties:
-     regulatoryAuthorityReference:
-      type: string
-      example: "721597"
-      description: |
-       `status: Registered`
-        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
-        bian-reference: RegulatoryComplianceCheckInvolvement (as RegulatoryAuthority)
-        general-info: Reference to the interested regulatory reporting authority
-     regulatoryReportingSchedule:
-      type: object
-      properties:
-       regulationReference:
-        type: string
-        example: "713921"
-        description: |
-         `status: Registered`
-          iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
-          bian-reference: Regulation
-          general-info: Reference to the regulation for which content is being collected
-       regulatoryReportType:
-        type: string
-        description: |
-         `status: Registered`
-          iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700/elements/_FDh9UMTGEeChad0JzLk7QA_-463914375
-          bian-reference: RegulatoryReport (as Report).ReportType
-          general-info: The types of report, included in the reporting schedule
    regulatoryComplianceAdministrativePlanRequestActionTaskReference:
     type: string
-    example: "RCAPRATR730774"
+    example: "RCAPRATR745628"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1369,7 +1467,7 @@ definitions:
       general-info: The request service call consolidated processing record
    requestRecordReference:
     type: string
-    example: "RRR706742"
+    example: "RRR770963"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1400,7 +1498,7 @@ definitions:
     properties:
      regulatoryComplianceAdministrativePlanInstanceReportReference:
       type: string
-      example: "736678"
+      example: "753165"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1422,7 +1520,7 @@ definitions:
     properties:
      regulatoryComplianceAdministrativePlanInstanceAnalysisReference:
       type: string
-      example: "768545"
+      example: "791812"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1442,9 +1540,38 @@ definitions:
  CRRegulatoryComplianceAdministrativePlanRetrieveOutputModel:
   type: object
   properties: 
+   regulatoryComplianceAdministrativePlanInstanceRecord:
+    type: object
+    properties:
+     regulatoryAuthorityReference:
+      type: string
+      example: "751526"
+      description: |
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvement (as RegulatoryAuthority)
+        general-info: Reference to the interested regulatory reporting authority
+     regulatoryReportingSchedule:
+      type: object
+      properties:
+       regulationReference:
+        type: string
+        example: "708411"
+        description: |
+         `status: Registered`
+          iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
+          bian-reference: Regulation
+          general-info: Reference to the regulation for which content is being collected
+       regulatoryReportType:
+        type: string
+        description: |
+         `status: Registered`
+          iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700/elements/_FDh9UMTGEeChad0JzLk7QA_-463914375
+          bian-reference: RegulatoryReport (as Report).ReportType
+          general-info: The types of report, included in the reporting schedule
    regulatoryComplianceAdministrativePlanRetrieveActionTaskReference:
     type: string
-    example: "RCAPRATR747994"
+    example: "RCAPRATR775555"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1503,39 +1630,225 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external analysis report in any suitable form including selection filters where appropriate
- BQServiceSelectionRequestInputModel:
+   consolidationInstanceRecord:
+    type: object
+    properties:
+     regulatoryReportTypeContentRequirements:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the source content required for a report type
+     sourceBusinessUnitEmployeeReference:
+      type: string
+      example: "767894"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source of production information being assembled
+     sourceProductServiceReference:
+      type: string
+      example: "799300"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source service or product for content if appropriate
+     sourceCustomerReference:
+      type: string
+      example: "715182"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the bank customer that is subject of the source content if appropriate
+     sourceTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for reporting 
+ BQConsolidationCaptureInputModel:
   type: object
   properties: 
    regulatoryComplianceAdministrativePlanInstanceReference:
     type: string
-    example: "RCAPIR725864"
+    example: "RCAPIR783981"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
-   serviceSelectionInstanceReference:
+   consolidationInstanceReference:
     type: string
-    example: "SSIR735260"
+    example: "CIR786763"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Service Selection instance
-   serviceSelectionRequestActionTaskRecord:
+      general-info: Reference to the Consolidation instance
+   consolidationInstanceRecord:
+    type: object
+    properties:
+     regulatoryReportTypeContentRequirements:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the source content required for a report type
+     sourceBusinessUnitEmployeeReference:
+      type: string
+      example: "704487"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source of production information being assembled
+     sourceProductServiceReference:
+      type: string
+      example: "777064"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source service or product for content if appropriate
+     sourceCustomerReference:
+      type: string
+      example: "721550"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the bank customer that is subject of the source content if appropriate
+     sourceTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for reporting 
+   consolidationCaptureActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The request service call consolidated processing record
-   requestRecordType:
+      general-info: The capture service call consolidated processing record
+   captureRecordType:
     type: object
     properties:
-     requestInputRecord:
+     captureInputRecord:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: Request service record (e.g. rework function, refresh record, process workstep)
- BQServiceSelectionRequestOutputModel:
+        general-info: Structured input transaction/record (e.g. timesheet, event record, account posting)
+ BQConsolidationCaptureOutputModel:
+  type: object
+  properties: 
+   consolidationInstanceRecord:
+    type: object
+    properties:
+     regulatoryReportTypeContentRequirements:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the source content required for a report type
+     sourceBusinessUnitEmployeeReference:
+      type: string
+      example: "704487"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source of production information being assembled
+     sourceProductServiceReference:
+      type: string
+      example: "777064"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source service or product for content if appropriate
+     sourceCustomerReference:
+      type: string
+      example: "721550"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the bank customer that is subject of the source content if appropriate
+     sourceTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for reporting 
+   consolidationCaptureActionTaskReference:
+    type: string
+    example: "CCATR712870"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Consolidation instance capture service call
+   consolidationCaptureActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The capture service call consolidated processing record
+   consolidationCaptureRecordReference:
+    type: string
+    example: "CCRR704941"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Consolidation structured input transaction/record
+   captureResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the capture action service response
+ BQConsolidationRetrieveInputModel:
+  type: object
+  properties: 
+   regulatoryComplianceAdministrativePlanInstanceReference:
+    type: string
+    example: "RCAPIR722660"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
+   consolidationInstanceReference:
+    type: string
+    example: "CIR717917"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Consolidation instance
+   consolidationRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   consolidationRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   consolidationInstanceReport:
+    type: object
+    properties:
+     consolidationInstanceReportReference:
+      type: string
+      example: "738528"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   consolidationInstanceAnalysis:
+    type: object
+    properties:
+     consolidationInstanceAnalysisReference:
+      type: string
+      example: "765691"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQConsolidationRetrieveOutputModel:
   type: object
   properties: 
    regulatoryComplianceAdministrativePlanInstanceRecord:
@@ -1543,7 +1856,7 @@ definitions:
     properties:
      regulatoryAuthorityReference:
       type: string
-      example: "798536"
+      example: "712408"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
@@ -1554,7 +1867,7 @@ definitions:
       properties:
        regulationReference:
         type: string
-        example: "728076"
+        example: "718682"
         description: |
          `status: Registered`
           iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
@@ -1567,133 +1880,164 @@ definitions:
           iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700/elements/_FDh9UMTGEeChad0JzLk7QA_-463914375
           bian-reference: RegulatoryReport (as Report).ReportType
           general-info: The types of report, included in the reporting schedule
-   serviceSelectionRequestActionTaskReference:
-    type: string
-    example: "SSRATR771428"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Service Selection instance request service call
-   serviceSelectionRequestActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The request service call consolidated processing record
-   serviceSelectionRequestRecordReference:
-    type: string
-    example: "SSRRR744651"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Service Selection service request record
-   requestResponseRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: Details of the request action service response
- BQInformationImportExecuteInputModel:
-  type: object
-  properties: 
-   regulatoryComplianceAdministrativePlanInstanceReference:
-    type: string
-    example: "RCAPIR747525"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
-   informationImportInstanceReference:
-    type: string
-    example: "IIIR708909"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Information Import instance
-   informationImportExecuteActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The execute service call consolidated processing record
-   executeRecordType:
+   consolidationInstanceRecord:
     type: object
     properties:
-     executeInputRecord:
+     regulatoryReportTypeContentRequirements:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the source content required for a report type
+     sourceBusinessUnitEmployeeReference:
+      type: string
+      example: "778289"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source of production information being assembled
+     sourceProductServiceReference:
+      type: string
+      example: "788409"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source service or product for content if appropriate
+     sourceCustomerReference:
+      type: string
+      example: "720881"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the bank customer that is subject of the source content if appropriate
+     sourceTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for reporting 
+   consolidationRetrieveActionTaskReference:
+    type: string
+    example: "CRATR759649"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Consolidation instance retrieve service call
+   consolidationRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   consolidationRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   consolidationInstanceReport:
+    type: object
+    properties:
+     consolidationInstanceReportRecord:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
- BQInformationImportExecuteOutputModel:
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     consolidationInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     consolidationInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     consolidationInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   consolidationInstanceAnalysis:
+    type: object
+    properties:
+     consolidationInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     consolidationInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     consolidationInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     consolidationInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQConsolidationUpdateInputModel:
   type: object
   properties: 
-   informationImportExecuteActionTaskReference:
-    type: string
-    example: "IIEATR702083"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Information Import instance execute service call
-   informationImportExecuteActionTaskRecord:
+   consolidationInstanceRecord:
     type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The execute service call consolidated processing record
-   informationImportExecuteRecordReference:
-    type: string
-    example: "IIERR725523"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Information Import execute transaction/record
-   executeResponseRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: Details of the execute action service response
- BQInformationExportUpdateInputModel:
-  type: object
-  properties: 
-   regulatoryComplianceAdministrativePlanInstanceReference:
-    type: string
-    example: "RCAPIR755970"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
-   informationExportInstanceReference:
-    type: string
-    example: "IEIR700735"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Information Export instance
-   informationExportUpdateActionTaskRecord:
+    properties:
+     sourceBusinessUnitEmployeeReference:
+      type: string
+      example: "769147"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source of production information being assembled
+     sourceProductServiceReference:
+      type: string
+      example: "759328"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source service or product for content if appropriate
+     sourceTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for reporting 
+   consolidationUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The update service call consolidated processing record
-   informationExportUpdateActionRequest:
+   consolidationUpdateActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- BQInformationExportUpdateOutputModel:
+ BQConsolidationUpdateOutputModel:
   type: object
   properties: 
-   informationExportUpdateActionTaskReference:
+   consolidationUpdateActionTaskReference:
     type: string
-    example: "IEUATR790475"
+    example: "CUATR703753"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to an update service call
-   informationExportUpdateActionTaskRecord:
+   consolidationUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1705,39 +2049,102 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- BQInformationExportExecuteInputModel:
+ BQAuthoringExchangeInputModel:
   type: object
   properties: 
    regulatoryComplianceAdministrativePlanInstanceReference:
     type: string
-    example: "RCAPIR773307"
+    example: "RCAPIR751507"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
-   informationExportInstanceReference:
+   authoringInstanceReference:
     type: string
-    example: "IEIR726270"
+    example: "AIR771175"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Information Export instance
-   informationExportExecuteActionTaskRecord:
+      general-info: Reference to the Authoring instance
+   authoringExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The execute service call consolidated processing record
-   executeRecordType:
+      general-info: The exchange service call consolidated processing record
+   authoringExchangeActionRequest:
     type: object
     properties:
-     executeInputRecord:
-      type: object
+     exchangeActionType:
+      type: string
       description: |
        `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
- BQInformationExportExecuteOutputModel:
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQAuthoringExchangeOutputModel:
+  type: object
+  properties: 
+   authoringExchangeActionTaskReference:
+    type: string
+    example: "AEATR768499"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Authoring instance exchange service call
+   authoringExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   authoringExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   authoringInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Authoring instance (e.g. accepted, rejected, verified)
+ BQAuthoringRetrieveInputModel:
+  type: object
+  properties: 
+   authoringRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   authoringRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   authoringInstanceReport:
+    type: object
+    properties:
+     authoringInstanceReportReference:
+      type: string
+      example: "714199"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   authoringInstanceAnalysis:
+    type: object
+    properties:
+     authoringInstanceAnalysisReference:
+      type: string
+      example: "726213"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQAuthoringRetrieveOutputModel:
   type: object
   properties: 
    regulatoryComplianceAdministrativePlanInstanceRecord:
@@ -1745,7 +2152,7 @@ definitions:
     properties:
      regulatoryAuthorityReference:
       type: string
-      example: "702950"
+      example: "763763"
       description: |
        `status: Registered`
         iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
@@ -1756,7 +2163,7 @@ definitions:
       properties:
        regulationReference:
         type: string
-        example: "771269"
+        example: "766962"
         description: |
          `status: Registered`
           iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_9jSw8nltEeG7BsjMvd1mEw_1652971177
@@ -1769,29 +2176,670 @@ definitions:
           iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700/elements/_FDh9UMTGEeChad0JzLk7QA_-463914375
           bian-reference: RegulatoryReport (as Report).ReportType
           general-info: The types of report, included in the reporting schedule
-   informationExportExecuteActionTaskReference:
+   consolidationInstanceRecord:
+    type: object
+    properties:
+     regulatoryReportTypeContentRequirements:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the source content required for a report type
+     sourceBusinessUnitEmployeeReference:
+      type: string
+      example: "778547"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source of production information being assembled
+     sourceProductServiceReference:
+      type: string
+      example: "716973"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the source service or product for content if appropriate
+     sourceCustomerReference:
+      type: string
+      example: "740362"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the bank customer that is subject of the source content if appropriate
+     sourceTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for reporting 
+   authoringInstanceRecord:
+    type: object
+    properties:
+     regulatoryReportTypeComplianceReportingRequirements:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the production information/measurements required for reporting - includes reporting format
+     reportingPeriod:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The time period covered by a report
+     reportingBusinessLegalEntityReference:
+      type: string
+      example: "771048"
+      description: |
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_E48d9cTGEeChad0JzLk7QA_-400209460/elements/_yagFILl5EeOpCN0IL2Swqw
+        bian-reference: ReportInvolvement (as PartyRole).Party (as Organisation). LegalEntityIdentifier
+        general-info: Refers to the company group or subsidiary covered by the regulatory report
+     reportingBusinessUnitReference:
+      type: string
+      example: "718789"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the responsible reporting business units for the report
+     regulatoryReportReference:
+      type: string
+      example: "700953"
+      description: |
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700
+        bian-reference: RegulatoryReport
+        general-info: Refers to the regulatory report
+     regulatoryReport:
+      type: object
+      description: |
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700
+        bian-reference: RegulatoryReport
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_FDYMVMTGEeChad0JzLk7QA_-1222522700
+        bian-reference: RegulatoryReport
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The regulatory report in any suitable format and media
+     regulatoryReportDocumentReference:
+      type: string
+      example: "761211"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for the record of the report
+   authoringRetrieveActionTaskReference:
     type: string
-    example: "IEEATR726831"
+    example: "ARATR735979"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Information Export instance execute service call
-   informationExportExecuteActionTaskRecord:
+      general-info: Reference to a Authoring instance retrieve service call
+   authoringRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The execute service call consolidated processing record
-   informationExportExecuteRecordReference:
+      general-info: The retrieve service call consolidated processing record
+   authoringRetrieveActionResponse:
     type: string
-    example: "IEERR733951"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   authoringInstanceReport:
+    type: object
+    properties:
+     authoringInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     authoringInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     authoringInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     authoringInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   authoringInstanceAnalysis:
+    type: object
+    properties:
+     authoringInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     authoringInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     authoringInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     authoringInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQEnquiriesInitiateInputModel:
+  type: object
+  properties: 
+   regulatoryComplianceAdministrativePlanInstanceRecord:
+    type: object
+    properties:
+     regulatoryAuthorityReference:
+      type: string
+      example: "701979"
+      description: |
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvement (as RegulatoryAuthority)
+        general-info: Reference to the interested regulatory reporting authority
+   regulatoryComplianceAdministrativePlanInstanceReference:
+    type: string
+    example: "RCAPIR718390"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Information Export execute transaction/record
-   executeResponseRecord:
+      general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
+   enquiriesInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: Details of the execute action service response
+      general-info: The Initiate service call input and output record
+   enquiriesInstanceRecord:
+    type: object
+    properties:
+     regulatoryEnquiry:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The description of the requested information for the regulatory enquiry
+     enquiryBusinessUnitReference:
+      type: string
+      example: "772801"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The business unit being assessed for enquiry if appropriate
+     enquiryProductServiceReference:
+      type: string
+      example: "770963"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The instances of products/services being assessed if appropriate
+     enquiryCustomerReference:
+      type: string
+      example: "780251"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer being assessed if appropriate
+     enquiryTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for the enquiry
+ BQEnquiriesInitiateOutputModel:
+  type: object
+  properties: 
+   enquiriesInstanceReference:
+    type: string
+    example: "EIR763447"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Enquiries instance
+   enquiriesInitiateActionReference:
+    type: string
+    example: "EIAR756938"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   enquiriesInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   enquiriesInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Enquiries instance (e.g. initialised, pending, active)
+   enquiriesInstanceRecord:
+    type: object
+    properties:
+     enquiryTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for the enquiry
+     regulatoryEnquiryWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Work documentation, forms and schedules produced and referenced during the enquiry
+     regulatoryEnquiryResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The record or report that is the outcome/result of the enquiry
+     regulatoryEnquiryDocumentReference:
+      type: string
+      example: "758182"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for all classified/archived documents from the enquiry
+ BQEnquiriesUpdateInputModel:
+  type: object
+  properties: 
+   regulatoryComplianceAdministrativePlanInstanceReference:
+    type: string
+    example: "RCAPIR720872"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
+   enquiriesInstanceReference:
+    type: string
+    example: "EIR731531"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Enquiries instance
+   enquiriesInstanceRecord:
+    type: object
+    properties:
+     enquiryBusinessUnitReference:
+      type: string
+      example: "730567"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The business unit being assessed for enquiry if appropriate
+     enquiryProductServiceReference:
+      type: string
+      example: "734236"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The instances of products/services being assessed if appropriate
+     enquiryTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for the enquiry
+   enquiriesUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   enquiriesUpdateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ BQEnquiriesUpdateOutputModel:
+  type: object
+  properties: 
+   enquiriesUpdateActionTaskReference:
+    type: string
+    example: "EUATR789784"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   enquiriesUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ BQEnquiriesExchangeInputModel:
+  type: object
+  properties: 
+   regulatoryComplianceAdministrativePlanInstanceReference:
+    type: string
+    example: "RCAPIR786371"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
+   enquiriesInstanceReference:
+    type: string
+    example: "EIR734974"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Enquiries instance
+   enquiriesExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   enquiriesExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQEnquiriesExchangeOutputModel:
+  type: object
+  properties: 
+   enquiriesExchangeActionTaskReference:
+    type: string
+    example: "EEATR728752"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Enquiries instance exchange service call
+   enquiriesExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   enquiriesExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   enquiriesInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Enquiries instance (e.g. accepted, rejected, verified)
+ BQEnquiriesCaptureInputModel:
+  type: object
+  properties: 
+   regulatoryComplianceAdministrativePlanInstanceReference:
+    type: string
+    example: "RCAPIR711928"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Regulatory Compliance Administrative Plan instance
+   enquiriesInstanceReference:
+    type: string
+    example: "EIR759070"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Enquiries instance
+   enquiriesInstanceRecord:
+    type: object
+    properties:
+     enquiryTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for the enquiry
+   enquiriesCaptureActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The capture service call consolidated processing record
+   captureRecordType:
+    type: object
+    properties:
+     captureInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Structured input transaction/record (e.g. timesheet, event record, account posting)
+ BQEnquiriesCaptureOutputModel:
+  type: object
+  properties: 
+   enquiriesCaptureActionTaskReference:
+    type: string
+    example: "ECATR730172"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Enquiries instance capture service call
+   enquiriesCaptureActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The capture service call consolidated processing record
+   enquiriesCaptureRecordReference:
+    type: string
+    example: "ECRR703287"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Enquiries structured input transaction/record
+   captureResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the capture action service response
+ BQEnquiriesRetrieveInputModel:
+  type: object
+  properties: 
+   enquiriesRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   enquiriesRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   enquiriesInstanceReport:
+    type: object
+    properties:
+     enquiriesInstanceReportReference:
+      type: string
+      example: "758088"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   enquiriesInstanceAnalysis:
+    type: object
+    properties:
+     enquiriesInstanceAnalysisReference:
+      type: string
+      example: "740904"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQEnquiriesRetrieveOutputModel:
+  type: object
+  properties: 
+   regulatoryComplianceAdministrativePlanInstanceRecord:
+    type: object
+    properties:
+     regulatoryAuthorityReference:
+      type: string
+      example: "777404"
+      description: |
+       `status: Registered`
+        iso-link: https://www.iso20022.org/standardsrepository/public/wqt/Description/mx/dico/bc/_EwKVZcTGEeChad0JzLk7QA_1558299460
+        bian-reference: RegulatoryComplianceCheckInvolvement (as RegulatoryAuthority)
+        general-info: Reference to the interested regulatory reporting authority
+   enquiriesInstanceRecord:
+    type: object
+    properties:
+     regulatoryEnquiry:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The description of the requested information for the regulatory enquiry
+     enquiryBusinessUnitReference:
+      type: string
+      example: "756491"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The business unit being assessed for enquiry if appropriate
+     enquiryProductServiceReference:
+      type: string
+      example: "753099"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The instances of products/services being assessed if appropriate
+     enquiryCustomerReference:
+      type: string
+      example: "762623"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the customer being assessed if appropriate
+     enquiryTransactionRecords:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The possibly extensive collection of production transaction records assembled for the enquiry
+     regulatoryEnquiryWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Work documentation, forms and schedules produced and referenced during the enquiry
+     regulatoryEnquiryResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The record or report that is the outcome/result of the enquiry
+     regulatoryEnquiryDocumentReference:
+      type: string
+      example: "750290"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for all classified/archived documents from the enquiry
+   enquiriesRetrieveActionTaskReference:
+    type: string
+    example: "ERATR739277"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Enquiries instance retrieve service call
+   enquiriesRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   enquiriesRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   enquiriesInstanceReport:
+    type: object
+    properties:
+     enquiriesInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     enquiriesInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     enquiriesInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     enquiriesInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   enquiriesInstanceAnalysis:
+    type: object
+    properties:
+     enquiriesInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     enquiriesInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     enquiriesInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     enquiriesInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
