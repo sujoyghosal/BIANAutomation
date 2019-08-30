@@ -1,0 +1,2188 @@
+swagger: '2.0'
+info:
+ version: '2.0.0'
+ title: 'Service Domain - Transaction Engine'
+ description: >
+
+    ## Executive Summary:
+
+    Orchestrate a schedule of payment transaction and reporting activities for the fulfillment of certain long term instruments or structured facilities
+
+    ## Example of Use:
+
+    Example of use:The mortgage fulfillment Service Domain delegates repayment processing to the Transaction Engine for its active mortgage product instances
+
+    ## Description:
+
+    The Service Domain provides a utility/background operational support service to orchestrate a schedule of payment transaction and reporting activities for the fulfillment of certain long term instruments or structured facilities. The Service Domain maintains a link to the associated fulfillment Service Domain and the applicable product instance for reporting and processing issues that may arise.
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-transaction-engine/2.0.0
+schemes:
+ - https
+paths:
+  /transaction-engine/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDTransactionEngine
+      summary: Activate  a SDTransactionEngine servicing session
+      description: Activate  a  SDTransactionEngine servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDTransactionEngine Request Payload
+        schema:
+          $ref: '#/definitions/SDTransactionEngineActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDTransactionEngineActivateOutputModel'
+  /transaction-engine/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDTransactionEngine
+      summary: Update an active SDTransactionEngine session configuration
+      description: Update an active SDTransactionEngine session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDTransactionEngine Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDTransactionEngine Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDTransactionEngineConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDTransactionEngineConfigureOutputModel'
+  /transaction-engine/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDTransactionEngine
+      summary: "Capturing feedback against the SDTransactionEngine service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDTransactionEngine service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDTransactionEngine Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDTransactionEngine Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDTransactionEngineFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDTransactionEngineFeedbackOutputModel'
+  /transaction-engine/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDTransactionEngine
+      summary: Analytical views maintained by the SDTransactionEngine service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDTransactionEngine service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDTransactionEngine Servicing Session Reference
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/SDTransactionEngineRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDTransactionEngineRetrieveOutputModel'
+  /transaction-engine/{sd-reference-id}/transaction-schedule-fulfillment-arrangement/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateTransactionScheduleFulfillmentArrangement
+      summary: Details of a new TransactionScheduleFulfillmentArrangement instance
+      description: Initiate delegated transaction processing for a product instance
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Transaction Engine Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: TransactionScheduleFulfillmentArrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new TransactionScheduleFulfillmentArrangement instance
+          schema:
+            $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementInitiateOutputModel'
+  /transaction-engine/{sd-reference-id}/transaction-schedule-fulfillment-arrangement/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateTransactionScheduleFulfillmentArrangement
+      summary: Update to any amendable fields of the TransactionScheduleFulfillmentArrangement instance
+      description: Update details for an active transaction processing arrangement
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Transaction Engine Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Transaction Schedule Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Transaction Schedule Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Transaction Schedule Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementUpdateOutputModel'
+  /transaction-engine/{sd-reference-id}/transaction-schedule-fulfillment-arrangement/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlTransactionScheduleFulfillmentArrangementUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control an active transaction processing arrangement (e.g. suspend)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Transaction Engine Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Transaction Schedule Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Transaction Schedule Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementControlInputModel'
+      responses:
+        200:
+          description: Successful control of Transaction Schedule Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementControlOutputModel'
+  /transaction-engine/{sd-reference-id}/transaction-schedule-fulfillment-arrangement/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeTransactionScheduleFulfillmentArrangementUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject a proposed action
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Transaction Engine Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Transaction Schedule Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Transaction Schedule Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Transaction Schedule Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementExchangeOutputModel'
+  /transaction-engine/{sd-reference-id}/transaction-schedule-fulfillment-arrangement/{cr-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeTransactionScheduleFulfillmentArrangementUpdate
+      summary: Invoke an automated execute action against the TransactionScheduleFulfillmentArrangement instance
+      description: Execute an automated function for a transaction processing arrangement (e.g. trigger some service option)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Transaction Engine Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Transaction Schedule Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Transaction Schedule Fulfillment Arrangement Request Payload
+        schema:
+          $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Transaction Schedule Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementExecuteOutputModel'
+  /transaction-engine/{sd-reference-id}/transaction-schedule-fulfillment-arrangement/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveTransactionEngine
+      summary: Invoke a reporting action to obtain a Transaction Schedule Fulfillment Arrangement instance related report
+      description: Retrieve details about delegated transaction processing for a product instance
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Transaction Engine Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Transaction Schedule Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRTransactionScheduleFulfillmentArrangementRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Transaction Schedule Fulfillment Arrangement Instance
+          schema:
+            $ref: '#/definitions/CRTransactionScheduleFulfillmentArrangementRetrieveOutputModel'
+  /transaction-engine/{sd-reference-id}/transaction-schedule-fulfillment-arrangement:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveTransactionEngineReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Transaction Engine Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- TransactionEngine Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /transaction-engine/transaction-schedule-fulfillment-arrangement/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveTransactionEngineBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: []
+  /transaction-engine/{sd-reference-id}/transaction-schedule-fulfillment-arrangement/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveTransactionEngineBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Transaction Engine Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Transaction Schedule Fulfillment Arrangement Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- 
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ID1, ID2]
+definitions:
+ SDTransactionEngineActivateInputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainCenterReference:
+    type: string
+    example: "SCR793499"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service center/operational unit
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR703914"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+ SDTransactionEngineActivateOutputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskReference:
+    type: string
+    example: "SAATR758836"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service activation service call
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR783215"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServicingSessionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Consolidated information record for the servicing session
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "769192"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "791202"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "767210"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDTransactionEngineConfigureInputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR764367"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR744740"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "710630"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+ SDTransactionEngineConfigureOutputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskReference:
+    type: string
+    example: "SCATR765419"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service configuration service call
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDTransactionEngineFeedbackInputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     serviceDomainServicingSessionReference:
+      type: string
+      example: "796678"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the active servicing session
+     controlRecordInstanceReference:
+      type: string
+      example: "724385"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance if appropriate
+     behaviorQualifierInstanceReference:
+      type: string
+      example: "789747"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the behavior qualifier instance if appropriate
+     feedbackRecordType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The layout/type of the feedback provided
+     feedbackRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The content of the feedback in any suitable format and media
+ SDTransactionEngineFeedbackOutputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskReference:
+    type: string
+    example: "SFATR765157"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a feedback service call
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     feedbackRecordDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date/time the feedback submitted for consideration
+     feedbackRecordStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of processing the feedback e.g. received, considered, responded to
+     employeeBusinessUnitReference:
+      type: string
+      example: "769031"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to business unit/employee responsible for handling feedback
+ SDTransactionEngineRetrieveInputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+ SDTransactionEngineRetrieveOutputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskReference:
+    type: string
+    example: "SRATR795161"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a retrieve service call
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+       activityAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the activity analysis that can be on-going, periodic and actual and projected
+       activityAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of activity analysis report available
+       activityAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The activity analysis report in any suitable form including selection filters where appropriate
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+       performanceAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the performance analysis that can be on-going or periodic
+       performanceAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of performance analysis report available
+       performanceAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The performance analysis report in any suitable form including selection filters where appropriate
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+       controlRecordPortfolioAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the portfolio analysis that can be on-going, periodic and actual and projected (can be unstructured data)
+       controlRecordPortfolioAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of external portfolio analysis report available
+       controlRecordAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The external analysis report in any suitable form including selection filters where appropriate
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Refers to the different types of services offered
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+       serviceDomainServiceDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the offered service 
+       serviceDomainServicePoliciesandGuidelines:
+        type: object
+        properties:
+         serviceDomainServiceEligibility:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Policies and rules governing access to the offered service, includes eligibility and qualifications
+         serviceDomainServiceIntendedUses:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Guidelines covering allowed, intended use of the service
+         serviceDomainServicePricingandTerms:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Terms, prices, penalties associated with use of the service
+       serviceDomainServiceSchedule:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Schedule defining when the accessed service is available
+ CRTransactionScheduleFulfillmentArrangementInitiateInputModel:
+  type: object
+  properties: 
+   transactionEngineServicingSessionReference:
+    type: string
+    example: "TESSR701755"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   transactionScheduleFulfillmentArrangementInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   transactionScheduleFulfillmentArrangementInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Transaction Schedule Fulfillment Arrangement instance (e.g. initialised, pending, active)
+   transactionScheduleFulfillmentArrangementInstanceRecord:
+    type: object
+    properties:
+     productInstanceReference:
+      type: string
+      example: "769037"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product instance for which the transaction processing is being handled
+     productServiceType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of product or service that is being supported (e.g. mortgage, term loan)
+     transactionScheduleFulfillmentSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The processing schedule, covering reporting and financial transactions that are to be executed
+     transactionScheduleWorkTaskRecord:
+      type: object
+      properties:
+       transactionScheduleWorkTaskType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of work task (e.g. generate report/notification)
+       transactionScheduleWorkTaskWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: File of consolidated notes, forms and documents for the work task
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "765731"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated documents
+   transactionScheduleFinancialTransaction:
+    type: object
+    properties:
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+ CRTransactionScheduleFulfillmentArrangementInitiateOutputModel:
+  type: object
+  properties: 
+   transactionScheduleFulfillmentArrangementInstanceReference:
+    type: string
+    example: "TSFAIR741760"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Transaction Schedule Fulfillment Arrangement instance
+   transactionScheduleFulfillmentArrangementInitiateActionReference:
+    type: string
+    example: "TSFAIAR724240"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   transactionScheduleFulfillmentArrangementInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   transactionScheduleFulfillmentArrangementInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Transaction Schedule Fulfillment Arrangement instance (e.g. initialised, pending, active)
+   transactionScheduleFulfillmentArrangementInstanceRecord:
+    type: object
+    properties:
+     productInstanceReference:
+      type: string
+      example: "769037"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product instance for which the transaction processing is being handled
+     productServiceType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of product or service that is being supported (e.g. mortgage, term loan)
+     transactionScheduleFulfillmentSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The processing schedule, covering reporting and financial transactions that are to be executed
+     transactionScheduleWorkTaskRecord:
+      type: object
+      properties:
+       transactionScheduleWorkTaskType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of work task (e.g. generate report/notification)
+       transactionScheduleWorkTaskDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the task performed
+       transactionScheduleWorkTaskWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: File of consolidated notes, forms and documents for the work task
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "765731"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated documents
+       transactionScheduleWorkTaskResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the outcome or result of the work task
+       transactionScheduleTaskFeeTransaction:
+        type: object
+        properties:
+         transactionScheduleWorkTaskFeeTransactionDescription:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: General description of the fee
+         transactionScheduleWorkTaskFeeTransactionType:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: The fee type applied
+         transactionScheduleWorkTaskFeeTransactionCharge:
+          type: string
+          example: USD 250
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+            general-info: The derived fee amount to be charged
+   transactionScheduleFinancialTransaction:
+    type: object
+    properties:
+     transactionScheduleFinancialTransactionProductInstanceReference:
+      type: string
+      example: "732749"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Identifies the payment source of the transaction - usually a reference to the parent product instance
+     transactionScheduleFinancialTransactionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sub-type of financial transaction
+     transactionScheduleFinancialTransactionDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any necessary details describing the purpose or reference properties of the transaction
+     transactionScheduleFinancialTransactionAmount:
+      type: string
+      example: USD 250
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+        general-info: The volume or value of the transaction
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "716710"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     correspondenceInstanceReference:
+      type: string
+      example: "760342"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the transaction (e.g. confirmation note)
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+ CRTransactionScheduleFulfillmentArrangementUpdateInputModel:
+  type: object
+  properties: 
+   transactionEngineServicingSessionReference:
+    type: string
+    example: "TESSR709829"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   transactionScheduleFulfillmentArrangementInstanceReference:
+    type: string
+    example: "TSFAIR742718"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Transaction Schedule Fulfillment Arrangement instance
+   transactionScheduleFulfillmentArrangementInstanceRecord:
+    type: object
+    properties:
+     productInstanceReference:
+      type: string
+      example: "778623"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product instance for which the transaction processing is being handled
+     productServiceType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of product or service that is being supported (e.g. mortgage, term loan)
+     transactionScheduleFulfillmentSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The processing schedule, covering reporting and financial transactions that are to be executed
+     transactionScheduleWorkTaskRecord:
+      type: object
+      properties:
+       transactionScheduleWorkTaskType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of work task (e.g. generate report/notification)
+       transactionScheduleWorkTaskDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the task performed
+       transactionScheduleWorkTaskWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: File of consolidated notes, forms and documents for the work task
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "744749"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated documents
+       transactionScheduleWorkTaskResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the outcome or result of the work task
+       transactionScheduleTaskFeeTransaction:
+        type: object
+        properties:
+         transactionScheduleWorkTaskFeeTransactionDescription:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: General description of the fee
+         transactionScheduleWorkTaskFeeTransactionType:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: The fee type applied
+         transactionScheduleWorkTaskFeeTransactionCharge:
+          type: string
+          example: USD 250
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+            general-info: The derived fee amount to be charged
+   transactionScheduleFinancialTransaction:
+    type: object
+    properties:
+     transactionScheduleFinancialTransactionProductInstanceReference:
+      type: string
+      example: "796559"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Identifies the payment source of the transaction - usually a reference to the parent product instance
+     transactionScheduleFinancialTransactionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sub-type of financial transaction
+     transactionScheduleFinancialTransactionDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any necessary details describing the purpose or reference properties of the transaction
+     transactionScheduleFinancialTransactionAmount:
+      type: string
+      example: USD 250
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+        general-info: The volume or value of the transaction
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "763744"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     correspondenceInstanceReference:
+      type: string
+      example: "773304"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the transaction (e.g. confirmation note)
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   transactionScheduleFulfillmentArrangementUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ CRTransactionScheduleFulfillmentArrangementUpdateOutputModel:
+  type: object
+  properties: 
+   transactionScheduleFulfillmentArrangementInstanceRecord:
+    type: object
+    properties:
+     productInstanceReference:
+      type: string
+      example: "778623"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product instance for which the transaction processing is being handled
+     productServiceType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of product or service that is being supported (e.g. mortgage, term loan)
+     transactionScheduleFulfillmentSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The processing schedule, covering reporting and financial transactions that are to be executed
+     transactionScheduleWorkTaskRecord:
+      type: object
+      properties:
+       transactionScheduleWorkTaskType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of work task (e.g. generate report/notification)
+       transactionScheduleWorkTaskDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the task performed
+       transactionScheduleWorkTaskWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: File of consolidated notes, forms and documents for the work task
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "744749"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated documents
+       transactionScheduleWorkTaskResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the outcome or result of the work task
+       transactionScheduleTaskFeeTransaction:
+        type: object
+        properties:
+         transactionScheduleWorkTaskFeeTransactionDescription:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: General description of the fee
+         transactionScheduleWorkTaskFeeTransactionType:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: The fee type applied
+         transactionScheduleWorkTaskFeeTransactionCharge:
+          type: string
+          example: USD 250
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+            general-info: The derived fee amount to be charged
+   transactionScheduleFinancialTransaction:
+    type: object
+    properties:
+     transactionScheduleFinancialTransactionProductInstanceReference:
+      type: string
+      example: "796559"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Identifies the payment source of the transaction - usually a reference to the parent product instance
+     transactionScheduleFinancialTransactionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sub-type of financial transaction
+     transactionScheduleFinancialTransactionDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any necessary details describing the purpose or reference properties of the transaction
+     transactionScheduleFinancialTransactionAmount:
+      type: string
+      example: USD 250
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+        general-info: The volume or value of the transaction
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "763744"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     correspondenceInstanceReference:
+      type: string
+      example: "773304"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the transaction (e.g. confirmation note)
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   transactionScheduleFulfillmentArrangementUpdateActionTaskReference:
+    type: string
+    example: "TSFAUATR765595"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   transactionScheduleFulfillmentArrangementUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ CRTransactionScheduleFulfillmentArrangementControlInputModel:
+  type: object
+  properties: 
+   transactionEngineServicingSessionReference:
+    type: string
+    example: "TESSR713714"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   transactionScheduleFulfillmentArrangementInstanceReference:
+    type: string
+    example: "TSFAIR797603"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Transaction Schedule Fulfillment Arrangement instance
+   transactionScheduleFulfillmentArrangementControlActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The processing control service call consolidated processing record
+   transactionScheduleFulfillmentArrangementControlActionRequest:
+    type: object
+    properties:
+     controlActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of processing action requested (e.g. suspend, skip, terminate)
+ CRTransactionScheduleFulfillmentArrangementControlOutputModel:
+  type: object
+  properties: 
+   transactionScheduleFulfillmentArrangementControlActionTaskReference:
+    type: string
+    example: "TSFACATR718016"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Transaction Schedule Fulfillment Arrangement instance control processing service call
+   transactionScheduleFulfillmentArrangementControlActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The processing control service call consolidated processing record
+   transactionScheduleFulfillmentArrangementControlActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the control action service response
+ CRTransactionScheduleFulfillmentArrangementExchangeInputModel:
+  type: object
+  properties: 
+   transactionEngineServicingSessionReference:
+    type: string
+    example: "TESSR771303"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   transactionScheduleFulfillmentArrangementInstanceReference:
+    type: string
+    example: "TSFAIR707049"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Transaction Schedule Fulfillment Arrangement instance
+   transactionScheduleFulfillmentArrangementExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   transactionScheduleFulfillmentArrangementExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ CRTransactionScheduleFulfillmentArrangementExchangeOutputModel:
+  type: object
+  properties: 
+   transactionScheduleFulfillmentArrangementExchangeActionTaskReference:
+    type: string
+    example: "TSFAEATR701425"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Transaction Schedule Fulfillment Arrangement instance exchange service call
+   transactionScheduleFulfillmentArrangementExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   transactionScheduleFulfillmentArrangementExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+ CRTransactionScheduleFulfillmentArrangementExecuteInputModel:
+  type: object
+  properties: 
+   transactionEngineServicingSessionReference:
+    type: string
+    example: "TESSR719178"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   transactionScheduleFulfillmentArrangementInstanceReference:
+    type: string
+    example: "TSFAIR763899"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Transaction Schedule Fulfillment Arrangement instance
+   transactionScheduleFulfillmentArrangementInstanceRecord:
+    type: object
+    properties:
+     productInstanceReference:
+      type: string
+      example: "734369"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product instance for which the transaction processing is being handled
+     productServiceType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of product or service that is being supported (e.g. mortgage, term loan)
+     transactionScheduleFulfillmentSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The processing schedule, covering reporting and financial transactions that are to be executed
+     transactionScheduleWorkTaskRecord:
+      type: object
+      properties:
+       transactionScheduleWorkTaskType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of work task (e.g. generate report/notification)
+       transactionScheduleWorkTaskWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: File of consolidated notes, forms and documents for the work task
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "747403"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated documents
+   transactionScheduleFinancialTransaction:
+    type: object
+    properties:
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   transactionScheduleFulfillmentArrangementExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   executeRecordType:
+    type: object
+    properties:
+     executeInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
+ CRTransactionScheduleFulfillmentArrangementExecuteOutputModel:
+  type: object
+  properties: 
+   transactionScheduleFulfillmentArrangementInstanceRecord:
+    type: object
+    properties:
+     productInstanceReference:
+      type: string
+      example: "734369"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product instance for which the transaction processing is being handled
+     productServiceType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of product or service that is being supported (e.g. mortgage, term loan)
+     transactionScheduleFulfillmentSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The processing schedule, covering reporting and financial transactions that are to be executed
+     transactionScheduleWorkTaskRecord:
+      type: object
+      properties:
+       transactionScheduleWorkTaskType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of work task (e.g. generate report/notification)
+       transactionScheduleWorkTaskDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the task performed
+       transactionScheduleWorkTaskWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: File of consolidated notes, forms and documents for the work task
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "747403"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated documents
+       transactionScheduleWorkTaskResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the outcome or result of the work task
+       transactionScheduleTaskFeeTransaction:
+        type: object
+        properties:
+         transactionScheduleWorkTaskFeeTransactionDescription:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: General description of the fee
+         transactionScheduleWorkTaskFeeTransactionType:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: The fee type applied
+         transactionScheduleWorkTaskFeeTransactionCharge:
+          type: string
+          example: USD 250
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+            general-info: The derived fee amount to be charged
+   transactionScheduleFinancialTransaction:
+    type: object
+    properties:
+     transactionScheduleFinancialTransactionProductInstanceReference:
+      type: string
+      example: "708593"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Identifies the payment source of the transaction - usually a reference to the parent product instance
+     transactionScheduleFinancialTransactionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sub-type of financial transaction
+     transactionScheduleFinancialTransactionDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any necessary details describing the purpose or reference properties of the transaction
+     transactionScheduleFinancialTransactionAmount:
+      type: string
+      example: USD 250
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+        general-info: The volume or value of the transaction
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "790915"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     correspondenceInstanceReference:
+      type: string
+      example: "788808"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the transaction (e.g. confirmation note)
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   transactionScheduleFulfillmentArrangementExecuteActionTaskReference:
+    type: string
+    example: "TSFAEATR790110"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Transaction Schedule Fulfillment Arrangement instance execute service call
+   transactionScheduleFulfillmentArrangementExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   executeRecordReference:
+    type: string
+    example: "ERR765803"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the execute transaction/record
+   executeResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the execute action service response
+ CRTransactionScheduleFulfillmentArrangementRetrieveInputModel:
+  type: object
+  properties: 
+   transactionScheduleFulfillmentArrangementRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   transactionScheduleFulfillmentArrangementRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   transactionScheduleFulfillmentArrangementInstanceReportRecord:
+    type: object
+    properties:
+     transactionScheduleFulfillmentArrangementInstanceReportReference:
+      type: string
+      example: "715920"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+     transactionScheduleFulfillmentArrangementInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     transactionScheduleFulfillmentArrangementInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+   transactionScheduleFulfillmentArrangementInstanceAnalysis:
+    type: object
+    properties:
+     transactionScheduleFulfillmentArrangementInstanceAnalysisReference:
+      type: string
+      example: "746199"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+     transactionScheduleFulfillmentArrangementInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     transactionScheduleFulfillmentArrangementInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+ CRTransactionScheduleFulfillmentArrangementRetrieveOutputModel:
+  type: object
+  properties: 
+   transactionScheduleFulfillmentArrangementInstanceRecord:
+    type: object
+    properties:
+     productInstanceReference:
+      type: string
+      example: "713950"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the product instance for which the transaction processing is being handled
+     productServiceType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of product or service that is being supported (e.g. mortgage, term loan)
+     transactionScheduleFulfillmentSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The processing schedule, covering reporting and financial transactions that are to be executed
+     transactionScheduleWorkTaskRecord:
+      type: object
+      properties:
+       transactionScheduleWorkTaskType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of work task (e.g. generate report/notification)
+       transactionScheduleWorkTaskDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the task performed
+       transactionScheduleWorkTaskWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: File of consolidated notes, forms and documents for the work task
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "795352"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated documents
+       transactionScheduleWorkTaskResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Details of the outcome or result of the work task
+       transactionScheduleTaskFeeTransaction:
+        type: object
+        properties:
+         transactionScheduleWorkTaskFeeTransactionDescription:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: General description of the fee
+         transactionScheduleWorkTaskFeeTransactionType:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: The fee type applied
+         transactionScheduleWorkTaskFeeTransactionCharge:
+          type: string
+          example: USD 250
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+            general-info: The derived fee amount to be charged
+   transactionScheduleFinancialTransaction:
+    type: object
+    properties:
+     transactionScheduleFinancialTransactionProductInstanceReference:
+      type: string
+      example: "714724"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Identifies the payment source of the transaction - usually a reference to the parent product instance
+     transactionScheduleFinancialTransactionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The sub-type of financial transaction
+     transactionScheduleFinancialTransactionDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any necessary details describing the purpose or reference properties of the transaction
+     transactionScheduleFinancialTransactionAmount:
+      type: string
+      example: USD 250
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+        general-info: The volume or value of the transaction
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "794174"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     correspondenceInstanceReference:
+      type: string
+      example: "729509"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the transaction (e.g. confirmation note)
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   transactionScheduleFulfillmentArrangementRetrieveActionTaskReference:
+    type: string
+    example: "TSFARATR750335"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Transaction Schedule Fulfillment Arrangement instance retrieve service call
+   transactionScheduleFulfillmentArrangementRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   transactionScheduleFulfillmentArrangementRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   transactionScheduleFulfillmentArrangementInstanceReportRecord:
+    type: object
+    properties:
+     transactionScheduleFulfillmentArrangementInstanceReportData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     transactionScheduleFulfillmentArrangementInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     transactionScheduleFulfillmentArrangementInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   transactionScheduleFulfillmentArrangementInstanceAnalysis:
+    type: object
+    properties:
+     transactionScheduleFulfillmentArrangementInstanceAnalysisData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     transactionScheduleFulfillmentArrangementInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     transactionScheduleFulfillmentArrangementInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate

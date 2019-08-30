@@ -1,0 +1,3164 @@
+swagger: '2.0'
+info:
+ version: '2.0.0'
+ title: 'Service Domain - Production Release'
+ description: >
+
+    ## Executive Summary:
+
+    Maintain and apply production release tests for new and updated systems
+
+    ## Example of Use:
+
+    A major product or service upgrade is tested prior to deployment
+
+    ## Description:
+
+    Maintain and apply a comprehensive portfolio of functional and non-functional test evaluation criteria and test utilities for pre-release and in-flight solution quality assurance of production IT systems
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-production-release/2.0.0
+schemes:
+ - https
+paths:
+  /production-release/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDProductionRelease
+      summary: Activate  a SDProductionRelease servicing session
+      description: Activate  a  SDProductionRelease servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDProductionRelease Request Payload
+        schema:
+          $ref: '#/definitions/SDProductionReleaseActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDProductionReleaseActivateOutputModel'
+  /production-release/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDProductionRelease
+      summary: Update an active SDProductionRelease session configuration
+      description: Update an active SDProductionRelease session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductionRelease Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDProductionRelease Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDProductionReleaseConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDProductionReleaseConfigureOutputModel'
+  /production-release/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDProductionRelease
+      summary: "Capturing feedback against the SDProductionRelease service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDProductionRelease service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductionRelease Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDProductionRelease Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDProductionReleaseFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDProductionReleaseFeedbackOutputModel'
+  /production-release/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDProductionRelease
+      summary: Analytical views maintained by the SDProductionRelease service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDProductionRelease service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDProductionRelease Servicing Session Reference
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/SDProductionReleaseRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDProductionReleaseRetrieveOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateITSystemAssessment
+      summary: Details of a new ITSystemAssessment instance
+      description: Evaluate various risk exposures for a production release
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ITSystemAssessment Request Payload
+        schema:
+          $ref: '#/definitions/CRITSystemAssessmentInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new ITSystemAssessment instance
+          schema:
+            $ref: '#/definitions/CRITSystemAssessmentInitiateOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateITSystemAssessment
+      summary: Update to any amendable fields of the ITSystemAssessment instance
+      description: Update aspects of an active production release evaluation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: IT System Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRITSystemAssessmentUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated IT System Assessment Instance
+          schema:
+            $ref: '#/definitions/CRITSystemAssessmentUpdateOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeITSystemAssessmentUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, etc aspects of an evaluation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: IT System Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRITSystemAssessmentExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of IT System Assessment Instance
+          schema:
+            $ref: '#/definitions/CRITSystemAssessmentExchangeOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestITSystemAssessmentUpdate
+      summary: Invoke a service request action against the ITSystemAssessment instance
+      description: Request manual intervention in an evaluation (e.g. re-work an evaluation)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: IT System Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRITSystemAssessmentRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of IT System Assessment Instance
+          schema:
+            $ref: '#/definitions/CRITSystemAssessmentRequestOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/grant:
+    put:
+      tags:
+      - grant
+      operationId: grantITSystemAssessmentUpdate
+      summary: Invoke a grant request action from the ITSystemAssessment instance to obtain access permission
+      description: Obtain a permission grant under the production release evaluation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: IT System Assessment Request Payload
+        schema:
+          $ref: '#/definitions/CRITSystemAssessmentGrantInputModel'
+      responses:
+        200:
+          description: Successful grant of IT System Assessment Instance
+          schema:
+            $ref: '#/definitions/CRITSystemAssessmentGrantOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveProductionRelease
+      summary: Invoke a reporting action to obtain a IT System Assessment instance related report
+      description: Retrieve details about a production release evaluation
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRITSystemAssessmentRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved IT System Assessment Instance
+          schema:
+            $ref: '#/definitions/CRITSystemAssessmentRetrieveOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/functionalrisk/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeITSystemAssessmentFunctionalRiskUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, confirm a functional risk assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FunctionalRisk Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: FunctionalRisk request payload
+        schema:
+          $ref: '#/definitions/BQFunctionalRiskExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of FunctionalRisk Instance Record
+          schema:
+            $ref: '#/definitions/BQFunctionalRiskExchangeOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/functionalrisk/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveITSystemAssessmentFunctionalRisk
+      summary: Invoke a reporting action to obtain a FunctionalRisk instance related report.
+      description: Retrieve details about a functional risk assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FunctionalRisk Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQFunctionalRiskRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved FunctionalRisk Instance Record
+          schema:
+            $ref: '#/definitions/BQFunctionalRiskRetrieveOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/productionrisk/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeITSystemAssessmentProductionRiskUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, confirm a production risk assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ProductionRisk Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ProductionRisk request payload
+        schema:
+          $ref: '#/definitions/BQProductionRiskExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of ProductionRisk Instance Record
+          schema:
+            $ref: '#/definitions/BQProductionRiskExchangeOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/productionrisk/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveITSystemAssessmentProductionRisk
+      summary: Invoke a reporting action to obtain a ProductionRisk instance related report.
+      description: Retrieve details about a production risk assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ProductionRisk Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQProductionRiskRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ProductionRisk Instance Record
+          schema:
+            $ref: '#/definitions/BQProductionRiskRetrieveOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/businessrisk/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeITSystemAssessmentBusinessRiskUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, confirm a business risk assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: BusinessRisk Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: BusinessRisk request payload
+        schema:
+          $ref: '#/definitions/BQBusinessRiskExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of BusinessRisk Instance Record
+          schema:
+            $ref: '#/definitions/BQBusinessRiskExchangeOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/businessrisk/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveITSystemAssessmentBusinessRisk
+      summary: Invoke a reporting action to obtain a BusinessRisk instance related report.
+      description: Retrieve details about a business risk assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: BusinessRisk Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQBusinessRiskRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved BusinessRisk Instance Record
+          schema:
+            $ref: '#/definitions/BQBusinessRiskRetrieveOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/operationalrisk/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeITSystemAssessmentOperationalRiskUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, confirm a operational risk assessment
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OperationalRisk Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: OperationalRisk request payload
+        schema:
+          $ref: '#/definitions/BQOperationalRiskExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of OperationalRisk Instance Record
+          schema:
+            $ref: '#/definitions/BQOperationalRiskExchangeOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/operationalrisk/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveITSystemAssessmentOperationalRisk
+      summary: Invoke a reporting action to obtain a OperationalRisk instance related report.
+      description: Retrieve details about a operational risk assessment .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OperationalRisk Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOperationalRiskRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved OperationalRisk Instance Record
+          schema:
+            $ref: '#/definitions/BQOperationalRiskRetrieveOutputModel'
+  /production-release/{sd-reference-id}/it-system-assessment:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveProductionReleaseReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- ProductionRelease Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /production-release/it-system-assessment/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveProductionReleaseBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'FunctionalRisk',  'ProductionRisk',  'BusinessRisk',  'OperationalRisk', ]
+  /production-release/{sd-reference-id}/it-system-assessment/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveProductionReleaseBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Production Release Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: IT System Assessment Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- OperationalRisk
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- OperationalRisk Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [OperationalRiskID1, OperationalRiskID2]
+definitions:
+ SDProductionReleaseActivateInputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainCenterReference:
+    type: string
+    example: "SCR793499"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service center/operational unit
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR703914"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+ SDProductionReleaseActivateOutputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskReference:
+    type: string
+    example: "SAATR758836"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service activation service call
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR783215"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServicingSessionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Consolidated information record for the servicing session
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "769192"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "791202"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "767210"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDProductionReleaseConfigureInputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR764367"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR744740"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "710630"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+ SDProductionReleaseConfigureOutputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskReference:
+    type: string
+    example: "SCATR765419"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service configuration service call
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDProductionReleaseFeedbackInputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     serviceDomainServicingSessionReference:
+      type: string
+      example: "796678"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the active servicing session
+     controlRecordInstanceReference:
+      type: string
+      example: "724385"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance if appropriate
+     behaviorQualifierInstanceReference:
+      type: string
+      example: "789747"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the behavior qualifier instance if appropriate
+     feedbackRecordType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The layout/type of the feedback provided
+     feedbackRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The content of the feedback in any suitable format and media
+ SDProductionReleaseFeedbackOutputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskReference:
+    type: string
+    example: "SFATR765157"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a feedback service call
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     feedbackRecordDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date/time the feedback submitted for consideration
+     feedbackRecordStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of processing the feedback e.g. received, considered, responded to
+     employeeBusinessUnitReference:
+      type: string
+      example: "769031"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to business unit/employee responsible for handling feedback
+ SDProductionReleaseRetrieveInputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+ SDProductionReleaseRetrieveOutputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskReference:
+    type: string
+    example: "SRATR795161"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a retrieve service call
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+       activityAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the activity analysis that can be on-going, periodic and actual and projected
+       activityAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of activity analysis report available
+       activityAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The activity analysis report in any suitable form including selection filters where appropriate
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+       performanceAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the performance analysis that can be on-going or periodic
+       performanceAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of performance analysis report available
+       performanceAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The performance analysis report in any suitable form including selection filters where appropriate
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+       controlRecordPortfolioAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the portfolio analysis that can be on-going, periodic and actual and projected (can be unstructured data)
+       controlRecordPortfolioAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of external portfolio analysis report available
+       controlRecordAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The external analysis report in any suitable form including selection filters where appropriate
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Refers to the different types of services offered
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+       serviceDomainServiceDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the offered service 
+       serviceDomainServicePoliciesandGuidelines:
+        type: object
+        properties:
+         serviceDomainServiceEligibility:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Policies and rules governing access to the offered service, includes eligibility and qualifications
+         serviceDomainServiceIntendedUses:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Guidelines covering allowed, intended use of the service
+         serviceDomainServicePricingandTerms:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Terms, prices, penalties associated with use of the service
+       serviceDomainServiceSchedule:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Schedule defining when the accessed service is available
+ CRITSystemAssessmentInitiateInputModel:
+  type: object
+  properties: 
+   productionReleaseServicingSessionReference:
+    type: string
+    example: "PRSSR756628"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   iTSystemAssessmentInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   iTSystemAssessmentInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the IT System Assessment instance (e.g. initialised, pending, active)
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "717162"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+ CRITSystemAssessmentInitiateOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR700860"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the IT System Assessment instance
+   iTSystemAssessmentInitiateActionReference:
+    type: string
+    example: "ISAIAR725335"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   iTSystemAssessmentInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   iTSystemAssessmentInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the IT System Assessment instance (e.g. initialised, pending, active)
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "724340"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+ CRITSystemAssessmentUpdateInputModel:
+  type: object
+  properties: 
+   productionReleaseServicingSessionReference:
+    type: string
+    example: "PRSSR700740"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR732809"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the IT System Assessment instance
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "705016"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "715782"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   iTSystemAssessmentUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ CRITSystemAssessmentUpdateOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "705016"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "715782"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   iTSystemAssessmentUpdateActionTaskReference:
+    type: string
+    example: "ISAUATR731580"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   iTSystemAssessmentUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ CRITSystemAssessmentExchangeInputModel:
+  type: object
+  properties: 
+   productionReleaseServicingSessionReference:
+    type: string
+    example: "PRSSR790916"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR764213"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the IT System Assessment instance
+   iTSystemAssessmentExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   iTSystemAssessmentExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ CRITSystemAssessmentExchangeOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentExchangeActionTaskReference:
+    type: string
+    example: "ISAEATR763827"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a IT System Assessment instance exchange service call
+   iTSystemAssessmentExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   iTSystemAssessmentExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+ CRITSystemAssessmentRequestInputModel:
+  type: object
+  properties: 
+   productionReleaseServicingSessionReference:
+    type: string
+    example: "PRSSR714930"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR767356"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the IT System Assessment instance
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "704759"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   iTSystemAssessmentRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordType:
+    type: object
+    properties:
+     requestInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Request service record (e.g. rework function, refresh record, process workstep)
+ CRITSystemAssessmentRequestOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "724358"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   iTSystemAssessmentRequestActionTaskReference:
+    type: string
+    example: "ISARATR741066"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a IT System Assessment instance request service call
+   iTSystemAssessmentRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordReference:
+    type: string
+    example: "RRR766706"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ CRITSystemAssessmentGrantInputModel:
+  type: object
+  properties: 
+   productionReleaseServicingSessionReference:
+    type: string
+    example: "PRSSR794447"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR779484"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the IT System Assessment instance
+   iTSystemAssessmentGrantActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The grant service call consolidated processing record
+   grantRequestRecordType:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Grant request type (e.g. access permission)
+   grantRequestInputRecord:
+    type: object
+    properties:
+     grantRequestDetails:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the permissions requested
+ CRITSystemAssessmentGrantOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "773793"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "749524"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   iTSystemAssessmentGrantActionTaskReference:
+    type: string
+    example: "ISAGATR769715"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a IT System Assessment instance grant service call
+   iTSystemAssessmentGrantActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The grant service call consolidated processing record
+   grantRequestRecordReference:
+    type: string
+    example: "GRRR782478"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the grant request record
+   grantRequestResponseRecord:
+    type: object
+    properties:
+     grantPermissionDetails:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the permissions granted
+ CRITSystemAssessmentRetrieveInputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   iTSystemAssessmentRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   iTSystemAssessmentInstanceReportRecord:
+    type: object
+    properties:
+     iTSystemAssessmentInstanceReportReference:
+      type: string
+      example: "791261"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+     iTSystemAssessmentInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     iTSystemAssessmentInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+   iTSystemAssessmentInstanceAnalysis:
+    type: object
+    properties:
+     iTSystemAssessmentInstanceAnalysisReference:
+      type: string
+      example: "755485"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+     iTSystemAssessmentInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     iTSystemAssessmentInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+ CRITSystemAssessmentRetrieveOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentRetrieveActionTaskReference:
+    type: string
+    example: "ISARATR799703"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a IT System Assessment instance retrieve service call
+   iTSystemAssessmentRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   iTSystemAssessmentRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   iTSystemAssessmentInstanceReportRecord:
+    type: object
+    properties:
+     iTSystemAssessmentInstanceReportData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     iTSystemAssessmentInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     iTSystemAssessmentInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   iTSystemAssessmentInstanceAnalysis:
+    type: object
+    properties:
+     iTSystemAssessmentInstanceAnalysisData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     iTSystemAssessmentInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     iTSystemAssessmentInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQFunctionalRiskExchangeInputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR775147"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent IT System Assessment instance
+   functionalRiskInstanceReference:
+    type: string
+    example: "FRIR734920"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Functional Risk instance
+   functionalRiskExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   functionalRiskExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQFunctionalRiskExchangeOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "703288"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "776423"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   functionalRiskInstanceRecord:
+    type: object
+    properties:
+     functionalRiskSystemTestType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of functional test being performed (e.g. functional coverage/integrity, usability, application integration)
+     functionalRiskSystemTestDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed description of the test, including expected results
+     functionalRiskSystemTestWorkProduct:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Reference to testing materials, results, assessments and other documents
+     functionalRiskSystemTestResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result of the functional risk test (including required remedial actions/fixes where appropriate)
+   functionalRiskExchangeActionTaskReference:
+    type: string
+    example: "FREATR736376"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Functional Risk instance exchange service call
+   functionalRiskExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   functionalRiskExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   functionalRiskInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Functional Risk instance (e.g. accepted, rejected, verified)
+ BQFunctionalRiskRetrieveInputModel:
+  type: object
+  properties: 
+   functionalRiskRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   functionalRiskRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   functionalRiskInstanceReport:
+    type: object
+    properties:
+     functionalRiskInstanceReportReference:
+      type: string
+      example: "710025"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   functionalRiskInstanceAnalysis:
+    type: object
+    properties:
+     functionalRiskInstanceAnalysisReference:
+      type: string
+      example: "741471"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQFunctionalRiskRetrieveOutputModel:
+  type: object
+  properties: 
+   functionalRiskRetrieveActionTaskReference:
+    type: string
+    example: "FRRATR726853"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Functional Risk instance retrieve service call
+   functionalRiskRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   functionalRiskRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   functionalRiskInstanceReport:
+    type: object
+    properties:
+     functionalRiskInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     functionalRiskInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     functionalRiskInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     functionalRiskInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   functionalRiskInstanceAnalysis:
+    type: object
+    properties:
+     functionalRiskInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     functionalRiskInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     functionalRiskInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     functionalRiskInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQProductionRiskExchangeInputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR746971"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent IT System Assessment instance
+   productionRiskInstanceReference:
+    type: string
+    example: "PRIR757489"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Production Risk instance
+   productionRiskExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   productionRiskExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQProductionRiskExchangeOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "716806"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "788158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   productionRiskInstanceRecord:
+    type: object
+    properties:
+     productionRiskSystemTestType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production test being performed (e.g. division of responsibilities, access control, audit trail, back-up and recovery)
+     productionRiskSystemTestDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed description of the test, including expected results
+     productionRiskSystemTestWorkProduct:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Reference to testing materials, results, assessments and other documents
+     productionRiskSystemTestResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result of the production risk test (including required remedial actions/fixes where appropriate)
+   productionRiskExchangeActionTaskReference:
+    type: string
+    example: "PREATR781352"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Production Risk instance exchange service call
+   productionRiskExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   productionRiskExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   productionRiskInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Production Risk instance (e.g. accepted, rejected, verified)
+ BQProductionRiskRetrieveInputModel:
+  type: object
+  properties: 
+   productionRiskRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   productionRiskRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   productionRiskInstanceReport:
+    type: object
+    properties:
+     productionRiskInstanceReportReference:
+      type: string
+      example: "747898"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   productionRiskInstanceAnalysis:
+    type: object
+    properties:
+     productionRiskInstanceAnalysisReference:
+      type: string
+      example: "767957"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQProductionRiskRetrieveOutputModel:
+  type: object
+  properties: 
+   productionRiskRetrieveActionTaskReference:
+    type: string
+    example: "PRRATR789258"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Production Risk instance retrieve service call
+   productionRiskRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   productionRiskRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   productionRiskInstanceReport:
+    type: object
+    properties:
+     productionRiskInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     productionRiskInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     productionRiskInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     productionRiskInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   productionRiskInstanceAnalysis:
+    type: object
+    properties:
+     productionRiskInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     productionRiskInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     productionRiskInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     productionRiskInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQBusinessRiskExchangeInputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR759188"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent IT System Assessment instance
+   businessRiskInstanceReference:
+    type: string
+    example: "BRIR748298"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Business Risk instance
+   businessRiskExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   businessRiskExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQBusinessRiskExchangeOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "744949"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "787582"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   businessRiskInstanceRecord:
+    type: object
+    properties:
+     businessRiskSystemTestType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of business risk test being performed (e.g. compliance, pricing, exposure)
+     businessRiskSystemTestDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed description of the test, including expected results
+     businessRiskTestWorkProduct:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Reference to testing materials, results, assessments and other documents
+     businessRiskTestResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result of the business risk test (including required remedial actions/fixes where appropriate)
+   businessRiskExchangeActionTaskReference:
+    type: string
+    example: "BREATR747616"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Business Risk instance exchange service call
+   businessRiskExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   businessRiskExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   businessRiskInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Business Risk instance (e.g. accepted, rejected, verified)
+ BQBusinessRiskRetrieveInputModel:
+  type: object
+  properties: 
+   businessRiskRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   businessRiskRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   businessRiskInstanceReport:
+    type: object
+    properties:
+     businessRiskInstanceReportReference:
+      type: string
+      example: "733097"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   businessRiskInstanceAnalysis:
+    type: object
+    properties:
+     businessRiskInstanceAnalysisReference:
+      type: string
+      example: "783138"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQBusinessRiskRetrieveOutputModel:
+  type: object
+  properties: 
+   businessRiskRetrieveActionTaskReference:
+    type: string
+    example: "BRRATR739509"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Business Risk instance retrieve service call
+   businessRiskRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   businessRiskRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   businessRiskInstanceReport:
+    type: object
+    properties:
+     businessRiskInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     businessRiskInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     businessRiskInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     businessRiskInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   businessRiskInstanceAnalysis:
+    type: object
+    properties:
+     businessRiskInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     businessRiskInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     businessRiskInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     businessRiskInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQOperationalRiskExchangeInputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceReference:
+    type: string
+    example: "ISAIR703920"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent IT System Assessment instance
+   operationalRiskInstanceReference:
+    type: string
+    example: "ORIR794376"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Operational Risk instance
+   operationalRiskExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   operationalRiskExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQOperationalRiskExchangeOutputModel:
+  type: object
+  properties: 
+   iTSystemAssessmentInstanceRecord:
+    type: object
+    properties:
+     productionReleaseName:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The reference to and descriptive name of the production release system
+     employeeBusinessUnitReference:
+      type: string
+      example: "764820"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business units responsible for the testing and deployment
+     productionReleaseType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of production release (e.g. production service update, new production system)
+     productionReleaseDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the scope, goal and make-up of the production release
+     productionReleaseTestProfile:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details the types of production release tests to be and actually applied
+     productionReleaseTestSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing the range of release tests (planned and actual)
+     productionReleaseConsolidationRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The consolidated release evaluation combining the results of all underlying tests
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "703222"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the specific date type
+   operationalRiskInstanceRecord:
+    type: object
+    properties:
+     operationalRiskSystemTestType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of operational risk test being performed (e.g. operator error recovery, major IT component failure recovery/continuity)
+     operationalRiskSystemTestDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed description of the test, including expected results
+     operationalRiskSystemTestWorkProduct:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Reference to testing materials, results, assessments and other documents
+     operationalRiskSystemTestResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result of the operational risk test (including required remedial actions/fixes where appropriate)
+   operationalRiskExchangeActionTaskReference:
+    type: string
+    example: "OREATR710317"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Operational Risk instance exchange service call
+   operationalRiskExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   operationalRiskExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   operationalRiskInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Operational Risk instance (e.g. accepted, rejected, verified)
+ BQOperationalRiskRetrieveInputModel:
+  type: object
+  properties: 
+   operationalRiskRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   operationalRiskRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   operationalRiskInstanceReport:
+    type: object
+    properties:
+     operationalRiskInstanceReportReference:
+      type: string
+      example: "758611"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   operationalRiskInstanceAnalysis:
+    type: object
+    properties:
+     operationalRiskInstanceAnalysisReference:
+      type: string
+      example: "754308"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQOperationalRiskRetrieveOutputModel:
+  type: object
+  properties: 
+   operationalRiskRetrieveActionTaskReference:
+    type: string
+    example: "ORRATR791016"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Operational Risk instance retrieve service call
+   operationalRiskRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   operationalRiskRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   operationalRiskInstanceReport:
+    type: object
+    properties:
+     operationalRiskInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     operationalRiskInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     operationalRiskInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     operationalRiskInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   operationalRiskInstanceAnalysis:
+    type: object
+    properties:
+     operationalRiskInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     operationalRiskInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     operationalRiskInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     operationalRiskInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
