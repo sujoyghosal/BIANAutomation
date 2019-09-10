@@ -1,0 +1,4506 @@
+swagger: '2.0'
+info:
+ version: '2.0.0'
+ title: 'Service Domain - Customer Surveys'
+ description: >
+
+    ## Executive Summary:
+
+    Define and execute and analyze customer surveys
+
+    ## Example of Use:
+
+    A bank develops a customer questionnaire to obtain feedback from customers that make frequent use of the self-service contact center facility for service improvement suggestions
+
+    ## Description:
+
+    Handle the deployment, execution and on-going refinement of customer surveys. This includes many types of survey including traditional mailshot questionnaires, in production review/feedback solicitation, review panels/focus groups. The survey execution process performs the survey definitions, selection of reviewers, surveying and post survey analysis
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-customer-surveys/2.0.0
+schemes:
+ - https
+paths:
+  /customer-surveys/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCustomerSurveys
+      summary: Activate  a SDCustomerSurveys servicing session
+      description: Activate  a  SDCustomerSurveys servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerSurveys Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerSurveysActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCustomerSurveysActivateOutputModel'
+  /customer-surveys/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCustomerSurveys
+      summary: Update an active SDCustomerSurveys session configuration
+      description: Update an active SDCustomerSurveys session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerSurveys Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerSurveys Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerSurveysConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCustomerSurveysConfigureOutputModel'
+  /customer-surveys/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCustomerSurveys
+      summary: "Capturing feedback against the SDCustomerSurveys service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCustomerSurveys service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerSurveys Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerSurveys Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerSurveysFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCustomerSurveysFeedbackOutputModel'
+  /customer-surveys/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCustomerSurveys
+      summary: Analytical views maintained by the SDCustomerSurveys service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCustomerSurveys service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerSurveys Servicing Session Reference
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/SDCustomerSurveysRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCustomerSurveysRetrieveOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCustomerSurveyProcedure
+      summary: Details of a new CustomerSurveyProcedure instance
+      description: Initiate customer survey processing
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CustomerSurveyProcedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerSurveyProcedureInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of new CustomerSurveyProcedure instance
+          schema:
+            $ref: '#/definitions/CRCustomerSurveyProcedureInitiateOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerSurveyProcedure
+      summary: Update to any amendable fields of the CustomerSurveyProcedure instance
+      description: Update details of an active customer survey process
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Survey Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerSurveyProcedureUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Customer Survey Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCustomerSurveyProcedureUpdateOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/control:
+    put:
+      tags:
+      - control
+      operationId: controlCustomerSurveyProcedureUpdate
+      summary: Request specific processing (e.g. suspend, skip, terminate)
+      description: Control the execution of a customer survey (e.g. suspend processing)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Survey Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerSurveyProcedureControlInputModel'
+      responses:
+        200:
+          description: Successful control of Customer Survey Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCustomerSurveyProcedureControlOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerSurveyProcedureUpdate
+      summary: Invoke a service request action against the CustomerSurveyProcedure instance
+      description: Request manual intervention to the survey process (e.g. revise customer targeting criteria)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Survey Procedure Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerSurveyProcedureRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Customer Survey Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCustomerSurveyProcedureRequestOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerSurveys
+      summary: Invoke a reporting action to obtain a Customer Survey Procedure instance related report
+      description: Retrieve details about a customer survey process
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCustomerSurveyProcedureRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Customer Survey Procedure Instance
+          schema:
+            $ref: '#/definitions/CRCustomerSurveyProcedureRetrieveOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/definition/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerSurveyProcedureDefinition
+      summary: Update to any amendable fields of the Definition instance
+      description: Update aspects of a customer survey definition/specification
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Definition Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Definition Request Payload
+        schema:
+          $ref: '#/definitions/BQDefinitionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Definition Instance
+          schema:
+            $ref: '#/definitions/BQDefinitionUpdateOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/definition/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerSurveyProcedureDefinitionUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, verify, etc. aspects of a customer survey definition
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Definition Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Definition request payload
+        schema:
+          $ref: '#/definitions/BQDefinitionExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of Definition Instance Record
+          schema:
+            $ref: '#/definitions/BQDefinitionExchangeOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/definition/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerSurveyProcedureDefinition
+      summary: Invoke a reporting action to obtain a Definition instance related report.
+      description: Retrieve details about customer survey related activity .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Definition Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQDefinitionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Definition Instance Record
+          schema:
+            $ref: '#/definitions/BQDefinitionRetrieveOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/reviewerselection/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerSurveyProcedureReviewerSelection
+      summary: Update to any amendable fields of the ReviewerSelection instance
+      description: Update reviewer selection details
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ReviewerSelection Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ReviewerSelection Request Payload
+        schema:
+          $ref: '#/definitions/BQReviewerSelectionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated ReviewerSelection Instance
+          schema:
+            $ref: '#/definitions/BQReviewerSelectionUpdateOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/reviewerselection/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerSurveyProcedureReviewerSelectionUpdate
+      summary: Invoke a service request action against the ReviewerSelection instance
+      description: Request manual intervention in survey reviewer selection (e.g. handle subject availability)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ReviewerSelection Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: ReviewerSelection request payload
+        schema:
+          $ref: '#/definitions/BQReviewerSelectionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of ReviewerSelection Instance Record
+          schema:
+            $ref: '#/definitions/BQReviewerSelectionRequestOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/reviewerselection/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerSurveyProcedureReviewerSelection
+      summary: Invoke a reporting action to obtain a ReviewerSelection instance related report.
+      description: Retrieve details about survey reviewer selection activity .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: ReviewerSelection Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQReviewerSelectionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved ReviewerSelection Instance Record
+          schema:
+            $ref: '#/definitions/BQReviewerSelectionRetrieveOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/execution/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCustomerSurveyProcedureExecution
+      summary: Details of a new Execution instance
+      description: Initiate customer survey execution task (e.g. run survey with a customer)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Survey Procedure Request Payload
+        schema:
+          $ref: '#/definitions/BQExecutionInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Customer Survey Procedure instance
+          schema:
+            $ref: '#/definitions/BQExecutionInitiateOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/execution/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerSurveyProcedureExecution
+      summary: Update to any amendable fields of the Execution instance
+      description: Update details of a survey execution task
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Execution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Execution Request Payload
+        schema:
+          $ref: '#/definitions/BQExecutionUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Execution Instance
+          schema:
+            $ref: '#/definitions/BQExecutionUpdateOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/execution/{bq-reference-id}/capture:
+    put:
+      tags:
+      - capture
+      operationId: captureCustomerSurveyProcedureExecutionUpdate
+      summary: Provide a structured input transaction/record (e.g. timesheet, event)
+      description: Capture input from a survey execution task (e.g. automated capture of customer feedback)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Execution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Execution request payload
+        schema:
+          $ref: '#/definitions/BQExecutionCaptureInputModel'
+      responses:
+        200:
+          description: Successful capture of Execution Instance Record
+          schema:
+            $ref: '#/definitions/BQExecutionCaptureOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/execution/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCustomerSurveyProcedureExecutionUpdate
+      summary: Invoke an automated execute action against the Execution instance
+      description: Execute an automated action for survey execution (e.g. present survey in context to a matched customer)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Execution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Execution request payload
+        schema:
+          $ref: '#/definitions/BQExecutionExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of Execution Instance Record
+          schema:
+            $ref: '#/definitions/BQExecutionExecuteOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/execution/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerSurveyProcedureExecutionUpdate
+      summary: Invoke a service request action against the Execution instance
+      description: Request manual intervention in survey execution (e.g. host a focus group event)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Execution Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Execution request payload
+        schema:
+          $ref: '#/definitions/BQExecutionRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Execution Instance Record
+          schema:
+            $ref: '#/definitions/BQExecutionRequestOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/execution/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerSurveyProcedureExecution
+      summary: Invoke a reporting action to obtain a Execution instance related report.
+      description: Retrieve details about customer survey execution activity .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Execution Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQExecutionRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Execution Instance Record
+          schema:
+            $ref: '#/definitions/BQExecutionRetrieveOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/surveyanalysis/initiation:
+    post:
+      tags:
+      - initiate
+      operationId: initiateCustomerSurveyProcedureSurveyAnalysis
+      summary: Details of a new SurveyAnalysis instance
+      description: Initiate survey result consolidation and analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Survey Procedure Request Payload
+        schema:
+          $ref: '#/definitions/BQSurveyAnalysisInitiateInputModel'
+      responses:
+        201:
+          description: Successful initiation of Customer Survey Procedure instance
+          schema:
+            $ref: '#/definitions/BQSurveyAnalysisInitiateOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/surveyanalysis/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerSurveyProcedureSurveyAnalysis
+      summary: Update to any amendable fields of the SurveyAnalysis instance
+      description: Update details about customer survey analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: SurveyAnalysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SurveyAnalysis Request Payload
+        schema:
+          $ref: '#/definitions/BQSurveyAnalysisUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated SurveyAnalysis Instance
+          schema:
+            $ref: '#/definitions/BQSurveyAnalysisUpdateOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/surveyanalysis/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerSurveyProcedureSurveyAnalysisUpdate
+      summary: Invoke a service request action against the SurveyAnalysis instance
+      description: Request manual intervention in survey analysis (e.g. perform specific analysis)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: SurveyAnalysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SurveyAnalysis request payload
+        schema:
+          $ref: '#/definitions/BQSurveyAnalysisRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of SurveyAnalysis Instance Record
+          schema:
+            $ref: '#/definitions/BQSurveyAnalysisRequestOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/surveyanalysis/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerSurveyProcedureSurveyAnalysis
+      summary: Invoke a reporting action to obtain a SurveyAnalysis instance related report.
+      description: Retrieve details about a customer survey analysis .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: SurveyAnalysis Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQSurveyAnalysisRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved SurveyAnalysis Instance Record
+          schema:
+            $ref: '#/definitions/BQSurveyAnalysisRetrieveOutputModel'
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerSurveysReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CustomerSurveys Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /customer-surveys/customer-survey-procedure/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerSurveysBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'Definition',  'ReviewerSelection',  'Execution',  'SurveyAnalysis', ]
+  /customer-surveys/{sd-reference-id}/customer-survey-procedure/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerSurveysBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Surveys Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Survey Procedure Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- SurveyAnalysis
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- SurveyAnalysis Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [SurveyAnalysisID1, SurveyAnalysisID2]
+definitions:
+ SDCustomerSurveysActivateInputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainCenterReference:
+    type: string
+    example: "SCR793499"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service center/operational unit
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR703914"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+ SDCustomerSurveysActivateOutputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskReference:
+    type: string
+    example: "SAATR758836"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service activation service call
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR783215"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServicingSessionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Consolidated information record for the servicing session
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "769192"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "791202"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "767210"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDCustomerSurveysConfigureInputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR764367"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR744740"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "710630"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+ SDCustomerSurveysConfigureOutputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskReference:
+    type: string
+    example: "SCATR765419"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service configuration service call
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDCustomerSurveysFeedbackInputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     serviceDomainServicingSessionReference:
+      type: string
+      example: "796678"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the active servicing session
+     controlRecordInstanceReference:
+      type: string
+      example: "724385"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance if appropriate
+     behaviorQualifierInstanceReference:
+      type: string
+      example: "789747"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the behavior qualifier instance if appropriate
+     feedbackRecordType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The layout/type of the feedback provided
+     feedbackRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The content of the feedback in any suitable format and media
+ SDCustomerSurveysFeedbackOutputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskReference:
+    type: string
+    example: "SFATR765157"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a feedback service call
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     feedbackRecordDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date/time the feedback submitted for consideration
+     feedbackRecordStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of processing the feedback e.g. received, considered, responded to
+     employeeBusinessUnitReference:
+      type: string
+      example: "769031"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to business unit/employee responsible for handling feedback
+ SDCustomerSurveysRetrieveInputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+ SDCustomerSurveysRetrieveOutputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskReference:
+    type: string
+    example: "SRATR795161"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a retrieve service call
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+       activityAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the activity analysis that can be on-going, periodic and actual and projected
+       activityAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of activity analysis report available
+       activityAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The activity analysis report in any suitable form including selection filters where appropriate
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+       performanceAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the performance analysis that can be on-going or periodic
+       performanceAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of performance analysis report available
+       performanceAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The performance analysis report in any suitable form including selection filters where appropriate
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+       controlRecordPortfolioAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the portfolio analysis that can be on-going, periodic and actual and projected (can be unstructured data)
+       controlRecordPortfolioAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of external portfolio analysis report available
+       controlRecordAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The external analysis report in any suitable form including selection filters where appropriate
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Refers to the different types of services offered
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+       serviceDomainServiceDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the offered service 
+       serviceDomainServicePoliciesandGuidelines:
+        type: object
+        properties:
+         serviceDomainServiceEligibility:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Policies and rules governing access to the offered service, includes eligibility and qualifications
+         serviceDomainServiceIntendedUses:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Guidelines covering allowed, intended use of the service
+         serviceDomainServicePricingandTerms:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Terms, prices, penalties associated with use of the service
+       serviceDomainServiceSchedule:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Schedule defining when the accessed service is available
+ CRCustomerSurveyProcedureInitiateInputModel:
+  type: object
+  properties: 
+   customerSurveysServicingSessionReference:
+    type: string
+    example: "CSSSR785115"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   customerSurveyProcedureInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   customerSurveyProcedureInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Customer Survey Procedure instance (e.g. initialised, pending, active)
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "734905"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+ CRCustomerSurveyProcedureInitiateOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR791343"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Customer Survey Procedure instance
+   customerSurveyProcedureInitiateActionReference:
+    type: string
+    example: "CSPIAR708024"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   customerSurveyProcedureInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   customerSurveyProcedureInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Customer Survey Procedure instance (e.g. initialised, pending, active)
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "734905"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+ CRCustomerSurveyProcedureUpdateInputModel:
+  type: object
+  properties: 
+   customerSurveysServicingSessionReference:
+    type: string
+    example: "CSSSR767526"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR740931"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Customer Survey Procedure instance
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "708804"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   customerSurveyProcedureUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ CRCustomerSurveyProcedureUpdateOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "708804"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   customerSurveyProcedureUpdateActionTaskReference:
+    type: string
+    example: "CSPUATR748709"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   customerSurveyProcedureUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ CRCustomerSurveyProcedureControlInputModel:
+  type: object
+  properties: 
+   customerSurveysServicingSessionReference:
+    type: string
+    example: "CSSSR703087"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR724757"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Customer Survey Procedure instance
+   customerSurveyProcedureControlActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The processing control service call consolidated processing record
+   customerSurveyProcedureControlActionRequest:
+    type: object
+    properties:
+     controlActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of processing action requested (e.g. suspend, skip, terminate)
+ CRCustomerSurveyProcedureControlOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureControlActionTaskReference:
+    type: string
+    example: "CSPCATR767839"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Customer Survey Procedure instance control processing service call
+   customerSurveyProcedureControlActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The processing control service call consolidated processing record
+   customerSurveyProcedureControlActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the control action service response
+ CRCustomerSurveyProcedureRequestInputModel:
+  type: object
+  properties: 
+   customerSurveysServicingSessionReference:
+    type: string
+    example: "CSSSR752742"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR704365"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Customer Survey Procedure instance
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "774330"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   customerSurveyProcedureRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordType:
+    type: object
+    properties:
+     requestInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Request service record (e.g. rework function, refresh record, process workstep)
+ CRCustomerSurveyProcedureRequestOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "774330"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   customerSurveyProcedureRequestActionTaskReference:
+    type: string
+    example: "CSPRATR766008"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Customer Survey Procedure instance request service call
+   customerSurveyProcedureRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordReference:
+    type: string
+    example: "RRR729667"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ CRCustomerSurveyProcedureRetrieveInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   customerSurveyProcedureRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   customerSurveyProcedureInstanceReportRecord:
+    type: object
+    properties:
+     customerSurveyProcedureInstanceReportReference:
+      type: string
+      example: "751739"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+     customerSurveyProcedureInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     customerSurveyProcedureInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+   customerSurveyProcedureInstanceAnalysis:
+    type: object
+    properties:
+     customerSurveyProcedureInstanceAnalysisReference:
+      type: string
+      example: "704556"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+     customerSurveyProcedureInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     customerSurveyProcedureInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+ CRCustomerSurveyProcedureRetrieveOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "711152"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   customerSurveyProcedureRetrieveActionTaskReference:
+    type: string
+    example: "CSPRATR798890"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Customer Survey Procedure instance retrieve service call
+   customerSurveyProcedureRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   customerSurveyProcedureRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   customerSurveyProcedureInstanceReportRecord:
+    type: object
+    properties:
+     customerSurveyProcedureInstanceReportData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     customerSurveyProcedureInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     customerSurveyProcedureInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   customerSurveyProcedureInstanceAnalysis:
+    type: object
+    properties:
+     customerSurveyProcedureInstanceAnalysisData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     customerSurveyProcedureInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     customerSurveyProcedureInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQDefinitionUpdateInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "733879"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR750514"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   definitionInstanceReference:
+    type: string
+    example: "DIR730573"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Definition instance
+   definitionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyDesignWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. research survey context, refine/trial questionnaire, develop supporting materials)
+     customerSurveyDesignWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the survey development task performed
+     customerSurveyDesignWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     customerSurveyDesignWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - specifically developed materials to be used in survey execution
+   definitionUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   definitionUpdateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ BQDefinitionUpdateOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "733879"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   definitionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyDesignWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. research survey context, refine/trial questionnaire, develop supporting materials)
+     customerSurveyDesignWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the survey development task performed
+     customerSurveyDesignWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     customerSurveyDesignWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - specifically developed materials to be used in survey execution
+   definitionUpdateActionTaskReference:
+    type: string
+    example: "DUATR735736"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   definitionUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ BQDefinitionExchangeInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR785438"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   definitionInstanceReference:
+    type: string
+    example: "DIR750126"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Definition instance
+   definitionExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   definitionExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQDefinitionExchangeOutputModel:
+  type: object
+  properties: 
+   definitionExchangeActionTaskReference:
+    type: string
+    example: "DEATR764140"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Definition instance exchange service call
+   definitionExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   definitionExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   definitionInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Definition instance (e.g. accepted, rejected, verified)
+ BQDefinitionRetrieveInputModel:
+  type: object
+  properties: 
+   definitionRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   definitionRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   definitionInstanceReport:
+    type: object
+    properties:
+     definitionInstanceReportReference:
+      type: string
+      example: "755490"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   definitionInstanceAnalysis:
+    type: object
+    properties:
+     definitionInstanceAnalysisReference:
+      type: string
+      example: "746570"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQDefinitionRetrieveOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "711907"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+   definitionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyDesignWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. research survey context, refine/trial questionnaire, develop supporting materials)
+     customerSurveyDesignWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the survey development task performed
+     customerSurveyDesignWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     customerSurveyDesignWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - specifically developed materials to be used in survey execution
+   definitionRetrieveActionTaskReference:
+    type: string
+    example: "DRATR762046"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Definition instance retrieve service call
+   definitionRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   definitionRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   definitionInstanceReport:
+    type: object
+    properties:
+     definitionInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     definitionInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     definitionInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     definitionInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   definitionInstanceAnalysis:
+    type: object
+    properties:
+     definitionInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     definitionInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     definitionInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     definitionInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQReviewerSelectionUpdateInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR799214"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   reviewerSelectionInstanceReference:
+    type: string
+    example: "RSIR717627"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Reviewer Selection instance
+   reviewerSelectionUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   reviewerSelectionUpdateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ BQReviewerSelectionUpdateOutputModel:
+  type: object
+  properties: 
+   reviewerSelectionUpdateActionTaskReference:
+    type: string
+    example: "RSUATR781497"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   reviewerSelectionUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ BQReviewerSelectionRequestInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR763226"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   reviewerSelectionInstanceReference:
+    type: string
+    example: "RSIR755820"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Reviewer Selection instance
+   reviewerSelectionRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordType:
+    type: object
+    properties:
+     requestInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Request service record (e.g. rework function, refresh record, process workstep)
+ BQReviewerSelectionRequestOutputModel:
+  type: object
+  properties: 
+   reviewerSelectionRequestActionTaskReference:
+    type: string
+    example: "RSRATR715286"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Reviewer Selection instance request service call
+   reviewerSelectionRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   reviewerSelectionRequestRecordReference:
+    type: string
+    example: "RSRRR796785"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Reviewer Selection service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ BQReviewerSelectionRetrieveInputModel:
+  type: object
+  properties: 
+   reviewerSelectionRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   reviewerSelectionRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   reviewerSelectionInstanceReport:
+    type: object
+    properties:
+     reviewerSelectionInstanceReportReference:
+      type: string
+      example: "797743"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   reviewerSelectionInstanceAnalysis:
+    type: object
+    properties:
+     reviewerSelectionInstanceAnalysisReference:
+      type: string
+      example: "767638"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQReviewerSelectionRetrieveOutputModel:
+  type: object
+  properties: 
+   reviewerSelectionRetrieveActionTaskReference:
+    type: string
+    example: "RSRATR788602"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Reviewer Selection instance retrieve service call
+   reviewerSelectionRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   reviewerSelectionRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   reviewerSelectionInstanceReport:
+    type: object
+    properties:
+     reviewerSelectionInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     reviewerSelectionInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     reviewerSelectionInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     reviewerSelectionInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   reviewerSelectionInstanceAnalysis:
+    type: object
+    properties:
+     reviewerSelectionInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     reviewerSelectionInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     reviewerSelectionInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     reviewerSelectionInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQExecutionInitiateInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "799589"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR743512"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   executionInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+ BQExecutionInitiateOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "799589"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   executionInstanceReference:
+    type: string
+    example: "EIR728239"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Execution instance
+   executionInitiateActionReference:
+    type: string
+    example: "EIAR753060"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   executionInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   executionInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Execution instance (e.g. initialised, pending, active)
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "733944"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+ BQExecutionUpdateInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR745145"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   executionInstanceReference:
+    type: string
+    example: "EIR710334"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Execution instance
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "793146"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   executionUpdateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ BQExecutionUpdateOutputModel:
+  type: object
+  properties: 
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "793146"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionUpdateActionTaskReference:
+    type: string
+    example: "EUATR707054"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   executionUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ BQExecutionCaptureInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR756249"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   executionInstanceReference:
+    type: string
+    example: "EIR795955"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Execution instance
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "796124"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionCaptureActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The capture service call consolidated processing record
+   captureRecordType:
+    type: object
+    properties:
+     captureInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Structured input transaction/record (e.g. timesheet, event record, account posting)
+ BQExecutionCaptureOutputModel:
+  type: object
+  properties: 
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "796124"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionCaptureActionTaskReference:
+    type: string
+    example: "ECATR752920"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Execution instance capture service call
+   executionCaptureActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The capture service call consolidated processing record
+   executionCaptureRecordReference:
+    type: string
+    example: "ECRR721873"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Execution structured input transaction/record
+   captureResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the capture action service response
+ BQExecutionExecuteInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR774476"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   executionInstanceReference:
+    type: string
+    example: "EIR739318"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Execution instance
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "717611"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   executeRecordType:
+    type: object
+    properties:
+     executeInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
+ BQExecutionExecuteOutputModel:
+  type: object
+  properties: 
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "717611"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionExecuteActionTaskReference:
+    type: string
+    example: "EEATR750889"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Execution instance execute service call
+   executionExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   executionExecuteRecordReference:
+    type: string
+    example: "EERR748108"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Execution execute transaction/record
+   executeResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the execute action service response
+ BQExecutionRequestInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR793923"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   executionInstanceReference:
+    type: string
+    example: "EIR723402"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Execution instance
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "702629"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordType:
+    type: object
+    properties:
+     requestInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Request service record (e.g. rework function, refresh record, process workstep)
+ BQExecutionRequestOutputModel:
+  type: object
+  properties: 
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "702629"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionRequestActionTaskReference:
+    type: string
+    example: "ERATR734526"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Execution instance request service call
+   executionRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   executionRequestRecordReference:
+    type: string
+    example: "ERRR780323"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Execution service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ BQExecutionRetrieveInputModel:
+  type: object
+  properties: 
+   executionRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   executionRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   executionInstanceReport:
+    type: object
+    properties:
+     executionInstanceReportReference:
+      type: string
+      example: "769004"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   executionInstanceAnalysis:
+    type: object
+    properties:
+     executionInstanceAnalysisReference:
+      type: string
+      example: "773183"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQExecutionRetrieveOutputModel:
+  type: object
+  properties: 
+   executionInstanceRecord:
+    type: object
+    properties:
+     customerSurveyExecutionWorkTaskType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of work task (e.g. host focus group session, issue questionnaire)
+     customerSurveyExecutionWorkTaskDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the task performed, includes summary of activities as necessary
+     customerSurveyExecutionWorkTaskWorkProducts:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: File of consolidated notes, forms and documents for the work task
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "792782"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to associated documents (e.g. required legal disclosures for participants)
+     customerSurveyExecutionWorkTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the outcome or result of the work task - typically the captured survey response and any related feedback
+     customerSurveyExecutionWorkTaskDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date-time the customer survey execution
+   executionRetrieveActionTaskReference:
+    type: string
+    example: "ERATR717046"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Execution instance retrieve service call
+   executionRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   executionRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   executionInstanceReport:
+    type: object
+    properties:
+     executionInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     executionInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     executionInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     executionInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   executionInstanceAnalysis:
+    type: object
+    properties:
+     executionInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     executionInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     executionInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     executionInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQSurveyAnalysisInitiateInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "745345"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR779424"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   surveyAnalysisInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   surveyAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSurveyProcedureSurveyAnalysisResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result customer survey which combines response details/statistics and associated analysis, commentary and derived insights
+ BQSurveyAnalysisInitiateOutputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceRecord:
+    type: object
+    properties:
+     customerSurveyType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type or category of customer survey (e.g. questionnaire, in context solicitation, focus group)
+     customerSurveyDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: A description of the customer survey that clarifies the sought customer insights, survey mechanism and target reviewers
+     employeeBusinessUnitReference:
+      type: string
+      example: "745345"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the business unit responsible for the survey execution
+     customerSurveyProcedureSetup:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the deployment set-up/configuration of the customer survey
+     customerSurveyProcedureVersionNumber:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey version number used
+     customerSurveySchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The customer survey processing schedule, covering survey definition, reviewer selection, survey execution and subsequent analysis. Note for some integrated surveys this can be an on-going activity that attempts provides a constant stream of feedback relating to specific activities/services rather than a specific event
+     customerSurveyConsumablesInventory:
+      type: object
+      properties:
+       customerSurveyConsumableType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of consumable item associated with the customer survey (e.g. questionnaire, participation incentive gift)
+       customerSurveyConsumableHolding:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The tracked inventory of the consumable item
+     dateType:
+      type: object
+      properties:
+       date:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: Value of the date type
+     customerSurveyProcedureResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result/impact of the customer survey (will include summary of customer survey activity, survey response data and survey findings presentation analysis)
+   surveyAnalysisInstanceReference:
+    type: string
+    example: "SAIR793194"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Survey Analysis instance
+   surveyAnalysisInitiateActionReference:
+    type: string
+    example: "SAIAR747114"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   surveyAnalysisInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   surveyAnalysisInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Survey Analysis instance (e.g. initialised, pending, active)
+   surveyAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSurveyProcedureSurveyAnalysisResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result customer survey which combines response details/statistics and associated analysis, commentary and derived insights
+ BQSurveyAnalysisUpdateInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR723735"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   surveyAnalysisInstanceReference:
+    type: string
+    example: "SAIR746349"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Survey Analysis instance
+   surveyAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSurveyProcedureSurveyAnalysisResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result customer survey which combines response details/statistics and associated analysis, commentary and derived insights
+   surveyAnalysisUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   surveyAnalysisUpdateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ BQSurveyAnalysisUpdateOutputModel:
+  type: object
+  properties: 
+   surveyAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSurveyProcedureSurveyAnalysisResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result customer survey which combines response details/statistics and associated analysis, commentary and derived insights
+   surveyAnalysisUpdateActionTaskReference:
+    type: string
+    example: "SAUATR709206"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   surveyAnalysisUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ BQSurveyAnalysisRequestInputModel:
+  type: object
+  properties: 
+   customerSurveyProcedureInstanceReference:
+    type: string
+    example: "CSPIR777550"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Survey Procedure instance
+   surveyAnalysisInstanceReference:
+    type: string
+    example: "SAIR770690"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Survey Analysis instance
+   surveyAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSurveyProcedureSurveyAnalysisResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result customer survey which combines response details/statistics and associated analysis, commentary and derived insights
+   surveyAnalysisRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordType:
+    type: object
+    properties:
+     requestInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Request service record (e.g. rework function, refresh record, process workstep)
+ BQSurveyAnalysisRequestOutputModel:
+  type: object
+  properties: 
+   surveyAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSurveyProcedureSurveyAnalysisResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result customer survey which combines response details/statistics and associated analysis, commentary and derived insights
+   surveyAnalysisRequestActionTaskReference:
+    type: string
+    example: "SARATR771991"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Survey Analysis instance request service call
+   surveyAnalysisRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   surveyAnalysisRequestRecordReference:
+    type: string
+    example: "SARRR796547"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Survey Analysis service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ BQSurveyAnalysisRetrieveInputModel:
+  type: object
+  properties: 
+   surveyAnalysisRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   surveyAnalysisRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   surveyAnalysisInstanceReport:
+    type: object
+    properties:
+     surveyAnalysisInstanceReportReference:
+      type: string
+      example: "775618"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   surveyAnalysisInstanceAnalysis:
+    type: object
+    properties:
+     surveyAnalysisInstanceAnalysisReference:
+      type: string
+      example: "736893"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQSurveyAnalysisRetrieveOutputModel:
+  type: object
+  properties: 
+   surveyAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSurveyProcedureSurveyAnalysisResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The result customer survey which combines response details/statistics and associated analysis, commentary and derived insights
+   surveyAnalysisRetrieveActionTaskReference:
+    type: string
+    example: "SARATR744521"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Survey Analysis instance retrieve service call
+   surveyAnalysisRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   surveyAnalysisRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   surveyAnalysisInstanceReport:
+    type: object
+    properties:
+     surveyAnalysisInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     surveyAnalysisInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     surveyAnalysisInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     surveyAnalysisInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   surveyAnalysisInstanceAnalysis:
+    type: object
+    properties:
+     surveyAnalysisInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     surveyAnalysisInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     surveyAnalysisInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     surveyAnalysisInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
