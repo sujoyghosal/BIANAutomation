@@ -1,321 +1,404 @@
 swagger: '2.0'
 info:
  version: '2.0.0'
- title: 'Service Domain - Suitability Checking'
+ title: 'Service Domain - Consumer Investments'
  description: >
 
     ## Executive Summary:
 
-    Confirm that all involved counterparties are suitable for a proposed market trade.
+    Handle the consumer front-end trading requests. These will typically be blocked/netted for market execution
 
     ## Example of Use:
 
-    An investment manager confirms that a proposed investment meets suitability requirements for the customer
+    An consumer initiates a securities purchase for their investment portfolio, providing funds from their linked 'trading' current account
 
     ## Description:
 
-    Confirm that all involved counterparties are suitable for a proposed market trade. The checks address regulatory requirements to ensure involved parties are suitably qualified/knowledgeable to participate in the type of trading activity (e.g. in the US suitability is defined by FINRA Rule 2111)
+    This supports consumer initiated securities investment and trading activity for their self-managed securities investments. Trades will typically be blocked/netted against the bank's own securities position for subsequent market execution. Quotes/prices are based on the prevailing price at the time of the customer instruction to trade
 
 host: virtserver.swaggerhub.com
-basePath: /BIAN/sd-suitability-checking/2.0.0
+basePath: /BIAN/sd-consumer-investments/2.0.0
 schemes:
  - https
 paths:
-  /suitability-checking/activation:
+  /consumer-investments/activation:
     post:
       tags:
       - activate
-      operationId: activateSDSuitabilityChecking
-      summary: Activate  a SDSuitabilityChecking servicing session
-      description: Activate  a  SDSuitabilityChecking servicing session
+      operationId: activateSDConsumerInvestments
+      summary: Activate  a SDConsumerInvestments servicing session
+      description: Activate  a  SDConsumerInvestments servicing session
       produces:
       - application/json
       parameters:
       - in: body
         name: body
         required: true
-        description: SDSuitabilityChecking Request Payload
+        description: SDConsumerInvestments Request Payload
         schema:
-          $ref: '#/definitions/SDSuitabilityCheckingActivateInputModel'
+          $ref: '#/definitions/SDConsumerInvestmentsActivateInputModel'
       responses:
         201:
           description: Successful Service Activation
           schema:
-            $ref: '#/definitions/SDSuitabilityCheckingActivateOutputModel'
-  /suitability-checking/{sd-reference-id}/configuration:
+            $ref: '#/definitions/SDConsumerInvestmentsActivateOutputModel'
+  /consumer-investments/{sd-reference-id}/configuration:
     put:
       tags:
       - configure
-      operationId: configureSDSuitabilityChecking
-      summary: Update an active SDSuitabilityChecking session configuration
-      description: Update an active SDSuitabilityChecking session configuration
+      operationId: configureSDConsumerInvestments
+      summary: Update an active SDConsumerInvestments session configuration
+      description: Update an active SDConsumerInvestments session configuration
       produces:
       - application/json
       parameters:
       - in: path
         name: sd-reference-id
         required: true
-        description: SDSuitabilityChecking Servicing Session Reference
+        description: SDConsumerInvestments Servicing Session Reference
         type: string
       - in: body
         name: body
         required: true
-        description: SDSuitabilityChecking Configure Request Payload
+        description: SDConsumerInvestments Configure Request Payload
         schema:
-          $ref: '#/definitions/SDSuitabilityCheckingConfigureInputModel'
+          $ref: '#/definitions/SDConsumerInvestmentsConfigureInputModel'
       responses:
         200:
           description: Successful Service Configuration
           schema:
-            $ref: '#/definitions/SDSuitabilityCheckingConfigureOutputModel'
-  /suitability-checking/{sd-reference-id}/feedback:
+            $ref: '#/definitions/SDConsumerInvestmentsConfigureOutputModel'
+  /consumer-investments/{sd-reference-id}/feedback:
     put:
       tags:
       - feedback
-      operationId: feedbackSDSuitabilityChecking
-      summary: "Capturing feedback against the SDSuitabilityChecking service that can target different levels of detail: SD/CR/BQ"
-      description:  "Capturing feedback against the SDSuitabilityChecking service that can target different levels of detail: SD/CR/BQ"
+      operationId: feedbackSDConsumerInvestments
+      summary: "Capturing feedback against the SDConsumerInvestments service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDConsumerInvestments service that can target different levels of detail: SD/CR/BQ"
       produces:
       - application/json
       parameters:
       - in: path
         name: sd-reference-id
         required: true
-        description: SDSuitabilityChecking Servicing Session Reference
+        description: SDConsumerInvestments Servicing Session Reference
         type: string
       - in: body
         name: body
         required: true
-        description: SDSuitabilityChecking Feedback Request Payload
+        description: SDConsumerInvestments Feedback Request Payload
         schema:
-          $ref: '#/definitions/SDSuitabilityCheckingFeedbackInputModel'
+          $ref: '#/definitions/SDConsumerInvestmentsFeedbackInputModel'
       responses:
         200:
           description: Successful Service Feedback
           schema:
-            $ref: '#/definitions/SDSuitabilityCheckingFeedbackOutputModel'
-  /suitability-checking/{sd-reference-id}:
+            $ref: '#/definitions/SDConsumerInvestmentsFeedbackOutputModel'
+  /consumer-investments/{sd-reference-id}:
     get:
       tags:
       - retrieve
-      operationId: retrieveSDSuitabilityChecking
-      summary: Analytical views maintained by the SDSuitabilityChecking service center for management reporting and analysis purposes
-      description: Analytical views maintained by the SDSuitabilityChecking service center for management reporting and analysis purposes
+      operationId: retrieveSDConsumerInvestments
+      summary: Analytical views maintained by the SDConsumerInvestments service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDConsumerInvestments service center for management reporting and analysis purposes
       produces:
       - application/json
       parameters:
       - in: path
         name: sd-reference-id
         required: true
-        description: SDSuitabilityChecking Servicing Session Reference
+        description: SDConsumerInvestments Servicing Session Reference
         type: string
       - in: query
         name: queryparams
         required: false
-        description: Query params from schema '#/definitions/SDSuitabilityCheckingRetrieveInputModel'
+        description: Query params from schema '#/definitions/SDConsumerInvestmentsRetrieveInputModel'
         type: string
       responses:
         200:
           description: Successful Service Retrieve
           schema:
-            $ref: '#/definitions/SDSuitabilityCheckingRetrieveOutputModel'
-  /suitability-checking/{sd-reference-id}/suitability-assessment/evaluation:
+            $ref: '#/definitions/SDConsumerInvestmentsRetrieveOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/initiation:
     post:
       tags:
-      - evaluate
-      operationId: evaluateSuitabilityAssessment
-      summary: Details of a new SuitabilityAssessment instance
-      description: Evaluate the suitability of a proposed transaction
+      - initiate
+      operationId: initiateConsumerSecuritiesOrderTransaction
+      summary: Details of a new ConsumerSecuritiesOrderTransaction instance
+      description: Initiate a consumer securities order
       produces:
       - application/json
       parameters:
       - name: sd-reference-id
         in: path
-        description: Suitability Checking Servicing Session Reference
+        description: Consumer Investments Servicing Session Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: SuitabilityAssessment Request Payload
+        description: ConsumerSecuritiesOrderTransaction Request Payload
         schema:
-          $ref: '#/definitions/CRSuitabilityAssessmentEvaluateInputModel'
+          $ref: '#/definitions/CRConsumerSecuritiesOrderTransactionInitiateInputModel'
       responses:
         201:
-          description: Successful evaluation of new SuitabilityAssessment instance
+          description: Successful initiation of new ConsumerSecuritiesOrderTransaction instance
           schema:
-            $ref: '#/definitions/CRSuitabilityAssessmentEvaluateOutputModel'
-  /suitability-checking/{sd-reference-id}/suitability-assessment/{cr-reference-id}/update:
+            $ref: '#/definitions/CRConsumerSecuritiesOrderTransactionInitiateOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/{cr-reference-id}/update:
     put:
       tags:
       - update
-      operationId: updateSuitabilityAssessment
-      summary: Update to any amendable fields of the SuitabilityAssessment instance
-      description: Update details of a suitability evaluation
+      operationId: updateConsumerSecuritiesOrderTransaction
+      summary: Update to any amendable fields of the ConsumerSecuritiesOrderTransaction instance
+      description: Update details on an active consumer securities order
       produces:
       - application/json
       parameters:
       - name: sd-reference-id
         in: path
-        description: Suitability Checking Servicing Session Reference
+        description: Consumer Investments Servicing Session Reference
         required: true
         type: string
       - name: cr-reference-id
         in: path
-        description: Suitability Assessment Instance Reference
+        description: Consumer Securities Order Transaction Instance Reference
         required: true
         type: string
       - in: body
         name: body
         required: true
-        description: Suitability Assessment Request Payload
+        description: Consumer Securities Order Transaction Request Payload
         schema:
-          $ref: '#/definitions/CRSuitabilityAssessmentUpdateInputModel'
+          $ref: '#/definitions/CRConsumerSecuritiesOrderTransactionUpdateInputModel'
       responses:
         200:
-          description: Successfully Updated Suitability Assessment Instance
+          description: Successfully Updated Consumer Securities Order Transaction Instance
           schema:
-            $ref: '#/definitions/CRSuitabilityAssessmentUpdateOutputModel'
-  /suitability-checking/{sd-reference-id}/suitability-assessment/{cr-reference-id}/exchange:
-    put:
-      tags:
-      - exchange
-      operationId: exchangeSuitabilityAssessmentUpdate
-      summary: Handle an external exchange (e.g. accept, reject, verify)
-      description: Accept, reject, etc. aspects of a suitability evaluation
-      produces:
-      - application/json
-      parameters:
-      - name: sd-reference-id
-        in: path
-        description: Suitability Checking Servicing Session Reference
-        required: true
-        type: string
-      - name: cr-reference-id
-        in: path
-        description: Suitability Assessment Instance Reference
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Suitability Assessment Request Payload
-        schema:
-          $ref: '#/definitions/CRSuitabilityAssessmentExchangeInputModel'
-      responses:
-        200:
-          description: Successful exchange of Suitability Assessment Instance
-          schema:
-            $ref: '#/definitions/CRSuitabilityAssessmentExchangeOutputModel'
-  /suitability-checking/{sd-reference-id}/suitability-assessment/{cr-reference-id}/requisition:
-    put:
-      tags:
-      - request
-      operationId: requestSuitabilityAssessmentUpdate
-      summary: Invoke a service request action against the SuitabilityAssessment instance
-      description: Request manual intervention into an active evaluation (e.g. consider additional input)
-      produces:
-      - application/json
-      parameters:
-      - name: sd-reference-id
-        in: path
-        description: Suitability Checking Servicing Session Reference
-        required: true
-        type: string
-      - name: cr-reference-id
-        in: path
-        description: Suitability Assessment Instance Reference
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Suitability Assessment Request Payload
-        schema:
-          $ref: '#/definitions/CRSuitabilityAssessmentRequestInputModel'
-      responses:
-        200:
-          description: Successful requisition of Suitability Assessment Instance
-          schema:
-            $ref: '#/definitions/CRSuitabilityAssessmentRequestOutputModel'
-  /suitability-checking/{sd-reference-id}/suitability-assessment/{cr-reference-id}/grant:
-    put:
-      tags:
-      - grant
-      operationId: grantSuitabilityAssessmentUpdate
-      summary: Invoke a grant request action from the SuitabilityAssessment instance to obtain access permission
-      description: Obtain a permission grant associated with the evaluation
-      produces:
-      - application/json
-      parameters:
-      - name: sd-reference-id
-        in: path
-        description: Suitability Checking Servicing Session Reference
-        required: true
-        type: string
-      - name: cr-reference-id
-        in: path
-        description: Suitability Assessment Instance Reference
-        required: true
-        type: string
-      - in: body
-        name: body
-        required: true
-        description: Suitability Assessment Request Payload
-        schema:
-          $ref: '#/definitions/CRSuitabilityAssessmentGrantInputModel'
-      responses:
-        200:
-          description: Successful grant of Suitability Assessment Instance
-          schema:
-            $ref: '#/definitions/CRSuitabilityAssessmentGrantOutputModel'
-  /suitability-checking/{sd-reference-id}/suitability-assessment/{cr-reference-id}:
+            $ref: '#/definitions/CRConsumerSecuritiesOrderTransactionUpdateOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/{cr-reference-id}:
     get:
       tags:
       - retrieve
-      operationId: retrieveSuitabilityChecking
-      summary: Invoke a reporting action to obtain a Suitability Assessment instance related report
-      description: Retrieve details about a suitability evaluation
+      operationId: retrieveConsumerInvestments
+      summary: Invoke a reporting action to obtain a Consumer Securities Order Transaction instance related report
+      description: Retrieve details about a consumer securities order
       produces:
       - application/json
       parameters:
       - name: sd-reference-id
         in: path
-        description: Suitability Checking Servicing Session Reference
+        description: Consumer Investments Servicing Session Reference
         required: true
         type: string
       - name: cr-reference-id
         in: path
-        description: Suitability Assessment Instance Reference
+        description: Consumer Securities Order Transaction Instance Reference
         required: true
         type: string
       - in: query
         name: queryparams
         required: false
-        description: Query params from schema '#/definitions/CRSuitabilityAssessmentRetrieveInputModel'
+        description: Query params from schema '#/definitions/CRConsumerSecuritiesOrderTransactionRetrieveInputModel'
         type: string
       responses:
         200:
-          description: Successfully Retrieved Suitability Assessment Instance
+          description: Successfully Retrieved Consumer Securities Order Transaction Instance
           schema:
-            $ref: '#/definitions/CRSuitabilityAssessmentRetrieveOutputModel'
-  /suitability-checking/{sd-reference-id}/suitability-assessment:
+            $ref: '#/definitions/CRConsumerSecuritiesOrderTransactionRetrieveOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/{cr-reference-id}/quote/{bq-reference-id}/:
     get:
       tags:
       - retrieve
-      operationId: RetrieveSuitabilityCheckingReferenceIds
+      operationId: retrieveConsumerSecuritiesOrderTransactionQuote
+      summary: Invoke a reporting action to obtain a Quote instance related report.
+      description: Retrieve bank quote for a security .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Investments Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Securities Order Transaction Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Quote Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQQuoteRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Quote Instance Record
+          schema:
+            $ref: '#/definitions/BQQuoteRetrieveOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/{cr-reference-id}/compliance/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerSecuritiesOrderTransactionCompliance
+      summary: Invoke a reporting action to obtain a Compliance instance related report.
+      description: Retrieve details about a consumer securities order compliance check .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Investments Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Securities Order Transaction Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: Compliance Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQComplianceRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved Compliance Instance Record
+          schema:
+            $ref: '#/definitions/BQComplianceRetrieveOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/{cr-reference-id}/fundingcheck/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerSecuritiesOrderTransactionFundingCheck
+      summary: Invoke a reporting action to obtain a FundingCheck instance related report.
+      description: Retrieve details about a funding check for a consumer securities order .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Investments Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Securities Order Transaction Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: FundingCheck Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQFundingCheckRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved FundingCheck Instance Record
+          schema:
+            $ref: '#/definitions/BQFundingCheckRetrieveOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/{cr-reference-id}/orderinitiation/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeConsumerSecuritiesOrderTransactionOrderInitiationUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject etc. a proposed consumer securities order
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Investments Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Securities Order Transaction Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OrderInitiation Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: OrderInitiation request payload
+        schema:
+          $ref: '#/definitions/BQOrderInitiationExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of OrderInitiation Instance Record
+          schema:
+            $ref: '#/definitions/BQOrderInitiationExchangeOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/{cr-reference-id}/orderinitiation/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveConsumerSecuritiesOrderTransactionOrderInitiation
+      summary: Invoke a reporting action to obtain a OrderInitiation instance related report.
+      description: Retrieve details about a consumer securities order .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Consumer Investments Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Consumer Securities Order Transaction Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: OrderInitiation Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQOrderInitiationRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved OrderInitiation Instance Record
+          schema:
+            $ref: '#/definitions/BQOrderInitiationRetrieveOutputModel'
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveConsumerInvestmentsReferenceIds
       summary: Retrieve CR Ids
       produces:
       - application/json
       parameters:
       - name: sd-reference-id
         in: path
-        description: Suitability Checking Servicing Session Reference
+        description: Consumer Investments Servicing Session Reference
         required: true
         type: string
       - name : collection-filter
         in: query
-        description: Filter to refine the result set. ex- SuitabilityChecking Instance Status='active'
+        description: Filter to refine the result set. ex- ConsumerInvestments Instance Status='active'
         required: false
         type: string
       responses:
@@ -326,11 +409,11 @@ paths:
             items:
               type: string
             example: ['ID726464', 'ID7264642']
-  /suitability-checking/suitability-assessment/behavior-qualifiers/:
+  /consumer-investments/consumer-securities-order-transaction/behavior-qualifiers/:
     get:
       tags:
       - retrieve
-      operationId: RetrieveSuitabilityCheckingBehaviorQualifiers
+      operationId: RetrieveConsumerInvestmentsBehaviorQualifiers
       summary: Retrieve BQ names
       produces:
       - application/json
@@ -341,34 +424,34 @@ paths:
             type: array
             items:
               type: string
-            example: []
-  /suitability-checking/{sd-reference-id}/suitability-assessment/{cr-reference-id}/{behavior-qualifier}/:
+            example: [ 'Quote',  'Compliance',  'FundingCheck',  'OrderInitiation', ]
+  /consumer-investments/{sd-reference-id}/consumer-securities-order-transaction/{cr-reference-id}/{behavior-qualifier}/:
     get:
       tags:
       - retrieve
-      operationId: RetrieveSuitabilityCheckingBehaviorQualifierReferenceIds
+      operationId: RetrieveConsumerInvestmentsBehaviorQualifierReferenceIds
       summary: Retrieve Behavior Qualifier Reference Ids
       produces:
       - application/json
       parameters:
       - name: sd-reference-id
         in: path
-        description: Suitability Checking Servicing Session Reference
+        description: Consumer Investments Servicing Session Reference
         required: true
         type: string
       - name: cr-reference-id
         in: path
-        description: Suitability Assessment Instance Reference
+        description: Consumer Securities Order Transaction Instance Reference
         required: true
         type: string
       - name : behavior-qualifier
         in: path
-        description: Behavior Qualifier Name. ex- 
+        description: Behavior Qualifier Name. ex- OrderInitiation
         required: true
         type: string
       - name : collection-filter
         in: query
-        description: Filter to refine the result set. ex-  Instance Status = 'pending'
+        description: Filter to refine the result set. ex- OrderInitiation Instance Status = 'pending'
         required: false
         type: string
       responses:
@@ -378,9 +461,9 @@ paths:
             type: array
             items:
               type: string
-            example: [ID1, ID2]
+            example: [OrderInitiationID1, OrderInitiationID2]
 definitions:
- SDSuitabilityCheckingActivateInputModel:
+ SDConsumerInvestmentsActivateInputModel:
   type: object
   properties: 
    serviceDomainActivationActionTaskRecord:
@@ -428,7 +511,7 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The default activation setting for the offered service configuration parameter 
- SDSuitabilityCheckingActivateOutputModel:
+ SDConsumerInvestmentsActivateOutputModel:
   type: object
   properties: 
    serviceDomainActivationActionTaskReference:
@@ -533,7 +616,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: The current operating status of the overall servicing session
- SDSuitabilityCheckingConfigureInputModel:
+ SDConsumerInvestmentsConfigureInputModel:
   type: object
   properties: 
    serviceDomainConfigurationActionTaskRecord:
@@ -620,7 +703,7 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Terms and conditions covering the service agreement
- SDSuitabilityCheckingConfigureOutputModel:
+ SDConsumerInvestmentsConfigureOutputModel:
   type: object
   properties: 
    serviceDomainConfigurationActionTaskReference:
@@ -705,7 +788,7 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: The current operating status of the overall servicing session
- SDSuitabilityCheckingFeedbackInputModel:
+ SDConsumerInvestmentsFeedbackInputModel:
   type: object
   properties: 
    serviceDomainFeedbackActionTaskRecord:
@@ -750,7 +833,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The content of the feedback in any suitable format and media
- SDSuitabilityCheckingFeedbackOutputModel:
+ SDConsumerInvestmentsFeedbackOutputModel:
   type: object
   properties: 
    serviceDomainFeedbackActionTaskReference:
@@ -789,7 +872,7 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to business unit/employee responsible for handling feedback
- SDSuitabilityCheckingRetrieveInputModel:
+ SDConsumerInvestmentsRetrieveInputModel:
   type: object
   properties: 
    serviceDomainRetrieveActionTaskRecord:
@@ -856,7 +939,7 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: The version details of the service when appropriate
- SDSuitabilityCheckingRetrieveOutputModel:
+ SDConsumerInvestmentsRetrieveOutputModel:
   type: object
   properties: 
    serviceDomainRetrieveActionTaskReference:
@@ -1023,77 +1106,77 @@ definitions:
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
           general-info: Schedule defining when the accessed service is available
- CRSuitabilityAssessmentEvaluateInputModel:
+ CRConsumerSecuritiesOrderTransactionInitiateInputModel:
   type: object
   properties: 
-   suitabilityCheckingServicingSessionReference:
+   consumerInvestmentsServicingSessionReference:
     type: string
-    example: "SCSSR737590"
+    example: "CISSR765387"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to the active servicing session
-   suitabilityAssessmentEvaluateActionRecord:
+   consumerSecuritiesOrderTransactionInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Evaluate service call input and output record
-   suitabilityAssessmentInstanceStatus:
+      general-info: The Initiate service call input and output record
+   consumerSecuritiesOrderTransactionInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Suitability Assessment instance (e.g. initialised, pending, active)
-   suitabilityAssessmentInstanceRecord:
+      general-info: The status of the Consumer Securities Order Transaction instance (e.g. initialised, pending, active)
+   consumerSecuritiesOrderTransactionInstanceRecord:
     type: object
     properties:
-     employeeBusinessUnitReference:
-      type: string
-      example: "708257"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Business unit submitting the proposed transaction for review
-     customerReference:
-      type: string
-      example: "705438"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer related to the proposed transaction
-     marketOrderType:
+     consumerSecuritiesOrderInstructionType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of market order (e.g. Managed Investment, Corporate Finance)
-     investmentPortfolioInstanceReference:
+        general-info: The type of market order request (e.g. Customer discretion)
+     customerReference:
       type: string
-      example: "788520"
+      example: "759608"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the associated investment portfolio record of all holdings (referenced to check securities availability if necessary)
-     customerMarketOrderProcessingInstruction:
+        general-info: Reference to the account primary party/owner for the market order
+     employeeBusinessUnitReference:
+      type: string
+      example: "736163"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The employee/business unit placing the market order
+     investmentPortfolioInstanceReference:
+      type: string
+      example: "706046"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer investment portfolio record of all holdings (referenced to check securities availability if necessary)
+     consumerSecuritiesOrderProcessingInstruction:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any customer specific processing preferences or requirements
-     proposedMarketOrderTransaction:
+     consumerSecuritiesOrderTransaction:
       type: object
       properties:
        investmentAccountFulfillmentArrangementInstanceReference:
         type: string
-        example: "723717"
+        example: "713511"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the underlying investment account supporting the transaction
        currentAccountFulfillmentArrangementInstanceReference:
         type: string
-        example: "797310"
+        example: "719646"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1103,7 +1186,7 @@ definitions:
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The type of market order (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order)
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
        securityType:
         type: string
         description: |
@@ -1127,195 +1210,77 @@ definitions:
            `status: Not Mapped`
             core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
             general-info: Value of the specific date type
-     suitabilityAssessmentType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type and make-up of suitability compliance tests referenced in the assessment
-     documentDirectoryEntryInstanceReference:
-      type: string
-      example: "786704"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: The document reference for any documents accessed and generated (e.g. disclosures)
- CRSuitabilityAssessmentEvaluateOutputModel:
+ CRConsumerSecuritiesOrderTransactionInitiateOutputModel:
   type: object
   properties: 
-   suitabilityAssessmentInstanceReference:
+   consumerSecuritiesOrderTransactionInstanceReference:
     type: string
-    example: "SAIR761514"
+    example: "CSOTIR794160"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Suitability Assessment instance
-   suitabilityAssessmentEvaluateActionReference:
+      general-info: Reference to the Consumer Securities Order Transaction instance
+   consumerSecuritiesOrderTransactionInitiateActionReference:
     type: string
-    example: "SAEAR799982"
+    example: "CSOTIAR792516"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to an Evaluate service call
-   suitabilityAssessmentEvaluateActionRecord:
+      general-info: Reference to an Initiate service call
+   consumerSecuritiesOrderTransactionInitiateActionRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The Evaluate service call input and output record
-   suitabilityAssessmentInstanceStatus:
+      general-info: The Initiate service call input and output record
+   consumerSecuritiesOrderTransactionInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: The status of the Suitability Assessment instance (e.g. initialised, pending, active)
-   suitabilityAssessmentInstanceRecord:
+      general-info: The status of the Consumer Securities Order Transaction instance (e.g. initialised, pending, active)
+   consumerSecuritiesOrderTransactionInstanceRecord:
     type: object
     properties:
-     proposedMarketOrderTransaction:
-      type: object
-      properties:
-       investmentAccountFulfillmentArrangementInstanceReference:
-        type: string
-        example: "723717"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the underlying investment account supporting the transaction
-       currentAccountFulfillmentArrangementInstanceReference:
-        type: string
-        example: "797310"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the underlying cash account supporting the transaction
-       marketOrderType:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The type of market order (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order)
-       securityType:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The security to be traded
-       amount:
-        type: string
-        example: USD 250
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-          general-info: The volume of shares to be bought or sold
-       dateType:
-        type: object
-        properties:
-         date:
-          type: string
-          example: "09-22-2018"
-          description: |
-           `status: Not Mapped`
-            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-            general-info: Value of the specific date type
-     suitabilityAssessmentType:
+     consumerSecuritiesOrderInstructionType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type and make-up of suitability compliance tests referenced in the assessment
-     documentDirectoryEntryInstanceReference:
-      type: string
-      example: "786704"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: The document reference for any documents accessed and generated (e.g. disclosures)
-     correspondenceInstanceReference:
-      type: string
-      example: "758056"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to any correspondence generated by the suitability check
-     suitabilityComplianceAssessmentWorkProducts:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Work documentation, forms and schedules produced and referenced during the assessment
-     suitabilityComplianceAssessmentResult:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Outcome/result of the suitability assessment, can include reported details if appropriate
- CRSuitabilityAssessmentUpdateInputModel:
-  type: object
-  properties: 
-   suitabilityCheckingServicingSessionReference:
-    type: string
-    example: "SCSSR779753"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
-   suitabilityAssessmentInstanceReference:
-    type: string
-    example: "SAIR789152"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Suitability Assessment instance
-   suitabilityAssessmentInstanceRecord:
-    type: object
-    properties:
-     employeeBusinessUnitReference:
-      type: string
-      example: "727980"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Business unit submitting the proposed transaction for review
-     customerReference:
-      type: string
-      example: "734148"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer related to the proposed transaction
-     marketOrderType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of market order (e.g. Managed Investment, Corporate Finance)
-     investmentPortfolioInstanceReference:
-      type: string
-      example: "790816"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the associated investment portfolio record of all holdings (referenced to check securities availability if necessary)
-     customerMarketOrderProcessingInstruction:
+        general-info: The type of market order request (e.g. Customer discretion)
+     consumerSecuritiesOrderProcessingInstruction:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any customer specific processing preferences or requirements
-     proposedMarketOrderTransaction:
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "736017"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for the order confirmation notice
+     correspondenceInstanceReference:
+      type: string
+      example: "731821"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the order confirmation
+     consumerSecuritiesOrderTransaction:
       type: object
       properties:
        investmentAccountFulfillmentArrangementInstanceReference:
         type: string
-        example: "733317"
+        example: "713511"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the underlying investment account supporting the transaction
        currentAccountFulfillmentArrangementInstanceReference:
         type: string
-        example: "794815"
+        example: "719646"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1325,7 +1290,7 @@ definitions:
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The type of market order (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order)
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
        securityType:
         type: string
         description: |
@@ -1349,39 +1314,120 @@ definitions:
            `status: Not Mapped`
             core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
             general-info: Value of the specific date type
-     suitabilityAssessmentType:
+ CRConsumerSecuritiesOrderTransactionUpdateInputModel:
+  type: object
+  properties: 
+   consumerInvestmentsServicingSessionReference:
+    type: string
+    example: "CISSR735409"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   consumerSecuritiesOrderTransactionInstanceReference:
+    type: string
+    example: "CSOTIR767473"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Consumer Securities Order Transaction instance
+   consumerSecuritiesOrderTransactionInstanceRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderInstructionType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type and make-up of suitability compliance tests referenced in the assessment
+        general-info: The type of market order request (e.g. Customer discretion)
+     customerReference:
+      type: string
+      example: "760806"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the account primary party/owner for the market order
+     employeeBusinessUnitReference:
+      type: string
+      example: "744201"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The employee/business unit placing the market order
+     investmentPortfolioInstanceReference:
+      type: string
+      example: "737639"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer investment portfolio record of all holdings (referenced to check securities availability if necessary)
+     consumerSecuritiesOrderProcessingInstruction:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any customer specific processing preferences or requirements
      documentDirectoryEntryInstanceReference:
       type: string
-      example: "703137"
+      example: "719302"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: The document reference for any documents accessed and generated (e.g. disclosures)
+        general-info: The document reference for the order confirmation notice
      correspondenceInstanceReference:
       type: string
-      example: "715919"
+      example: "791747"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to any correspondence generated by the suitability check
-     suitabilityComplianceAssessmentWorkProducts:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Work documentation, forms and schedules produced and referenced during the assessment
-     suitabilityComplianceAssessmentResult:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Outcome/result of the suitability assessment, can include reported details if appropriate
-   suitabilityAssessmentUpdateActionTaskRecord:
+        general-info: Reference to the correspondence generated for the order confirmation
+     consumerSecuritiesOrderTransaction:
+      type: object
+      properties:
+       investmentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "794232"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying investment account supporting the transaction
+       currentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "736620"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying cash account supporting the transaction
+       marketOrderType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
+       securityType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The security to be traded
+       amount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The volume of shares to be bought or sold
+       dateType:
+        type: object
+        properties:
+         date:
+          type: string
+          example: "09-22-2018"
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+            general-info: Value of the specific date type
+   consumerSecuritiesOrderTransactionUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1393,58 +1439,72 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the update action service request
- CRSuitabilityAssessmentUpdateOutputModel:
+ CRConsumerSecuritiesOrderTransactionUpdateOutputModel:
   type: object
   properties: 
-   suitabilityAssessmentInstanceRecord:
+   consumerSecuritiesOrderTransactionInstanceRecord:
     type: object
     properties:
-     employeeBusinessUnitReference:
-      type: string
-      example: "727980"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Business unit submitting the proposed transaction for review
-     customerReference:
-      type: string
-      example: "734148"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer related to the proposed transaction
-     marketOrderType:
+     consumerSecuritiesOrderInstructionType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of market order (e.g. Managed Investment, Corporate Finance)
-     investmentPortfolioInstanceReference:
+        general-info: The type of market order request (e.g. Customer discretion)
+     customerReference:
       type: string
-      example: "790816"
+      example: "760806"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the associated investment portfolio record of all holdings (referenced to check securities availability if necessary)
-     customerMarketOrderProcessingInstruction:
+        general-info: Reference to the account primary party/owner for the market order
+     employeeBusinessUnitReference:
+      type: string
+      example: "744201"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The employee/business unit placing the market order
+     investmentPortfolioInstanceReference:
+      type: string
+      example: "737639"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer investment portfolio record of all holdings (referenced to check securities availability if necessary)
+     consumerSecuritiesOrderProcessingInstruction:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any customer specific processing preferences or requirements
-     proposedMarketOrderTransaction:
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "719302"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for the order confirmation notice
+     correspondenceInstanceReference:
+      type: string
+      example: "791747"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the order confirmation
+     consumerSecuritiesOrderTransaction:
       type: object
       properties:
        investmentAccountFulfillmentArrangementInstanceReference:
         type: string
-        example: "733317"
+        example: "794232"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the underlying investment account supporting the transaction
        currentAccountFulfillmentArrangementInstanceReference:
         type: string
-        example: "794815"
+        example: "736620"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -1454,7 +1514,7 @@ definitions:
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The type of market order (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order)
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
        securityType:
         type: string
         description: |
@@ -1478,46 +1538,14 @@ definitions:
            `status: Not Mapped`
             core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
             general-info: Value of the specific date type
-     suitabilityAssessmentType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type and make-up of suitability compliance tests referenced in the assessment
-     documentDirectoryEntryInstanceReference:
-      type: string
-      example: "703137"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: The document reference for any documents accessed and generated (e.g. disclosures)
-     correspondenceInstanceReference:
-      type: string
-      example: "715919"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to any correspondence generated by the suitability check
-     suitabilityComplianceAssessmentWorkProducts:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Work documentation, forms and schedules produced and referenced during the assessment
-     suitabilityComplianceAssessmentResult:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Outcome/result of the suitability assessment, can include reported details if appropriate
-   suitabilityAssessmentUpdateActionTaskReference:
+   consumerSecuritiesOrderTransactionUpdateActionTaskReference:
     type: string
-    example: "SAUATR730002"
+    example: "CSOTUATR776439"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
       general-info: Reference to an update service call
-   suitabilityAssessmentUpdateActionTaskRecord:
+   consumerSecuritiesOrderTransactionUpdateActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
@@ -1529,30 +1557,909 @@ definitions:
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: Details of the Update action service response
- CRSuitabilityAssessmentExchangeInputModel:
+ CRConsumerSecuritiesOrderTransactionRetrieveInputModel:
   type: object
   properties: 
-   suitabilityCheckingServicingSessionReference:
+   consumerSecuritiesOrderTransactionRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   consumerSecuritiesOrderTransactionRetrieveActionRequest:
     type: string
-    example: "SCSSR728770"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   consumerSecuritiesOrderTransactionInstanceReportRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderTransactionInstanceReportReference:
+      type: string
+      example: "781532"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+     consumerSecuritiesOrderTransactionInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     consumerSecuritiesOrderTransactionInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+   consumerSecuritiesOrderTransactionInstanceAnalysis:
+    type: object
+    properties:
+     consumerSecuritiesOrderTransactionInstanceAnalysisReference:
+      type: string
+      example: "750177"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+     consumerSecuritiesOrderTransactionInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     consumerSecuritiesOrderTransactionInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+ CRConsumerSecuritiesOrderTransactionRetrieveOutputModel:
+  type: object
+  properties: 
+   consumerSecuritiesOrderTransactionInstanceRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderInstructionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of market order request (e.g. Customer discretion)
+     customerReference:
+      type: string
+      example: "741401"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the account primary party/owner for the market order
+     employeeBusinessUnitReference:
+      type: string
+      example: "753940"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The employee/business unit placing the market order
+     investmentPortfolioInstanceReference:
+      type: string
+      example: "756802"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer investment portfolio record of all holdings (referenced to check securities availability if necessary)
+     consumerSecuritiesOrderProcessingInstruction:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any customer specific processing preferences or requirements
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "776231"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for the order confirmation notice
+     correspondenceInstanceReference:
+      type: string
+      example: "795966"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the order confirmation
+     consumerSecuritiesOrderTransaction:
+      type: object
+      properties:
+       investmentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "778672"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying investment account supporting the transaction
+       currentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "768767"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying cash account supporting the transaction
+       marketOrderType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
+       securityType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The security to be traded
+       amount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The volume of shares to be bought or sold
+       dateType:
+        type: object
+        properties:
+         date:
+          type: string
+          example: "09-22-2018"
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+            general-info: Value of the specific date type
+   consumerSecuritiesOrderTransactionRetrieveActionTaskReference:
+    type: string
+    example: "CSOTRATR714464"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
-   suitabilityAssessmentInstanceReference:
+      general-info: Reference to a Consumer Securities Order Transaction instance retrieve service call
+   consumerSecuritiesOrderTransactionRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   consumerSecuritiesOrderTransactionRetrieveActionResponse:
     type: string
-    example: "SAIR764379"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   consumerSecuritiesOrderTransactionInstanceReportRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderTransactionInstanceReportData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     consumerSecuritiesOrderTransactionInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     consumerSecuritiesOrderTransactionInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   consumerSecuritiesOrderTransactionInstanceAnalysis:
+    type: object
+    properties:
+     consumerSecuritiesOrderTransactionInstanceAnalysisData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     consumerSecuritiesOrderTransactionInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     consumerSecuritiesOrderTransactionInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQQuoteRetrieveInputModel:
+  type: object
+  properties: 
+   quoteRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   quoteRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   quoteInstanceReport:
+    type: object
+    properties:
+     quoteInstanceReportReference:
+      type: string
+      example: "757458"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   quoteInstanceAnalysis:
+    type: object
+    properties:
+     quoteInstanceAnalysisReference:
+      type: string
+      example: "776804"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQQuoteRetrieveOutputModel:
+  type: object
+  properties: 
+   consumerSecuritiesOrderTransactionInstanceRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderInstructionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of market order request (e.g. Customer discretion)
+     customerReference:
+      type: string
+      example: "712189"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the account primary party/owner for the market order
+     employeeBusinessUnitReference:
+      type: string
+      example: "791696"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The employee/business unit placing the market order
+     investmentPortfolioInstanceReference:
+      type: string
+      example: "794627"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer investment portfolio record of all holdings (referenced to check securities availability if necessary)
+     consumerSecuritiesOrderProcessingInstruction:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any customer specific processing preferences or requirements
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "706345"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for the order confirmation notice
+     correspondenceInstanceReference:
+      type: string
+      example: "790446"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the order confirmation
+     consumerSecuritiesOrderTransaction:
+      type: object
+      properties:
+       investmentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "779651"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying investment account supporting the transaction
+       currentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "794985"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying cash account supporting the transaction
+       marketOrderType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
+       securityType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The security to be traded
+       amount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The volume of shares to be bought or sold
+       dateType:
+        type: object
+        properties:
+         date:
+          type: string
+          example: "09-22-2018"
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+            general-info: Value of the specific date type
+   quoteInstanceRecord:
+    type: object
+    properties:
+     securitiesPrice:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The prevailing bank buy/sell quote for the security
+   quoteRetrieveActionTaskReference:
+    type: string
+    example: "QRATR782532"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Suitability Assessment instance
-   suitabilityAssessmentExchangeActionTaskRecord:
+      general-info: Reference to a Quote instance retrieve service call
+   quoteRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   quoteRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   quoteInstanceReport:
+    type: object
+    properties:
+     quoteInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     quoteInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     quoteInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     quoteInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   quoteInstanceAnalysis:
+    type: object
+    properties:
+     quoteInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     quoteInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     quoteInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     quoteInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQComplianceRetrieveInputModel:
+  type: object
+  properties: 
+   complianceRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   complianceRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   complianceInstanceReport:
+    type: object
+    properties:
+     complianceInstanceReportReference:
+      type: string
+      example: "759416"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   complianceInstanceAnalysis:
+    type: object
+    properties:
+     complianceInstanceAnalysisReference:
+      type: string
+      example: "751572"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQComplianceRetrieveOutputModel:
+  type: object
+  properties: 
+   consumerSecuritiesOrderTransactionInstanceRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderInstructionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of market order request (e.g. Customer discretion)
+     customerReference:
+      type: string
+      example: "730978"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the account primary party/owner for the market order
+     employeeBusinessUnitReference:
+      type: string
+      example: "743053"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The employee/business unit placing the market order
+     investmentPortfolioInstanceReference:
+      type: string
+      example: "760892"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer investment portfolio record of all holdings (referenced to check securities availability if necessary)
+     consumerSecuritiesOrderProcessingInstruction:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any customer specific processing preferences or requirements
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "797954"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for the order confirmation notice
+     correspondenceInstanceReference:
+      type: string
+      example: "706312"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the order confirmation
+     consumerSecuritiesOrderTransaction:
+      type: object
+      properties:
+       investmentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "744220"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying investment account supporting the transaction
+       currentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "750272"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying cash account supporting the transaction
+       marketOrderType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
+       securityType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The security to be traded
+       amount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The volume of shares to be bought or sold
+       dateType:
+        type: object
+        properties:
+         date:
+          type: string
+          example: "09-22-2018"
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+            general-info: Value of the specific date type
+   complianceInstanceRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderTransactionComplianceCheckType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of compliance check performed (e.g. AML, Watch lists)
+     consumerSecuritiesOrderTransactionComplianceCheckResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The outcome of the compliance check
+     consumerSecuritiesOrderTransactionComplianceTaskResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Details of the overall compliance checking process
+   complianceRetrieveActionTaskReference:
+    type: string
+    example: "CRATR767785"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Compliance instance retrieve service call
+   complianceRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   complianceRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   complianceInstanceReport:
+    type: object
+    properties:
+     complianceInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     complianceInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     complianceInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     complianceInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   complianceInstanceAnalysis:
+    type: object
+    properties:
+     complianceInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     complianceInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     complianceInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     complianceInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQFundingCheckRetrieveInputModel:
+  type: object
+  properties: 
+   fundingCheckRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   fundingCheckRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   fundingCheckInstanceReport:
+    type: object
+    properties:
+     fundingCheckInstanceReportReference:
+      type: string
+      example: "770052"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   fundingCheckInstanceAnalysis:
+    type: object
+    properties:
+     fundingCheckInstanceAnalysisReference:
+      type: string
+      example: "761497"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQFundingCheckRetrieveOutputModel:
+  type: object
+  properties: 
+   consumerSecuritiesOrderTransactionInstanceRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderInstructionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of market order request (e.g. Customer discretion)
+     customerReference:
+      type: string
+      example: "711122"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the account primary party/owner for the market order
+     employeeBusinessUnitReference:
+      type: string
+      example: "794147"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The employee/business unit placing the market order
+     investmentPortfolioInstanceReference:
+      type: string
+      example: "755686"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer investment portfolio record of all holdings (referenced to check securities availability if necessary)
+     consumerSecuritiesOrderProcessingInstruction:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Any customer specific processing preferences or requirements
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "767782"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for the order confirmation notice
+     correspondenceInstanceReference:
+      type: string
+      example: "767925"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the order confirmation
+     consumerSecuritiesOrderTransaction:
+      type: object
+      properties:
+       investmentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "786475"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying investment account supporting the transaction
+       currentAccountFulfillmentArrangementInstanceReference:
+        type: string
+        example: "798015"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the underlying cash account supporting the transaction
+       marketOrderType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
+       securityType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The security to be traded
+       amount:
+        type: string
+        example: USD 250
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
+          general-info: The volume of shares to be bought or sold
+       dateType:
+        type: object
+        properties:
+         date:
+          type: string
+          example: "09-22-2018"
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+            general-info: Value of the specific date type
+   fundingCheckInstanceRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderTransactionFundingCheckResult:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The outcome of the funds available check
+   fundingCheckRetrieveActionTaskReference:
+    type: string
+    example: "FCRATR761647"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Funding Check instance retrieve service call
+   fundingCheckRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   fundingCheckRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   fundingCheckInstanceReport:
+    type: object
+    properties:
+     fundingCheckInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     fundingCheckInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     fundingCheckInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     fundingCheckInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   fundingCheckInstanceAnalysis:
+    type: object
+    properties:
+     fundingCheckInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     fundingCheckInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     fundingCheckInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     fundingCheckInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQOrderInitiationExchangeInputModel:
+  type: object
+  properties: 
+   consumerSecuritiesOrderTransactionInstanceReference:
+    type: string
+    example: "CSOTIR776193"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Consumer Securities Order Transaction instance
+   orderInitiationInstanceReference:
+    type: string
+    example: "OIIR745631"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Order Initiation instance
+   orderInitiationExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
-   suitabilityAssessmentExchangeActionRequest:
+   orderInitiationExchangeActionRequest:
     type: object
     properties:
      exchangeActionType:
@@ -1561,478 +2468,135 @@ definitions:
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: The type of exchange (e.g. accept, reject, verify)
- CRSuitabilityAssessmentExchangeOutputModel:
+ BQOrderInitiationExchangeOutputModel:
   type: object
   properties: 
-   suitabilityAssessmentExchangeActionTaskReference:
+   orderInitiationExchangeActionTaskReference:
     type: string
-    example: "SAEATR716301"
+    example: "OIEATR765835"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Suitability Assessment instance exchange service call
-   suitabilityAssessmentExchangeActionTaskRecord:
+      general-info: Reference to a Order Initiation instance exchange service call
+   orderInitiationExchangeActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The exchange service call consolidated processing record
-   suitabilityAssessmentExchangeActionResponse:
+   orderInitiationExchangeActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the exchange action service response
- CRSuitabilityAssessmentRequestInputModel:
-  type: object
-  properties: 
-   suitabilityCheckingServicingSessionReference:
-    type: string
-    example: "SCSSR773612"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
-   suitabilityAssessmentInstanceReference:
-    type: string
-    example: "SAIR720043"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Suitability Assessment instance
-   suitabilityAssessmentInstanceRecord:
-    type: object
-    properties:
-     employeeBusinessUnitReference:
-      type: string
-      example: "792812"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Business unit submitting the proposed transaction for review
-     customerReference:
-      type: string
-      example: "735793"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer related to the proposed transaction
-     marketOrderType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of market order (e.g. Managed Investment, Corporate Finance)
-     investmentPortfolioInstanceReference:
-      type: string
-      example: "760736"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the associated investment portfolio record of all holdings (referenced to check securities availability if necessary)
-     customerMarketOrderProcessingInstruction:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Any customer specific processing preferences or requirements
-     proposedMarketOrderTransaction:
-      type: object
-      properties:
-       investmentAccountFulfillmentArrangementInstanceReference:
-        type: string
-        example: "718032"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the underlying investment account supporting the transaction
-       currentAccountFulfillmentArrangementInstanceReference:
-        type: string
-        example: "720930"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the underlying cash account supporting the transaction
-       marketOrderType:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The type of market order (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order)
-       securityType:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The security to be traded
-       amount:
-        type: string
-        example: USD 250
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-          general-info: The volume of shares to be bought or sold
-       dateType:
-        type: object
-        properties:
-         date:
-          type: string
-          example: "09-22-2018"
-          description: |
-           `status: Not Mapped`
-            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-            general-info: Value of the specific date type
-     suitabilityAssessmentType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type and make-up of suitability compliance tests referenced in the assessment
-     documentDirectoryEntryInstanceReference:
-      type: string
-      example: "783001"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: The document reference for any documents accessed and generated (e.g. disclosures)
-     correspondenceInstanceReference:
-      type: string
-      example: "738449"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to any correspondence generated by the suitability check
-     suitabilityComplianceAssessmentWorkProducts:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Work documentation, forms and schedules produced and referenced during the assessment
-     suitabilityComplianceAssessmentResult:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Outcome/result of the suitability assessment, can include reported details if appropriate
-   suitabilityAssessmentRequestActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The request service call consolidated processing record
-   requestRecordType:
-    type: object
-    properties:
-     requestInputRecord:
-      type: object
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-        general-info: Request service record (e.g. rework function, refresh record, process workstep)
- CRSuitabilityAssessmentRequestOutputModel:
-  type: object
-  properties: 
-   suitabilityAssessmentInstanceRecord:
-    type: object
-    properties:
-     employeeBusinessUnitReference:
-      type: string
-      example: "792812"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Business unit submitting the proposed transaction for review
-     customerMarketOrderProcessingInstruction:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Any customer specific processing preferences or requirements
-     proposedMarketOrderTransaction:
-      type: object
-      properties:
-       investmentAccountFulfillmentArrangementInstanceReference:
-        type: string
-        example: "718032"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the underlying investment account supporting the transaction
-       currentAccountFulfillmentArrangementInstanceReference:
-        type: string
-        example: "720930"
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-          general-info: Reference to the underlying cash account supporting the transaction
-       marketOrderType:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The type of market order (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order)
-       securityType:
-        type: string
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The security to be traded
-       amount:
-        type: string
-        example: USD 250
-        description: |
-         `status: Not Mapped`
-          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Amount
-          general-info: The volume of shares to be bought or sold
-       dateType:
-        type: object
-        properties:
-         date:
-          type: string
-          example: "09-22-2018"
-          description: |
-           `status: Not Mapped`
-            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
-            general-info: Value of the specific date type
-     suitabilityAssessmentType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type and make-up of suitability compliance tests referenced in the assessment
-     documentDirectoryEntryInstanceReference:
-      type: string
-      example: "783001"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: The document reference for any documents accessed and generated (e.g. disclosures)
-     correspondenceInstanceReference:
-      type: string
-      example: "738449"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to any correspondence generated by the suitability check
-     suitabilityComplianceAssessmentWorkProducts:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Work documentation, forms and schedules produced and referenced during the assessment
-     suitabilityComplianceAssessmentResult:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Outcome/result of the suitability assessment, can include reported details if appropriate
-   suitabilityAssessmentRequestActionTaskReference:
-    type: string
-    example: "SARATR791682"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Suitability Assessment instance request service call
-   suitabilityAssessmentRequestActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The request service call consolidated processing record
-   requestRecordReference:
-    type: string
-    example: "RRR775268"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the service request record
-   requestResponseRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: Details of the request action service response
- CRSuitabilityAssessmentGrantInputModel:
-  type: object
-  properties: 
-   suitabilityCheckingServicingSessionReference:
-    type: string
-    example: "SCSSR754283"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the active servicing session
-   suitabilityAssessmentInstanceReference:
-    type: string
-    example: "SAIR770992"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the Suitability Assessment instance
-   suitabilityAssessmentGrantActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The grant service call consolidated processing record
-   grantRequestRecordType:
+   orderInitiationInstanceStatus:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-      general-info: Grant request type (e.g. access permission)
-   grantRequestInputRecord:
-    type: object
-    properties:
-     grantRequestDetails:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details of the permissions requested
- CRSuitabilityAssessmentGrantOutputModel:
+      general-info: The status of the Order Initiation instance (e.g. accepted, rejected, verified)
+ BQOrderInitiationRetrieveInputModel:
   type: object
   properties: 
-   suitabilityAssessmentGrantActionTaskReference:
-    type: string
-    example: "SAGATR769583"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Suitability Assessment instance grant service call
-   suitabilityAssessmentGrantActionTaskRecord:
-    type: object
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
-      general-info: The grant service call consolidated processing record
-   grantRequestRecordReference:
-    type: string
-    example: "GRRR748181"
-    description: |
-     `status: Not Mapped`
-      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to the grant request record
-   grantRequestResponseRecord:
-    type: object
-    properties:
-     grantPermissionDetails:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Details of the permissions granted
- CRSuitabilityAssessmentRetrieveInputModel:
-  type: object
-  properties: 
-   suitabilityAssessmentRetrieveActionTaskRecord:
+   orderInitiationRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   suitabilityAssessmentRetrieveActionRequest:
+   orderInitiationRetrieveActionRequest:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service request (lists requested reports)
-   suitabilityAssessmentInstanceReportRecord:
+   orderInitiationInstanceReport:
     type: object
     properties:
-     suitabilityAssessmentInstanceReportReference:
+     orderInitiationInstanceReportReference:
       type: string
-      example: "768940"
+      example: "705081"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance report
-     suitabilityAssessmentInstanceReportType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
-        general-info: The type of external report available
-     suitabilityAssessmentInstanceReportParameters:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The selection parameters for the report (e.g. period, content type)
-   suitabilityAssessmentInstanceAnalysis:
+   orderInitiationInstanceAnalysis:
     type: object
     properties:
-     suitabilityAssessmentInstanceAnalysisReference:
+     orderInitiationInstanceAnalysisReference:
       type: string
-      example: "759046"
+      example: "740837"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
         general-info: Reference to the control record instance analysis view
-     suitabilityAssessmentInstanceAnalysisReportType:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
-        general-info: The type of external performance analysis report available
-     suitabilityAssessmentInstanceAnalysisParameters:
-      type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
- CRSuitabilityAssessmentRetrieveOutputModel:
+ BQOrderInitiationRetrieveOutputModel:
   type: object
   properties: 
-   suitabilityAssessmentInstanceRecord:
+   consumerSecuritiesOrderTransactionInstanceRecord:
     type: object
     properties:
-     employeeBusinessUnitReference:
-      type: string
-      example: "761225"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Business unit submitting the proposed transaction for review
-     customerReference:
-      type: string
-      example: "726154"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the customer related to the proposed transaction
-     marketOrderType:
+     consumerSecuritiesOrderInstructionType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type of market order (e.g. Managed Investment, Corporate Finance)
-     investmentPortfolioInstanceReference:
+        general-info: The type of market order request (e.g. Customer discretion)
+     customerReference:
       type: string
-      example: "728688"
+      example: "742359"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to the associated investment portfolio record of all holdings (referenced to check securities availability if necessary)
-     customerMarketOrderProcessingInstruction:
+        general-info: Reference to the account primary party/owner for the market order
+     employeeBusinessUnitReference:
+      type: string
+      example: "713494"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The employee/business unit placing the market order
+     investmentPortfolioInstanceReference:
+      type: string
+      example: "700440"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the associated customer investment portfolio record of all holdings (referenced to check securities availability if necessary)
+     consumerSecuritiesOrderProcessingInstruction:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
         general-info: Any customer specific processing preferences or requirements
-     proposedMarketOrderTransaction:
+     documentDirectoryEntryInstanceReference:
+      type: string
+      example: "749605"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: The document reference for the order confirmation notice
+     correspondenceInstanceReference:
+      type: string
+      example: "708629"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the correspondence generated for the order confirmation
+     consumerSecuritiesOrderTransaction:
       type: object
       properties:
        investmentAccountFulfillmentArrangementInstanceReference:
         type: string
-        example: "715207"
+        example: "736872"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
           general-info: Reference to the underlying investment account supporting the transaction
        currentAccountFulfillmentArrangementInstanceReference:
         type: string
-        example: "700142"
+        example: "727774"
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
@@ -2042,7 +2606,7 @@ definitions:
         description: |
          `status: Not Mapped`
           core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-          general-info: The type of market order (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order)
+          general-info: The type of market order underlying the consumer securities order request (e.g. Day Order. Order on Open/Close, Fill or Kill, Limit Order - if allowed for consumer trading)
        securityType:
         type: string
         description: |
@@ -2066,94 +2630,96 @@ definitions:
            `status: Not Mapped`
             core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
             general-info: Value of the specific date type
-     suitabilityAssessmentType:
+   orderInitiationInstanceRecord:
+    type: object
+    properties:
+     consumerSecuritiesOrderTransactionInstanceReference:
       type: string
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: The type and make-up of suitability compliance tests referenced in the assessment
-     documentDirectoryEntryInstanceReference:
-      type: string
-      example: "711427"
+      example: "724766"
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: The document reference for any documents accessed and generated (e.g. disclosures)
-     correspondenceInstanceReference:
-      type: string
-      example: "733668"
-      description: |
-       `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-        general-info: Reference to any correspondence generated by the suitability check
-     suitabilityComplianceAssessmentWorkProducts:
+        general-info: The reference to the market order. Note this can be the internal bank 'order' made against the bank's managed position and may not result in a matched trade in the wholesale markets
+     consumerSecuritiesOrderTransactionInstanceStatus:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Work documentation, forms and schedules produced and referenced during the assessment
-     suitabilityComplianceAssessmentResult:
+        general-info: The returned status of the customer securities order
+     consumerSecuritiesOrderInitiationTaskResult:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
-        general-info: Outcome/result of the suitability assessment, can include reported details if appropriate
-   suitabilityAssessmentRetrieveActionTaskReference:
+        general-info: Details of the market order initiation task
+   orderInitiationRetrieveActionTaskReference:
     type: string
-    example: "SARATR737354"
+    example: "OIRATR776099"
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
-      general-info: Reference to a Suitability Assessment instance retrieve service call
-   suitabilityAssessmentRetrieveActionTaskRecord:
+      general-info: Reference to a Order Initiation instance retrieve service call
+   orderInitiationRetrieveActionTaskRecord:
     type: object
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
       general-info: The retrieve service call consolidated processing record
-   suitabilityAssessmentRetrieveActionResponse:
+   orderInitiationRetrieveActionResponse:
     type: string
     description: |
      `status: Not Mapped`
       core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
       general-info: Details of the retrieve action service response (lists returned reports)
-   suitabilityAssessmentInstanceReportRecord:
+   orderInitiationInstanceReport:
     type: object
     properties:
-     suitabilityAssessmentInstanceReportData:
-      type: string
+     orderInitiationInstanceReportRecord:
+      type: object
       description: |
        `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
-     suitabilityAssessmentInstanceReportType:
+     orderInitiationInstanceReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external report available
-     suitabilityAssessmentInstanceReport:
+     orderInitiationInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     orderInitiationInstanceReport:
       type: object
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The external report in any suitable form including selection filters where appropriate
-   suitabilityAssessmentInstanceAnalysis:
+   orderInitiationInstanceAnalysis:
     type: object
     properties:
-     suitabilityAssessmentInstanceAnalysisData:
-      type: string
+     orderInitiationInstanceAnalysisRecord:
+      type: object
       description: |
        `status: Not Mapped`
-        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
         general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
-     suitabilityAssessmentInstanceAnalysisReportType:
+     orderInitiationInstanceAnalysisReportType:
       type: string
       description: |
        `status: Not Mapped`
         core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
         general-info: The type of external performance analysis report available
-     suitabilityAssessmentInstanceAnalysisReport:
+     orderInitiationInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     orderInitiationInstanceAnalysisReport:
       type: object
       description: |
        `status: Not Mapped`
