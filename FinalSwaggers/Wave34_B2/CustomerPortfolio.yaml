@@ -1,0 +1,2725 @@
+swagger: '2.0'
+info:
+ version: '2.0.0'
+ title: 'Service Domain - Customer Portfolio'
+ description: >
+
+    ## Executive Summary:
+
+    Maintain a portfolio of analytical views of the customer base to support customer segment profitability and performance analysis
+
+    ## Example of Use:
+
+    Business development review customer segment performance in order to target customer relationship management priorities
+
+    ## Description:
+
+    Maintain a portfolio of view of the customer base with key customer data and consolidated activity details to support profitability and performance analysis across many possible customer segment dimensions
+
+host: virtserver.swaggerhub.com
+basePath: /BIAN/sd-customer-portfolio/2.0.0
+schemes:
+ - https
+paths:
+  /customer-portfolio/activation:
+    post:
+      tags:
+      - activate
+      operationId: activateSDCustomerPortfolio
+      summary: Activate  a SDCustomerPortfolio servicing session
+      description: Activate  a  SDCustomerPortfolio servicing session
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerPortfolio Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerPortfolioActivateInputModel'
+      responses:
+        201:
+          description: Successful Service Activation
+          schema:
+            $ref: '#/definitions/SDCustomerPortfolioActivateOutputModel'
+  /customer-portfolio/{sd-reference-id}/configuration:
+    put:
+      tags:
+      - configure
+      operationId: configureSDCustomerPortfolio
+      summary: Update an active SDCustomerPortfolio session configuration
+      description: Update an active SDCustomerPortfolio session configuration
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerPortfolio Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerPortfolio Configure Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerPortfolioConfigureInputModel'
+      responses:
+        200:
+          description: Successful Service Configuration
+          schema:
+            $ref: '#/definitions/SDCustomerPortfolioConfigureOutputModel'
+  /customer-portfolio/{sd-reference-id}/feedback:
+    put:
+      tags:
+      - feedback
+      operationId: feedbackSDCustomerPortfolio
+      summary: "Capturing feedback against the SDCustomerPortfolio service that can target different levels of detail: SD/CR/BQ"
+      description:  "Capturing feedback against the SDCustomerPortfolio service that can target different levels of detail: SD/CR/BQ"
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerPortfolio Servicing Session Reference
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: SDCustomerPortfolio Feedback Request Payload
+        schema:
+          $ref: '#/definitions/SDCustomerPortfolioFeedbackInputModel'
+      responses:
+        200:
+          description: Successful Service Feedback
+          schema:
+            $ref: '#/definitions/SDCustomerPortfolioFeedbackOutputModel'
+  /customer-portfolio/{sd-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveSDCustomerPortfolio
+      summary: Analytical views maintained by the SDCustomerPortfolio service center for management reporting and analysis purposes
+      description: Analytical views maintained by the SDCustomerPortfolio service center for management reporting and analysis purposes
+      produces:
+      - application/json
+      parameters:
+      - in: path
+        name: sd-reference-id
+        required: true
+        description: SDCustomerPortfolio Servicing Session Reference
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/SDCustomerPortfolioRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successful Service Retrieve
+          schema:
+            $ref: '#/definitions/SDCustomerPortfolioRetrieveOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/evaluation:
+    post:
+      tags:
+      - evaluate
+      operationId: evaluateCustomerSegmentAnalysis
+      summary: Details of a new CustomerSegmentAnalysis instance
+      description: Evaluate customer segment performance (trigger the analysis)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: CustomerSegmentAnalysis Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerSegmentAnalysisEvaluateInputModel'
+      responses:
+        201:
+          description: Successful evaluation of new CustomerSegmentAnalysis instance
+          schema:
+            $ref: '#/definitions/CRCustomerSegmentAnalysisEvaluateOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerSegmentAnalysis
+      summary: Update to any amendable fields of the CustomerSegmentAnalysis instance
+      description: Update settings or content for customer segment analysis activity
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Segment Analysis Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerSegmentAnalysisUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated Customer Segment Analysis Instance
+          schema:
+            $ref: '#/definitions/CRCustomerSegmentAnalysisUpdateOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerSegmentAnalysisUpdate
+      summary: Invoke a service request action against the CustomerSegmentAnalysis instance
+      description: Request manual intervention in the customer segment analysis activity (e.g. ad-hoc request)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Segment Analysis Request Payload
+        schema:
+          $ref: '#/definitions/CRCustomerSegmentAnalysisRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of Customer Segment Analysis Instance
+          schema:
+            $ref: '#/definitions/CRCustomerSegmentAnalysisRequestOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerPortfolio
+      summary: Invoke a reporting action to obtain a Customer Segment Analysis instance related report
+      description: Retrieve details about customer segment analysis activity
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/CRCustomerSegmentAnalysisRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully Retrieved Customer Segment Analysis Instance
+          schema:
+            $ref: '#/definitions/CRCustomerSegmentAnalysisRetrieveOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/performanceanalysis/evaluation:
+    post:
+      tags:
+      - evaluate
+      operationId: evaluateCustomerSegmentAnalysisPerformanceAnalysis
+      summary: Details of a new PerformanceAnalysis instance
+      description: Evaluate customer segment performance using a specific type of analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: Customer Segment Analysis Request Payload
+        schema:
+          $ref: '#/definitions/BQPerformanceAnalysisEvaluateInputModel'
+      responses:
+        201:
+          description: Successful evaluation of Customer Segment Analysis instance
+          schema:
+            $ref: '#/definitions/BQPerformanceAnalysisEvaluateOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/performanceanalysis/{bq-reference-id}/update:
+    put:
+      tags:
+      - update
+      operationId: updateCustomerSegmentAnalysisPerformanceAnalysis
+      summary: Update to any amendable fields of the PerformanceAnalysis instance
+      description: Update details of a specific customer segment performance analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PerformanceAnalysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PerformanceAnalysis Request Payload
+        schema:
+          $ref: '#/definitions/BQPerformanceAnalysisUpdateInputModel'
+      responses:
+        200:
+          description: Successfully Updated PerformanceAnalysis Instance
+          schema:
+            $ref: '#/definitions/BQPerformanceAnalysisUpdateOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/performanceanalysis/{bq-reference-id}/exchange:
+    put:
+      tags:
+      - exchange
+      operationId: exchangeCustomerSegmentAnalysisPerformanceAnalysisUpdate
+      summary: Handle an external exchange (e.g. accept, reject, verify)
+      description: Accept, reject, verify, etc. customer segment analysis
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PerformanceAnalysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PerformanceAnalysis request payload
+        schema:
+          $ref: '#/definitions/BQPerformanceAnalysisExchangeInputModel'
+      responses:
+        200:
+          description: Successful exchange of PerformanceAnalysis Instance Record
+          schema:
+            $ref: '#/definitions/BQPerformanceAnalysisExchangeOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/performanceanalysis/{bq-reference-id}/execution:
+    put:
+      tags:
+      - execute
+      operationId: executeCustomerSegmentAnalysisPerformanceAnalysisUpdate
+      summary: Invoke an automated execute action against the PerformanceAnalysis instance
+      description: Execute an automated action against on-going analysis (e.g. refresh source production data)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PerformanceAnalysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PerformanceAnalysis request payload
+        schema:
+          $ref: '#/definitions/BQPerformanceAnalysisExecuteInputModel'
+      responses:
+        200:
+          description: Successful execution of PerformanceAnalysis Instance Record
+          schema:
+            $ref: '#/definitions/BQPerformanceAnalysisExecuteOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/performanceanalysis/{bq-reference-id}/requisition:
+    put:
+      tags:
+      - request
+      operationId: requestCustomerSegmentAnalysisPerformanceAnalysisUpdate
+      summary: Invoke a service request action against the PerformanceAnalysis instance
+      description: Request manual intervention to on-going analysis (e.g. amend analysis scope/approach)
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PerformanceAnalysis Instance Reference
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        description: PerformanceAnalysis request payload
+        schema:
+          $ref: '#/definitions/BQPerformanceAnalysisRequestInputModel'
+      responses:
+        200:
+          description: Successful requisition of PerformanceAnalysis Instance Record
+          schema:
+            $ref: '#/definitions/BQPerformanceAnalysisRequestOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/performanceanalysis/{bq-reference-id}/:
+    get:
+      tags:
+      - retrieve
+      operationId: retrieveCustomerSegmentAnalysisPerformanceAnalysis
+      summary: Invoke a reporting action to obtain a PerformanceAnalysis instance related report.
+      description: Retrieve details about a specific customer segment performance analysis .The retrieve operation can have sub qualifiers beyond BQ level, please reffer to the model heriarchy to extend beyond BQ level into APIs retrieving sub-qualifier level information.
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - name: bq-reference-id
+        in: path
+        description: PerformanceAnalysis Instance Reference
+        required: true
+        type: string
+      - in: query
+        name: queryparams
+        required: false
+        description: Query params from schema '#/definitions/BQPerformanceAnalysisRetrieveInputModel'
+        type: string
+      responses:
+        200:
+          description: Successfully  Retrieved PerformanceAnalysis Instance Record
+          schema:
+            $ref: '#/definitions/BQPerformanceAnalysisRetrieveOutputModel'
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerPortfolioReferenceIds
+      summary: Retrieve CR Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- CustomerPortfolio Instance Status='active'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: ['ID726464', 'ID7264642']
+  /customer-portfolio/customer-segment-analysis/behavior-qualifiers/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerPortfolioBehaviorQualifiers
+      summary: Retrieve BQ names
+      produces:
+      - application/json
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [ 'PerformanceAnalysis', ]
+  /customer-portfolio/{sd-reference-id}/customer-segment-analysis/{cr-reference-id}/{behavior-qualifier}/:
+    get:
+      tags:
+      - retrieve
+      operationId: RetrieveCustomerPortfolioBehaviorQualifierReferenceIds
+      summary: Retrieve Behavior Qualifier Reference Ids
+      produces:
+      - application/json
+      parameters:
+      - name: sd-reference-id
+        in: path
+        description: Customer Portfolio Servicing Session Reference
+        required: true
+        type: string
+      - name: cr-reference-id
+        in: path
+        description: Customer Segment Analysis Instance Reference
+        required: true
+        type: string
+      - name : behavior-qualifier
+        in: path
+        description: Behavior Qualifier Name. ex- PerformanceAnalysis
+        required: true
+        type: string
+      - name : collection-filter
+        in: query
+        description: Filter to refine the result set. ex- PerformanceAnalysis Instance Status = 'pending'
+        required: false
+        type: string
+      responses:
+        200:
+          description: Successful
+          schema:
+            type: array
+            items:
+              type: string
+            example: [PerformanceAnalysisID1, PerformanceAnalysisID2]
+definitions:
+ SDCustomerPortfolioActivateInputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainCenterReference:
+    type: string
+    example: "SCR793499"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service center/operational unit
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR703914"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+ SDCustomerPortfolioActivateOutputModel:
+  type: object
+  properties: 
+   serviceDomainActivationActionTaskReference:
+    type: string
+    example: "SAATR758836"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service activation service call
+   serviceDomainActivationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The activation service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR783215"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServicingSessionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Consolidated information record for the servicing session
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "700761"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The default activation setting for the offered service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "769192"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "791202"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "767210"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDCustomerPortfolioConfigureInputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServicingSessionReference:
+    type: string
+    example: "SSSR764367"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   serviceDomainServiceReference:
+    type: string
+    example: "CPASSR744740"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service offered by the service center
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingReference:
+      type: string
+      example: "710630"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Refers to the service configuration parameter for the service
+     serviceDomainServiceConfigurationSettingType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of service configuration parameter
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+ SDCustomerPortfolioConfigureOutputModel:
+  type: object
+  properties: 
+   serviceDomainConfigurationActionTaskReference:
+    type: string
+    example: "SCATR765419"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a service configuration service call
+   serviceDomainConfigurationActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The configuration service call consolidated processing record
+   serviceDomainServiceConfigurationRecord:
+    type: object
+    properties:
+     serviceDomainServiceConfigurationSettingDescription:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Description of the configuration parameter, allowed values and processing impact
+     serviceDomainServiceConfigurationSetup:
+      type: object
+      properties:
+       serviceDomainServiceConfigurationParameter:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The requested and current activation values for the service configuration parameter 
+     serviceDomainServiceSubscription:
+      type: object
+      properties:
+       serviceDomainServiceSubscriberReference:
+        type: string
+        example: "756221"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Maintains reference to allowed users or subscribers to the service which can be any known party
+       serviceDomainServiceSubscriberAccessProfile:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The allowed service access for a user or subscriber to the service which can be any known party
+     serviceDomainServiceAgreement:
+      type: object
+      properties:
+       serviceDomainServiceAgreementReference:
+        type: string
+        example: "721156"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the offered service agreement
+       serviceDomainServiceUserReference:
+        type: string
+        example: "733696"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the user covered by the contract
+       serviceDomainServiceAgreementTermsandConditions:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Terms and conditions covering the service agreement
+     serviceDomainServiceStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of the offered service (e.g. active, suspended, idle)
+   serviceDomainServicingSessionStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The current operating status of the overall servicing session
+ SDCustomerPortfolioFeedbackInputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     serviceDomainServicingSessionReference:
+      type: string
+      example: "796678"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the active servicing session
+     controlRecordInstanceReference:
+      type: string
+      example: "724385"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance if appropriate
+     behaviorQualifierInstanceReference:
+      type: string
+      example: "789747"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the behavior qualifier instance if appropriate
+     feedbackRecordType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The layout/type of the feedback provided
+     feedbackRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The content of the feedback in any suitable format and media
+ SDCustomerPortfolioFeedbackOutputModel:
+  type: object
+  properties: 
+   serviceDomainFeedbackActionTaskReference:
+    type: string
+    example: "SFATR765157"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a feedback service call
+   serviceDomainFeedbackActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The feedback service call consolidated processing record
+   serviceDomainFeedbackActionRecord:
+    type: object
+    properties:
+     feedbackRecordDateTime:
+      type: string
+      example: "09-22-2018"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+        general-info: The date/time the feedback submitted for consideration
+     feedbackRecordStatus:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The status of processing the feedback e.g. received, considered, responded to
+     employeeBusinessUnitReference:
+      type: string
+      example: "769031"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to business unit/employee responsible for handling feedback
+ SDCustomerPortfolioRetrieveInputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+ SDCustomerPortfolioRetrieveOutputModel:
+  type: object
+  properties: 
+   serviceDomainRetrieveActionTaskReference:
+    type: string
+    example: "SRATR795161"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a retrieve service call
+   serviceDomainRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   serviceDomainRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   serviceDomainRetrieveActionRecord:
+    type: object
+    properties:
+     serviceDomainActivityAnalysis:
+      type: object
+      properties:
+       activityAnalysisReference:
+        type: string
+        example: "730230"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal activity analysis view maintained by the service center
+       activityAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the activity analysis that can be on-going, periodic and actual and projected
+       activityAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of activity analysis report available
+       activityAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The activity analysis report in any suitable form including selection filters where appropriate
+     serviceDomainPerformanceAnalysis:
+      type: object
+      properties:
+       performanceAnalysisReference:
+        type: string
+        example: "761670"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the internal performance analysis view maintained by the service center
+       performanceAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the performance analysis that can be on-going or periodic
+       performanceAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of performance analysis report available
+       performanceAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The performance analysis report in any suitable form including selection filters where appropriate
+     controlRecordPortfolioAnalysis:
+      type: object
+      properties:
+       controlRecordPortfolioAnalysisReference:
+        type: string
+        example: "739764"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the control record portfolio analysis view maintained by the service center
+       controlRecordPortfolioAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The results of the portfolio analysis that can be on-going, periodic and actual and projected (can be unstructured data)
+       controlRecordPortfolioAnalysisReportType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+          general-info: The type of external portfolio analysis report available
+       controlRecordAnalysisReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The external analysis report in any suitable form including selection filters where appropriate
+   serviceDomainOfferedService:
+    type: object
+    properties:
+     serviceDomainServiceReference:
+      type: string
+      example: "776158"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to a service offered by the service center
+     serviceDomainServiceRecord:
+      type: object
+      properties:
+       serviceDomainServiceType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Refers to the different types of services offered
+       serviceDomainServiceVersion:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The version details of the service when appropriate
+       serviceDomainServiceDescription:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Description of the offered service 
+       serviceDomainServicePoliciesandGuidelines:
+        type: object
+        properties:
+         serviceDomainServiceEligibility:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Policies and rules governing access to the offered service, includes eligibility and qualifications
+         serviceDomainServiceIntendedUses:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Guidelines covering allowed, intended use of the service
+         serviceDomainServicePricingandTerms:
+          type: string
+          description: |
+           `status: Not Mapped`
+            core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+            general-info: Terms, prices, penalties associated with use of the service
+       serviceDomainServiceSchedule:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Schedule defining when the accessed service is available
+ CRCustomerSegmentAnalysisEvaluateInputModel:
+  type: object
+  properties: 
+   customerPortfolioServicingSessionReference:
+    type: string
+    example: "CPSSR751546"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   customerSegmentAnalysisEvaluateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Evaluate service call input and output record
+   customerSegmentAnalysisInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Customer Segment Analysis instance (e.g. initialised, pending, active)
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The descriptive name of the bank defined customer segment 
+     customerSegmentTypeDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed properties and characteristics that define the customer segment
+     customerSegmentPerformanceGoals:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Definition of the performance goals for defined customer segments as defined by senior management functions (target/anticipated and actual as assessed).
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+ CRCustomerSegmentAnalysisEvaluateOutputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceReference:
+    type: string
+    example: "CSAIR780166"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Customer Segment Analysis instance
+   customerSegmentAnalysisEvaluateActionReference:
+    type: string
+    example: "CSAEAR750153"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Evaluate service call
+   customerSegmentAnalysisEvaluateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Evaluate service call input and output record
+   customerSegmentAnalysisInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Customer Segment Analysis instance (e.g. initialised, pending, active)
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The descriptive name of the bank defined customer segment 
+     customerSegmentTypeDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed properties and characteristics that define the customer segment
+     customerSegmentPerformanceGoals:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Definition of the performance goals for defined customer segments as defined by senior management functions (target/anticipated and actual as assessed).
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The consolidated report of the performance evaluation and comparisons from the analysis
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "780342"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated performance analysis reporting documents
+ CRCustomerSegmentAnalysisUpdateInputModel:
+  type: object
+  properties: 
+   customerPortfolioServicingSessionReference:
+    type: string
+    example: "CPSSR702793"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   customerSegmentAnalysisInstanceReference:
+    type: string
+    example: "CSAIR708786"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Customer Segment Analysis instance
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The descriptive name of the bank defined customer segment 
+     customerSegmentTypeDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed properties and characteristics that define the customer segment
+     customerSegmentPerformanceGoals:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Definition of the performance goals for defined customer segments as defined by senior management functions (target/anticipated and actual as assessed).
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The consolidated report of the performance evaluation and comparisons from the analysis
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "708667"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated performance analysis reporting documents
+   customerSegmentAnalysisUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ CRCustomerSegmentAnalysisUpdateOutputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The descriptive name of the bank defined customer segment 
+     customerSegmentTypeDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed properties and characteristics that define the customer segment
+     customerSegmentPerformanceGoals:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Definition of the performance goals for defined customer segments as defined by senior management functions (target/anticipated and actual as assessed).
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The consolidated report of the performance evaluation and comparisons from the analysis
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "708667"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated performance analysis reporting documents
+   customerSegmentAnalysisUpdateActionTaskReference:
+    type: string
+    example: "CSAUATR793450"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   customerSegmentAnalysisUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ CRCustomerSegmentAnalysisRequestInputModel:
+  type: object
+  properties: 
+   customerPortfolioServicingSessionReference:
+    type: string
+    example: "CPSSR708014"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the active servicing session
+   customerSegmentAnalysisInstanceReference:
+    type: string
+    example: "CSAIR753517"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Customer Segment Analysis instance
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The descriptive name of the bank defined customer segment 
+     customerSegmentTypeDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed properties and characteristics that define the customer segment
+     customerSegmentPerformanceGoals:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Definition of the performance goals for defined customer segments as defined by senior management functions (target/anticipated and actual as assessed).
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+   customerSegmentAnalysisRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordType:
+    type: object
+    properties:
+     requestInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Request service record (e.g. rework function, refresh record, process workstep)
+ CRCustomerSegmentAnalysisRequestOutputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The descriptive name of the bank defined customer segment 
+     customerSegmentTypeDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed properties and characteristics that define the customer segment
+     customerSegmentPerformanceGoals:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Definition of the performance goals for defined customer segments as defined by senior management functions (target/anticipated and actual as assessed).
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The consolidated report of the performance evaluation and comparisons from the analysis
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "715459"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated performance analysis reporting documents
+   customerSegmentAnalysisRequestActionTaskReference:
+    type: string
+    example: "CSARATR774050"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Customer Segment Analysis instance request service call
+   customerSegmentAnalysisRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordReference:
+    type: string
+    example: "RRR740247"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ CRCustomerSegmentAnalysisRetrieveInputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   customerSegmentAnalysisRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   customerSegmentAnalysisInstanceReportRecord:
+    type: object
+    properties:
+     customerSegmentAnalysisInstanceReportReference:
+      type: string
+      example: "706355"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+     customerSegmentAnalysisInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     customerSegmentAnalysisInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+   customerSegmentAnalysisInstanceAnalysis:
+    type: object
+    properties:
+     customerSegmentAnalysisInstanceAnalysisReference:
+      type: string
+      example: "706879"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+     customerSegmentAnalysisInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     customerSegmentAnalysisInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+ CRCustomerSegmentAnalysisRetrieveOutputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The descriptive name of the bank defined customer segment 
+     customerSegmentTypeDefinition:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Detailed properties and characteristics that define the customer segment
+     customerSegmentPerformanceGoals:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Definition of the performance goals for defined customer segments as defined by senior management functions (target/anticipated and actual as assessed).
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The consolidated report of the performance evaluation and comparisons from the analysis
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "706174"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated performance analysis reporting documents
+   customerSegmentAnalysisRetrieveActionTaskReference:
+    type: string
+    example: "CSARATR759064"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Customer Segment Analysis instance retrieve service call
+   customerSegmentAnalysisRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   customerSegmentAnalysisRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   customerSegmentAnalysisInstanceReportRecord:
+    type: object
+    properties:
+     customerSegmentAnalysisInstanceReportData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     customerSegmentAnalysisInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     customerSegmentAnalysisInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   customerSegmentAnalysisInstanceAnalysis:
+    type: object
+    properties:
+     customerSegmentAnalysisInstanceAnalysisData:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     customerSegmentAnalysisInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     customerSegmentAnalysisInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
+ BQPerformanceAnalysisEvaluateInputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The consolidated report of the performance evaluation and comparisons from the analysis
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "799417"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated performance analysis reporting documents
+   customerSegmentAnalysisInstanceReference:
+    type: string
+    example: "CSAIR730835"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Segment Analysis instance
+   performanceAnalysisInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "727946"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+ BQPerformanceAnalysisEvaluateOutputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentAnalysisSchedule:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The schedule for performing customer segment analysis for the enterprise or division
+     customerSegmentAnalysisReport:
+      type: object
+      properties:
+       customerSegmentAnalysisType:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Defines a type of performance analysis performed (e.g. scheduled review, specialized analysis, sensitivity assessment/projection)
+       customerSegmentAnalysisResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The consolidated report of the performance evaluation and comparisons from the analysis
+       customerSegmentAnalysisReportingDate:
+        type: string
+        example: "09-22-2018"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::DateTime
+          general-info: The date/time the performance report was completed
+       documentDirectoryEntryInstanceReference:
+        type: string
+        example: "799417"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to associated performance analysis reporting documents
+   performanceAnalysisInstanceReference:
+    type: string
+    example: "PAIR786742"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Performance Analysis instance
+   performanceAnalysisInitiateActionReference:
+    type: string
+    example: "PAIAR704191"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an Initiate service call
+   performanceAnalysisInitiateActionRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The Initiate service call input and output record
+   performanceAnalysisInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Performance Analysis instance (e.g. initialised, pending, active)
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "727946"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       customerSegmentPerformanceRequestResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The output from executing the selected performance analysis 
+ BQPerformanceAnalysisUpdateInputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceReference:
+    type: string
+    example: "CSAIR734970"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Segment Analysis instance
+   performanceAnalysisInstanceReference:
+    type: string
+    example: "PAIR750924"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Performance Analysis instance
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "779263"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       customerSegmentPerformanceRequestResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The output from executing the selected performance analysis 
+   performanceAnalysisUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   performanceAnalysisUpdateActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the update action service request
+ BQPerformanceAnalysisUpdateOutputModel:
+  type: object
+  properties: 
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "779263"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       customerSegmentPerformanceRequestResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The output from executing the selected performance analysis 
+   performanceAnalysisUpdateActionTaskReference:
+    type: string
+    example: "PAUATR743957"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to an update service call
+   performanceAnalysisUpdateActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The update service call consolidated processing record
+   updateResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the Update action service response
+ BQPerformanceAnalysisExchangeInputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceReference:
+    type: string
+    example: "CSAIR797600"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Segment Analysis instance
+   performanceAnalysisInstanceReference:
+    type: string
+    example: "PAIR749417"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Performance Analysis instance
+   performanceAnalysisExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   performanceAnalysisExchangeActionRequest:
+    type: object
+    properties:
+     exchangeActionType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The type of exchange (e.g. accept, reject, verify)
+ BQPerformanceAnalysisExchangeOutputModel:
+  type: object
+  properties: 
+   performanceAnalysisExchangeActionTaskReference:
+    type: string
+    example: "PAEATR757454"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Performance Analysis instance exchange service call
+   performanceAnalysisExchangeActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The exchange service call consolidated processing record
+   performanceAnalysisExchangeActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the exchange action service response
+   performanceAnalysisInstanceStatus:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: The status of the Performance Analysis instance (e.g. accepted, rejected, verified)
+ BQPerformanceAnalysisExecuteInputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceReference:
+    type: string
+    example: "CSAIR744181"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Segment Analysis instance
+   performanceAnalysisInstanceReference:
+    type: string
+    example: "PAIR705264"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Performance Analysis instance
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "701396"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       customerSegmentPerformanceRequestResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The output from executing the selected performance analysis 
+   performanceAnalysisExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   executeRecordType:
+    type: object
+    properties:
+     executeInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Execute transaction/record (e.g. deposit, withdrawal, fee/penalty, interest)
+ BQPerformanceAnalysisExecuteOutputModel:
+  type: object
+  properties: 
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "701396"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       customerSegmentPerformanceRequestResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The output from executing the selected performance analysis 
+   performanceAnalysisExecuteActionTaskReference:
+    type: string
+    example: "PAEATR735956"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Performance Analysis instance execute service call
+   performanceAnalysisExecuteActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The execute service call consolidated processing record
+   performanceAnalysisExecuteRecordReference:
+    type: string
+    example: "PAERR762279"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Performance Analysis execute transaction/record
+   executeResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the execute action service response
+ BQPerformanceAnalysisRequestInputModel:
+  type: object
+  properties: 
+   customerSegmentAnalysisInstanceReference:
+    type: string
+    example: "CSAIR762687"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the parent Customer Segment Analysis instance
+   performanceAnalysisInstanceReference:
+    type: string
+    example: "PAIR776870"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Performance Analysis instance
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "792523"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       customerSegmentPerformanceRequestResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The output from executing the selected performance analysis 
+   performanceAnalysisRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   requestRecordType:
+    type: object
+    properties:
+     requestInputRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: Request service record (e.g. rework function, refresh record, process workstep)
+ BQPerformanceAnalysisRequestOutputModel:
+  type: object
+  properties: 
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "792523"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       customerSegmentPerformanceRequestResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The output from executing the selected performance analysis 
+   performanceAnalysisRequestActionTaskReference:
+    type: string
+    example: "PARATR765539"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Performance Analysis instance request service call
+   performanceAnalysisRequestActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The request service call consolidated processing record
+   performanceAnalysisRequestRecordReference:
+    type: string
+    example: "PARRR739278"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to the Performance Analysis service request record
+   requestResponseRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: Details of the request action service response
+ BQPerformanceAnalysisRetrieveInputModel:
+  type: object
+  properties: 
+   performanceAnalysisRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   performanceAnalysisRetrieveActionRequest:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service request (lists requested reports)
+   performanceAnalysisInstanceReport:
+    type: object
+    properties:
+     performanceAnalysisInstanceReportReference:
+      type: string
+      example: "782690"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance report
+   performanceAnalysisInstanceAnalysis:
+    type: object
+    properties:
+     performanceAnalysisInstanceAnalysisReference:
+      type: string
+      example: "793083"
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+        general-info: Reference to the control record instance analysis view
+ BQPerformanceAnalysisRetrieveOutputModel:
+  type: object
+  properties: 
+   performanceAnalysisInstanceRecord:
+    type: object
+    properties:
+     customerSegmentPerformanceAnalysisType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: Defines the type of analysis/algorithm used to evaluate and compare the customer segment performance to prevailing market measures
+     customerSegmentPerformanceAnalysisTask:
+      type: object
+      properties:
+       customerSegmentPerformanceRequestSpecification:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The specific details of the performance analysis (can be a default/standard analysis or a specialist/ad-hoc request)
+       customerSegmentPerformanceModelReference:
+        type: string
+        example: "765702"
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+          general-info: Reference to the performance analysis model used
+       customerSegmentPerformanceProductServiceActivityReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The data file, report of customer related transaction details used in the analysis
+       customerSegmentPerformanceFinancialMarketResearchReport:
+        type: object
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+          general-info: The content of selected financial market research report or market transaction database in any suitable form used for comparisons when appropriate
+       customerSegmentPerformanceWorkProducts:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: Work documentation, forms and schedules produced and referenced during the analysis
+       customerSegmentPerformanceRequestResult:
+        type: string
+        description: |
+         `status: Not Mapped`
+          core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+          general-info: The output from executing the selected performance analysis 
+   performanceAnalysisRetrieveActionTaskReference:
+    type: string
+    example: "PARATR747768"
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::ISO20022andUNCEFACT::Identifier
+      general-info: Reference to a Performance Analysis instance retrieve service call
+   performanceAnalysisRetrieveActionTaskRecord:
+    type: object
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+      general-info: The retrieve service call consolidated processing record
+   performanceAnalysisRetrieveActionResponse:
+    type: string
+    description: |
+     `status: Not Mapped`
+      core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+      general-info: Details of the retrieve action service response (lists returned reports)
+   performanceAnalysisInstanceReport:
+    type: object
+    properties:
+     performanceAnalysisInstanceReportRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The input information used to assemble the report that can be on-going, periodic and actual and projected
+     performanceAnalysisInstanceReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external report available
+     performanceAnalysisInstanceReportParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the report (e.g. period, content type)
+     performanceAnalysisInstanceReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external report in any suitable form including selection filters where appropriate
+   performanceAnalysisInstanceAnalysis:
+    type: object
+    properties:
+     performanceAnalysisInstanceAnalysisRecord:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The inputs and results of the instance analysis that can be on-going, periodic and actual and projected
+     performanceAnalysisInstanceAnalysisReportType:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Code
+        general-info: The type of external performance analysis report available
+     performanceAnalysisInstanceAnalysisParameters:
+      type: string
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Text
+        general-info: The selection parameters for the analysis (e.g. period, algorithm type)
+     performanceAnalysisInstanceAnalysisReport:
+      type: object
+      description: |
+       `status: Not Mapped`
+        core-data-type-reference: BIAN::DataTypesLibrary::CoreDataTypes::UNCEFACT::Binary
+        general-info: The external analysis report in any suitable form including selection filters where appropriate
